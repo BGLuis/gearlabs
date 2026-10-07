@@ -5,11 +5,13 @@ import {
   GearBuild,
   CalculatedGearStats,
   VersionCatalog,
+  VersionPreset,
   Grade,
   PartSlot,
 } from '@/types/silentgear';
 import {
-  OFFICIAL_MATERIALS_1_20,
+  ATM11_CATALOG,
+  VERSION_PRESETS,
   OFFICIAL_GEAR_TYPES,
   OFFICIAL_TRAITS,
 } from '@/data/defaultCatalog';
@@ -19,7 +21,7 @@ import { decodeBuildFromHash, encodeBuildToHash } from '@/lib/url-state';
 interface GearContextType {
   version: string;
   setVersion: (v: string) => void;
-  availableVersions: string[];
+  presets: VersionPreset[];
   catalog: VersionCatalog;
   build: GearBuild;
   stats: CalculatedGearStats;
@@ -30,36 +32,31 @@ interface GearContextType {
   inventory: Set<string>;
   toggleInventoryMaterial: (materialId: string) => void;
   setAllInventory: (enableAll: boolean) => void;
+  importCustomCatalog: (name: string, customCatalog: VersionCatalog) => void;
   lang: 'pt' | 'en';
   setLang: (l: 'pt' | 'en') => void;
   shareUrl: string;
   copyShareUrl: () => Promise<boolean>;
 }
 
-const defaultCatalog: VersionCatalog = {
-  version: '1.20.1',
-  materials: OFFICIAL_MATERIALS_1_20,
-  gearTypes: OFFICIAL_GEAR_TYPES,
-  traits: OFFICIAL_TRAITS,
-};
-
 const initialBuild: GearBuild = {
   gearTypeId: 'sword',
   parts: {
-    main: { materialId: 'silentgear:diamond', grade: 'NONE' },
-    rod: { materialId: 'silentgear:wood', grade: 'NONE' },
+    main: { materialId: 'allthemodium:unobtainium', grade: 'NONE' },
+    rod: { materialId: 'silentgear:breeze_rod', grade: 'NONE' },
   },
 };
 
 const GearContext = createContext<GearContextType | null>(null);
 
 export function GearProvider({ children }: { children: React.ReactNode }) {
-  const [version, setVersionState] = useState<string>('1.20.1');
-  const availableVersions = ['1.20.1', '1.21.1'];
-  const [catalog, setCatalog] = useState<VersionCatalog>(defaultCatalog);
+  const [version, setVersionState] = useState<string>('atm11');
+  const [presets, setPresets] = useState<VersionPreset[]>(VERSION_PRESETS);
+  const [catalog, setCatalog] = useState<VersionCatalog>(ATM11_CATALOG);
+  const [customCatalogs, setCustomCatalogs] = useState<Record<string, VersionCatalog>>({});
   const [build, setBuild] = useState<GearBuild>(initialBuild);
   const [inventory, setInventory] = useState<Set<string>>(
-    new Set(Object.keys(defaultCatalog.materials))
+    new Set(Object.keys(ATM11_CATALOG.materials))
   );
   const [lang, setLangState] = useState<'pt' | 'en'>('pt');
   const [shareUrl, setShareUrl] = useState<string>('');
@@ -72,7 +69,27 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
       setLangState(savedLang);
     }
 
-    // 2. Inventário
+    // 2. Modpacks customizados salvos
+    const savedCustom = localStorage.getItem('gearlabs_custom_catalogs');
+    if (savedCustom) {
+      try {
+        const parsed = JSON.parse(savedCustom);
+        setCustomCatalogs(parsed);
+        const customPresets: VersionPreset[] = Object.keys(parsed).map((id) => ({
+          id,
+          name: parsed[id].name || id,
+          badge: 'Custom',
+          type: 'custom',
+          minecraftVersion: 'Custom',
+          description: 'Modpack importado pelo usuário',
+        }));
+        setPresets([...VERSION_PRESETS, ...customPresets]);
+      } catch (e) {
+        console.error('Failed to parse custom catalogs', e);
+      }
+    }
+
+    // 3. Inventário
     const savedInv = localStorage.getItem('gearlabs_inventory');
     if (savedInv) {
       try {
@@ -85,7 +102,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    // 3. Hash da URL (Link compartilhado)
+    // 4. Hash da URL (Link compartilhado)
     if (typeof window !== 'undefined' && window.location.hash) {
       const decoded = decodeBuildFromHash(window.location.hash);
       if (decoded) {
@@ -97,21 +114,37 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
 
   // Carregar catálogo da versão selecionada
   useEffect(() => {
+    // Se for customizado
+    if (customCatalogs[version]) {
+      setCatalog(customCatalogs[version]);
+      setInventory(new Set(Object.keys(customCatalogs[version].materials)));
+      return;
+    }
+
+    // Se for o ATM11
+    if (version === 'atm11') {
+      setCatalog(ATM11_CATALOG);
+      setInventory(new Set(Object.keys(ATM11_CATALOG.materials)));
+      return;
+    }
+
+    // Buscar do endpoint estático
     async function loadCatalog() {
       try {
         const res = await fetch(`/data/versions/${version}/catalog.json`);
         if (res.ok) {
           const data = await res.json();
           setCatalog(data);
+          setInventory(new Set(Object.keys(data.materials)));
           return;
         }
       } catch (err) {
-        console.warn('Fallback to local catalog for version', version);
+        console.warn('Fallback to ATM11 catalog for version', version);
       }
-      setCatalog({ ...defaultCatalog, version });
+      setCatalog(ATM11_CATALOG);
     }
     loadCatalog();
-  }, [version]);
+  }, [version, customCatalogs]);
 
   // Atualizar URL de compartilhamento sempre que a build muda
   useEffect(() => {
@@ -158,14 +191,12 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     if (!gearType) return;
     const newParts: Partial<Record<PartSlot, { materialId: string; grade?: Grade }>> = {};
 
-    // Mantém as partes compatíveis
     for (const slot of gearType.requiredSlots) {
-      if (build.parts[slot]) {
+      if (build.parts[slot] && catalog.materials[build.parts[slot]!.materialId]) {
         newParts[slot] = build.parts[slot];
       } else {
-        // Padrão: Diamante ou Ferro se main, Madeira se rod
-        const fallbackMat = slot === 'main' ? 'silentgear:diamond' : 'silentgear:wood';
-        newParts[slot] = { materialId: fallbackMat, grade: 'NONE' };
+        const firstAvailable = Object.keys(catalog.materials)[0] || 'allthemodium:unobtainium';
+        newParts[slot] = { materialId: firstAvailable, grade: 'NONE' };
       }
     }
     setBuild({ gearTypeId: typeId, parts: newParts });
@@ -212,6 +243,30 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('gearlabs_inventory', JSON.stringify(Array.from(next)));
   }
 
+  function importCustomCatalog(name: string, customCatalog: VersionCatalog) {
+    const customId = `custom_${Date.now()}`;
+    const nextCatalogs = {
+      ...customCatalogs,
+      [customId]: {
+        ...customCatalog,
+        version: customId,
+      },
+    };
+    setCustomCatalogs(nextCatalogs);
+    localStorage.setItem('gearlabs_custom_catalogs', JSON.stringify(nextCatalogs));
+
+    const newPreset: VersionPreset = {
+      id: customId,
+      name,
+      badge: 'Custom',
+      type: 'custom',
+      minecraftVersion: 'Custom',
+      description: 'Modpack importado via .zip ou dump',
+    };
+    setPresets((prev) => [...prev, newPreset]);
+    setVersionState(customId);
+  }
+
   async function copyShareUrl(): Promise<boolean> {
     try {
       if (navigator.clipboard && shareUrl) {
@@ -229,7 +284,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
       value={{
         version,
         setVersion,
-        availableVersions,
+        presets,
         catalog,
         build,
         stats,
@@ -240,6 +295,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         inventory,
         toggleInventoryMaterial,
         setAllInventory,
+        importCustomCatalog,
         lang,
         setLang,
         shareUrl,

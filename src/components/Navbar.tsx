@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useGear } from '@/context/GearContext';
+import { ImportModpackModal } from '@/components/ImportModpackModal';
 import { Hammer, BookOpen, History, Share2, Check, Globe } from 'lucide-react';
 
 export function Navbar() {
-  const { version, setVersion, availableVersions, lang, setLang, copyShareUrl } = useGear();
+  const { version, setVersion, presets, lang, setLang, copyShareUrl } = useGear();
   const pathname = usePathname();
   const [copied, setCopied] = useState(false);
 
@@ -26,7 +27,7 @@ export function Navbar() {
       changelog: 'Changelog',
       share: 'Compartilhar',
       copied: 'Copiado!',
-      version: 'Versão',
+      version: 'Versão / Modpack',
     },
     en: {
       builder: 'Simulator',
@@ -34,9 +35,14 @@ export function Navbar() {
       changelog: 'Changelog',
       share: 'Share',
       copied: 'Copied!',
-      version: 'Version',
+      version: 'Version / Modpack',
     },
   }[lang];
+
+  // Agrupamento dos presets
+  const modpackPresets = presets.filter((p) => p.type === 'modpack');
+  const officialPresets = presets.filter((p) => p.type === 'official');
+  const customPresets = presets.filter((p) => p.type === 'custom');
 
   return (
     <header className="sticky top-0 z-50 bg-mc-surface/90 backdrop-blur-md border-b border-mc-border">
@@ -94,22 +100,44 @@ export function Navbar() {
         </div>
 
         {/* Controles da Direita */}
-        <div className="flex items-center gap-3">
-          {/* Seletor de Versão */}
-          <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1 rounded border border-mc-border text-xs font-mono">
-            <span className="text-mc-muted">{t.version}:</span>
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Seletor Agrupado de Versões */}
+          <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1.5 rounded border border-mc-border text-xs font-mono">
             <select
               value={version}
               onChange={(e) => setVersion(e.target.value)}
-              className="bg-transparent text-mc-text font-semibold focus:outline-none cursor-pointer"
+              className="bg-transparent text-mc-text font-bold focus:outline-none cursor-pointer max-w-[160px] sm:max-w-[220px] truncate"
             >
-              {availableVersions.map((v) => (
-                <option key={v} value={v} className="bg-mc-surface text-mc-text">
-                  MC {v}
-                </option>
-              ))}
+              <optgroup label="🌟 Modpacks em Destaque" className="bg-mc-surface text-mc-gold font-bold">
+                {modpackPresets.map((p) => (
+                  <option key={p.id} value={p.id} className="text-mc-text">
+                    {p.name} [{p.badge}]
+                  </option>
+                ))}
+              </optgroup>
+
+              <optgroup label="📦 Versões Oficiais (Silent Gear)" className="bg-mc-surface text-mc-primary font-bold">
+                {officialPresets.map((p) => (
+                  <option key={p.id} value={p.id} className="text-mc-text">
+                    {p.name}
+                  </option>
+                ))}
+              </optgroup>
+
+              {customPresets.length > 0 && (
+                <optgroup label="🛠️ Modpacks Importados" className="bg-mc-surface text-mc-accent font-bold">
+                  {customPresets.map((p) => (
+                    <option key={p.id} value={p.id} className="text-mc-text">
+                      {p.name}
+                    </option>
+                  ))}
+                </optgroup>
+              )}
             </select>
           </div>
+
+          {/* Modal de Importação de Modpacks */}
+          <ImportModpackModal />
 
           {/* Alternador de Idioma */}
           <button
@@ -131,7 +159,7 @@ export function Navbar() {
             }`}
           >
             {copied ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
-            {copied ? t.copied : t.share}
+            <span className="hidden sm:inline">{copied ? t.copied : t.share}</span>
           </button>
         </div>
       </div>

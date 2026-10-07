@@ -1,4 +1,4 @@
-import { Material, GearType, TraitInfo, VersionCatalog } from '@/types/silentgear';
+import { Material, GearType, TraitInfo, VersionCatalog, VersionPreset } from '@/types/silentgear';
 
 export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
   'silentgear:iron': {
@@ -19,23 +19,12 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         harvest_tier: 'minecraft:iron',
         rarity: 20,
       },
-      rod: {
-        durability: 50,
-      },
-      tip: {
-        durability: 64,
-        melee_damage: 1.0,
-        harvest_speed: 1.0,
-      },
-      coating: {
-        durability: 60,
-        armor: 2,
-      },
+      rod: { durability: 50 },
+      tip: { durability: 64, melee_damage: 1.0, harvest_speed: 1.0 },
+      coating: { durability: 60, armor: 2 },
     },
     statModifiers: {
-      rod: {
-        durability: { mul2: 0.1 },
-      },
+      rod: { durability: { mul2: 0.1 } },
     },
     traits: {
       main: [{ name: 'silentgear:malleable', level: 2 }],
@@ -62,17 +51,10 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         rarity: 70,
       },
       rod: {},
-      tip: {
-        durability: 256,
-        melee_damage: 2.0,
-        harvest_speed: 2.0,
-        rarity: 20,
-      },
+      tip: { durability: 256, melee_damage: 2.0, harvest_speed: 2.0, rarity: 20 },
     },
     statModifiers: {
-      rod: {
-        harvest_speed: { mul2: 0.2 },
-      },
+      rod: { harvest_speed: { mul2: 0.2 } },
     },
     traits: {
       main: [
@@ -100,21 +82,11 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         harvest_tier: 'minecraft:netherite',
         rarity: 100,
       },
-      coating: {
-        durability: 300,
-        armor: 4,
-        melee_damage: 1.5,
-      },
-      tip: {
-        durability: 400,
-        melee_damage: 2.5,
-        harvest_speed: 2.5,
-      },
+      coating: { durability: 300, armor: 4, melee_damage: 1.5 },
+      tip: { durability: 400, melee_damage: 2.5, harvest_speed: 2.5 },
     },
     statModifiers: {
-      rod: {
-        durability: { mul2: 0.3 },
-      },
+      rod: { durability: { mul2: 0.3 } },
     },
     traits: {
       main: [
@@ -142,19 +114,11 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         harvest_tier: 'minecraft:diamond',
         rarity: 40,
       },
-      rod: {
-        durability: 80,
-      },
-      tip: {
-        durability: 120,
-        melee_damage: 1.5,
-        harvest_speed: 1.5,
-      },
+      rod: { durability: 80 },
+      tip: { durability: 120, melee_damage: 1.5, harvest_speed: 1.5 },
     },
     statModifiers: {
-      rod: {
-        durability: { mul2: 0.15 },
-      },
+      rod: { durability: { mul2: 0.15 } },
     },
     traits: {
       main: [{ name: 'silentgear:fireproof', level: 1 }],
@@ -179,20 +143,11 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         harvest_tier: 'minecraft:netherite',
         rarity: 80,
       },
-      tip: {
-        durability: 300,
-        melee_damage: 2.5,
-        harvest_speed: 2.0,
-      },
-      coating: {
-        durability: 250,
-        armor: 3,
-      },
+      tip: { durability: 300, melee_damage: 2.5, harvest_speed: 2.0 },
+      coating: { durability: 250, armor: 3 },
     },
     statModifiers: {
-      rod: {
-        durability: { mul2: 0.25 },
-      },
+      rod: { durability: { mul2: 0.25 } },
     },
     traits: {
       main: [
@@ -219,9 +174,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         harvest_tier: 'minecraft:diamond',
         rarity: 75,
       },
-      rod: {
-        durability: 100,
-      },
+      rod: { durability: 100 },
     },
     statModifiers: {
       rod: {
@@ -254,9 +207,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
       },
     },
     statModifiers: {
-      rod: {
-        attack_speed: { add: 0.25 },
-      },
+      rod: { attack_speed: { add: 0.25 } },
     },
     traits: {
       main: [
@@ -283,14 +234,10 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         harvest_tier: 'minecraft:wood',
         rarity: 30,
       },
-      tip: {
-        harvest_speed: 4.0,
-      },
+      tip: { harvest_speed: 4.0 },
     },
     statModifiers: {
-      rod: {
-        attack_speed: { add: 0.2 },
-      },
+      rod: { attack_speed: { add: 0.2 } },
     },
     traits: {
       main: [
@@ -317,14 +264,10 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         harvest_tier: 'minecraft:stone',
         rarity: 15,
       },
-      rod: {
-        durability: 30,
-      },
+      rod: { durability: 30 },
     },
     statModifiers: {
-      rod: {
-        durability: { mul2: 0.05 },
-      },
+      rod: { durability: { mul2: 0.05 } },
     },
     traits: {
       main: [{ name: 'silentgear:malleable', level: 1 }],
@@ -349,20 +292,157 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         harvest_tier: 'minecraft:wood',
         rarity: 5,
       },
-      rod: {
-        durability: 15,
-      },
+      rod: { durability: 15 },
     },
     statModifiers: {
-      rod: {
-        durability: { mul2: 0.0 },
-      },
+      rod: { durability: { mul2: 0.0 } },
     },
     traits: {
       main: [{ name: 'silentgear:flexible', level: 1 }],
       rod: [{ name: 'silentgear:flexible', level: 1 }],
     },
   },
+};
+
+// Novos materiais oficiais do Minecraft 1.21+ / Tricky Trials e ATM11
+export const BREEZE_ROD_MATERIAL: Material = {
+  id: 'silentgear:breeze_rod',
+  name: { en: 'Breeze Rod', pt: 'Haste de Brisa' },
+  tier: 2,
+  category: 'metal',
+  color: '#C0C9ED',
+  stats: {
+    rod: {
+      durability: 150,
+      attack_speed: 0.35,
+    },
+  },
+  statModifiers: {
+    rod: {
+      attack_speed: { add: 0.35 },
+    },
+  },
+  traits: {
+    rod: [{ name: 'silentgear:swift', level: 2 }],
+  },
+};
+
+// Materiais Lendários do All The Mods 11 / ATM10 / ATM9
+export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
+  'allthemodium:allthemodium': {
+    id: 'allthemodium:allthemodium',
+    name: { en: 'Allthemodium', pt: 'Allthemodium' },
+    tier: 5,
+    category: 'metal',
+    color: '#F9E076',
+    stats: {
+      main: {
+        durability: 12000,
+        armor: 25,
+        armor_toughness: 12,
+        magic_armor: 8,
+        melee_damage: 7.0,
+        harvest_speed: 14.0,
+        harvest_tier: 'allthemodium:allthemodium',
+        rarity: 150,
+      },
+      rod: { durability: 1000 },
+      tip: { durability: 2000, melee_damage: 3.0, harvest_speed: 4.0 },
+      coating: { durability: 1500, armor: 4, melee_damage: 2.0 },
+    },
+    statModifiers: {
+      rod: { durability: { mul2: 0.4 }, attack_speed: { add: 0.1 } },
+    },
+    traits: {
+      main: [
+        { name: 'allthemodium:indestructible', level: 1 },
+        { name: 'silentgear:fireproof', level: 1 },
+        { name: 'silentgear:malleable', level: 3 },
+      ],
+      tip: [{ name: 'silentgear:lustrous', level: 2 }],
+    },
+  },
+  'allthemodium:vibranium': {
+    id: 'allthemodium:vibranium',
+    name: { en: 'Vibranium', pt: 'Vibranium' },
+    tier: 6,
+    category: 'metal',
+    color: '#38EF7D',
+    stats: {
+      main: {
+        durability: 28000,
+        armor: 30,
+        armor_toughness: 16,
+        magic_armor: 14,
+        melee_damage: 11.0,
+        attack_speed: 0.2,
+        harvest_speed: 20.0,
+        harvest_tier: 'allthemodium:vibranium',
+        rarity: 220,
+      },
+      rod: { durability: 2500 },
+      tip: { durability: 5000, melee_damage: 5.0, harvest_speed: 6.0 },
+      coating: { durability: 3500, armor: 6, melee_damage: 3.5 },
+    },
+    statModifiers: {
+      rod: { durability: { mul2: 0.6 }, attack_speed: { add: 0.2 } },
+    },
+    traits: {
+      main: [
+        { name: 'allthemodium:vibranium_shield', level: 1 },
+        { name: 'silentgear:swift', level: 3 },
+        { name: 'silentgear:fireproof', level: 1 },
+      ],
+      tip: [{ name: 'silentgear:jagged', level: 3 }],
+    },
+  },
+  'allthemodium:unobtainium': {
+    id: 'allthemodium:unobtainium',
+    name: { en: 'Unobtainium', pt: 'Unobtainium' },
+    tier: 7,
+    category: 'metal',
+    color: '#9B51E0',
+    stats: {
+      main: {
+        durability: 52000,
+        armor: 35,
+        armor_toughness: 20,
+        magic_armor: 20,
+        melee_damage: 16.0,
+        attack_speed: 0.3,
+        harvest_speed: 26.0,
+        harvest_tier: 'allthemodium:unobtainium',
+        rarity: 300,
+      },
+      rod: { durability: 5000 },
+      tip: { durability: 10000, melee_damage: 8.0, harvest_speed: 8.0 },
+      coating: { durability: 8000, armor: 8, melee_damage: 5.0 },
+    },
+    statModifiers: {
+      rod: { durability: { mul2: 1.0 }, attack_speed: { add: 0.3 } },
+    },
+    traits: {
+      main: [
+        { name: 'allthemodium:godlike', level: 1 },
+        { name: 'silentgear:holy', level: 5 },
+        { name: 'silentgear:fireproof', level: 1 },
+      ],
+      tip: [{ name: 'silentgear:holy', level: 3 }, { name: 'silentgear:jagged', level: 4 }],
+    },
+  },
+};
+
+// Catálogo consolidado do All The Mods 11 (ATM11 - NeoForge 26.1.x)
+export const ATM11_MATERIALS: Record<string, Material> = {
+  ...OFFICIAL_MATERIALS_1_20,
+  'silentgear:breeze_rod': BREEZE_ROD_MATERIAL,
+  ...ALLTHEMODIUM_MATERIALS,
+};
+
+// Catálogo consolidado do Silent Gear 1.21.1 Oficial
+export const OFFICIAL_MATERIALS_1_21: Record<string, Material> = {
+  ...OFFICIAL_MATERIALS_1_20,
+  'silentgear:breeze_rod': BREEZE_ROD_MATERIAL,
 };
 
 export const OFFICIAL_GEAR_TYPES: Record<string, GearType> = {
@@ -538,4 +618,89 @@ export const OFFICIAL_TRAITS: Record<string, TraitInfo> = {
       pt: 'Atrai itens caídos no chão diretamente para o jogador.',
     },
   },
+  'allthemodium:indestructible': {
+    id: 'allthemodium:indestructible',
+    maxLevel: 1,
+    name: { en: 'Indestructible', pt: 'Indestrutível' },
+    description: {
+      en: 'Immune to all durability damage, explosions, and void damage.',
+      pt: 'Imune a dano de durabilidade, explosões e dano do vazio.',
+    },
+  },
+  'allthemodium:vibranium_shield': {
+    id: 'allthemodium:vibranium_shield',
+    maxLevel: 1,
+    name: { en: 'Vibranium Kinetic Shield', pt: 'Escudo Cinético de Vibranium' },
+    description: {
+      en: 'Absorbs kinetic impact and grants extreme regeneration.',
+      pt: 'Absorve impactos cinéticos e concede regeneração acelerada.',
+    },
+  },
+  'allthemodium:godlike': {
+    id: 'allthemodium:godlike',
+    maxLevel: 1,
+    name: { en: 'Godlike Transcendence', pt: 'Transcendência Divina' },
+    description: {
+      en: 'Ultimate power tier: massive resistance and cosmic damage amplification.',
+      pt: 'Poder supremo: resistência absoluta e amplificação cósmica de dano.',
+    },
+  },
+};
+
+export const VERSION_PRESETS: VersionPreset[] = [
+  {
+    id: 'atm11',
+    name: 'All The Mods 11 (ATM11)',
+    badge: 'Mais Recente',
+    type: 'modpack',
+    minecraftVersion: '26.1.x / 1.21+',
+    description: 'Modpack mais recente com Allthemodium, Vibranium, Unobtainium e Breeze Rod.',
+  },
+  {
+    id: 'atm10',
+    name: 'All The Mods 10 (ATM10)',
+    badge: '1.21.1',
+    type: 'modpack',
+    minecraftVersion: '1.21.1',
+    description: 'Modpack completo para Minecraft 1.21.1 NeoForge.',
+  },
+  {
+    id: 'atm9',
+    name: 'All The Mods 9 (ATM9)',
+    badge: '1.20.1',
+    type: 'modpack',
+    minecraftVersion: '1.20.1',
+    description: 'Versão consagrada para 1.20.1 com centenas de mods.',
+  },
+  {
+    id: '1.21.1',
+    name: 'Minecraft 1.21.1 (Oficial)',
+    badge: 'SG 4.2.3',
+    type: 'official',
+    minecraftVersion: '1.21.1',
+    description: 'Silent Gear oficial 4.2.3 com Breeze Rod e Tricky Trials.',
+  },
+  {
+    id: '1.20.1',
+    name: 'Minecraft 1.20.1 (Oficial)',
+    badge: 'SG 3.6.x',
+    type: 'official',
+    minecraftVersion: '1.20.1',
+    description: 'Silent Gear oficial para Minecraft 1.20.1.',
+  },
+  {
+    id: '1.19.2',
+    name: 'Minecraft 1.19.2 (Oficial)',
+    badge: 'SG 3.2.x',
+    type: 'official',
+    minecraftVersion: '1.19.2',
+    description: 'Silent Gear oficial para Minecraft 1.19.2.',
+  },
+];
+
+export const ATM11_CATALOG: VersionCatalog = {
+  version: 'atm11',
+  materials: ATM11_MATERIALS,
+  gearTypes: OFFICIAL_GEAR_TYPES,
+  traits: OFFICIAL_TRAITS,
 };

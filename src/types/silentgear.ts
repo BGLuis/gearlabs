@@ -138,6 +138,15 @@ export interface VersionCatalog {
   traits: Record<string, TraitInfo>;
 }
 
+export interface VersionPreset {
+  id: string;
+  name: string;
+  badge: string;
+  type: 'official' | 'modpack' | 'custom';
+  minecraftVersion: string;
+  description: string;
+}
+
 export type OptimizationGoal =
   | 'max_damage'
   | 'max_dps'

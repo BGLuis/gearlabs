@@ -4,6 +4,7 @@ import {
   OFFICIAL_MATERIALS_1_20,
   OFFICIAL_GEAR_TYPES,
   OFFICIAL_TRAITS,
+  ATM11_CATALOG,
 } from '@/data/defaultCatalog';
 import { VersionCatalog } from '@/types/silentgear';
 
@@ -108,5 +109,35 @@ describe('findBestBuilds', () => {
     const elapsed = performance.now() - start;
     expect(results.length).toBe(3);
     expect(elapsed).toBeLessThan(50); // Garantia de execução sub-50ms
+  });
+
+  it('no ATM11 escolhe Unobtainium como topo para dano e proteção', () => {
+    const available = Object.keys(ATM11_CATALOG.materials);
+
+    const swordResults = findBestBuilds(
+      {
+        gearTypeId: 'sword',
+        availableMaterials: available,
+        goal: 'max_damage',
+      },
+      ATM11_CATALOG,
+      1
+    );
+
+    expect(swordResults[0].build.parts.main?.materialId).toBe('allthemodium:unobtainium');
+    expect(swordResults[0].stats.meleeDamage).toBeGreaterThan(18);
+
+    const armorResults = findBestBuilds(
+      {
+        gearTypeId: 'chestplate',
+        availableMaterials: available,
+        goal: 'max_protection',
+      },
+      ATM11_CATALOG,
+      1
+    );
+
+    expect(armorResults[0].build.parts.main?.materialId).toBe('allthemodium:unobtainium');
+    expect(armorResults[0].stats.armor).toBeGreaterThanOrEqual(35);
   });
 });

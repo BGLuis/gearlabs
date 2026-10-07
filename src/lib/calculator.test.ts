@@ -4,6 +4,7 @@ import {
   OFFICIAL_MATERIALS_1_20,
   OFFICIAL_GEAR_TYPES,
   OFFICIAL_TRAITS,
+  ATM11_CATALOG,
 } from '@/data/defaultCatalog';
 import { VersionCatalog, GearBuild } from '@/types/silentgear';
 
@@ -99,5 +100,30 @@ describe('calculateGearStats', () => {
     // Diamante no tip adiciona +256 durabilidade e +2 dano
     expect(withTip.durability).toBe(withoutTip.durability + 256);
     expect(withTip.meleeDamage).toBe(withoutTip.meleeDamage + 2.0);
+  });
+
+  it('calcula build endgame no ATM11 com Unobtainium e Breeze Rod', () => {
+    const build: GearBuild = {
+      gearTypeId: 'sword',
+      parts: {
+        main: { materialId: 'allthemodium:unobtainium' },
+        rod: { materialId: 'silentgear:breeze_rod' },
+        tip: { materialId: 'allthemodium:allthemodium' },
+      },
+    };
+
+    const stats = calculateGearStats(build, ATM11_CATALOG);
+
+    // Unobtainium dano 16.0 + Espada base 3.0 + Tip Allthemodium 3.0 = 22.0
+    // Sinergia: Unobtainium (metal), Breeze Rod (metal), Allthemodium (metal) -> todos metais = 1.05
+    // finalDamage = 22.0 * 1.05 = 23.1
+    expect(stats.meleeDamage).toBeGreaterThanOrEqual(22.0);
+    expect(stats.durability).toBeGreaterThan(50000);
+    // Breeze rod adiciona +0.35 de attack speed
+    expect(stats.attackSpeed).toBeGreaterThan(1.6);
+
+    const traitIds = stats.traits.map((t) => t.id);
+    expect(traitIds).toContain('allthemodium:godlike');
+    expect(traitIds).toContain('silentgear:swift');
   });
 });
