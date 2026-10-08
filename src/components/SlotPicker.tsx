@@ -5,6 +5,7 @@ import { useGear } from '@/context/GearContext';
 import { Grade, PartSlot, SubMaterialSelection, StarchargeLevel } from '@/types/silentgear';
 import { X, ArrowUp, ArrowDown, Plus, Layers, Sparkles } from 'lucide-react';
 import { calculateSynergy, getNumericStatValue } from '@/lib/calculator';
+import { MaterialCombobox } from '@/components/MaterialCombobox';
 
 interface SlotPickerProps {
   slot: PartSlot;
@@ -194,30 +195,19 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                     {idx + 1}º{isFirst ? (lang === 'pt' ? ' Primário' : ' Primary') : ''}
                   </span>
 
-                  {/* Cor do Material */}
-                  {matObj && (
-                    <span
-                      className="w-2.5 h-2.5 rounded-full shrink-0 border border-white/20"
-                      style={{ backgroundColor: matObj.color }}
+                  {/* Seletor do Sub-Material via Combobox */}
+                  <div className="flex-1 min-w-0">
+                    <MaterialCombobox
+                      materials={validMaterials}
+                      selectedMaterialId={subMat.materialId}
+                      onSelect={(matId) => updateSubMaterial(slot, idx, matId, subMat.grade)}
+                      slot={slot}
+                      inventory={inventory}
+                      lang={lang}
+                      isRequired={true}
+                      compact={true}
                     />
-                  )}
-
-                  {/* Seletor do Sub-Material */}
-                  <select
-                    value={subMat.materialId}
-                    onChange={(e) => updateSubMaterial(slot, idx, e.target.value, subMat.grade)}
-                    className="flex-1 bg-transparent text-mc-text text-xs font-medium focus:outline-none cursor-pointer truncate"
-                  >
-                    {validMaterials.map((mat) => {
-                      const inInv = inventory.has(mat.id);
-                      return (
-                        <option key={mat.id} value={mat.id} className="bg-mc-surface text-mc-text">
-                          {inInv ? '✓ ' : '○ '}
-                          {mat.name[lang] || mat.name.en} [Tier {mat.tier}]
-                        </option>
-                      );
-                    })}
-                  </select>
+                  </div>
 
                   {/* Seletor de Grau Individual */}
                   <select
@@ -292,32 +282,24 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
         /* Modo Material Único (Simples) */
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
-            {/* Seletor de Material */}
+            {/* Seletor de Material via Combobox */}
             <div className="sm:col-span-2 relative">
-              <select
-                value={currentSelection?.materialId || ''}
-                onChange={(e) => {
-                  if (e.target.value) {
-                    setPartMaterial(slot, e.target.value, currentGrade, currentStarcharge);
-                  } else if (!isRequired) {
+              <MaterialCombobox
+                materials={validMaterials}
+                selectedMaterialId={currentSelection?.materialId}
+                onSelect={(matId) => {
+                  setPartMaterial(slot, matId, currentGrade, currentStarcharge);
+                }}
+                onClear={() => {
+                  if (!isRequired) {
                     removePart(slot);
                   }
                 }}
-                className="w-full bg-mc-bg border border-mc-border text-mc-text text-xs rounded px-2.5 py-2 font-medium focus:border-mc-primary focus:outline-none cursor-pointer"
-              >
-                {!isRequired && (
-                  <option value="">{lang === 'pt' ? '(Nenhum / Vazio)' : '(None / Empty)'}</option>
-                )}
-                {validMaterials.map((mat) => {
-                  const inInv = inventory.has(mat.id);
-                  return (
-                    <option key={mat.id} value={mat.id} className="bg-mc-surface text-mc-text">
-                      {inInv ? '✓ ' : '○ '}
-                      {mat.name[lang] || mat.name.en} [Tier {mat.tier}]
-                    </option>
-                  );
-                })}
-              </select>
+                slot={slot}
+                inventory={inventory}
+                lang={lang}
+                isRequired={isRequired}
+              />
             </div>
 
             {/* Seletor de Grau (Grade) */}

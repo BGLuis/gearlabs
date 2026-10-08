@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useGear } from '@/context/GearContext';
 import { MaterialCategory, StatModifierEntry } from '@/types/silentgear';
 import { getNumericStatValue } from '@/lib/calculator';
+import { filterMaterials } from '@/lib/materials';
 import {
   Search,
   CheckCircle2,
@@ -33,12 +34,11 @@ export default function MaterialsPage() {
 
   const materials = Object.values(catalog.materials);
 
-  // Filtragem
-  const filtered = materials.filter((m) => {
-    const matchesCat = selectedCat === 'all' || m.category === selectedCat;
-    const nameStr = `${m.name.en} ${m.name.pt} ${m.id}`.toLowerCase();
-    const matchesSearch = nameStr.includes(search.toLowerCase());
-    return matchesCat && matchesSearch;
+  // Filtragem (reutilizando função centralizada)
+  const filtered = filterMaterials(materials, {
+    query: search,
+    category: selectedCat,
+    lang,
   });
 
   // Ordenação

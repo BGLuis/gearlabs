@@ -72,6 +72,7 @@ export function formatMaterialName(baseName: string): { en: string; pt: string }
     copper: 'Cobre',
     wood: 'Madeira',
     stone: 'Pedra',
+    wool: 'Lã',
     crimson_iron: 'Ferro Carmesim',
     crimson_steel: 'Aço Carmesim',
     azure_silver: 'Prata Lazúli',
