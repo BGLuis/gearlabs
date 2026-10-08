@@ -130,13 +130,6 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    // Se for o ATM11
-    if (version === 'atm11') {
-      setCatalog(ATM11_CATALOG);
-      setInventory(new Set(Object.keys(ATM11_CATALOG.materials)));
-      return;
-    }
-
     // Buscar do endpoint estático
     async function loadCatalog() {
       try {
