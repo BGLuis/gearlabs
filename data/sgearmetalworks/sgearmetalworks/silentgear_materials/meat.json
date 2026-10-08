@@ -1,0 +1,115 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "casting"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:ingots/meat"
+    },
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFFD4E67",
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.sgearmetalworks.meat"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "armor": 20.0,
+      "armor/boots": 3.0,
+      "armor/chestplate": 8.0,
+      "armor/helmet": 3.0,
+      "armor/leggings": 6.0,
+      "armor_durability": 13.0,
+      "armor_toughness": 4.0,
+      "attack_damage": 3.0,
+      "attack_speed": -0.4,
+      "charging_value": 0.6,
+      "draw_speed": -0.4,
+      "durability": 1024.0,
+      "enchantment_value": 7.0,
+      "harvest_speed": 6.0,
+      "magic_armor": 8.0,
+      "magic_damage": 2.0,
+      "projectile_accuracy": 0.7,
+      "projectile_speed": 0.7,
+      "ranged_damage": 0.0,
+      "rarity": 10.0,
+      "repair_value": -0.25,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:organic"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:bending"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:yummy"
+        }
+      ]
+    },
+    "silentgear:rod": {
+      "harvest_speed": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.1
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:organic"
+        },
+        {
+          "conditions": [],
+          "level": 5,
+          "trait": "silentgear:flexible"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:yummy"
+        },
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:bulky"
+        }
+      ]
+    },
+    "silentgear:tip": {
+      "durability": {
+        "operation": "ADD",
+        "value": 68.0
+      },
+      "harvest_speed": {
+        "operation": "ADD",
+        "value": -0.1
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:yummy"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:soft"
+        }
+      ]
+    }
+  }
+}

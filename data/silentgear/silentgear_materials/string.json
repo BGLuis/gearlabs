@@ -1,0 +1,50 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "organic",
+      "fiber",
+      "basic"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": "minecraft:string",
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFFFFFFF",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_flat",
+      "compound_asset_id": "silentgear:generic_flat",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.string"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:binding": {
+      "repair_efficiency": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.05
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    },
+    "silentgear:cord": {
+      "draw_speed": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.1
+      }
+    }
+  }
+}

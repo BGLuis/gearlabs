@@ -42,7 +42,7 @@ interface GearContextType {
 const initialBuild: GearBuild = {
   gearTypeId: 'sword',
   parts: {
-    main: { materialId: 'allthemodium:unobtainium', grade: 'NONE' },
+    main: { materialId: 'silentgear:unobtainium', grade: 'NONE' },
     rod: { materialId: 'silentgear:breeze_rod', grade: 'NONE' },
   },
 };
@@ -195,7 +195,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
       if (build.parts[slot] && catalog.materials[build.parts[slot]!.materialId]) {
         newParts[slot] = build.parts[slot];
       } else {
-        const firstAvailable = Object.keys(catalog.materials)[0] || 'allthemodium:unobtainium';
+        const firstAvailable = Object.keys(catalog.materials)[0] || 'silentgear:unobtainium';
         newParts[slot] = { materialId: firstAvailable, grade: 'NONE' };
       }
     }

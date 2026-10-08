@@ -1,0 +1,84 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "gem",
+      "dust",
+      "intermediate"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": "#c:dusts/glowstone",
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFD2D200",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.glowstone"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "additive": true,
+      "attack_damage": 3.0,
+      "attack_speed": 0.4,
+      "charging_value": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.15
+      },
+      "harvest_speed": 15.0,
+      "ranged_damage": 3.0,
+      "rarity": 40.0,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:renew"
+        }
+      ]
+    },
+    "silentgear:tip": {
+      "attack_damage": {
+        "operation": "ADD",
+        "value": 2.0
+      },
+      "draw_speed": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.3
+      },
+      "harvest_speed": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": 0.4
+      },
+      "magic_damage": {
+        "operation": "ADD",
+        "value": 2.0
+      },
+      "rarity": {
+        "operation": "ADD",
+        "value": 15.0
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:refractive"
+        },
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:lustrous"
+        }
+      ]
+    }
+  }
+}

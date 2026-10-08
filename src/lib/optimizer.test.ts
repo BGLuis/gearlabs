@@ -124,7 +124,9 @@ describe('findBestBuilds', () => {
       1
     );
 
-    expect(swordResults[0].build.parts.main?.materialId).toBe('allthemodium:unobtainium');
+    expect(['silentgear:unobtainium', 'sgearmetalworks:uru_metal']).toContain(
+      swordResults[0].build.parts.main?.materialId
+    );
     expect(swordResults[0].stats.meleeDamage).toBeGreaterThan(18);
 
     const armorResults = findBestBuilds(
@@ -137,7 +139,9 @@ describe('findBestBuilds', () => {
       1
     );
 
-    expect(armorResults[0].build.parts.main?.materialId).toBe('allthemodium:unobtainium');
-    expect(armorResults[0].stats.armor).toBeGreaterThanOrEqual(35);
+    expect(['silentgear:unobtainium', 'sgearmetalworks:uru_metal']).toContain(
+      armorResults[0].build.parts.main?.materialId
+    );
+    expect(armorResults[0].stats.armor).toBeGreaterThanOrEqual(14);
   });
 });

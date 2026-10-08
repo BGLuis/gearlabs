@@ -1,0 +1,46 @@
+{
+  "type": "silentgear:processed",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "sheet"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": "silentgear:sheet_metal",
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFFFFFFF",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_shiny",
+      "compound_asset_id": "silentgear:generic_shiny",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.sheet_metal"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "armor": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.5
+      },
+      "armor_durability": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.4
+      },
+      "armor_toughness": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": -0.5
+      },
+      "durability": {
+        "operation": "MULTIPLY_TOTAL",
+        "value": -1.0
+      }
+    }
+  }
+}

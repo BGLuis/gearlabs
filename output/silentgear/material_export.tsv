@@ -1,0 +1,99 @@
+Pack	Name	Type	ID	Parent	Categories	Durability	Armor Durability	Armor	Armor Toughness	Magic Armor
+mod/sgearmetalworks	Aluminum	Main	silentgear:aluminum		Metal, Casting, Intermediate	365	15	14	0.5	3
+silentgear	Aluminum Steel	Main	silentgear:aluminum_steel		Metal, Advanced	660	18	18	2	6
+mod/sgearmetalworks	Amethyst	Main	silentgear:amethyst		Gem, Intermediate, Casting	210	10	15	0	10
+mod/sgearmetalworks	Azure Electrum	Main	silentgear:azure_electrum		Metal, Endgame, Casting	1259	61	19	8	19
+mod/sgearmetalworks	Azure Silver	Main	silentgear:azure_silver		Metal, Advanced, Casting	197	17	13	0	13
+silentgear	Bamboo	Main	silentgear:bamboo		Organic, Wood, Basic	65	9	7	0	2
+silentgear	Barrier	Main	silentgear:barrier		Intangible	1337	84	20	10	10
+silentgear	Basalt	Main	silentgear:basalt		Rock, Basic	137	4	6	0	0
+silentgear	Bismuth	Main	silentgear:bismuth		Metal, Intermediate	330	10	16	2	6
+silentgear	Bismuth Brass	Main	silentgear:bismuth_brass		Metal, Intermediate	580	15	18	2	8
+silentgear	Bismuth Steel	Main	silentgear:bismuth_steel		Metal, Advanced	1050	25	20	4	8
+silentgear	Blackstone	Main	silentgear:blackstone		Rock, Basic	151	5	5	0	0
+mod/sgearmetalworks	Blaze Gold	Main	silentgear:blaze_gold		Metal, Advanced, Casting	69	9	13	1	10
+silentgear	Bone	Main	silentgear:bone		Organic, Basic, Crude	108	4	5	0	1
+mod/sgearmetalworks	Brass	Main	silentgear:brass		Metal, Casting, Intermediate	240	8	14	1	6
+mod/sgearmetalworks	Bronze	Main	silentgear:bronze		Metal, Intermediate, Casting	300	13	15	1	6
+silentgear	Compressed Iron	Main	silentgear:compressed_iron		Metal, Advanced	1024	24	20	2	4
+mod/sgearmetalworks	Copper	Main	silentgear:copper		Metal, Basic, Casting	151	12	10	0	8
+mod/sgearmetalworks	Crimson Iron	Main	silentgear:crimson_iron		Metal, Advanced, Casting	420	27	18	2	6
+mod/sgearmetalworks	Crimson Steel	Main	silentgear:crimson_steel		Metal, Endgame, Casting	2400	42	22	10	10
+silentgear	Crushed Shulker Shell	Main	silentgear:crushed_shulker_shell		Rock, Dust, Endgame	2500	50	0	0	0
+mod/sgearmetalworks	Diamond	Main	silentgear:diamond		Gem, Advanced, Casting	1561	33	20	8	4
+silentgear	Dimerald	Main	silentgear:dimerald		Gem, Advanced	1776	36	22	10	10
+mod/sgearmetalworks	Electrum	Main	silentgear:electrum		Metal, Casting, Intermediate	96	10	15	0	11
+mod/sgearmetalworks	Emerald	Main	silentgear:emerald		Gem, Advanced, Casting	1080	24	16	4	6
+silentgear	End Stone	Main	silentgear:end_stone		Rock, Basic	1164	15	15	1	6
+mod/sgearmetalworks	Enderium	Main	silentgear:enderium		Metal, Casting, Endgame	1200	34	22	8	10
+silentgear	Example	Main	silentgear:example		Intangible	100	6	4	1	1
+silentgear	Feather	Main	silentgear:feather		Organic, Basic	0	2	3	0	0
+silentgear	Fine Silk Cloth	Main	silentgear:fine_silk_cloth		Organic, Cloth, Intermediate	0	14	6	0	14
+silentgear	Flint	Main	silentgear:flint		Rock, Basic	124	4	4	0	0
+mod/sgearmetalworks	Glowstone	Main	silentgear:glowstone		Gem, Dust, Intermediate, Casting	0	0	0	0	0
+mod/sgearmetalworks	Gold	Main	silentgear:gold		Metal, Intermediate, Casting	32	7	11	0	8
+silentgear	High Carbon Steel	Main	silentgear:high_carbon_steel		Metal, Advanced	420	24	20	2	6
+mod/sgearmetalworks	Invar	Main	silentgear:invar		Metal, Casting, Intermediate	640	20	18	2	6
+mod/sgearmetalworks	Iron	Main	silentgear:iron		Metal, Intermediate, Casting	250	15	15	0	6
+mod/sgearmetalworks	Lapis Lazuli	Main	silentgear:lapis_lazuli		Gem, Intermediate, Casting	200	13	15	0	10
+mod/sgearmetalworks	Lead	Main	silentgear:lead		Metal, Casting, Intermediate	260	14	13	0	4
+silentgear	Leather	Main	silentgear:leather		Organic, Cloth, Basic	0	5	7	0	8
+silentgear	Leaves	Main	silentgear:leaves		Organic, Basic	0	2	3	0	0
+mod/sgearmetalworks	Lumium	Main	silentgear:lumium		Metal, Casting, Advanced	920	20	18	4	10
+silentgear	Netherrack	Main	silentgear:netherrack		Rock, Organic, Basic	142	5	8	0	4
+silentgear	Netherwood	Main	silentgear:netherwood		Organic, Wood	72	12	8	0	6
+mod/sgearmetalworks	Nickel	Main	silentgear:nickel		Metal, Casting, Intermediate	380	17	13	0	6
+mod/sgearmetalworks	Obsidian	Main	silentgear:obsidian		Rock, Advanced, Casting	1024	13	20	4	8
+mod/sgearmetalworks	Osmium	Main	silentgear:osmium		Metal, Casting, Intermediate	500	30	17	0	4
+silentgear	Paper	Main	silentgear:paper		Organic, Sheet, Basic	0	2	4	0	0
+silentgear	Phantom Membrane	Main	silentgear:phantom_membrane		Organic, Cloth, Intermediate	0	12	6	0	8
+mod/sgearmetalworks	Platinum	Main	silentgear:platinum		Metal, Casting, Advanced	900	21	18	2	12
+mod/sgearmetalworks	Quartz	Main	silentgear:quartz		Gem, Intermediate, Casting	330	13	14	0	4
+mod/sgearmetalworks	Redstone	Main	silentgear:redstone		Metal, Dust, Intermediate, Casting	0	0	0	0	0
+silentgear	Redstone Alloy	Main	silentgear:redstone_alloy		Metal, Intermediate	840	20	17	1	8
+mod/sgearmetalworks	Refined Glowstone	Main	silentgear:refined_glowstone		Metal, Casting, Advanced	300	18	19	0	8
+silentgear	Refined Iron	Main	silentgear:refined_iron		Metal, Intermediate	512	20	18	2	6
+mod/sgearmetalworks	Refined Obsidian	Main	silentgear:refined_obsidian		Metal, Casting, Endgame	2500	50	30	16	6
+silentgear	Sandstone	Main	silentgear:sandstone		Rock, Basic	117	6	5	0	0
+silentgear	Sheet Metal	Main	silentgear:sheet_metal		Sheet	0	0	0	0	0
+mod/sgearmetalworks	Signalum	Main	silentgear:signalum		Metal, Casting, Endgame	800	25	16	2	4
+mod/sgearmetalworks	Silver	Main	silentgear:silver		Metal, Casting, Intermediate	64	9	11	0	10
+mod/sgearmetalworks	Steel	Main	silentgear:steel		Metal, Casting, Intermediate	500	20	20	2	6
+silentgear	Stone	Main	silentgear:stone		Rock, Basic	131	5	5	0	0
+silentgear	Terracotta	Main	silentgear:terracotta		Rock, Basic	165	11	9	0	3
+mod/sgearmetalworks	Tin	Main	silentgear:tin		Metal, Casting, Basic	192	13	12	0	2
+silentgear	Titanium	Main	silentgear:titanium		Metal, Endgame	1600	37	24	8	4
+silentgear	Turtle	Main	silentgear:turtle		Organic, Intermediate	0	0	0	0	4
+mod/sgearmetalworks	Tyrian Steel	Main	silentgear:tyrian_steel		Metal, Endgame, Casting	3652	81	25	12	12
+mod/sgearmetalworks	Uranium	Main	silentgear:uranium		Metal, Casting, Advanced	800	20	13	1	3
+silentgear	Crimson	Main	silentgear:crimson			0	0	0	0	0
+silentgear	Warped	Main	silentgear:warped			0	0	0	0	0
+silentgear	Wood	Main	silentgear:wood		Organic, Wood	59	8	7	0	2
+silentgear	Wool	Main	silentgear:wool		Organic, Cloth, Basic	0	4	4	0	4
+mod/sgearmetalworks	Zinc	Main	silentgear:zinc		Metal, Casting, Basic	192	10	10	0	2
+kubejs	Meat	Main	sgearmetalworks:meat		Casting	1024	13	20	4	8
+kubejs	Uru Metal	Main	sgearmetalworks:uru_metal		Metal, Endgame, Casting, Infusing	15000	50000	42	100	600
+mod/sgearmetalworks	Alexandrite	Main	silentgems:alexandrite		Gem, Intermediate, Casting	1024	29	18	5	10
+mod/sgearmetalworks	Ammolite	Main	silentgems:ammolite		Gem, Advanced, Casting	1024	40	22	12	16
+mod/sgearmetalworks	Aquamarine	Main	silentgems:aquamarine		Gem, Intermediate, Casting	1024	34	15	4	6
+mod/sgearmetalworks	Black Diamond	Main	silentgems:black_diamond		Gem, Advanced, Casting	1792	39	20	8	10
+mod/sgearmetalworks	Carnelian	Main	silentgems:carnelian		Gem, Intermediate, Casting	1280	37	16	4	8
+mod/sgearmetalworks	Citrine	Main	silentgems:citrine		Gem, Intermediate, Casting	768	26	16	4	8
+mod/sgearmetalworks	Garnet	Main	silentgems:garnet		Gem, Intermediate, Casting	512	21	15	4	6
+mod/sgearmetalworks	Heliodor	Main	silentgems:heliodor		Gem, Advanced, Casting	1024	34	16	4	8
+mod/sgearmetalworks	Iolite	Main	silentgems:iolite		Gem, Intermediate, Casting	768	32	20	6	14
+mod/sgearmetalworks	Kyanite	Main	silentgems:kyanite		Gem, Advanced, Casting	1280	38	20	8	14
+mod/sgearmetalworks	Moldavite	Main	silentgems:moldavite		Gem, Intermediate, Casting	512	26	16	4	8
+mod/sgearmetalworks	Opal	Main	silentgems:opal		Gem, Advanced, Casting	1024	36	18	4	8
+mod/sgearmetalworks	Pearl	Main	silentgems:pearl		Gem, Advanced, Casting	1024	44	20	12	16
+mod/sgearmetalworks	Peridot	Main	silentgems:peridot		Gem, Intermediate, Casting	512	21	15	4	6
+mod/sgearmetalworks	Rose Quartz	Main	silentgems:rose_quartz		Gem, Advanced, Casting	1024	34	16	4	8
+mod/sgearmetalworks	Ruby	Main	silentgems:ruby		Gem, Intermediate, Casting	1024	34	15	4	6
+mod/sgearmetalworks	Sapphire	Main	silentgems:sapphire		Gem, Intermediate, Casting	512	28	18	6	10
+mod/sgearmetalworks	Tanzanite	Main	silentgems:tanzanite		Gem, Intermediate, Casting	768	28	18	5	10
+mod/sgearmetalworks	Topaz	Main	silentgems:topaz		Gem, Intermediate, Casting	512	21	15	4	6
+mod/sgearmetalworks	Turquoise	Main	silentgems:turquoise		Gem, Advanced, Casting	1536	40	15	6	20
+mod/sgearmetalworks	White Diamond	Main	silentgems:white_diamond		Gem, Advanced, Casting	2048	44	24	16	20
+kubejs	Allthemodium	Main	silentgear:allthemodium		Metal, Endgame	5500	60	60	60	200
+kubejs	Unobtainium	Main	silentgear:unobtainium		Metal, Endgame	9500	120	90	90	600
+kubejs	Vibranium	Main	silentgear:vibranium		Metal, Endgame	7500	90	70	70	400

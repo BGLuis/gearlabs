@@ -1,0 +1,26 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:terracotta",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [],
+    "gear_type_blacklist": [],
+    "ingredient": "minecraft:light_gray_terracotta",
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FF876A61",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_flat",
+      "compound_asset_id": "silentgear:generic_flat",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.terracotta.light_gray"
+    },
+    "name_prefix": ""
+  },
+  "properties": {}
+}

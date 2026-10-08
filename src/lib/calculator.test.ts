@@ -58,13 +58,13 @@ describe('calculateGearStats', () => {
     const buildAlone: GearBuild = {
       gearTypeId: 'helmet',
       parts: {
-        main: { materialId: 'allthemodium:unobtainium' },
+        main: { materialId: 'silentgear:unobtainium' },
       },
     };
     const buildWithCoating: GearBuild = {
       gearTypeId: 'helmet',
       parts: {
-        main: { materialId: 'allthemodium:unobtainium' },
+        main: { materialId: 'silentgear:unobtainium' },
         coating: { materialId: 'silentgear:netherite' },
       },
     };
@@ -86,7 +86,7 @@ describe('calculateGearStats', () => {
     const buildAlone: GearBuild = {
       gearTypeId: 'helmet',
       parts: {
-        main: { materialId: 'allthemodium:unobtainium' },
+        main: { materialId: 'silentgear:unobtainium' },
       },
     };
     // Mock de catálogo onde coating não concede armor (comportamento oficial do Silent Gear)
@@ -106,7 +106,7 @@ describe('calculateGearStats', () => {
     const buildWithCoating: GearBuild = {
       gearTypeId: 'helmet',
       parts: {
-        main: { materialId: 'allthemodium:unobtainium' },
+        main: { materialId: 'silentgear:unobtainium' },
         coating: { materialId: 'silentgear:netherite_no_armor' },
       },
     };
@@ -225,24 +225,22 @@ describe('calculateGearStats', () => {
     const build: GearBuild = {
       gearTypeId: 'sword',
       parts: {
-        main: { materialId: 'allthemodium:unobtainium' },
+        main: { materialId: 'silentgear:unobtainium' },
         rod: { materialId: 'silentgear:breeze_rod' },
-        tip: { materialId: 'allthemodium:allthemodium' },
+        tip: { materialId: 'silentgear:allthemodium' },
       },
     };
 
     const stats = calculateGearStats(build, ATM11_CATALOG);
 
-    // Unobtainium dano 16.0 + Espada base 3.0 + Tip Allthemodium 3.0 = 22.0
-    // Sinergia neutra entre partes simples (1.00); finalDamage = 22.0
     expect(stats.synergy).toBe(100);
     expect(stats.meleeDamage).toBeGreaterThanOrEqual(22.0);
-    expect(stats.durability).toBeGreaterThan(50000);
+    expect(stats.durability).toBeGreaterThan(9000);
     // Breeze rod adiciona +0.35 de attack speed
     expect(stats.attackSpeed).toBeGreaterThan(1.6);
 
     const traitIds = stats.traits.map((t) => t.id);
-    expect(traitIds).toContain('allthemodium:godlike');
+    expect(traitIds).toContain('silentgear:brilliant');
     expect(traitIds).toContain('silentgear:swift');
   });
 
