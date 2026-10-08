@@ -29,6 +29,7 @@ interface GearContextType {
   stats: CalculatedGearStats;
   setGearType: (typeId: string) => void;
   setPartMaterial: (slot: PartSlot, materialId: string, grade?: Grade, starcharge?: StarchargeLevel) => void;
+  setPartGrade: (slot: PartSlot, grade: Grade) => void;
   setPartSubMaterials: (slot: PartSlot, materials: SubMaterialSelection[]) => void;
   addSubMaterial: (slot: PartSlot, materialId: string, grade?: Grade) => void;
   removeSubMaterial: (slot: PartSlot, index: number) => void;
@@ -225,6 +226,23 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     }));
   }
 
+  function setPartGrade(slot: PartSlot, grade: Grade) {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      if (!current) return prev;
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: {
+            ...current,
+            grade,
+          },
+        },
+      };
+    });
+  }
+
   function setPartSubMaterials(slot: PartSlot, materials: SubMaterialSelection[]) {
     setBuild((prev) => {
       const current = prev.parts[slot];
@@ -235,7 +253,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
           ...prev.parts,
           [slot]: {
             materialId: primary?.materialId || current?.materialId || '',
-            grade: current?.grade || primary?.grade || 'NONE',
+            grade: current?.grade || 'NONE',
             starcharge: current?.starcharge || 0,
             materials,
           },
@@ -249,18 +267,18 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
       const current = prev.parts[slot];
       const currentMaterials = current?.materials && current.materials.length > 0
         ? [...current.materials]
-        : (current?.materialId ? [{ materialId: current.materialId, grade: current.grade || 'NONE' }] : []);
+        : (current?.materialId ? [{ materialId: current.materialId }] : []);
 
       if (currentMaterials.length >= 6) return prev;
 
-      const newMaterials = [...currentMaterials, { materialId, grade }];
+      const newMaterials = [...currentMaterials, { materialId }];
       return {
         ...prev,
         parts: {
           ...prev.parts,
           [slot]: {
             materialId: newMaterials[0].materialId,
-            grade: current?.grade || newMaterials[0].grade || 'NONE',
+            grade: current?.grade || 'NONE',
             materials: newMaterials,
           },
         },
@@ -284,7 +302,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
           ...prev.parts,
           [slot]: {
             materialId: nextMaterials[0].materialId,
-            grade: current.grade || nextMaterials[0].grade || 'NONE',
+            grade: current.grade || 'NONE',
             materials: nextMaterials.length > 1 ? nextMaterials : undefined,
           },
         },
@@ -322,14 +340,13 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     });
   }
 
-  function updateSubMaterial(slot: PartSlot, index: number, materialId: string, grade?: Grade) {
+  function updateSubMaterial(slot: PartSlot, index: number, materialId: string, _grade?: Grade) {
     setBuild((prev) => {
       const current = prev.parts[slot];
       if (!current?.materials || index < 0 || index >= current.materials.length) return prev;
       const nextMaterials = [...current.materials];
       nextMaterials[index] = {
         materialId,
-        grade: grade !== undefined ? grade : nextMaterials[index].grade,
       };
       return {
         ...prev,
@@ -440,6 +457,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         stats,
         setGearType,
         setPartMaterial,
+        setPartGrade,
         setPartSubMaterials,
         addSubMaterial,
         removeSubMaterial,
