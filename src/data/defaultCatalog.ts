@@ -6,7 +6,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
     name: { en: 'Iron', pt: 'Ferro' },
     tier: 2,
     category: 'metal',
-    color: '#D8D8D8',
+    color: '#FFFFFF',
     stats: {
       main: {
         durability: 250,
@@ -69,7 +69,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
     name: { en: 'Netherite', pt: 'Netherita' },
     tier: 4,
     category: 'metal',
-    color: '#4C4244',
+    color: '#867B86',
     stats: {
       main: {
         durability: 2031,
@@ -101,7 +101,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
     name: { en: 'Crimson Iron', pt: 'Ferro Carmesim' },
     tier: 2,
     category: 'metal',
-    color: '#A62639',
+    color: '#FF6189',
     stats: {
       main: {
         durability: 450,
@@ -130,7 +130,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
     name: { en: 'Crimson Steel', pt: 'Aço Carmesim' },
     tier: 3,
     category: 'metal',
-    color: '#D8315B',
+    color: '#DC143C',
     stats: {
       main: {
         durability: 1650,
@@ -161,7 +161,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
     name: { en: 'Azure Silver', pt: 'Prata Azul' },
     tier: 3,
     category: 'metal',
-    color: '#84DCC6',
+    color: '#CBBAFF',
     stats: {
       main: {
         durability: 850,
@@ -192,7 +192,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
     name: { en: 'Azure Electrum', pt: 'Electrum Azul' },
     tier: 4,
     category: 'metal',
-    color: '#5BC0BE',
+    color: '#4575E3',
     stats: {
       main: {
         durability: 1850,
@@ -221,7 +221,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
     name: { en: 'Gold', pt: 'Ouro' },
     tier: 1,
     category: 'metal',
-    color: '#FEE180',
+    color: '#FDFF70',
     stats: {
       main: {
         durability: 32,
@@ -251,7 +251,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
     name: { en: 'Copper', pt: 'Cobre' },
     tier: 1,
     category: 'metal',
-    color: '#D97D64',
+    color: '#FD804C',
     stats: {
       main: {
         durability: 180,
@@ -279,7 +279,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
     name: { en: 'Wood', pt: 'Madeira' },
     tier: 0,
     category: 'wood',
-    color: '#86654B',
+    color: '#896727',
     stats: {
       main: {
         durability: 59,
@@ -310,7 +310,7 @@ export const BREEZE_ROD_MATERIAL: Material = {
   name: { en: 'Breeze Rod', pt: 'Haste de Brisa' },
   tier: 2,
   category: 'metal',
-  color: '#C0C9ED',
+  color: '#9398C1',
   stats: {
     rod: {
       durability: 150,
@@ -334,7 +334,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
     name: { en: 'Allthemodium', pt: 'Allthemodium' },
     tier: 5,
     category: 'metal',
-    color: '#F9E076',
+    color: '#FFEF0E',
     stats: {
       main: {
         durability: 12000,
@@ -367,7 +367,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
     name: { en: 'Vibranium', pt: 'Vibranium' },
     tier: 6,
     category: 'metal',
-    color: '#38EF7D',
+    color: '#26DE88',
     stats: {
       main: {
         durability: 28000,
@@ -401,7 +401,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
     name: { en: 'Unobtainium', pt: 'Unobtainium' },
     tier: 7,
     category: 'metal',
-    color: '#9B51E0',
+    color: '#D152E3',
     stats: {
       main: {
         durability: 52000,
