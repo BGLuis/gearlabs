@@ -1,10 +1,14 @@
 import {
   GearBuild,
+  GearPartSelection,
   GearType,
+  Grade,
+  Material,
   OptimizationGoal,
   OptimizationRequest,
   OptimizedBuildResult,
   PartSlot,
+  StarchargeLevel,
   VersionCatalog,
 } from '@/types/silentgear';
 import { calculateGearStats } from './calculator';
@@ -37,11 +41,14 @@ function computeScore(
 function generateHighlights(
   stats: ReturnType<typeof calculateGearStats>,
   goal: OptimizationGoal,
-  gearType: GearType
+  gearType: GearType,
+  mainPart?: GearPartSelection
 ): string[] {
   const highlights: string[] = [];
 
-  if (stats.synergy >= 105) {
+  if (mainPart?.materials && mainPart.materials.length > 1) {
+    highlights.push(`Liga de ${mainPart.materials.length} materiais (${stats.synergy}% harmonia)`);
+  } else if (stats.synergy >= 105) {
     highlights.push(`Harmonia elevada: ${stats.synergy}% de sinergia`);
   }
 
@@ -65,6 +72,127 @@ function generateHighlights(
 
 export const MAX_SECONDARY_CANDIDATES = 12;
 
+function beamSearchAlloys(
+  mainCandidates: Material[],
+  gearTypeId: string,
+  goal: OptimizationGoal,
+  gearType: GearType,
+  catalog: VersionCatalog,
+  targetGrade?: Grade,
+  targetStarcharge?: StarchargeLevel,
+  maxIngredients: number = 6,
+  beamWidth: number = 6
+): GearPartSelection[] {
+  if (mainCandidates.length < 2) return [];
+
+  function makeAlloySelection(primaryId: string, subMatIds: string[]): GearPartSelection {
+    const ordered = [primaryId, ...subMatIds.filter((id) => id !== primaryId)];
+    const part: GearPartSelection = {
+      materialId: primaryId,
+      materials: ordered.map((id) => {
+        const sub: { materialId: string; grade?: Grade; starcharge?: StarchargeLevel } = { materialId: id };
+        if (targetGrade && targetGrade !== 'NONE') sub.grade = targetGrade;
+        if (targetStarcharge && targetStarcharge > 0) sub.starcharge = targetStarcharge;
+        return sub;
+      }),
+    };
+    if (targetGrade && targetGrade !== 'NONE') part.grade = targetGrade;
+    if (targetStarcharge && targetStarcharge > 0) part.starcharge = targetStarcharge;
+    return part;
+  }
+
+  function makePureSelection(materialId: string): GearPartSelection {
+    const part: GearPartSelection = { materialId };
+    if (targetGrade && targetGrade !== 'NONE') part.grade = targetGrade;
+    if (targetStarcharge && targetStarcharge > 0) part.starcharge = targetStarcharge;
+    return part;
+  }
+
+  // 1. Avaliar materiais puros para inicializar o feixe
+  const scoredPure = mainCandidates.map((m) => {
+    const part = makePureSelection(m.id);
+    const stats = calculateGearStats({ gearTypeId, parts: { main: part } }, catalog);
+    const score = computeScore(stats, goal, gearType);
+    return {
+      subMatIds: [m.id],
+      primaryId: m.id,
+      score,
+      part,
+    };
+  });
+
+  scoredPure.sort((a, b) => b.score - a.score);
+
+  let beam = scoredPure.slice(0, beamWidth);
+  const candidateAlloys: Array<{ score: number; part: GearPartSelection }> = [];
+
+  const maxDepth = Math.min(maxIngredients, mainCandidates.length);
+
+  for (let depth = 2; depth <= maxDepth; depth++) {
+    const nextStates: Array<{
+      subMatIds: string[];
+      primaryId: string;
+      score: number;
+      part: GearPartSelection;
+    }> = [];
+
+    for (const b of beam) {
+      for (const nextMat of mainCandidates) {
+        if (b.subMatIds.includes(nextMat.id)) continue;
+        const newIds = [...b.subMatIds, nextMat.id];
+
+        // Avaliar com primário atual ou com o novo material como primário
+        for (const prim of [b.primaryId, nextMat.id]) {
+          const part = makeAlloySelection(prim, newIds);
+          const stats = calculateGearStats({ gearTypeId, parts: { main: part } }, catalog);
+          const score = computeScore(stats, goal, gearType);
+          nextStates.push({
+            subMatIds: newIds,
+            primaryId: prim,
+            score,
+            part,
+          });
+        }
+      }
+    }
+
+    if (nextStates.length === 0) break;
+
+    // Deduplicar estados no mesmo nível de profundidade
+    const seen = new Set<string>();
+    const unique: typeof nextStates = [];
+    for (const s of nextStates) {
+      const key = [...s.subMatIds].sort().join(',') + '::' + s.primaryId;
+      if (!seen.has(key)) {
+        seen.add(key);
+        unique.push(s);
+      }
+    }
+
+    unique.sort((a, b) => b.score - a.score);
+    beam = unique.slice(0, beamWidth);
+
+    if (beam.length > 0) {
+      candidateAlloys.push(beam[0]);
+      if (beam.length > 1) candidateAlloys.push(beam[1]);
+    }
+  }
+
+  candidateAlloys.sort((a, b) => b.score - a.score);
+
+  const result: GearPartSelection[] = [];
+  const seenAlloyKeys = new Set<string>();
+  for (const item of candidateAlloys) {
+    const key = (item.part.materials || []).map((m) => m.materialId).sort().join(',') + '::' + item.part.materialId;
+    if (!seenAlloyKeys.has(key)) {
+      seenAlloyKeys.add(key);
+      result.push(item.part);
+    }
+  }
+
+  return result.slice(0, 3);
+}
+
 export function findBestBuilds(
   request: OptimizationRequest,
   catalog: VersionCatalog,
@@ -74,6 +202,18 @@ export function findBestBuilds(
   const gearType = catalog.gearTypes[request.gearTypeId];
   if (!gearType) {
     throw new Error(`GearType '${request.gearTypeId}' not found.`);
+  }
+
+  const targetGrade: Grade | undefined = request.grade ?? request.maxGrade;
+  const targetStarcharge: StarchargeLevel | undefined = request.starcharge;
+  const allowAlloys = request.allowAlloys ?? (targetGrade !== undefined || (targetStarcharge !== undefined && targetStarcharge > 0));
+  const maxAlloyIngredients = request.maxAlloyIngredients ?? 6;
+
+  function makePart(materialId: string): GearPartSelection {
+    const part: GearPartSelection = { materialId };
+    if (targetGrade && targetGrade !== 'NONE') part.grade = targetGrade;
+    if (targetStarcharge && targetStarcharge > 0) part.starcharge = targetStarcharge;
+    return part;
   }
 
   // Filtrar materiais permitidos
@@ -95,29 +235,47 @@ export function findBestBuilds(
   }
 
   // Candidatos viáveis por slot
-  const candidatesBySlot: Partial<Record<PartSlot, string[]>> = {};
+  const candidatePartsBySlot: Partial<Record<PartSlot, GearPartSelection[]>> = {};
 
   for (const slot of slotsToFill) {
-    // Se o usuário fixou o slot, usa apenas a escolha dele
+    // Se o usuário fixou o slot, usa apenas a escolha dele com grade e starcharge aplicados
     if (request.fixedSlots?.[slot]) {
-      candidatesBySlot[slot] = [request.fixedSlots[slot]!];
+      candidatePartsBySlot[slot] = [makePart(request.fixedSlots[slot]!)];
       continue;
     }
 
-    let valid = eligibleMaterials.filter((m) => {
+    const valid = eligibleMaterials.filter((m) => {
       if (slot === 'main') return !!m.stats.main;
       if (slot === 'rod') return !!m.stats.rod || !!m.statModifiers?.rod;
       if (slot === 'tip') return !!m.stats.tip;
       return !!m.stats[slot];
     });
 
-    if (slot !== 'main') {
-      // Ordenar candidatos secundários pela contribuição individual ao objetivo
+    if (slot === 'main') {
+      const pureCandidates = valid.map((m) => makePart(m.id));
+      let alloyCandidates: GearPartSelection[] = [];
+
+      if (allowAlloys && valid.length >= 2) {
+        alloyCandidates = beamSearchAlloys(
+          valid,
+          request.gearTypeId,
+          request.goal,
+          gearType,
+          catalog,
+          targetGrade,
+          targetStarcharge,
+          maxAlloyIngredients
+        );
+      }
+
+      candidatePartsBySlot[slot] = [...alloyCandidates, ...pureCandidates];
+    } else {
+      // Ordenar candidatos secundários pela contribuição individual ao objetivo com grade/starcharge
       const scoredCandidates = valid.map((m) => {
         const stats = calculateGearStats(
           {
             gearTypeId: request.gearTypeId,
-            parts: { [slot]: { materialId: m.id } },
+            parts: { [slot]: makePart(m.id) },
           },
           catalog
         );
@@ -133,19 +291,18 @@ export function findBestBuilds(
       });
 
       // Poda: se houver mais candidatos que o teto para slot secundário, pegar os melhores
+      let selectedSecondary = scoredCandidates;
       if (scoredCandidates.length > maxSecondaryCandidates) {
-        valid = scoredCandidates.slice(0, maxSecondaryCandidates).map((c) => c.material);
-      } else {
-        valid = scoredCandidates.map((c) => c.material);
+        selectedSecondary = scoredCandidates.slice(0, maxSecondaryCandidates);
       }
-    }
 
-    candidatesBySlot[slot] = valid.map((m) => m.id);
+      candidatePartsBySlot[slot] = selectedSecondary.map((c) => makePart(c.material.id));
+    }
   }
 
   // Garantir que todos os slots obrigatórios têm pelo menos 1 candidato
   for (const slot of gearType.requiredSlots) {
-    if (!candidatesBySlot[slot] || candidatesBySlot[slot]!.length === 0) {
+    if (!candidatePartsBySlot[slot] || candidatePartsBySlot[slot]!.length === 0) {
       return [];
     }
   }
@@ -153,7 +310,7 @@ export function findBestBuilds(
   const results: OptimizedBuildResult[] = [];
 
   // Produto cartesiano para avaliação de combinações
-  function explore(slotIndex: number, currentParts: Partial<Record<PartSlot, { materialId: string }>>) {
+  function explore(slotIndex: number, currentParts: Partial<Record<PartSlot, GearPartSelection>>) {
     if (slotIndex >= slotsToFill.length) {
       const build: GearBuild = {
         gearTypeId: request.gearTypeId,
@@ -161,7 +318,7 @@ export function findBestBuilds(
       };
       const stats = calculateGearStats(build, catalog);
       const score = computeScore(stats, request.goal, gearType);
-      const highlights = generateHighlights(stats, request.goal, gearType);
+      const highlights = generateHighlights(stats, request.goal, gearType, currentParts.main);
 
       results.push({
         build,
@@ -173,7 +330,7 @@ export function findBestBuilds(
     }
 
     const currentSlot = slotsToFill[slotIndex];
-    const slotCandidates = candidatesBySlot[currentSlot] || [];
+    const slotCandidates = candidatePartsBySlot[currentSlot] || [];
 
     // Se for opcional e não tiver candidatos, pula
     if (slotCandidates.length === 0) {
@@ -181,8 +338,8 @@ export function findBestBuilds(
       return;
     }
 
-    for (const matId of slotCandidates) {
-      currentParts[currentSlot] = { materialId: matId };
+    for (const part of slotCandidates) {
+      currentParts[currentSlot] = part;
       explore(slotIndex + 1, currentParts);
     }
     delete currentParts[currentSlot];
@@ -190,9 +347,26 @@ export function findBestBuilds(
 
   explore(0, {});
 
-  // Ordenar decrescente pelo score e retornar Top N
+  // Ordenar decrescente pelo score
   results.sort((a, b) => b.score - a.score);
 
   // Deduplicar builds equivalentes e retornar top N
-  return results.slice(0, topN);
+  const seenBuilds = new Set<string>();
+  const uniqueResults: OptimizedBuildResult[] = [];
+  for (const res of results) {
+    const key = Object.entries(res.build.parts)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([slot, part]) => {
+        const sub = part?.materials ? part.materials.map((m) => m.materialId).sort().join('+') : '';
+        return `${slot}:${part?.materialId}:${sub}:${part?.grade ?? ''}:${part?.starcharge ?? ''}`;
+      })
+      .join('|');
+    if (!seenBuilds.has(key)) {
+      seenBuilds.add(key);
+      uniqueResults.push(res);
+      if (uniqueResults.length >= topN) break;
+    }
+  }
+
+  return uniqueResults;
 }

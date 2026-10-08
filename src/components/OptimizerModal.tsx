@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useGear } from '@/context/GearContext';
-import { OptimizationGoal, OptimizedBuildResult } from '@/types/silentgear';
+import { Grade, OptimizationGoal, OptimizedBuildResult, StarchargeLevel } from '@/types/silentgear';
 import { findBestBuilds } from '@/lib/optimizer';
 import { Sparkles, X, Check, Shield, Swords, Zap, Pickaxe, Scale, Heart } from 'lucide-react';
 
@@ -10,6 +10,9 @@ export function OptimizerModal() {
   const { catalog, build, inventory, loadBuild, lang } = useGear();
   const [isOpen, setIsOpen] = useState(false);
   const [goal, setGoal] = useState<OptimizationGoal>('max_damage');
+  const [grade, setGrade] = useState<Grade>('NONE');
+  const [starcharge, setStarcharge] = useState<StarchargeLevel>(0);
+  const [allowAlloys, setAllowAlloys] = useState(true);
 
   const currentGearType = catalog.gearTypes[build.gearTypeId];
   const isArmor = currentGearType?.category === 'armor';
@@ -74,6 +77,9 @@ export function OptimizerModal() {
           gearTypeId: build.gearTypeId,
           availableMaterials: availableList,
           goal,
+          grade,
+          starcharge,
+          allowAlloys,
         },
         catalog,
         3
@@ -82,7 +88,7 @@ export function OptimizerModal() {
       console.error('Error optimizing builds', e);
       return [];
     }
-  }, [isOpen, build.gearTypeId, availableList, goal, catalog]);
+  }, [isOpen, build.gearTypeId, availableList, goal, grade, starcharge, allowAlloys, catalog]);
 
   const handleApply = (res: OptimizedBuildResult) => {
     loadBuild(res.build);
@@ -166,6 +172,70 @@ export function OptimizerModal() {
                 </div>
               </div>
 
+              {/* Opções de Endgame: Grau, Starcharge e Ligas */}
+              <div className="p-3 bg-mc-bg/40 border border-mc-border rounded-lg space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-mc-text font-mono uppercase tracking-wider">
+                    {lang === 'pt' ? 'Configurações de Endgame:' : 'Endgame Settings:'}
+                  </span>
+                  <label className="flex items-center gap-2 cursor-pointer text-xs text-mc-muted hover:text-mc-text">
+                    <input
+                      type="checkbox"
+                      checked={allowAlloys}
+                      onChange={(e) => setAllowAlloys(e.target.checked)}
+                      className="rounded border-mc-border text-mc-primary focus:ring-0"
+                    />
+                    <span>{lang === 'pt' ? 'Explorar Ligas' : 'Explore Alloys'}</span>
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Grau */}
+                  <div>
+                    <label className="block text-[11px] font-mono text-mc-muted mb-1">
+                      {lang === 'pt' ? 'Grau Máximo:' : 'Max Grade:'}
+                    </label>
+                    <div className="flex flex-wrap gap-1">
+                      {(['NONE', 'E', 'D', 'C', 'B', 'A', 'S', 'SS', 'SSS', 'MAX'] as Grade[]).map((g) => (
+                        <button
+                          key={g}
+                          onClick={() => setGrade(g)}
+                          className={`px-1.5 py-0.5 rounded text-[11px] font-mono font-bold border transition-colors ${
+                            grade === g
+                              ? 'bg-mc-gold/20 border-mc-gold text-mc-gold'
+                              : 'bg-mc-surface border-mc-border text-mc-muted hover:text-mc-text'
+                          }`}
+                        >
+                          {g}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Starcharge */}
+                  <div>
+                    <label className="block text-[11px] font-mono text-mc-muted mb-1">
+                      {lang === 'pt' ? 'Starlight Charger:' : 'Starlight Charger:'}
+                    </label>
+                    <div className="flex gap-1.5">
+                      {([0, 1, 2, 3] as StarchargeLevel[]).map((sc) => (
+                        <button
+                          key={sc}
+                          onClick={() => setStarcharge(sc)}
+                          className={`flex-1 py-1 rounded text-xs font-mono font-bold border transition-colors flex items-center justify-center gap-1 ${
+                            starcharge === sc
+                              ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300'
+                              : 'bg-mc-surface border-mc-border text-mc-muted hover:text-mc-text'
+                          }`}
+                        >
+                          <span>{sc === 0 ? '0' : `⭐ ${['', 'I', 'II', 'III'][sc]}`}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Resultados Sugeridos */}
               <div>
                 <label className="block text-xs font-bold text-mc-muted uppercase tracking-wider font-mono mb-2">
@@ -216,25 +286,58 @@ export function OptimizerModal() {
                             <div>
                               {/* Peças usadas */}
                               <div className="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-mc-text">
-                                {mainMat && (
-                                  <span className="flex items-center gap-1">
-                                    <span
-                                      className="w-2 h-2 rounded-full inline-block"
-                                      style={{ backgroundColor: mainMat.color }}
-                                    />
-                                    {mainMat.name[lang]} (Lâmina)
+                                {res.build.parts.main?.materials && res.build.parts.main.materials.length > 1 ? (
+                                  <span className="flex items-center gap-1 text-mc-accent">
+                                    <span>⚡ {lang === 'pt' ? 'Liga' : 'Alloy'}:</span>
+                                    <span className="flex items-center gap-1 text-mc-text font-normal">
+                                      {res.build.parts.main.materials.map((sm, smIdx) => {
+                                        const mat = catalog.materials[sm.materialId];
+                                        return (
+                                          <span key={smIdx} className="inline-flex items-center gap-0.5">
+                                            {mat && (
+                                              <span
+                                                className="w-2 h-2 rounded-full inline-block"
+                                                style={{ backgroundColor: mat.color }}
+                                              />
+                                            )}
+                                            {mat?.name[lang] || sm.materialId}
+                                            {smIdx < res.build.parts.main!.materials!.length - 1 ? ',' : ''}
+                                          </span>
+                                        );
+                                      })}
+                                    </span>
                                   </span>
+                                ) : (
+                                  mainMat && (
+                                    <span className="flex items-center gap-1">
+                                      <span
+                                        className="w-2 h-2 rounded-full inline-block"
+                                        style={{ backgroundColor: mainMat.color }}
+                                      />
+                                      {mainMat.name[lang]} ({isArmor ? (lang === 'pt' ? 'Placa' : 'Plate') : (lang === 'pt' ? 'Lâmina' : 'Blade')})
+                                    </span>
+                                  )
                                 )}
                                 {rodMat && (
                                   <span className="flex items-center gap-1 text-mc-muted">
-                                    + {rodMat.name[lang]} (Haste)
+                                    + {rodMat.name[lang]} ({lang === 'pt' ? 'Haste' : 'Rod'})
                                   </span>
                                 )}
                                 {tipMat && (
                                   <span className="flex items-center gap-1 text-mc-primary">
-                                    + {tipMat.name[lang]} (Ponta)
+                                    + {tipMat.name[lang]} ({lang === 'pt' ? 'Ponta' : 'Tip'})
                                   </span>
                                 )}
+                                {res.build.parts.main?.grade && res.build.parts.main.grade !== 'NONE' && (
+                                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-mc-gold/20 text-mc-gold border border-mc-gold/40">
+                                    {res.build.parts.main.grade}
+                                  </span>
+                                )}
+                                {res.build.parts.main?.starcharge && res.build.parts.main.starcharge > 0 ? (
+                                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                                    ⭐ {['', 'I', 'II', 'III'][res.build.parts.main.starcharge]}
+                                  </span>
+                                ) : null}
                               </div>
 
                               {/* Atributos Chave */}

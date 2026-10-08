@@ -197,6 +197,11 @@ export interface OptimizationRequest {
   availableMaterials: string[];
   goal: OptimizationGoal;
   fixedSlots?: Partial<Record<PartSlot, string>>;
+  grade?: Grade;
+  maxGrade?: Grade;
+  starcharge?: StarchargeLevel;
+  allowAlloys?: boolean;
+  maxAlloyIngredients?: number;
 }
 
 export interface OptimizedBuildResult {

@@ -419,6 +419,9 @@ export function composeCompoundSlotModifiers(
     harvestTier = subMaterials[0]?.harvest_tier || 'minecraft:wood';
   }
 
+  // Charging Value (não afetado por sinergia na extração, compõe por média ponderada)
+  const chargingValueMods = processStat((mat) => mat.stats[slot]?.charging_value, false);
+
   // Traits
   const traits: MaterialTraitRef[] = [];
   for (const mat of subMaterials) {
@@ -437,6 +440,7 @@ export function composeCompoundSlotModifiers(
     attackSpeedMods,
     harvestSpeedMods,
     rarityMods,
+    chargingValueMods,
     harvestTier,
     traits,
   };
@@ -531,7 +535,9 @@ export function calculateGearStats(
 
   const mainGradeMul = mainSelection?.grade ? (GRADE_MULTIPLIERS[mainSelection.grade] || 0) : 0;
   const mainStarchargeLevel = mainSelection?.starcharge || 0;
-  const mainChargingValue = getNumericStatValue(mainMaterial?.stats.main?.charging_value, 0);
+  const mainChargingValue = (composedMain && composedMain.chargingValueMods.length > 0)
+    ? composedMain.chargingValueMods[0].value
+    : getNumericStatValue(mainMaterial?.stats.main?.charging_value, 0);
 
   // 1. ARMOR
   const armorMods: ComputedModifier[] = [];
@@ -621,10 +627,13 @@ export function calculateGearStats(
     const slotGradeMul = sel.grade ? (GRADE_MULTIPLIERS[sel.grade] || 0) : 0;
     const slotStarchargeLevel = sel.starcharge || 0;
     const mat = slotSubMaterials[0];
-    const slotChargingValue = getNumericStatValue(mat?.stats.main?.charging_value, 0);
+    let slotChargingValue = getNumericStatValue(mat?.stats[slot]?.charging_value ?? mat?.stats.main?.charging_value, 0);
 
     if (isSlotCompound) {
       const composedSlot = composeCompoundSlotModifiers(slotSubMaterials, slot, isArmor, gearType.id);
+      if (composedSlot.chargingValueMods.length > 0) {
+        slotChargingValue = composedSlot.chargingValueMods[0].value;
+      }
 
       if (composedSlot.armorMods.length > 0) {
         armorMods.push(...applyEnhancementsToModifiers(composedSlot.armorMods, 'armor', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
