@@ -1,12 +1,14 @@
+import fs from 'fs';
+import path from 'path';
 import { describe, it, expect } from 'vitest';
-import { findBestBuilds } from './optimizer';
+import { findBestBuilds, MAX_SECONDARY_CANDIDATES } from './optimizer';
 import {
   OFFICIAL_MATERIALS_1_20,
   OFFICIAL_GEAR_TYPES,
   OFFICIAL_TRAITS,
   ATM11_CATALOG,
 } from '@/data/defaultCatalog';
-import { VersionCatalog } from '@/types/silentgear';
+import { Material, VersionCatalog } from '@/types/silentgear';
 
 const catalog: VersionCatalog = {
   version: '1.20.1',
@@ -143,5 +145,176 @@ describe('findBestBuilds', () => {
       armorResults[0].build.parts.main?.materialId
     );
     expect(armorResults[0].stats.armor).toBeGreaterThanOrEqual(14);
+  });
+
+  it('num catálogo com 30 pontas em que a melhor para o objetivo é a última na ordem do objeto, findBestBuilds a devolve', () => {
+    const materials: Record<string, Material> = {
+      'test:main_mat': {
+        id: 'test:main_mat',
+        name: { en: 'Main Mat', pt: 'Material Principal' },
+        tier: 1,
+        category: 'metal',
+        color: '#FFFFFF',
+        stats: {
+          main: {
+            durability: 500,
+            melee_damage: 5.0,
+            attack_speed: 0.0,
+            harvest_speed: 4.0,
+          },
+        },
+        traits: {},
+      },
+      'test:rod_mat': {
+        id: 'test:rod_mat',
+        name: { en: 'Rod Mat', pt: 'Material Haste' },
+        tier: 1,
+        category: 'wood',
+        color: '#888888',
+        stats: {
+          rod: { durability: 50 },
+        },
+        traits: {},
+      },
+    };
+
+    // Gera 30 pontas: pontas 01..29 são fracas (+1.0 dano), ponta 30 é a mais forte (+25.0 dano)
+    for (let i = 1; i <= 29; i++) {
+      const id = `test:tip_${String(i).padStart(2, '0')}`;
+      materials[id] = {
+        id,
+        name: { en: `Tip ${i}`, pt: `Ponta ${i}` },
+        tier: 1,
+        category: 'gem',
+        color: '#AAAAAA',
+        stats: {
+          tip: { durability: 50, melee_damage: 1.0 },
+        },
+        traits: {},
+      };
+    }
+
+    const bestTipId = 'test:tip_30';
+    materials[bestTipId] = {
+      id: bestTipId,
+      name: { en: 'Super Tip 30', pt: 'Super Ponta 30' },
+      tier: 3,
+      category: 'gem',
+      color: '#FF00FF',
+      stats: {
+        tip: { durability: 500, melee_damage: 25.0 },
+      },
+      traits: {},
+    };
+
+    const testCatalog: VersionCatalog = {
+      version: 'test-1.0',
+      materials,
+      gearTypes: OFFICIAL_GEAR_TYPES,
+      traits: {},
+    };
+
+    const results = findBestBuilds(
+      {
+        gearTypeId: 'sword',
+        availableMaterials: Object.keys(materials),
+        goal: 'max_damage',
+      },
+      testCatalog,
+      1
+    );
+
+    expect(results.length).toBe(1);
+    expect(results[0].build.parts.tip?.materialId).toBe(bestTipId);
+    expect(results[0].stats.meleeDamage).toBeGreaterThanOrEqual(30);
+  });
+
+  it('teste de equivalência: num catálogo reduzido (≤ 8 candidatos por slot) o resultado é igual ao da busca exaustiva', () => {
+    const materials: Record<string, Material> = {};
+
+    // 4 materiais principais
+    for (let i = 1; i <= 4; i++) {
+      const id = `test:equiv_main_${i}`;
+      materials[id] = {
+        id,
+        name: { en: `Main ${i}`, pt: `Principal ${i}` },
+        tier: i,
+        category: 'metal',
+        color: '#FFFFFF',
+        stats: {
+          main: { durability: 200 * i, melee_damage: 2.0 * i },
+        },
+        traits: {},
+      };
+    }
+
+    // 5 hastes (≤ 8)
+    for (let i = 1; i <= 5; i++) {
+      const id = `test:equiv_rod_${i}`;
+      materials[id] = {
+        id,
+        name: { en: `Rod ${i}`, pt: `Haste ${i}` },
+        tier: 1,
+        category: 'wood',
+        color: '#FFFFFF',
+        stats: {
+          rod: { durability: 30 * i },
+        },
+        traits: {},
+      };
+    }
+
+    // 6 pontas (≤ 8)
+    for (let i = 1; i <= 6; i++) {
+      const id = `test:equiv_tip_${i}`;
+      materials[id] = {
+        id,
+        name: { en: `Tip ${i}`, pt: `Ponta ${i}` },
+        tier: 1,
+        category: 'gem',
+        color: '#FFFFFF',
+        stats: {
+          tip: { durability: 20 * i, melee_damage: 1.5 * i },
+        },
+        traits: {},
+      };
+    }
+
+    const testCatalog: VersionCatalog = {
+      version: 'test-equiv',
+      materials,
+      gearTypes: OFFICIAL_GEAR_TYPES,
+      traits: {},
+    };
+
+    const standardResults = findBestBuilds(
+      {
+        gearTypeId: 'sword',
+        availableMaterials: Object.keys(materials),
+        goal: 'max_damage',
+      },
+      testCatalog,
+      3
+    );
+
+    // Busca exaustiva (sem poda: maxSecondaryCandidates = Infinity)
+    const exhaustiveResults = findBestBuilds(
+      {
+        gearTypeId: 'sword',
+        availableMaterials: Object.keys(materials),
+        goal: 'max_damage',
+      },
+      testCatalog,
+      3,
+      Infinity
+    );
+
+    expect(standardResults).toEqual(exhaustiveResults);
+  });
+
+  it('garante que slice(0, 15) não existe no código de optimizer.ts', () => {
+    const optimizerFilePath = path.join(__dirname, 'optimizer.ts');
+    const optimizerCode = fs.readFileSync(optimizerFilePath, 'utf-8');
+    expect(optimizerCode.includes('slice(0, 15)')).toBe(false);
   });
 });
