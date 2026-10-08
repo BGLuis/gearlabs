@@ -31,6 +31,10 @@ export function calculateSynergy(
   return 1.0;
 }
 
+export function applyGradeBonus(value: number, bonus: number): number {
+  return value + Math.abs(value) * bonus;
+}
+
 export function calculateGearStats(
   build: GearBuild,
   catalog: VersionCatalog
@@ -56,15 +60,23 @@ export function calculateGearStats(
 
   // Stats base derivados do main
   const mainGradeMul = mainSelection?.grade ? (GRADE_MULTIPLIERS[mainSelection.grade] || 0) : 0;
-  const gradeFactor = 1 + mainGradeMul;
 
-  let baseDurability = ((mainMaterial?.stats.main?.durability ?? 100) * gearType.durabilityMultiplier) * gradeFactor;
-  let baseArmor = (mainMaterial?.stats.main?.armor ?? 0) * gradeFactor;
-  let baseArmorToughness = (mainMaterial?.stats.main?.armor_toughness ?? 0) * gradeFactor;
-  let baseMagicArmor = (mainMaterial?.stats.main?.magic_armor ?? 0) * gradeFactor;
-  let baseDamage = (gearType.baseDamage + (mainMaterial?.stats.main?.melee_damage ?? 0)) * gradeFactor;
+  let baseDurability = applyGradeBonus(
+    (mainMaterial?.stats.main?.durability ?? 100) * gearType.durabilityMultiplier,
+    mainGradeMul
+  );
+  let baseArmor = applyGradeBonus(mainMaterial?.stats.main?.armor ?? 0, mainGradeMul);
+  let baseArmorToughness = applyGradeBonus(mainMaterial?.stats.main?.armor_toughness ?? 0, mainGradeMul);
+  let baseMagicArmor = applyGradeBonus(mainMaterial?.stats.main?.magic_armor ?? 0, mainGradeMul);
+  let baseDamage = applyGradeBonus(
+    gearType.baseDamage + (mainMaterial?.stats.main?.melee_damage ?? 0),
+    mainGradeMul
+  );
   let baseAttackSpeed = gearType.baseAttackSpeed + (mainMaterial?.stats.main?.attack_speed ?? 0);
-  let baseHarvestSpeed = (mainMaterial?.stats.main?.harvest_speed ?? 1.0) * gradeFactor;
+  let baseHarvestSpeed = applyGradeBonus(
+    mainMaterial?.stats.main?.harvest_speed ?? 1.0,
+    mainGradeMul
+  );
   let harvestTier = mainMaterial?.stats.main?.harvest_tier || mainMaterial?.harvest_tier || 'minecraft:wood';
   let rarity = mainMaterial?.stats.main?.rarity ?? 0;
 
@@ -77,16 +89,15 @@ export function calculateGearStats(
     if (!mat) continue;
 
     const slotGradeMul = sel.grade ? (GRADE_MULTIPLIERS[sel.grade] || 0) : 0;
-    const slotGradeFactor = 1 + slotGradeMul;
 
     // Stat additions do slot
     const slotStats = mat.stats[slot];
     if (slotStats) {
-      if (slotStats.durability) baseDurability += slotStats.durability * slotGradeFactor;
-      if (slotStats.melee_damage) baseDamage += slotStats.melee_damage * slotGradeFactor;
-      if (slotStats.armor) baseArmor += slotStats.armor * slotGradeFactor;
-      if (slotStats.armor_toughness) baseArmorToughness += slotStats.armor_toughness * slotGradeFactor;
-      if (slotStats.harvest_speed) baseHarvestSpeed += slotStats.harvest_speed * slotGradeFactor;
+      if (slotStats.durability) baseDurability += applyGradeBonus(slotStats.durability, slotGradeMul);
+      if (slotStats.melee_damage) baseDamage += applyGradeBonus(slotStats.melee_damage, slotGradeMul);
+      if (slotStats.armor) baseArmor += applyGradeBonus(slotStats.armor, slotGradeMul);
+      if (slotStats.armor_toughness) baseArmorToughness += applyGradeBonus(slotStats.armor_toughness, slotGradeMul);
+      if (slotStats.harvest_speed) baseHarvestSpeed += applyGradeBonus(slotStats.harvest_speed, slotGradeMul);
       if (slotStats.rarity) rarity += slotStats.rarity;
       if (slotStats.harvest_tier) harvestTier = slotStats.harvest_tier;
     }
@@ -95,11 +106,11 @@ export function calculateGearStats(
     const slotMods = mat.statModifiers?.[slot];
     if (slotMods) {
       if (slotMods.durability) {
-        if (slotMods.durability.add) baseDurability += slotMods.durability.add * slotGradeFactor;
+        if (slotMods.durability.add) baseDurability += applyGradeBonus(slotMods.durability.add, slotGradeMul);
         if (slotMods.durability.mul2) baseDurability *= (1 + slotMods.durability.mul2);
       }
       if (slotMods.harvest_speed) {
-        if (slotMods.harvest_speed.add) baseHarvestSpeed += slotMods.harvest_speed.add * slotGradeFactor;
+        if (slotMods.harvest_speed.add) baseHarvestSpeed += applyGradeBonus(slotMods.harvest_speed.add, slotGradeMul);
         if (slotMods.harvest_speed.mul2) baseHarvestSpeed *= (1 + slotMods.harvest_speed.mul2);
       }
       if (slotMods.attack_speed) {
