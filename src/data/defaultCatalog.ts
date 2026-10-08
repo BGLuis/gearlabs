@@ -498,7 +498,7 @@ export const OFFICIAL_GEAR_TYPES: Record<string, GearType> = {
     optionalSlots: ['lining', 'coating'],
     baseDamage: 0.0,
     baseAttackSpeed: 0.0,
-    durabilityMultiplier: 0.75,
+    durabilityMultiplier: 11,
     iconName: 'helmet',
   },
   chestplate: {
@@ -509,7 +509,7 @@ export const OFFICIAL_GEAR_TYPES: Record<string, GearType> = {
     optionalSlots: ['lining', 'coating'],
     baseDamage: 0.0,
     baseAttackSpeed: 0.0,
-    durabilityMultiplier: 1.1,
+    durabilityMultiplier: 16,
     iconName: 'chestplate',
   },
   leggings: {
@@ -520,7 +520,7 @@ export const OFFICIAL_GEAR_TYPES: Record<string, GearType> = {
     optionalSlots: ['lining', 'coating'],
     baseDamage: 0.0,
     baseAttackSpeed: 0.0,
-    durabilityMultiplier: 1.0,
+    durabilityMultiplier: 15,
     iconName: 'leggings',
   },
   boots: {
@@ -531,7 +531,7 @@ export const OFFICIAL_GEAR_TYPES: Record<string, GearType> = {
     optionalSlots: ['lining', 'coating'],
     baseDamage: 0.0,
     baseAttackSpeed: 0.0,
-    durabilityMultiplier: 0.85,
+    durabilityMultiplier: 13,
     iconName: 'boots',
   },
 };

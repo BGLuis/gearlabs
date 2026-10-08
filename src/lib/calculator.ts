@@ -1,4 +1,5 @@
 import {
+  ArmorPiece,
   CalculatedGearStats,
   CalculatedTrait,
   GearBuild,
@@ -47,11 +48,20 @@ export function calculateGearStats(
   // Stats base derivados do main
   const mainGradeMul = mainSelection?.grade ? (GRADE_MULTIPLIERS[mainSelection.grade] || 0) : 0;
 
+  const rawBaseDurability = gearType.category === 'armor'
+    ? (mainMaterial?.stats.main?.armor_durability ?? mainMaterial?.stats.main?.durability ?? 100)
+    : (mainMaterial?.stats.main?.durability ?? 100);
+
   let baseDurability = applyGradeBonus(
-    (mainMaterial?.stats.main?.durability ?? 100) * gearType.durabilityMultiplier,
+    rawBaseDurability * gearType.durabilityMultiplier,
     mainGradeMul
   );
-  let baseArmor = applyGradeBonus(mainMaterial?.stats.main?.armor ?? 0, mainGradeMul);
+
+  const rawBaseArmor = gearType.category === 'armor'
+    ? (mainMaterial?.stats.main?.armor_by_piece?.[gearType.id as ArmorPiece] ?? mainMaterial?.stats.main?.armor ?? 0)
+    : (mainMaterial?.stats.main?.armor ?? 0);
+
+  let baseArmor = applyGradeBonus(rawBaseArmor, mainGradeMul);
   let baseArmorToughness = applyGradeBonus(mainMaterial?.stats.main?.armor_toughness ?? 0, mainGradeMul);
   let baseMagicArmor = applyGradeBonus(mainMaterial?.stats.main?.magic_armor ?? 0, mainGradeMul);
   let baseDamage = applyGradeBonus(
@@ -81,7 +91,10 @@ export function calculateGearStats(
     if (slotStats) {
       if (slotStats.durability) baseDurability += applyGradeBonus(slotStats.durability, slotGradeMul);
       if (slotStats.melee_damage) baseDamage += applyGradeBonus(slotStats.melee_damage, slotGradeMul);
-      if (slotStats.armor) baseArmor += applyGradeBonus(slotStats.armor, slotGradeMul);
+      const slotArmor = (gearType.category === 'armor' && slotStats.armor_by_piece?.[gearType.id as ArmorPiece] !== undefined)
+        ? slotStats.armor_by_piece[gearType.id as ArmorPiece]!
+        : (slotStats.armor ?? 0);
+      if (slotArmor) baseArmor += applyGradeBonus(slotArmor, slotGradeMul);
       if (slotStats.armor_toughness) baseArmorToughness += applyGradeBonus(slotStats.armor_toughness, slotGradeMul);
       if (slotStats.harvest_speed) baseHarvestSpeed += applyGradeBonus(slotStats.harvest_speed, slotGradeMul);
       if (slotStats.rarity) rarity += slotStats.rarity;

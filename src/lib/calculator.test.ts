@@ -244,4 +244,125 @@ describe('calculateGearStats', () => {
     expect(traitIds).toContain('allthemodium:godlike');
     expect(traitIds).toContain('silentgear:swift');
   });
+
+  describe('Issue #4: Armadura - resolução de armor por peça e armor_durability', () => {
+    it('material com armor 60 e armor/helmet 15 dá armor 15 num capacete; sem armor/helmet, dá 60', () => {
+      const testCatalogWithPiece: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:custom_armor_mat': {
+            id: 'test:custom_armor_mat',
+            name: { en: 'Custom Armor', pt: 'Armadura Custom' },
+            tier: 1,
+            category: 'metal',
+            color: '#ffffff',
+            stats: {
+              main: {
+                armor: 60,
+                armor_by_piece: {
+                  helmet: 15,
+                },
+              },
+            },
+            traits: {},
+          },
+        },
+      };
+
+      const testCatalogWithoutPiece: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:custom_armor_mat': {
+            id: 'test:custom_armor_mat',
+            name: { en: 'Custom Armor', pt: 'Armadura Custom' },
+            tier: 1,
+            category: 'metal',
+            color: '#ffffff',
+            stats: {
+              main: {
+                armor: 60,
+              },
+            },
+            traits: {},
+          },
+        },
+      };
+
+      const build: GearBuild = {
+        gearTypeId: 'helmet',
+        parts: {
+          main: { materialId: 'test:custom_armor_mat' },
+        },
+      };
+
+      const statsWithPiece = calculateGearStats(build, testCatalogWithPiece);
+      const statsWithoutPiece = calculateGearStats(build, testCatalogWithoutPiece);
+
+      expect(statsWithPiece.armor).toBe(15);
+      expect(statsWithoutPiece.armor).toBe(60);
+    });
+
+    it('material com armor_durability 60 dá durabilidade 660 no capacete e 960 no peitoral', () => {
+      const testCatalog: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:durability_mat': {
+            id: 'test:durability_mat',
+            name: { en: 'Durability Mat', pt: 'Mat Durabilidade' },
+            tier: 1,
+            category: 'metal',
+            color: '#ffffff',
+            stats: {
+              main: {
+                armor_durability: 60,
+                durability: 5000, // Durabilidade de ferramenta deve ser ignorada em armadura
+              },
+            },
+            traits: {},
+          },
+        },
+      };
+
+      const helmetBuild: GearBuild = {
+        gearTypeId: 'helmet',
+        parts: {
+          main: { materialId: 'test:durability_mat' },
+        },
+      };
+
+      const chestBuild: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: { materialId: 'test:durability_mat' },
+        },
+      };
+
+      const leggingsBuild: GearBuild = {
+        gearTypeId: 'leggings',
+        parts: {
+          main: { materialId: 'test:durability_mat' },
+        },
+      };
+
+      const bootsBuild: GearBuild = {
+        gearTypeId: 'boots',
+        parts: {
+          main: { materialId: 'test:durability_mat' },
+        },
+      };
+
+      const helmetStats = calculateGearStats(helmetBuild, testCatalog);
+      const chestStats = calculateGearStats(chestBuild, testCatalog);
+      const leggingsStats = calculateGearStats(leggingsBuild, testCatalog);
+      const bootsStats = calculateGearStats(bootsBuild, testCatalog);
+
+      expect(helmetStats.durability).toBe(660); // 60 * 11
+      expect(chestStats.durability).toBe(960); // 60 * 16
+      expect(leggingsStats.durability).toBe(900); // 60 * 15
+      expect(bootsStats.durability).toBe(780); // 60 * 13
+    });
+  });
 });

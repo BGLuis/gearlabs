@@ -612,7 +612,7 @@
       ],
       "baseDamage": 0,
       "baseAttackSpeed": 0,
-      "durabilityMultiplier": 0.75,
+      "durabilityMultiplier": 11,
       "iconName": "helmet"
     },
     "chestplate": {
@@ -631,7 +631,7 @@
       ],
       "baseDamage": 0,
       "baseAttackSpeed": 0,
-      "durabilityMultiplier": 1.1,
+      "durabilityMultiplier": 16,
       "iconName": "chestplate"
     },
     "leggings": {
@@ -650,7 +650,7 @@
       ],
       "baseDamage": 0,
       "baseAttackSpeed": 0,
-      "durabilityMultiplier": 1,
+      "durabilityMultiplier": 15,
       "iconName": "leggings"
     },
     "boots": {
@@ -669,7 +669,7 @@
       ],
       "baseDamage": 0,
       "baseAttackSpeed": 0,
-      "durabilityMultiplier": 0.85,
+      "durabilityMultiplier": 13,
       "iconName": "boots"
     }
   },
