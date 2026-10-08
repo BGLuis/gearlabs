@@ -8,6 +8,7 @@ import {
   VersionPreset,
   Grade,
   PartSlot,
+  SubMaterialSelection,
 } from '@/types/silentgear';
 import {
   ATM11_CATALOG,
@@ -27,6 +28,11 @@ interface GearContextType {
   stats: CalculatedGearStats;
   setGearType: (typeId: string) => void;
   setPartMaterial: (slot: PartSlot, materialId: string, grade?: Grade) => void;
+  setPartSubMaterials: (slot: PartSlot, materials: SubMaterialSelection[]) => void;
+  addSubMaterial: (slot: PartSlot, materialId: string, grade?: Grade) => void;
+  removeSubMaterial: (slot: PartSlot, index: number) => void;
+  reorderSubMaterials: (slot: PartSlot, fromIndex: number, toIndex: number) => void;
+  updateSubMaterial: (slot: PartSlot, index: number, materialId: string, grade?: Grade) => void;
   removePart: (slot: PartSlot) => void;
   loadBuild: (newBuild: GearBuild) => void;
   inventory: Set<string>;
@@ -207,9 +213,133 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
       ...prev,
       parts: {
         ...prev.parts,
-        [slot]: { materialId, grade: grade || prev.parts[slot]?.grade || 'NONE' },
+        [slot]: {
+          materialId,
+          grade: grade || prev.parts[slot]?.grade || 'NONE',
+          materials: undefined,
+        },
       },
     }));
+  }
+
+  function setPartSubMaterials(slot: PartSlot, materials: SubMaterialSelection[]) {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      const primary = materials[0];
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: {
+            materialId: primary?.materialId || current?.materialId || '',
+            grade: current?.grade || primary?.grade || 'NONE',
+            materials,
+          },
+        },
+      };
+    });
+  }
+
+  function addSubMaterial(slot: PartSlot, materialId: string, grade: Grade = 'NONE') {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      const currentMaterials = current?.materials && current.materials.length > 0
+        ? [...current.materials]
+        : (current?.materialId ? [{ materialId: current.materialId, grade: current.grade || 'NONE' }] : []);
+
+      if (currentMaterials.length >= 6) return prev;
+
+      const newMaterials = [...currentMaterials, { materialId, grade }];
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: {
+            materialId: newMaterials[0].materialId,
+            grade: current?.grade || newMaterials[0].grade || 'NONE',
+            materials: newMaterials,
+          },
+        },
+      };
+    });
+  }
+
+  function removeSubMaterial(slot: PartSlot, index: number) {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      if (!current?.materials || current.materials.length <= index) return prev;
+      const nextMaterials = current.materials.filter((_, i) => i !== index);
+      if (nextMaterials.length === 0) {
+        const nextParts = { ...prev.parts };
+        delete nextParts[slot];
+        return { ...prev, parts: nextParts };
+      }
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: {
+            materialId: nextMaterials[0].materialId,
+            grade: current.grade || nextMaterials[0].grade || 'NONE',
+            materials: nextMaterials.length > 1 ? nextMaterials : undefined,
+          },
+        },
+      };
+    });
+  }
+
+  function reorderSubMaterials(slot: PartSlot, fromIndex: number, toIndex: number) {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      if (!current?.materials || fromIndex === toIndex) return prev;
+      if (
+        fromIndex < 0 ||
+        fromIndex >= current.materials.length ||
+        toIndex < 0 ||
+        toIndex >= current.materials.length
+      ) {
+        return prev;
+      }
+
+      const nextMaterials = [...current.materials];
+      const [moved] = nextMaterials.splice(fromIndex, 1);
+      nextMaterials.splice(toIndex, 0, moved);
+
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: {
+            ...current,
+            materialId: nextMaterials[0].materialId,
+            materials: nextMaterials,
+          },
+        },
+      };
+    });
+  }
+
+  function updateSubMaterial(slot: PartSlot, index: number, materialId: string, grade?: Grade) {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      if (!current?.materials || index < 0 || index >= current.materials.length) return prev;
+      const nextMaterials = [...current.materials];
+      nextMaterials[index] = {
+        materialId,
+        grade: grade !== undefined ? grade : nextMaterials[index].grade,
+      };
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: {
+            ...current,
+            materialId: nextMaterials[0].materialId,
+            materials: nextMaterials,
+          },
+        },
+      };
+    });
   }
 
   function removePart(slot: PartSlot) {
@@ -290,6 +420,11 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         stats,
         setGearType,
         setPartMaterial,
+        setPartSubMaterials,
+        addSubMaterial,
+        removeSubMaterial,
+        reorderSubMaterials,
+        updateSubMaterial,
         removePart,
         loadBuild,
         inventory,

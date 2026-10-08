@@ -1,4 +1,4 @@
-import { GearBuild, VersionCatalog } from '@/types/silentgear';
+import { GearBuild, GearPartSelection, VersionCatalog } from '@/types/silentgear';
 import { GEAR_TEXTURES, TexturePixel } from '@/data/gear-textures';
 
 export interface RenderOptions {
@@ -12,6 +12,36 @@ function hexToRgb(hex: string): [number, number, number] {
   }
   const num = parseInt(cleanHex, 16);
   return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+}
+
+function getBlendedColor(
+  sel: GearPartSelection | undefined,
+  catalog: VersionCatalog,
+  defaultColor: string
+): [number, number, number] {
+  if (!sel) return hexToRgb(defaultColor);
+  if (sel.materials && sel.materials.length > 0) {
+    const mats = sel.materials.map((m) => catalog.materials[m.materialId]).filter(Boolean);
+    if (mats.length === 1) {
+      return hexToRgb(mats[0].color || defaultColor);
+    }
+    if (mats.length > 1) {
+      let r = 0, g = 0, b = 0;
+      for (const m of mats) {
+        const rgb = hexToRgb(m.color || defaultColor);
+        r += rgb[0];
+        g += rgb[1];
+        b += rgb[2];
+      }
+      return [
+        Math.round(r / mats.length),
+        Math.round(g / mats.length),
+        Math.round(b / mats.length),
+      ];
+    }
+  }
+  const mat = catalog.materials[sel.materialId];
+  return hexToRgb(mat?.color || defaultColor);
 }
 
 export function renderGearToCanvas(
@@ -38,31 +68,35 @@ export function renderGearToCanvas(
   // Conforme lógica oficial do Silent Gear (GearArmorItem / getCoatingOrMainPart):
   // se houver coating, o material do revestimento tinge a camada externa (main)
   const coatingMat = build.parts.coating
-    ? catalog.materials[build.parts.coating.materialId]
+    ? catalog.materials[build.parts.coating.materials?.[0]?.materialId || build.parts.coating.materialId]
     : null;
   const rawMainMat = build.parts.main
-    ? catalog.materials[build.parts.main.materialId]
+    ? catalog.materials[build.parts.main.materials?.[0]?.materialId || build.parts.main.materialId]
     : null;
   const mainMat = coatingMat || rawMainMat;
 
   const rodMat = build.parts.rod
-    ? catalog.materials[build.parts.rod.materialId]
+    ? catalog.materials[build.parts.rod.materials?.[0]?.materialId || build.parts.rod.materialId]
     : null;
   const tipMat = build.parts.tip
-    ? catalog.materials[build.parts.tip.materialId]
+    ? catalog.materials[build.parts.tip.materials?.[0]?.materialId || build.parts.tip.materialId]
     : null;
   const gripMat = build.parts.grip
-    ? catalog.materials[build.parts.grip.materialId]
+    ? catalog.materials[build.parts.grip.materials?.[0]?.materialId || build.parts.grip.materialId]
     : null;
   const bindingMat = build.parts.binding
-    ? catalog.materials[build.parts.binding.materialId]
+    ? catalog.materials[build.parts.binding.materials?.[0]?.materialId || build.parts.binding.materialId]
     : null;
 
-  const mainRgb = hexToRgb(mainMat?.color || '#D8D8D8');
-  const rodRgb = hexToRgb(rodMat?.color || '#86654B');
-  const tipRgb = hexToRgb(tipMat?.color || mainMat?.color || '#33EBCB');
-  const gripRgb = hexToRgb(gripMat?.color || '#EEEEEE');
-  const bindingRgb = hexToRgb(bindingMat?.color || '#C2B280');
+  const mainRgb = build.parts.coating
+    ? getBlendedColor(build.parts.coating, catalog, '#D8D8D8')
+    : getBlendedColor(build.parts.main, catalog, '#D8D8D8');
+  const rodRgb = getBlendedColor(build.parts.rod, catalog, '#86654B');
+  const tipRgb = build.parts.tip
+    ? getBlendedColor(build.parts.tip, catalog, '#33EBCB')
+    : mainRgb;
+  const gripRgb = getBlendedColor(build.parts.grip, catalog, '#EEEEEE');
+  const bindingRgb = getBlendedColor(build.parts.binding, catalog, '#C2B280');
 
   // Selecionar template do Silent Gear para o tipo de equipamento
   const template =

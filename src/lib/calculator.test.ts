@@ -1,12 +1,20 @@
 import { describe, it, expect } from 'vitest';
-import { calculateGearStats, calculateSynergy, applyGradeBonus, computeNumberProperty } from './calculator';
+import fs from 'fs';
+import path from 'path';
+import {
+  calculateGearStats,
+  calculateSynergy,
+  applyGradeBonus,
+  computeNumberProperty,
+  compressModifiersForProperty,
+} from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
   OFFICIAL_GEAR_TYPES,
   OFFICIAL_TRAITS,
   ATM11_CATALOG,
 } from '@/data/defaultCatalog';
-import { VersionCatalog, GearBuild } from '@/types/silentgear';
+import { VersionCatalog, GearBuild, Material } from '@/types/silentgear';
 
 const catalog: VersionCatalog = {
   version: '1.20.1',
@@ -566,6 +574,115 @@ describe('calculateGearStats', () => {
         { value: 5, operation: 'ADD' },
       ]);
       expect(Number(result.toFixed(2))).toBe(97.4);
+    });
+  });
+
+  describe('Issue #8: Suporte a materiais compostos (ligas e tecidos mistos)', () => {
+    it('Critério 1: liga de dois materiais com armor 25 (primário) e 90 dá média ponderada (25·(1+25/26) + 90·(1+90/26)) / ((1+25/26) + (1+90/26)) ≈ 70,15 antes da sinergia', () => {
+      const compressed = compressModifiersForProperty([
+        { value: 25, operation: 'AVERAGE' },
+        { value: 90, operation: 'AVERAGE' },
+      ]);
+      expect(compressed).toHaveLength(1);
+      expect(compressed[0].operation).toBe('AVERAGE');
+      expect(Number(compressed[0].value.toFixed(2))).toBe(70.15);
+    });
+
+    it('Critério 2: cinco materiais únicos todos com metal e endgame e rarity igual dão sinergia 1,1·5/6,1 + 1/2,1 + 2·0,015·5 ≈ 1,528', () => {
+      const mockMats: Material[] = [
+        {
+          id: 'test:mat1',
+          name: { en: 'Mat 1', pt: 'Mat 1' },
+          tier: 4,
+          category: 'metal',
+          categories: ['metal', 'endgame'],
+          color: '#111111',
+          stats: { main: { rarity: 100 } },
+          traits: {},
+        },
+        {
+          id: 'test:mat2',
+          name: { en: 'Mat 2', pt: 'Mat 2' },
+          tier: 4,
+          category: 'metal',
+          categories: ['metal', 'endgame'],
+          color: '#222222',
+          stats: { main: { rarity: 100 } },
+          traits: {},
+        },
+        {
+          id: 'test:mat3',
+          name: { en: 'Mat 3', pt: 'Mat 3' },
+          tier: 4,
+          category: 'metal',
+          categories: ['metal', 'endgame'],
+          color: '#333333',
+          stats: { main: { rarity: 100 } },
+          traits: {},
+        },
+        {
+          id: 'test:mat4',
+          name: { en: 'Mat 4', pt: 'Mat 4' },
+          tier: 4,
+          category: 'metal',
+          categories: ['metal', 'endgame'],
+          color: '#444444',
+          stats: { main: { rarity: 100 } },
+          traits: {},
+        },
+        {
+          id: 'test:mat5',
+          name: { en: 'Mat 5', pt: 'Mat 5' },
+          tier: 4,
+          category: 'metal',
+          categories: ['metal', 'endgame'],
+          color: '#555555',
+          stats: { main: { rarity: 100 } },
+          traits: {},
+        },
+      ];
+
+      const synergy = calculateSynergy(mockMats, 'main');
+      expect(Number(synergy.toFixed(3))).toBe(1.528);
+    });
+
+    it('Critério 3: reordenar os sub-materiais muda o resultado (o primário define o peso)', () => {
+      // Ordem A -> B (25 primário, 90 secundário)
+      const compressedAB = compressModifiersForProperty([
+        { value: 25, operation: 'AVERAGE' },
+        { value: 90, operation: 'AVERAGE' },
+      ]);
+      // Ordem B -> A (90 primário, 25 secundário)
+      const compressedBA = compressModifiersForProperty([
+        { value: 90, operation: 'AVERAGE' },
+        { value: 25, operation: 'AVERAGE' },
+      ]);
+
+      expect(Number(compressedAB[0].value.toFixed(2))).toBe(70.15);
+      expect(Number(compressedBA[0].value.toFixed(2))).toBe(64.61);
+      expect(compressedAB[0].value).not.toBe(compressedBA[0].value);
+    });
+
+    it('Critério 4: teste de referência com a construção do save (exportada como fixture JSON)', () => {
+      const fixturePath = path.resolve(__dirname, '../../tests/fixtures/reference_helmet_save.json');
+      const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+
+      const build: GearBuild = {
+        gearTypeId: fixture.gearTypeId,
+        parts: fixture.parts,
+      };
+
+      const stats = calculateGearStats(build, ATM11_CATALOG);
+
+      // A sinergia da liga quíntupla no main com casting em uru metal
+      expect(stats.synergy).toBeGreaterThanOrEqual(140);
+      expect(stats.armor).toBeGreaterThanOrEqual(25);
+      expect(stats.armorToughness).toBeGreaterThanOrEqual(140);
+      expect(stats.magicArmor).toBeGreaterThanOrEqual(850);
+
+      // Traits acumuladas dos sub-materiais da liga e forro devem estar presentes
+      const traitIds = stats.traits.map((t) => t.id);
+      expect(traitIds).toContain('silentgear:indestructible');
     });
   });
 });

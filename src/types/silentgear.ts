@@ -117,9 +117,15 @@ export interface TraitInfo {
   };
 }
 
+export interface SubMaterialSelection {
+  materialId: string;
+  grade?: Grade;
+}
+
 export interface GearPartSelection {
   materialId: string;
   grade?: Grade;
+  materials?: SubMaterialSelection[];
 }
 
 export interface GearBuild {
