@@ -626,13 +626,6 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
   },
 };
 
-// Catálogo consolidado do All The Mods 11 (ATM11 - NeoForge 26.1.x)
-export const ATM11_MATERIALS: Record<string, Material> = {
-  ...OFFICIAL_MATERIALS_1_20,
-  'silentgear:breeze_rod': BREEZE_ROD_MATERIAL,
-  ...ALLTHEMODIUM_MATERIALS,
-};
-
 // Catálogo consolidado do Silent Gear 1.21.1 Oficial
 export const OFFICIAL_MATERIALS_1_21: Record<string, Material> = {
   ...OFFICIAL_MATERIALS_1_20,
@@ -1029,7 +1022,12 @@ export const VERSION_PRESETS: VersionPreset[] = [
 
 export const ATM11_CATALOG: VersionCatalog = {
   version: 'atm11',
-  materials: ATM11_MATERIALS,
+  materials: {
+    ...OFFICIAL_MATERIALS_1_20,
+    'silentgear:breeze_rod': BREEZE_ROD_MATERIAL,
+    ...ALLTHEMODIUM_MATERIALS,
+  },
   gearTypes: OFFICIAL_GEAR_TYPES,
   traits: OFFICIAL_TRAITS,
 };
+

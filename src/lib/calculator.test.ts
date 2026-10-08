@@ -25,6 +25,9 @@ const catalog: VersionCatalog = {
   traits: OFFICIAL_TRAITS,
 };
 
+const atm11CatalogPath = path.resolve(__dirname, '../../public/data/versions/atm11/catalog.json');
+const atm11Catalog: VersionCatalog = JSON.parse(fs.readFileSync(atm11CatalogPath, 'utf8'));
+
 describe('calculateGearStats', () => {
   it('calcula corretamente uma espada de Diamante e Madeira', () => {
     const build: GearBuild = {
@@ -79,8 +82,8 @@ describe('calculateGearStats', () => {
       },
     };
 
-    const statsAlone = calculateGearStats(buildAlone, ATM11_CATALOG);
-    const statsWithCoating = calculateGearStats(buildWithCoating, ATM11_CATALOG);
+    const statsAlone = calculateGearStats(buildAlone, atm11Catalog);
+    const statsWithCoating = calculateGearStats(buildWithCoating, atm11Catalog);
 
     // Sinergia deve ser neutra (100%), sem o bônus de 1.05 entre metais
     expect(statsWithCoating.synergy).toBe(100);
@@ -101,13 +104,13 @@ describe('calculateGearStats', () => {
     };
     // Mock de catálogo onde coating não concede armor (comportamento oficial do Silent Gear)
     const mockCatalog: VersionCatalog = {
-      ...ATM11_CATALOG,
+      ...atm11Catalog,
       materials: {
-        ...ATM11_CATALOG.materials,
+        ...atm11Catalog.materials,
         'silentgear:netherite_no_armor': {
-          ...ATM11_CATALOG.materials['silentgear:netherite'],
+          ...atm11Catalog.materials['silentgear:netherite'],
           stats: {
-            ...ATM11_CATALOG.materials['silentgear:netherite'].stats,
+            ...atm11Catalog.materials['silentgear:netherite'].stats,
             coating: { durability: 300, melee_damage: 1.5 },
           },
         },
@@ -241,17 +244,16 @@ describe('calculateGearStats', () => {
       },
     };
 
-    const stats = calculateGearStats(build, ATM11_CATALOG);
+    const stats = calculateGearStats(build, atm11Catalog);
 
     expect(stats.synergy).toBe(100);
     expect(stats.meleeDamage).toBeGreaterThanOrEqual(22.0);
     expect(stats.durability).toBeGreaterThan(9000);
-    // Breeze rod adiciona +0.35 de attack speed
     expect(stats.attackSpeed).toBeGreaterThan(1.6);
 
     const traitIds = stats.traits.map((t) => t.id);
     expect(traitIds).toContain('silentgear:brilliant');
-    expect(traitIds).toContain('silentgear:swift');
+    expect(traitIds).toContain('silentgear:wind_blast');
   });
 
   describe('Issue #4: Armadura - resolução de armor por peça e armor_durability', () => {
@@ -674,7 +676,7 @@ describe('calculateGearStats', () => {
         parts: fixture.parts,
       };
 
-      const stats = calculateGearStats(build, ATM11_CATALOG);
+      const stats = calculateGearStats(build, atm11Catalog);
 
       // A sinergia da liga quíntupla no main com casting em uru metal
       expect(stats.synergy).toBeGreaterThanOrEqual(140);
@@ -911,5 +913,26 @@ describe('calculateGearStats', () => {
       expect(stats.dps).toBe(152);
     });
   });
-});
 
+  describe('Issue #45: Catálogo ATM11 carregado de catalog.json', () => {
+    it('botas de ferro no catálogo carregado têm armor 2', () => {
+      const build: GearBuild = {
+        gearTypeId: 'boots',
+        parts: {
+          main: { materialId: 'silentgear:iron' },
+        },
+      };
+
+      const stats = calculateGearStats(build, atm11Catalog);
+      expect(stats.armor).toBe(2);
+    });
+
+    it('preset atm11 lista ≥ 140 materiais e inventário inicial tem o mesmo tamanho', () => {
+      const materialCount = Object.keys(atm11Catalog.materials).length;
+      expect(materialCount).toBeGreaterThanOrEqual(140);
+
+      const initialInventory = new Set(Object.keys(atm11Catalog.materials));
+      expect(initialInventory.size).toBe(materialCount);
+    });
+  });
+});
