@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { useGear } from '@/context/GearContext';
 import { renderGearToCanvas } from '@/lib/canvas-renderer';
 
-export function GearCanvas({ size = 160 }: { size?: number }) {
+export function GearCanvas({ size = 128 }: { size?: number }) {
   const { build, catalog, stats, lang } = useGear();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
