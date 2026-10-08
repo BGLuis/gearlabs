@@ -63,10 +63,13 @@ function generateHighlights(
   return highlights;
 }
 
+export const MAX_SECONDARY_CANDIDATES = 12;
+
 export function findBestBuilds(
   request: OptimizationRequest,
   catalog: VersionCatalog,
-  topN: number = 3
+  topN: number = 3,
+  maxSecondaryCandidates: number = MAX_SECONDARY_CANDIDATES
 ): OptimizedBuildResult[] {
   const gearType = catalog.gearTypes[request.gearTypeId];
   if (!gearType) {
@@ -108,9 +111,33 @@ export function findBestBuilds(
       return !!m.stats[slot];
     });
 
-    // Poda: se houver mais de 15 candidatos para um slot secundário, pegar os melhores 12
-    if (valid.length > 15 && slot !== 'main') {
-      valid = valid.slice(0, 15);
+    if (slot !== 'main') {
+      // Ordenar candidatos secundários pela contribuição individual ao objetivo
+      const scoredCandidates = valid.map((m) => {
+        const stats = calculateGearStats(
+          {
+            gearTypeId: request.gearTypeId,
+            parts: { [slot]: { materialId: m.id } },
+          },
+          catalog
+        );
+        return {
+          material: m,
+          score: computeScore(stats, request.goal, gearType),
+        };
+      });
+
+      scoredCandidates.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.material.id.localeCompare(b.material.id);
+      });
+
+      // Poda: se houver mais candidatos que o teto para slot secundário, pegar os melhores
+      if (scoredCandidates.length > maxSecondaryCandidates) {
+        valid = scoredCandidates.slice(0, maxSecondaryCandidates).map((c) => c.material);
+      } else {
+        valid = scoredCandidates.map((c) => c.material);
+      }
     }
 
     candidatesBySlot[slot] = valid.map((m) => m.id);
