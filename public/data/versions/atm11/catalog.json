@@ -2212,8 +2212,8 @@
         "rod": {},
         "tip": {},
         "coating": {},
-        "grip": {},
         "lining": {},
+        "grip": {},
         "binding": {}
       },
       "traits": {}
@@ -2321,16 +2321,16 @@
             "boots": 1
           }
         },
-        "grip": {
-          "harvest_speed": {
-            "value": 0.15,
-            "operation": "MULTIPLY_BASE"
-          }
-        },
         "lining": {
           "magic_armor": {
             "value": 2,
             "operation": "ADD"
+          }
+        },
+        "grip": {
+          "harvest_speed": {
+            "value": 0.15,
+            "operation": "MULTIPLY_BASE"
           }
         }
       },
@@ -2341,16 +2341,16 @@
             "level": 1
           }
         ],
-        "grip": [
-          {
-            "name": "silentgear:accelerate",
-            "level": 1
-          }
-        ],
         "lining": [
           {
             "name": "silentgear:flexible",
             "level": 4
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:accelerate",
+            "level": 1
           }
         ]
       }
@@ -3025,6 +3025,7 @@
             "boots": 1
           }
         },
+        "lining": {},
         "grip": {
           "attack_speed": {
             "value": 0.15,
@@ -3034,8 +3035,7 @@
             "value": 0.15,
             "operation": "MULTIPLY_BASE"
           }
-        },
-        "lining": {}
+        }
       },
       "traits": {
         "main": [
@@ -3044,16 +3044,16 @@
             "level": 1
           }
         ],
-        "grip": [
-          {
-            "name": "silentgear:flexible",
-            "level": 3
-          }
-        ],
         "lining": [
           {
             "name": "silentgear:flexible",
             "level": 4
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 3
           }
         ]
       }
@@ -3385,7 +3385,8 @@
             "level": 1
           }
         ]
-      }
+      },
+      "parent": "silentgear:wood"
     },
     "silentgear:nickel": {
       "id": "silentgear:nickel",
@@ -3650,6 +3651,7 @@
             "boots": 1
           }
         },
+        "lining": {},
         "grip": {
           "attack_speed": {
             "value": 0.2,
@@ -3659,19 +3661,12 @@
             "value": 0.1,
             "operation": "MULTIPLY_BASE"
           }
-        },
-        "lining": {}
+        }
       },
       "traits": {
         "main": [
           {
             "name": "silentgear:renew",
-            "level": 2
-          }
-        ],
-        "grip": [
-          {
-            "name": "silentgear:ancient",
             "level": 2
           }
         ],
@@ -3683,6 +3678,12 @@
           {
             "name": "silentgear:flexible",
             "level": 3
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:ancient",
+            "level": 2
           }
         ]
       }
@@ -4254,24 +4255,56 @@
         ]
       }
     },
-    "silentgear:red": {
-      "id": "silentgear:red",
+    "silentgear:sandstone/red": {
+      "id": "silentgear:sandstone/red",
       "name": {
-        "en": "Red",
-        "pt": "Red"
+        "en": "Red Sandstone",
+        "pt": "Arenito Vermelho"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#A12722",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#D97B30",
+      "stats": {
+        "main": {
+          "durability": 117,
+          "armor": 5,
+          "armor_durability": 6,
+          "melee_damage": 1,
+          "attack_speed": 0.1,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "harvest_tier": "sandstone",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 1
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:sandstone"
     },
     "silentgear:sandstone": {
       "id": "silentgear:sandstone",
       "name": {
         "en": "Sandstone",
-        "pt": "Sandstone"
+        "pt": "Arenito"
       },
       "tier": 2,
       "category": "rock",
@@ -4594,11 +4627,11 @@
         ]
       }
     },
-    "silentgear:andesite": {
-      "id": "silentgear:andesite",
+    "silentgear:stone/andesite": {
+      "id": "silentgear:stone/andesite",
       "name": {
         "en": "Andesite",
-        "pt": "Andesite"
+        "pt": "Andesito"
       },
       "tier": 1,
       "category": "rock",
@@ -4607,14 +4640,58 @@
         "basic"
       ],
       "color": "#8A8A8E",
-      "stats": {},
-      "traits": {}
+      "stats": {
+        "main": {
+          "durability": 131,
+          "armor": 5,
+          "armor_durability": 5,
+          "melee_damage": 1,
+          "attack_speed": 0,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 4,
+          "enchantment_value": 5,
+          "charging_value": 0.5,
+          "harvest_tier": "stone",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:ancient",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:stone"
     },
-    "silentgear:diorite": {
-      "id": "silentgear:diorite",
+    "silentgear:stone/diorite": {
+      "id": "silentgear:stone/diorite",
       "name": {
         "en": "Diorite",
-        "pt": "Diorite"
+        "pt": "Diorito"
       },
       "tier": 1,
       "category": "rock",
@@ -4623,14 +4700,58 @@
         "basic"
       ],
       "color": "#FFFFFF",
-      "stats": {},
-      "traits": {}
+      "stats": {
+        "main": {
+          "durability": 131,
+          "armor": 5,
+          "armor_durability": 5,
+          "melee_damage": 1,
+          "attack_speed": 0,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 4,
+          "enchantment_value": 5,
+          "charging_value": 0.5,
+          "harvest_tier": "stone",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:ancient",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:stone"
     },
-    "silentgear:granite": {
-      "id": "silentgear:granite",
+    "silentgear:stone/granite": {
+      "id": "silentgear:stone/granite",
       "name": {
         "en": "Granite",
-        "pt": "Granite"
+        "pt": "Granito"
       },
       "tier": 1,
       "category": "rock",
@@ -4639,8 +4760,52 @@
         "basic"
       ],
       "color": "#9F6B58",
-      "stats": {},
-      "traits": {}
+      "stats": {
+        "main": {
+          "durability": 131,
+          "armor": 5,
+          "armor_durability": 5,
+          "melee_damage": 1,
+          "attack_speed": 0,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 4,
+          "enchantment_value": 5,
+          "charging_value": 0.5,
+          "harvest_tier": "stone",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:ancient",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:stone"
     },
     "silentgear:stone": {
       "id": "silentgear:stone",
@@ -4740,206 +4905,1115 @@
       "stats": {},
       "traits": {}
     },
-    "silentgear:black": {
-      "id": "silentgear:black",
+    "silentgear:terracotta/black": {
+      "id": "silentgear:terracotta/black",
       "name": {
-        "en": "Black",
-        "pt": "Black"
+        "en": "Black Terracotta",
+        "pt": "Terracota Preta"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#141519",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#251610",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:blue": {
-      "id": "silentgear:blue",
+    "silentgear:terracotta/blue": {
+      "id": "silentgear:terracotta/blue",
       "name": {
-        "en": "Blue",
-        "pt": "Blue"
+        "en": "Blue Terracotta",
+        "pt": "Terracota Azul"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#35399D",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#4A3B5B",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:brown": {
-      "id": "silentgear:brown",
+    "silentgear:terracotta/brown": {
+      "id": "silentgear:terracotta/brown",
       "name": {
-        "en": "Brown",
-        "pt": "Brown"
+        "en": "Brown Terracotta",
+        "pt": "Terracota Marrom"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#724728",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#4D3224",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:cyan": {
-      "id": "silentgear:cyan",
+    "silentgear:terracotta/cyan": {
+      "id": "silentgear:terracotta/cyan",
       "name": {
-        "en": "Cyan",
-        "pt": "Cyan"
+        "en": "Cyan Terracotta",
+        "pt": "Terracota Ciano"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#158991",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#D1B1A1",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:gray": {
-      "id": "silentgear:gray",
+    "silentgear:terracotta/gray": {
+      "id": "silentgear:terracotta/gray",
       "name": {
-        "en": "Gray",
-        "pt": "Gray"
+        "en": "Gray Terracotta",
+        "pt": "Terracota Cinza"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#3E4447",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#D1B1A1",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:green": {
-      "id": "silentgear:green",
+    "silentgear:terracotta/green": {
+      "id": "silentgear:terracotta/green",
       "name": {
-        "en": "Green",
-        "pt": "Green"
+        "en": "Green Terracotta",
+        "pt": "Terracota Verde"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#546D1B",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#4B522A",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:light_blue": {
-      "id": "silentgear:light_blue",
+    "silentgear:terracotta/light_blue": {
+      "id": "silentgear:terracotta/light_blue",
       "name": {
-        "en": "Light Blue",
-        "pt": "Light Blue"
+        "en": "Light Blue Terracotta",
+        "pt": "Terracota Azul Clara"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#3AAFD9",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#706C8A",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:light_gray": {
-      "id": "silentgear:light_gray",
+    "silentgear:terracotta/light_gray": {
+      "id": "silentgear:terracotta/light_gray",
       "name": {
-        "en": "Light Gray",
-        "pt": "Light Gray"
+        "en": "Light Gray Terracotta",
+        "pt": "Terracota Cinza Clara"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#8E8E86",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#876A61",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:lime": {
-      "id": "silentgear:lime",
+    "silentgear:terracotta/lime": {
+      "id": "silentgear:terracotta/lime",
       "name": {
-        "en": "Lime",
-        "pt": "Lime"
+        "en": "Lime Terracotta",
+        "pt": "Terracota Verde Limão"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#70B919",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#677534",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:magenta": {
-      "id": "silentgear:magenta",
+    "silentgear:terracotta/magenta": {
+      "id": "silentgear:terracotta/magenta",
       "name": {
-        "en": "Magenta",
-        "pt": "Magenta"
+        "en": "Magenta Terracotta",
+        "pt": "Terracota Magenta"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#BD44B3",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#95576C",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:orange": {
-      "id": "silentgear:orange",
+    "silentgear:terracotta/orange": {
+      "id": "silentgear:terracotta/orange",
       "name": {
-        "en": "Orange",
-        "pt": "Orange"
+        "en": "Orange Terracotta",
+        "pt": "Terracota Laranja"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#F07613",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#A05325",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:pink": {
-      "id": "silentgear:pink",
+    "silentgear:terracotta/pink": {
+      "id": "silentgear:terracotta/pink",
       "name": {
-        "en": "Pink",
-        "pt": "Pink"
+        "en": "Pink Terracotta",
+        "pt": "Terracota Rosa"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#ED8DAC",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#A04D4E",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:purple": {
-      "id": "silentgear:purple",
+    "silentgear:terracotta/purple": {
+      "id": "silentgear:terracotta/purple",
       "name": {
-        "en": "Purple",
-        "pt": "Purple"
+        "en": "Purple Terracotta",
+        "pt": "Terracota Roxa"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#792AAC",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#764556",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:white": {
-      "id": "silentgear:white",
+    "silentgear:terracotta/red": {
+      "id": "silentgear:terracotta/red",
       "name": {
-        "en": "White",
-        "pt": "White"
+        "en": "Red Terracotta",
+        "pt": "Terracota Vermelha"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#E9ECEC",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#8E3C2E",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
-    "silentgear:yellow": {
-      "id": "silentgear:yellow",
+    "silentgear:terracotta/white": {
+      "id": "silentgear:terracotta/white",
       "name": {
-        "en": "Yellow",
-        "pt": "Yellow"
+        "en": "White Terracotta",
+        "pt": "Terracota Branca"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
-      "color": "#F8C627",
-      "stats": {},
-      "traits": {}
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#D1B1A1",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
+    },
+    "silentgear:terracotta/yellow": {
+      "id": "silentgear:terracotta/yellow",
+      "name": {
+        "en": "Yellow Terracotta",
+        "pt": "Terracota Amarela"
+      },
+      "tier": 1,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#B98423",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      },
+      "parent": "silentgear:terracotta"
     },
     "silentgear:terracotta": {
       "id": "silentgear:terracotta",
       "name": {
         "en": "Terracotta",
-        "pt": "Terracotta"
+        "pt": "Terracota"
       },
       "tier": 2,
       "category": "rock",
@@ -5339,44 +6413,152 @@
       },
       "traits": {}
     },
-    "silentgear:acacia": {
-      "id": "silentgear:acacia",
+    "silentgear:wood/acacia": {
+      "id": "silentgear:wood/acacia",
       "name": {
-        "en": "Acacia",
-        "pt": "Acacia"
+        "en": "Acacia Wood",
+        "pt": "Madeira de Acácia"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
+      "category": "organic",
+      "categories": [
+        "organic",
+        "wood"
+      ],
       "color": "#BA6337",
-      "stats": {},
-      "traits": {}
+      "stats": {
+        "main": {
+          "durability": 59,
+          "armor": 7,
+          "armor_durability": 8,
+          "magic_armor": 2,
+          "melee_damage": 0,
+          "attack_speed": 0,
+          "harvest_speed": 2,
+          "ranged_damage": 0,
+          "rarity": 1,
+          "enchantment_value": 15,
+          "charging_value": 0.6,
+          "harvest_tier": "wood",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flammable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wood"
     },
-    "silentgear:birch": {
-      "id": "silentgear:birch",
+    "silentgear:wood/birch": {
+      "id": "silentgear:wood/birch",
       "name": {
-        "en": "Birch",
-        "pt": "Birch"
+        "en": "Birch Wood",
+        "pt": "Madeira de Bétula"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
+      "category": "organic",
+      "categories": [
+        "organic",
+        "wood"
+      ],
       "color": "#D7C185",
-      "stats": {},
-      "traits": {}
+      "stats": {
+        "main": {
+          "durability": 59,
+          "armor": 7,
+          "armor_durability": 8,
+          "magic_armor": 2,
+          "melee_damage": 0,
+          "attack_speed": 0,
+          "harvest_speed": 2,
+          "ranged_damage": 0,
+          "rarity": 1,
+          "enchantment_value": 15,
+          "charging_value": 0.6,
+          "harvest_tier": "wood",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flammable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wood"
     },
-    "silentgear:crimson": {
-      "id": "silentgear:crimson",
+    "silentgear:wood/crimson": {
+      "id": "silentgear:wood/crimson",
       "name": {
-        "en": "Crimson",
-        "pt": "Crimson"
+        "en": "Crimson Wood",
+        "pt": "Madeira Carmesim"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
+      "category": "organic",
+      "categories": [
+        "organic",
+        "wood"
+      ],
       "color": "#7E3A56",
       "stats": {
-        "main": {},
+        "main": {
+          "durability": 59,
+          "armor": 7,
+          "armor_durability": 8,
+          "magic_armor": 2,
+          "melee_damage": 0,
+          "attack_speed": 0,
+          "harvest_speed": 2,
+          "ranged_damage": 0,
+          "rarity": 1,
+          "enchantment_value": 15,
+          "charging_value": 0.6,
+          "harvest_tier": "wood",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
         "rod": {}
       },
       "traits": {
@@ -5392,72 +6574,267 @@
             "level": 2
           }
         ]
-      }
+      },
+      "parent": "silentgear:wood"
     },
-    "silentgear:dark_oak": {
-      "id": "silentgear:dark_oak",
+    "silentgear:wood/dark_oak": {
+      "id": "silentgear:wood/dark_oak",
       "name": {
-        "en": "Dark Oak",
-        "pt": "Dark Oak"
+        "en": "Dark Oak Wood",
+        "pt": "Madeira de Carvalho Escuro"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
+      "category": "organic",
+      "categories": [
+        "organic",
+        "wood"
+      ],
       "color": "#4F3218",
-      "stats": {},
-      "traits": {}
+      "stats": {
+        "main": {
+          "durability": 59,
+          "armor": 7,
+          "armor_durability": 8,
+          "magic_armor": 2,
+          "melee_damage": 0,
+          "attack_speed": 0,
+          "harvest_speed": 2,
+          "ranged_damage": 0,
+          "rarity": 1,
+          "enchantment_value": 15,
+          "charging_value": 0.6,
+          "harvest_tier": "wood",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flammable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wood"
     },
-    "silentgear:jungle": {
-      "id": "silentgear:jungle",
+    "silentgear:wood/jungle": {
+      "id": "silentgear:wood/jungle",
       "name": {
-        "en": "Jungle",
-        "pt": "Jungle"
+        "en": "Jungle Wood",
+        "pt": "Madeira da Selva"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
+      "category": "organic",
+      "categories": [
+        "organic",
+        "wood"
+      ],
       "color": "#B88764",
-      "stats": {},
-      "traits": {}
+      "stats": {
+        "main": {
+          "durability": 59,
+          "armor": 7,
+          "armor_durability": 8,
+          "magic_armor": 2,
+          "melee_damage": 0,
+          "attack_speed": 0,
+          "harvest_speed": 2,
+          "ranged_damage": 0,
+          "rarity": 1,
+          "enchantment_value": 15,
+          "charging_value": 0.6,
+          "harvest_tier": "wood",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flammable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wood"
     },
-    "silentgear:oak": {
-      "id": "silentgear:oak",
+    "silentgear:wood/oak": {
+      "id": "silentgear:wood/oak",
       "name": {
-        "en": "Oak",
-        "pt": "Oak"
+        "en": "Oak Wood",
+        "pt": "Madeira de Carvalho"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
+      "category": "organic",
+      "categories": [
+        "organic",
+        "wood"
+      ],
       "color": "#B8945F",
-      "stats": {},
-      "traits": {}
+      "stats": {
+        "main": {
+          "durability": 59,
+          "armor": 7,
+          "armor_durability": 8,
+          "magic_armor": 2,
+          "melee_damage": 0,
+          "attack_speed": 0,
+          "harvest_speed": 2,
+          "ranged_damage": 0,
+          "rarity": 1,
+          "enchantment_value": 15,
+          "charging_value": 0.6,
+          "harvest_tier": "wood",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flammable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wood"
     },
-    "silentgear:spruce": {
-      "id": "silentgear:spruce",
+    "silentgear:wood/spruce": {
+      "id": "silentgear:wood/spruce",
       "name": {
-        "en": "Spruce",
-        "pt": "Spruce"
+        "en": "Spruce Wood",
+        "pt": "Madeira de Pinheiro"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
+      "category": "organic",
+      "categories": [
+        "organic",
+        "wood"
+      ],
       "color": "#82613A",
-      "stats": {},
-      "traits": {}
+      "stats": {
+        "main": {
+          "durability": 59,
+          "armor": 7,
+          "armor_durability": 8,
+          "magic_armor": 2,
+          "melee_damage": 0,
+          "attack_speed": 0,
+          "harvest_speed": 2,
+          "ranged_damage": 0,
+          "rarity": 1,
+          "enchantment_value": 15,
+          "charging_value": 0.6,
+          "harvest_tier": "wood",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flammable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wood"
     },
-    "silentgear:warped": {
-      "id": "silentgear:warped",
+    "silentgear:wood/warped": {
+      "id": "silentgear:wood/warped",
       "name": {
-        "en": "Warped",
-        "pt": "Warped"
+        "en": "Warped Wood",
+        "pt": "Madeira Distorcida"
       },
       "tier": 1,
-      "category": "metal",
-      "categories": [],
+      "category": "organic",
+      "categories": [
+        "organic",
+        "wood"
+      ],
       "color": "#398382",
       "stats": {
-        "main": {},
+        "main": {
+          "durability": 59,
+          "armor": 7,
+          "armor_durability": 8,
+          "magic_armor": 2,
+          "melee_damage": 0,
+          "attack_speed": 0,
+          "harvest_speed": 2,
+          "ranged_damage": 0,
+          "rarity": 1,
+          "enchantment_value": 15,
+          "charging_value": 0.6,
+          "harvest_tier": "wood",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
         "rod": {}
       },
       "traits": {
@@ -5473,7 +6850,8 @@
             "level": 2
           }
         ]
-      }
+      },
+      "parent": "silentgear:wood"
     },
     "silentgear:wood": {
       "id": "silentgear:wood",
@@ -5530,6 +6908,1110 @@
         ]
       }
     },
+    "silentgear:wool/black": {
+      "id": "silentgear:wool/black",
+      "name": {
+        "en": "Black Wool",
+        "pt": "Lã Preta"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#141519",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/blue": {
+      "id": "silentgear:wool/blue",
+      "name": {
+        "en": "Blue Wool",
+        "pt": "Lã Azul"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#35399D",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/brown": {
+      "id": "silentgear:wool/brown",
+      "name": {
+        "en": "Brown Wool",
+        "pt": "Lã Marrom"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#724728",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/cyan": {
+      "id": "silentgear:wool/cyan",
+      "name": {
+        "en": "Cyan Wool",
+        "pt": "Lã Ciano"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#158991",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/gray": {
+      "id": "silentgear:wool/gray",
+      "name": {
+        "en": "Gray Wool",
+        "pt": "Lã Cinza"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#3E4447",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/green": {
+      "id": "silentgear:wool/green",
+      "name": {
+        "en": "Green Wool",
+        "pt": "Lã Verde"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#546D1B",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/light_blue": {
+      "id": "silentgear:wool/light_blue",
+      "name": {
+        "en": "Light Blue Wool",
+        "pt": "Lã Azul Clara"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#3AAFD9",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/light_gray": {
+      "id": "silentgear:wool/light_gray",
+      "name": {
+        "en": "Light Gray Wool",
+        "pt": "Lã Cinza Clara"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#8E8E86",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/lime": {
+      "id": "silentgear:wool/lime",
+      "name": {
+        "en": "Lime Wool",
+        "pt": "Lã Verde Limão"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#70B919",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/magenta": {
+      "id": "silentgear:wool/magenta",
+      "name": {
+        "en": "Magenta Wool",
+        "pt": "Lã Magenta"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#BD44B3",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/orange": {
+      "id": "silentgear:wool/orange",
+      "name": {
+        "en": "Orange Wool",
+        "pt": "Lã Laranja"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#F07613",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/pink": {
+      "id": "silentgear:wool/pink",
+      "name": {
+        "en": "Pink Wool",
+        "pt": "Lã Rosa"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#ED8DAC",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/purple": {
+      "id": "silentgear:wool/purple",
+      "name": {
+        "en": "Purple Wool",
+        "pt": "Lã Roxa"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#792AAC",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/red": {
+      "id": "silentgear:wool/red",
+      "name": {
+        "en": "Red Wool",
+        "pt": "Lã Vermelha"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#A12722",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/white": {
+      "id": "silentgear:wool/white",
+      "name": {
+        "en": "White Wool",
+        "pt": "Lã Branca"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#E9ECEC",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
+    "silentgear:wool/yellow": {
+      "id": "silentgear:wool/yellow",
+      "name": {
+        "en": "Yellow Wool",
+        "pt": "Lã Amarela"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#F8C627",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      },
+      "parent": "silentgear:wool"
+    },
     "silentgear:wool": {
       "id": "silentgear:wool",
       "name": {
@@ -5560,6 +8042,12 @@
             "boots": 0.5
           }
         },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        },
         "grip": {
           "attack_speed": {
             "value": 0.2,
@@ -5568,12 +8056,6 @@
           "harvest_speed": {
             "value": 0.1,
             "operation": "MULTIPLY_BASE"
-          }
-        },
-        "lining": {
-          "knockback_resistance": {
-            "value": 0.1,
-            "operation": "ADD"
           }
         }
       },
@@ -5584,13 +8066,13 @@
             "level": 1
           }
         ],
-        "grip": [
+        "lining": [
           {
             "name": "silentgear:flexible",
             "level": 2
           }
         ],
-        "lining": [
+        "grip": [
           {
             "name": "silentgear:flexible",
             "level": 2

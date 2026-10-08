@@ -41,7 +41,7 @@ silentgear	Leather	Main	silentgear:leather		Organic, Cloth, Basic	0	5	7	0	8
 silentgear	Leaves	Main	silentgear:leaves		Organic, Basic	0	2	3	0	0
 mod/sgearmetalworks	Lumium	Main	silentgear:lumium		Metal, Casting, Advanced	920	20	18	4	10
 silentgear	Netherrack	Main	silentgear:netherrack		Rock, Organic, Basic	142	5	8	0	4
-silentgear	Netherwood	Main	silentgear:netherwood		Organic, Wood	72	12	8	0	6
+silentgear	Netherwood	Main	silentgear:netherwood	silentgear:wood	Organic, Wood	72	12	8	0	6
 mod/sgearmetalworks	Nickel	Main	silentgear:nickel		Metal, Casting, Intermediate	380	17	13	0	6
 mod/sgearmetalworks	Obsidian	Main	silentgear:obsidian		Rock, Advanced, Casting	1024	13	20	4	8
 mod/sgearmetalworks	Osmium	Main	silentgear:osmium		Metal, Casting, Intermediate	500	30	17	0	4
@@ -54,21 +54,63 @@ silentgear	Redstone Alloy	Main	silentgear:redstone_alloy		Metal, Intermediate	84
 mod/sgearmetalworks	Refined Glowstone	Main	silentgear:refined_glowstone		Metal, Casting, Advanced	300	18	19	0	8
 silentgear	Refined Iron	Main	silentgear:refined_iron		Metal, Intermediate	512	20	18	2	6
 mod/sgearmetalworks	Refined Obsidian	Main	silentgear:refined_obsidian		Metal, Casting, Endgame	2500	50	30	16	6
+silentgear	Red Sandstone	Main	silentgear:sandstone/red	silentgear:sandstone	Rock, Basic	117	6	5	0	0
 silentgear	Sandstone	Main	silentgear:sandstone		Rock, Basic	117	6	5	0	0
 silentgear	Sheet Metal	Main	silentgear:sheet_metal		Sheet	0	0	0	0	0
 mod/sgearmetalworks	Signalum	Main	silentgear:signalum		Metal, Casting, Endgame	800	25	16	2	4
 mod/sgearmetalworks	Silver	Main	silentgear:silver		Metal, Casting, Intermediate	64	9	11	0	10
 mod/sgearmetalworks	Steel	Main	silentgear:steel		Metal, Casting, Intermediate	500	20	20	2	6
+silentgear	Andesite	Main	silentgear:stone/andesite	silentgear:stone	Rock, Basic	131	5	5	0	0
+silentgear	Diorite	Main	silentgear:stone/diorite	silentgear:stone	Rock, Basic	131	5	5	0	0
+silentgear	Granite	Main	silentgear:stone/granite	silentgear:stone	Rock, Basic	131	5	5	0	0
 silentgear	Stone	Main	silentgear:stone		Rock, Basic	131	5	5	0	0
+silentgear	Black Terracotta	Main	silentgear:terracotta/black	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Blue Terracotta	Main	silentgear:terracotta/blue	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Brown Terracotta	Main	silentgear:terracotta/brown	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Cyan Terracotta	Main	silentgear:terracotta/cyan	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Gray Terracotta	Main	silentgear:terracotta/gray	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Green Terracotta	Main	silentgear:terracotta/green	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Light Blue Terracotta	Main	silentgear:terracotta/light_blue	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Light Gray Terracotta	Main	silentgear:terracotta/light_gray	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Lime Terracotta	Main	silentgear:terracotta/lime	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Magenta Terracotta	Main	silentgear:terracotta/magenta	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Orange Terracotta	Main	silentgear:terracotta/orange	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Pink Terracotta	Main	silentgear:terracotta/pink	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Purple Terracotta	Main	silentgear:terracotta/purple	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Red Terracotta	Main	silentgear:terracotta/red	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	White Terracotta	Main	silentgear:terracotta/white	silentgear:terracotta	Rock, Basic	165	11	9	0	3
+silentgear	Yellow Terracotta	Main	silentgear:terracotta/yellow	silentgear:terracotta	Rock, Basic	165	11	9	0	3
 silentgear	Terracotta	Main	silentgear:terracotta		Rock, Basic	165	11	9	0	3
 mod/sgearmetalworks	Tin	Main	silentgear:tin		Metal, Casting, Basic	192	13	12	0	2
 silentgear	Titanium	Main	silentgear:titanium		Metal, Endgame	1600	37	24	8	4
 silentgear	Turtle	Main	silentgear:turtle		Organic, Intermediate	0	0	0	0	4
 mod/sgearmetalworks	Tyrian Steel	Main	silentgear:tyrian_steel		Metal, Endgame, Casting	3652	81	25	12	12
 mod/sgearmetalworks	Uranium	Main	silentgear:uranium		Metal, Casting, Advanced	800	20	13	1	3
-silentgear	Crimson	Main	silentgear:crimson			0	0	0	0	0
-silentgear	Warped	Main	silentgear:warped			0	0	0	0	0
+silentgear	Acacia Wood	Main	silentgear:wood/acacia	silentgear:wood	Organic, Wood	59	8	7	0	2
+silentgear	Birch Wood	Main	silentgear:wood/birch	silentgear:wood	Organic, Wood	59	8	7	0	2
+silentgear	Crimson Wood	Main	silentgear:wood/crimson	silentgear:wood	Organic, Wood	59	8	7	0	2
+silentgear	Dark Oak Wood	Main	silentgear:wood/dark_oak	silentgear:wood	Organic, Wood	59	8	7	0	2
+silentgear	Jungle Wood	Main	silentgear:wood/jungle	silentgear:wood	Organic, Wood	59	8	7	0	2
+silentgear	Oak Wood	Main	silentgear:wood/oak	silentgear:wood	Organic, Wood	59	8	7	0	2
+silentgear	Spruce Wood	Main	silentgear:wood/spruce	silentgear:wood	Organic, Wood	59	8	7	0	2
+silentgear	Warped Wood	Main	silentgear:wood/warped	silentgear:wood	Organic, Wood	59	8	7	0	2
 silentgear	Wood	Main	silentgear:wood		Organic, Wood	59	8	7	0	2
+silentgear	Black Wool	Main	silentgear:wool/black	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Blue Wool	Main	silentgear:wool/blue	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Brown Wool	Main	silentgear:wool/brown	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Cyan Wool	Main	silentgear:wool/cyan	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Gray Wool	Main	silentgear:wool/gray	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Green Wool	Main	silentgear:wool/green	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Light Blue Wool	Main	silentgear:wool/light_blue	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Light Gray Wool	Main	silentgear:wool/light_gray	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Lime Wool	Main	silentgear:wool/lime	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Magenta Wool	Main	silentgear:wool/magenta	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Orange Wool	Main	silentgear:wool/orange	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Pink Wool	Main	silentgear:wool/pink	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Purple Wool	Main	silentgear:wool/purple	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Red Wool	Main	silentgear:wool/red	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	White Wool	Main	silentgear:wool/white	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
+silentgear	Yellow Wool	Main	silentgear:wool/yellow	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
 silentgear	Wool	Main	silentgear:wool		Organic, Cloth, Basic	0	4	4	0	4
 mod/sgearmetalworks	Zinc	Main	silentgear:zinc		Metal, Casting, Basic	192	10	10	0	2
 kubejs	Meat	Main	sgearmetalworks:meat		Casting	1024	13	20	4	8

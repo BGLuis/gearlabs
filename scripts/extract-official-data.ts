@@ -17,180 +17,24 @@ import {
 export const ATM11_COMMIT = '220614ecfacee7a4099696970471fe70ab7c72ed';
 export const SILENT_GEAR_COMMIT = 'cb9926f4a3215a2f6016e4b465d1029ce06251e4';
 
-export function normalizeColor(color: string | undefined): string {
-  if (!color || typeof color !== 'string') return '#FFFFFF';
-  let c = color.trim().toUpperCase();
-  if (c.startsWith('#') && c.length === 9) {
-    // #AARRGGBB -> #RRGGBB
-    c = '#' + c.slice(3);
-  }
-  return c;
-}
+import {
+  parseMaterialJson,
+  resolveMaterialParents,
+  formatMaterialName,
+  normalizeColor,
+  parseStatValueEntry as parseStatEntry,
+} from '../src/lib/datapack-parser';
 
-export function parseStatEntry(val: any): StatModifierEntry | undefined {
-  if (val === undefined || val === null) return undefined;
-  if (typeof val === 'number') return val;
-  if (typeof val === 'object') {
-    if (Array.isArray(val)) {
-      return val.map((item) => ({
-        value: typeof item.value === 'number' ? item.value : parseFloat(item.value) || 0,
-        operation: item.operation as StatOperation,
-      }));
-    }
-    return {
-      value: typeof val.value === 'number' ? val.value : parseFloat(val.value) || 0,
-      operation: val.operation as StatOperation,
-    };
-  }
-  const parsed = parseFloat(val);
-  return isNaN(parsed) ? undefined : parsed;
-}
-
-export function formatMaterialName(baseName: string): { en: string; pt: string } {
-  const enTranslations: Record<string, string> = {
-    allthemodium: 'Allthemodium',
-    vibranium: 'Vibranium',
-    unobtainium: 'Unobtainium',
-    uru_metal: 'Uru Metal',
-    tyrian_steel: 'Tyrian Steel',
-    crimson_iron: 'Crimson Iron',
-    crimson_steel: 'Crimson Steel',
-    azure_silver: 'Azure Silver',
-    azure_electrum: 'Azure Electrum',
-    breeze_rod: 'Breeze Rod',
-  };
-
-  const ptTranslations: Record<string, string> = {
-    allthemodium: 'Allthemodium',
-    vibranium: 'Vibranium',
-    unobtainium: 'Unobtainium',
-    uru_metal: 'Metal Uru',
-    tyrian_steel: 'Aço Tiriano',
-    iron: 'Ferro',
-    diamond: 'Diamante',
-    netherite: 'Netherita',
-    gold: 'Ouro',
-    copper: 'Cobre',
-    wood: 'Madeira',
-    stone: 'Pedra',
-    wool: 'Lã',
-    crimson_iron: 'Ferro Carmesim',
-    crimson_steel: 'Aço Carmesim',
-    azure_silver: 'Prata Lazúli',
-    azure_electrum: 'Electro Lazúli',
-    breeze_rod: 'Haste de Brisa',
-  };
-
-  const formattedEn =
-    enTranslations[baseName] ||
-    baseName.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-  const formattedPt = ptTranslations[baseName] || formattedEn;
-
-  return { en: formattedEn, pt: formattedPt };
-}
+export { formatMaterialName, normalizeColor, parseStatEntry };
 
 export function parseMaterialFile(filePath: string): Material {
   const content = fs.readFileSync(filePath, 'utf-8');
   const json = JSON.parse(content);
-
-  const normalizedPath = filePath.replace(/\\/g, '/');
-  const match = normalizedPath.match(/\/([^\/]+)\/silentgear_materials\/([^\/]+)\.json$/);
-  const namespace = match ? match[1] : 'silentgear';
-  const baseName = match ? match[2] : path.basename(filePath, '.json');
-  const id = `${namespace}:${baseName}`;
-
-  const rawColor = json.display?.color || json.model?.color || '#D8D8D8';
-  const color = normalizeColor(rawColor);
-
-  const rawCategories: string[] =
-    json.crafting?.categories || json.availability?.categories || ['metal'];
-  const category = (rawCategories[0] || 'metal') as MaterialCategory;
-  const categories = rawCategories;
-
-  const rawProps = json.properties || {};
-  const rawStats = json.stats || {};
-
-  const slotMap: Record<string, PartSlot> = {
-    'silentgear:main': 'main',
-    main: 'main',
-    'silentgear:rod': 'rod',
-    rod: 'rod',
-    'silentgear:tip': 'tip',
-    tip: 'tip',
-    'silentgear:coating': 'coating',
-    coating: 'coating',
-    'silentgear:grip': 'grip',
-    grip: 'grip',
-    'silentgear:lining': 'lining',
-    lining: 'lining',
-    'silentgear:binding': 'binding',
-    binding: 'binding',
-  };
-
-  const stats: Partial<Record<PartSlot, any>> = {};
-  const traits: Partial<Record<PartSlot, any>> = {};
-
-  for (const [propKey, slotName] of Object.entries(slotMap)) {
-    const slotData = rawProps[propKey] || rawStats[slotName];
-    if (!slotData) continue;
-    if (stats[slotName]) continue;
-
-    const slotStats: any = {};
-    if (slotData.durability !== undefined) slotStats.durability = parseStatEntry(slotData.durability);
-    if (slotData.armor !== undefined) slotStats.armor = parseStatEntry(slotData.armor);
-    if (slotData.armor_durability !== undefined) slotStats.armor_durability = parseStatEntry(slotData.armor_durability);
-    if (slotData.armor_toughness !== undefined) slotStats.armor_toughness = parseStatEntry(slotData.armor_toughness);
-    if (slotData.magic_armor !== undefined) slotStats.magic_armor = parseStatEntry(slotData.magic_armor);
-    if (slotData.knockback_resistance !== undefined) slotStats.knockback_resistance = parseStatEntry(slotData.knockback_resistance);
-
-    if (slotData.attack_damage !== undefined) slotStats.melee_damage = parseStatEntry(slotData.attack_damage);
-    else if (slotData.melee_damage !== undefined) slotStats.melee_damage = parseStatEntry(slotData.melee_damage);
-
-    if (slotData.attack_speed !== undefined) slotStats.attack_speed = parseStatEntry(slotData.attack_speed);
-    if (slotData.harvest_speed !== undefined) slotStats.harvest_speed = parseStatEntry(slotData.harvest_speed);
-    if (slotData.ranged_damage !== undefined) slotStats.ranged_damage = parseStatEntry(slotData.ranged_damage);
-    if (slotData.rarity !== undefined) slotStats.rarity = parseStatEntry(slotData.rarity);
-    if (slotData.enchantment_value !== undefined) slotStats.enchantment_value = parseStatEntry(slotData.enchantment_value);
-    if (slotData.charging_value !== undefined) slotStats.charging_value = parseStatEntry(slotData.charging_value);
-
-    if (typeof slotData.harvest_tier === 'object' && slotData.harvest_tier) {
-      slotStats.harvest_tier = slotData.harvest_tier.name || slotData.harvest_tier.incorrect_blocks_for_tool;
-    } else if (typeof slotData.harvest_tier === 'string') {
-      slotStats.harvest_tier = slotData.harvest_tier;
-    }
-
-    const armorByPiece: any = {};
-    if (slotData['armor/helmet'] !== undefined) armorByPiece.helmet = parseStatEntry(slotData['armor/helmet']);
-    if (slotData['armor/chestplate'] !== undefined) armorByPiece.chestplate = parseStatEntry(slotData['armor/chestplate']);
-    if (slotData['armor/leggings'] !== undefined) armorByPiece.leggings = parseStatEntry(slotData['armor/leggings']);
-    if (slotData['armor/boots'] !== undefined) armorByPiece.boots = parseStatEntry(slotData['armor/boots']);
-
-    if (Object.keys(armorByPiece).length > 0) {
-      slotStats.armor_by_piece = armorByPiece;
-    }
-
-    stats[slotName] = slotStats;
-
-    if (Array.isArray(slotData.traits)) {
-      traits[slotName] = slotData.traits.map((t: any) => ({
-        name: t.trait || t.name,
-        level: typeof t.level === 'number' ? t.level : 1,
-      }));
-    }
+  const mat = parseMaterialJson(filePath, json);
+  if (!mat) {
+    throw new Error(`[extract-official-data] Erro ao analisar material em ${filePath}`);
   }
-
-  const names = formatMaterialName(baseName);
-
-  return {
-    id,
-    name: names,
-    tier: stats.main?.harvest_tier ? 2 : 1,
-    category,
-    categories,
-    color,
-    stats,
-    traits,
-  };
+  return mat;
 }
 
 function findJsonFiles(dir: string): string[] {
@@ -248,7 +92,7 @@ export function extractAllMaterials(projectRoot: string): Record<string, Materia
     }
   }
 
-  return materials;
+  return resolveMaterialParents(materials);
 }
 
 export function generateTsvDump(materials: Record<string, Material>, outTsvPath: string) {
@@ -265,7 +109,7 @@ export function generateTsvDump(materials: Record<string, Material>, outTsvPath:
 
     const name = mat.name.en;
     const type = 'Main';
-    const parent = '';
+    const parent = mat.parent || '';
     const categoriesStr = (mat.categories || [mat.category])
       .map((c) => c.charAt(0).toUpperCase() + c.slice(1))
       .join(', ');
