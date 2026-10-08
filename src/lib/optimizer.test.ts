@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { describe, it, expect } from 'vitest';
 import { findBestBuilds, MAX_SECONDARY_CANDIDATES } from './optimizer';
+import { calculateGearStats } from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
   OFFICIAL_GEAR_TYPES,
@@ -335,6 +336,82 @@ describe('findBestBuilds', () => {
     for (const res of results) {
       expect(res.stats.attackSpeed).toBeLessThanOrEqual(4);
     }
+  });
+
+  describe('Issue #56: Otimizador com ligas, grau e starcharge', () => {
+    const saveMetals = [
+      'silentgear:tyrian_steel',
+      'silentgear:unobtainium',
+      'sgearmetalworks:uru_metal',
+      'silentgear:vibranium',
+      'silentgear:allthemodium',
+    ];
+
+    it('Critério 1: peitoral, meta Proteção, grau MAX, starcharge 3, com os cinco metais do save disponíveis: a sugestão é uma liga com armor ≥ 40,9 e armorToughness ≥ 154', () => {
+      const results = findBestBuilds(
+        {
+          gearTypeId: 'chestplate',
+          availableMaterials: saveMetals,
+          goal: 'max_protection',
+          grade: 'MAX',
+          starcharge: 3,
+        },
+        ATM11_CATALOG,
+        1
+      );
+
+      expect(results.length).toBeGreaterThan(0);
+      const best = results[0];
+
+      // A sugestão deve ser uma liga composta (mais de 1 sub-material)
+      expect(best.build.parts.main?.materials).toBeDefined();
+      expect(best.build.parts.main?.materials!.length).toBeGreaterThan(1);
+
+      // Critério estrito de armadura e tenacidade
+      expect(best.stats.armor).toBeGreaterThanOrEqual(40.9);
+      expect(best.stats.armorToughness).toBeGreaterThanOrEqual(154);
+    });
+
+    it('Critério 2: a sugestão com grau MAX nunca tem armor menor que a do melhor material puro com o mesmo grau', () => {
+      const bestPureArmor = Math.max(
+        ...saveMetals.map((matId) => {
+          const stats = calculateGearStats(
+            {
+              gearTypeId: 'chestplate',
+              parts: { main: { materialId: matId, grade: 'MAX', starcharge: 3 } },
+            },
+            ATM11_CATALOG
+          );
+          return stats.armor;
+        })
+      );
+
+      const results = findBestBuilds(
+        {
+          gearTypeId: 'chestplate',
+          availableMaterials: saveMetals,
+          goal: 'max_protection',
+          grade: 'MAX',
+          starcharge: 3,
+        },
+        ATM11_CATALOG,
+        1
+      );
+
+      expect(results.length).toBeGreaterThan(0);
+      expect(results[0].stats.armor).toBeGreaterThanOrEqual(bestPureArmor);
+    });
+
+    it('Critério 3: grep -n "grade|starcharge" src/lib/optimizer.ts passa a ter resultados', () => {
+      const optimizerFilePath = path.join(__dirname, 'optimizer.ts');
+      const optimizerCode = fs.readFileSync(optimizerFilePath, 'utf-8');
+
+      const gradeMatches = optimizerCode.match(/grade/g) || [];
+      const starchargeMatches = optimizerCode.match(/starcharge/g) || [];
+
+      expect(gradeMatches.length).toBeGreaterThan(0);
+      expect(starchargeMatches.length).toBeGreaterThan(0);
+    });
   });
 });
 

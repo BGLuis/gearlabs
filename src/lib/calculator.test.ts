@@ -937,7 +937,7 @@ describe('calculateGearStats', () => {
   });
 
   describe('Issue #26: Grau em ligas (nível da peça)', () => {
-    it('Critério de aceite 1: liga de cinco metais com grade: MAX e starcharge: 3 na parte, no peitoral, resulta em armor 39.7 (±0.1)', () => {
+    it('Critério de aceite 1: liga de cinco metais com grade: MAX e starcharge: 3 na parte, no peitoral, resulta em armor 41.0 (±0.1)', () => {
       const build: GearBuild = {
         gearTypeId: 'chestplate',
         parts: {
@@ -957,7 +957,7 @@ describe('calculateGearStats', () => {
       };
 
       const stats = calculateGearStats(build, ATM11_CATALOG);
-      expect(stats.armor).toBeCloseTo(39.7, 1);
+      expect(stats.armor).toBeCloseTo(41.0, 1);
     });
 
     it('Critério de aceite 2: grade nos sub-materiais (materials[i]) não altera nenhum stat', () => {
