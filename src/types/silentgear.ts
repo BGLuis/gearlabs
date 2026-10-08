@@ -79,12 +79,14 @@ export interface Material {
   };
   tier: number;
   category: MaterialCategory;
+  categories?: string[];
   color: string; // Hex color for layer tinting (e.g. "#33EBCB")
   harvest_tier?: string;
   stats: Partial<Record<PartSlot, MaterialStats>>;
   statModifiers?: Partial<Record<PartSlot, Record<string, StatModifier>>>;
   traits: Partial<Record<PartSlot, MaterialTraitRef[]>>;
   texture?: string;
+  parent?: string;
 }
 
 export interface GearType {
