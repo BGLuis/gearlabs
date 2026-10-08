@@ -40,7 +40,7 @@ describe('calculateGearStats', () => {
     expect(traitIds).toContain('silentgear:flexible');
   });
 
-  it('aplica bônus de sinergia quando materiais são da mesma categoria (metais)', () => {
+  it('não aplica sinergia entre slots mesmo quando materiais são da mesma categoria', () => {
     const build: GearBuild = {
       gearTypeId: 'sword',
       parts: {
@@ -50,8 +50,71 @@ describe('calculateGearStats', () => {
     };
 
     const stats = calculateGearStats(build, catalog);
-    // Ferro e Cobre são metais -> +5% de sinergia
-    expect(stats.synergy).toBe(105);
+    // Ferro e Cobre são metais, mas sinergia entre slots não existe no Silent Gear
+    expect(stats.synergy).toBe(100);
+  });
+
+  it('capacete com main Unobtainium + coating Netherite retorna synergy === 100 e não infla atributos do main', () => {
+    const buildAlone: GearBuild = {
+      gearTypeId: 'helmet',
+      parts: {
+        main: { materialId: 'allthemodium:unobtainium' },
+      },
+    };
+    const buildWithCoating: GearBuild = {
+      gearTypeId: 'helmet',
+      parts: {
+        main: { materialId: 'allthemodium:unobtainium' },
+        coating: { materialId: 'silentgear:netherite' },
+      },
+    };
+
+    const statsAlone = calculateGearStats(buildAlone, ATM11_CATALOG);
+    const statsWithCoating = calculateGearStats(buildWithCoating, ATM11_CATALOG);
+
+    // Sinergia deve ser neutra (100%), sem o bônus de 1.05 entre metais
+    expect(statsWithCoating.synergy).toBe(100);
+    // O armor base do main (35) + coating (4 no catálogo atual, cf. #5) = 39,
+    // sem a multiplicação incorreta por 1.05 (que inflaria para 41)
+    expect(statsWithCoating.armor).toBe(
+      statsAlone.armor + (ATM11_CATALOG.materials['silentgear:netherite'].stats.coating?.armor || 0)
+    );
+  });
+
+  it('preserva armadura inalterada ao adicionar coating sem stat de armor', () => {
+    const buildAlone: GearBuild = {
+      gearTypeId: 'helmet',
+      parts: {
+        main: { materialId: 'allthemodium:unobtainium' },
+      },
+    };
+    // Mock de catálogo onde coating não concede armor (comportamento oficial do Silent Gear)
+    const mockCatalog: VersionCatalog = {
+      ...ATM11_CATALOG,
+      materials: {
+        ...ATM11_CATALOG.materials,
+        'silentgear:netherite_no_armor': {
+          ...ATM11_CATALOG.materials['silentgear:netherite'],
+          stats: {
+            ...ATM11_CATALOG.materials['silentgear:netherite'].stats,
+            coating: { durability: 300, melee_damage: 1.5 },
+          },
+        },
+      },
+    };
+    const buildWithCoating: GearBuild = {
+      gearTypeId: 'helmet',
+      parts: {
+        main: { materialId: 'allthemodium:unobtainium' },
+        coating: { materialId: 'silentgear:netherite_no_armor' },
+      },
+    };
+
+    const statsAlone = calculateGearStats(buildAlone, mockCatalog);
+    const statsWithCoating = calculateGearStats(buildWithCoating, mockCatalog);
+
+    expect(statsWithCoating.synergy).toBe(100);
+    expect(statsWithCoating.armor).toBe(statsAlone.armor);
   });
 
   it('aplica multiplicador de graduação de qualidade (Grade MAX dá +30%)', () => {
@@ -170,8 +233,8 @@ describe('calculateGearStats', () => {
     const stats = calculateGearStats(build, ATM11_CATALOG);
 
     // Unobtainium dano 16.0 + Espada base 3.0 + Tip Allthemodium 3.0 = 22.0
-    // Sinergia: Unobtainium (metal), Breeze Rod (metal), Allthemodium (metal) -> todos metais = 1.05
-    // finalDamage = 22.0 * 1.05 = 23.1
+    // Sinergia neutra entre partes simples (1.00); finalDamage = 22.0
+    expect(stats.synergy).toBe(100);
     expect(stats.meleeDamage).toBeGreaterThanOrEqual(22.0);
     expect(stats.durability).toBeGreaterThan(50000);
     // Breeze rod adiciona +0.35 de attack speed

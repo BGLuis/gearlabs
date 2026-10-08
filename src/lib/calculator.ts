@@ -10,24 +10,17 @@ import {
   VersionCatalog,
 } from '@/types/silentgear';
 
+/**
+ * Calcula a sinergia de materiais.
+ * No Silent Gear oficial, a sinergia só se aplica internamente a sub-materiais de
+ * materiais compostos (ligas/tecidos mistos via SynergyUtils.java).
+ * Partes de material simples utilizam sinergia neutra de 1.0 (100%).
+ */
 export function calculateSynergy(
   materials: Material[]
 ): number {
   if (materials.length <= 1) return 1.0;
-
-  // Se todos os materiais são da mesma categoria (ex: todos metais ou todas gemas), ganham bônus de sinergia
-  const categories = new Set(materials.map((m) => m.category));
-  if (categories.size === 1) {
-    return 1.05; // +5% de sinergia por consistência de categoria
-  }
-
-  // Se todos forem exatamente o mesmo material
-  const uniqueIds = new Set(materials.map((m) => m.id));
-  if (uniqueIds.size === 1) {
-    return 1.10; // +10% harmonia perfeita
-  }
-
-  // Caso padrão
+  // TODO(#8): Implementar SynergyUtils.getSynergy para materiais compostos.
   return 1.0;
 }
 
@@ -47,16 +40,9 @@ export function calculateGearStats(
   const mainSelection = build.parts.main;
   const mainMaterial = mainSelection ? catalog.materials[mainSelection.materialId] : null;
 
-  // Lista de todos os materiais usados na montagem para cálculo de sinergia
-  const activeMaterials: Material[] = [];
-  for (const slot of Object.keys(build.parts) as PartSlot[]) {
-    const sel = build.parts[slot];
-    if (sel && catalog.materials[sel.materialId]) {
-      activeMaterials.push(catalog.materials[sel.materialId]);
-    }
-  }
-
-  const synergy = calculateSynergy(activeMaterials);
+  // Sinergia no Silent Gear aplica-se internamente a materiais compostos (Issue #8).
+  // Equipamentos e peças com materiais simples têm sinergia neutra de 1.0 (100%).
+  const synergy = 1.0;
 
   // Stats base derivados do main
   const mainGradeMul = mainSelection?.grade ? (GRADE_MULTIPLIERS[mainSelection.grade] || 0) : 0;
