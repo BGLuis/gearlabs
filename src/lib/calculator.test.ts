@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateGearStats, calculateSynergy } from './calculator';
+import { calculateGearStats, calculateSynergy, applyGradeBonus } from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
   OFFICIAL_GEAR_TYPES,
@@ -54,7 +54,7 @@ describe('calculateGearStats', () => {
     expect(stats.synergy).toBe(105);
   });
 
-  it('aplica multiplicador de graduação de qualidade (Grade MAX dá +25%)', () => {
+  it('aplica multiplicador de graduação de qualidade (Grade MAX dá +30%)', () => {
     const buildUngraded: GearBuild = {
       gearTypeId: 'sword',
       parts: {
@@ -75,6 +75,61 @@ describe('calculateGearStats', () => {
 
     expect(statsGraded.meleeDamage).toBeGreaterThan(statsUngraded.meleeDamage);
     expect(statsGraded.durability).toBeGreaterThan(statsUngraded.durability);
+    // Dano base espada (3.0) + Ferro (2.0) = 5.0. Com Grade MAX (+30%): 5.0 * 1.30 = 6.5
+    expect(statsGraded.meleeDamage).toBe(6.5);
+  });
+
+  it('afirma que MAX multiplica o armor de um main de valor 10 para 13,0 e E para 10,1', () => {
+    const testCatalog: VersionCatalog = {
+      ...catalog,
+      materials: {
+        ...catalog.materials,
+        'test:armor_mat': {
+          id: 'test:armor_mat',
+          name: { en: 'Test Armor', pt: 'Armadura Teste' },
+          tier: 1,
+          category: 'metal',
+          color: '#ffffff',
+          stats: {
+            main: {
+              armor: 10,
+              durability: 100,
+            },
+          },
+          traits: {},
+        },
+      },
+    };
+
+    const buildE: GearBuild = {
+      gearTypeId: 'helmet',
+      parts: {
+        main: { materialId: 'test:armor_mat', grade: 'E' },
+      },
+    };
+    const buildMax: GearBuild = {
+      gearTypeId: 'helmet',
+      parts: {
+        main: { materialId: 'test:armor_mat', grade: 'MAX' },
+      },
+    };
+
+    const statsE = calculateGearStats(buildE, testCatalog);
+    const statsMax = calculateGearStats(buildMax, testCatalog);
+
+    expect(statsE.armor).toBe(10.1);
+    expect(statsMax.armor).toBe(13.0);
+  });
+
+  it('aplica a fórmula v + |v| * bônus preservando comportamento para valores negativos', () => {
+    // Valor positivo com bônus de 30% (MAX): 10 + 10 * 0.30 = 13.0
+    expect(applyGradeBonus(10, 0.30)).toBe(13.0);
+    // Valor positivo com bônus de 1% (E): 10 + 10 * 0.01 = 10.1
+    expect(applyGradeBonus(10, 0.01)).toBe(10.1);
+    // Valor negativo com bônus de 30% (MAX): -10 + |-10| * 0.30 = -7.0
+    expect(applyGradeBonus(-10, 0.30)).toBe(-7.0);
+    // Valor com bônus de 0% (NONE):
+    expect(applyGradeBonus(-10, 0.0)).toBe(-10);
   });
 
   it('aplica adições da ponta (Tip Slot)', () => {

@@ -8,15 +8,15 @@ export type Grade = 'NONE' | 'E' | 'D' | 'C' | 'B' | 'A' | 'S' | 'SS' | 'SSS' | 
 
 export const GRADE_MULTIPLIERS: Record<Grade, number> = {
   NONE: 0.0,
-  E: -0.15,
-  D: -0.10,
-  C: -0.05,
-  B: 0.0,
+  E: 0.01,
+  D: 0.02,
+  C: 0.03,
+  B: 0.04,
   A: 0.05,
   S: 0.10,
   SS: 0.15,
-  SSS: 0.20,
-  MAX: 0.25,
+  SSS: 0.25,
+  MAX: 0.30,
 };
 
 export interface MaterialStats {
