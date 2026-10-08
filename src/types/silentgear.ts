@@ -86,6 +86,7 @@ export interface Material {
   statModifiers?: Partial<Record<PartSlot, Record<string, StatModifier>>>;
   traits: Partial<Record<PartSlot, MaterialTraitRef[]>>;
   texture?: string;
+  parent?: string;
 }
 
 export interface GearType {
