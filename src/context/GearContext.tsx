@@ -8,6 +8,7 @@ import {
   VersionPreset,
   Grade,
   PartSlot,
+  StarchargeLevel,
 } from '@/types/silentgear';
 import {
   ATM11_CATALOG,
@@ -26,7 +27,8 @@ interface GearContextType {
   build: GearBuild;
   stats: CalculatedGearStats;
   setGearType: (typeId: string) => void;
-  setPartMaterial: (slot: PartSlot, materialId: string, grade?: Grade) => void;
+  setPartMaterial: (slot: PartSlot, materialId: string, grade?: Grade, starcharge?: StarchargeLevel) => void;
+  setPartStarcharge: (slot: PartSlot, starcharge: StarchargeLevel) => void;
   removePart: (slot: PartSlot) => void;
   loadBuild: (newBuild: GearBuild) => void;
   inventory: Set<string>;
@@ -202,14 +204,35 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     setBuild({ gearTypeId: typeId, parts: newParts });
   }
 
-  function setPartMaterial(slot: PartSlot, materialId: string, grade?: Grade) {
+  function setPartMaterial(slot: PartSlot, materialId: string, grade?: Grade, starcharge?: StarchargeLevel) {
     setBuild((prev) => ({
       ...prev,
       parts: {
         ...prev.parts,
-        [slot]: { materialId, grade: grade || prev.parts[slot]?.grade || 'NONE' },
+        [slot]: {
+          materialId,
+          grade: grade !== undefined ? grade : (prev.parts[slot]?.grade || 'NONE'),
+          starcharge: starcharge !== undefined ? starcharge : (prev.parts[slot]?.starcharge || 0),
+        },
       },
     }));
+  }
+
+  function setPartStarcharge(slot: PartSlot, starcharge: StarchargeLevel) {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      if (!current) return prev;
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: {
+            ...current,
+            starcharge,
+          },
+        },
+      };
+    });
   }
 
   function removePart(slot: PartSlot) {
@@ -290,6 +313,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         stats,
         setGearType,
         setPartMaterial,
+        setPartStarcharge,
         removePart,
         loadBuild,
         inventory,

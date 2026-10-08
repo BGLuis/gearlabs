@@ -28,4 +28,22 @@ describe('url-state', () => {
     expect(decoded?.build.parts.tip?.materialId).toBe('silentgear:netherite');
     expect(decoded?.build.parts.tip?.grade).toBe('MAX');
   });
+
+  it('codifica e decodifica níveis de Starcharge (Starlight Charger) nos slots', () => {
+    const build: GearBuild = {
+      gearTypeId: 'helmet',
+      parts: {
+        main: { materialId: 'silentgear:unobtainium', grade: 'MAX', starcharge: 3 },
+        coating: { materialId: 'silentgear:netherite', starcharge: 2 },
+      },
+    };
+
+    const hash = encodeBuildToHash(build, 'atm11');
+    const decoded = decodeBuildFromHash(hash);
+
+    expect(decoded).not.toBeNull();
+    expect(decoded?.build.parts.main?.starcharge).toBe(3);
+    expect(decoded?.build.parts.main?.grade).toBe('MAX');
+    expect(decoded?.build.parts.coating?.starcharge).toBe(2);
+  });
 });

@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { useGear } from '@/context/GearContext';
-import { Grade, PartSlot } from '@/types/silentgear';
+import { Grade, PartSlot, StarchargeLevel } from '@/types/silentgear';
+import { getNumericStatValue } from '@/lib/calculator';
 import { X, CheckCircle2 } from 'lucide-react';
 
 interface SlotPickerProps {
@@ -11,6 +12,12 @@ interface SlotPickerProps {
 }
 
 const GRADES: Grade[] = ['NONE', 'E', 'D', 'C', 'B', 'A', 'S', 'SS', 'SSS', 'MAX'];
+const STARCHARD_LEVELS: { level: StarchargeLevel; label: string }[] = [
+  { level: 0, label: '0' },
+  { level: 1, label: 'I' },
+  { level: 2, label: 'II' },
+  { level: 3, label: 'III' },
+];
 
 export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
   const { catalog, build, setPartMaterial, removePart, inventory, lang } = useGear();
@@ -36,6 +43,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
   };
 
   const currentGrade = currentSelection?.grade || 'NONE';
+  const currentStarcharge: StarchargeLevel = currentSelection?.starcharge ?? 0;
 
   return (
     <div className="p-3 bg-mc-surface border border-mc-border rounded-lg shadow-sm">
@@ -66,14 +74,14 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
         {/* Seletor de Material */}
         <div className="sm:col-span-2 relative">
           <select
             value={currentSelection?.materialId || ''}
             onChange={(e) => {
               if (e.target.value) {
-                setPartMaterial(slot, e.target.value, currentGrade);
+                setPartMaterial(slot, e.target.value, currentGrade, currentStarcharge);
               } else if (!isRequired) {
                 removePart(slot);
               }
@@ -102,7 +110,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
             value={currentGrade}
             onChange={(e) => {
               if (currentSelection) {
-                setPartMaterial(slot, currentSelection.materialId, e.target.value as Grade);
+                setPartMaterial(slot, currentSelection.materialId, e.target.value as Grade, currentStarcharge);
               }
             }}
             disabled={!currentSelection}
@@ -111,6 +119,28 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
             {GRADES.map((g) => (
               <option key={g} value={g} className="bg-mc-surface text-mc-text">
                 {g}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Seletor de Carga Estelar (Starcharge) */}
+        <div className="flex items-center gap-1.5 bg-mc-bg border border-mc-border rounded px-2 py-1">
+          <span className="text-[10px] text-mc-muted font-mono">Carga:</span>
+          <select
+            value={currentStarcharge}
+            onChange={(e) => {
+              if (currentSelection) {
+                setPartMaterial(slot, currentSelection.materialId, currentGrade, Number(e.target.value) as StarchargeLevel);
+              }
+            }}
+            disabled={!currentSelection}
+            className="w-full bg-transparent text-cyan-400 font-bold text-xs font-mono focus:outline-none cursor-pointer disabled:opacity-40"
+            title="Nível do Starlight Charger (Starcharged)"
+          >
+            {STARCHARD_LEVELS.map(({ level, label }) => (
+              <option key={level} value={level} className="bg-mc-surface text-mc-text">
+                {label}
               </option>
             ))}
           </select>
@@ -129,6 +159,11 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
             <span className="text-[10px] px-1 rounded bg-mc-card border border-mc-border capitalize">
               {currentMat.category}
             </span>
+            {currentMat.stats.main?.charging_value !== undefined && (
+              <span className="text-[10px] px-1 rounded bg-cyan-950/60 border border-cyan-800 text-cyan-400" title="Valor base de carga (charging_value)">
+                ⚡ {getNumericStatValue(currentMat.stats.main.charging_value)}
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-1">

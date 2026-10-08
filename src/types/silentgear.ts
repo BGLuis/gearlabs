@@ -117,9 +117,12 @@ export interface TraitInfo {
   };
 }
 
+export type StarchargeLevel = 0 | 1 | 2 | 3;
+
 export interface GearPartSelection {
   materialId: string;
   grade?: Grade;
+  starcharge?: StarchargeLevel;
 }
 
 export interface GearBuild {
