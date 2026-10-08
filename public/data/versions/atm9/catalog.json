@@ -9,7 +9,7 @@
       },
       "tier": 2,
       "category": "metal",
-      "color": "#D8D8D8",
+      "color": "#FFFFFF",
       "stats": {
         "main": {
           "durability": 250,
@@ -126,7 +126,7 @@
       },
       "tier": 4,
       "category": "metal",
-      "color": "#4C4244",
+      "color": "#867B86",
       "stats": {
         "main": {
           "durability": 2031,
@@ -184,7 +184,7 @@
       },
       "tier": 2,
       "category": "metal",
-      "color": "#A62639",
+      "color": "#FF6189",
       "stats": {
         "main": {
           "durability": 450,
@@ -236,7 +236,7 @@
       },
       "tier": 3,
       "category": "metal",
-      "color": "#D8315B",
+      "color": "#DC143C",
       "stats": {
         "main": {
           "durability": 1650,
@@ -287,7 +287,7 @@
       },
       "tier": 3,
       "category": "metal",
-      "color": "#84DCC6",
+      "color": "#CBBAFF",
       "stats": {
         "main": {
           "durability": 850,
@@ -337,7 +337,7 @@
       },
       "tier": 4,
       "category": "metal",
-      "color": "#5BC0BE",
+      "color": "#4575E3",
       "stats": {
         "main": {
           "durability": 1850,
@@ -379,7 +379,7 @@
       },
       "tier": 1,
       "category": "metal",
-      "color": "#FEE180",
+      "color": "#FDFF70",
       "stats": {
         "main": {
           "durability": 32,
@@ -424,7 +424,7 @@
       },
       "tier": 1,
       "category": "metal",
-      "color": "#D97D64",
+      "color": "#FD804C",
       "stats": {
         "main": {
           "durability": 180,
@@ -471,7 +471,7 @@
       },
       "tier": 0,
       "category": "wood",
-      "color": "#86654B",
+      "color": "#896727",
       "stats": {
         "main": {
           "durability": 59,
@@ -518,7 +518,7 @@
       },
       "tier": 2,
       "category": "metal",
-      "color": "#C0C9ED",
+      "color": "#9398C1",
       "stats": {
         "rod": {
           "durability": 150,
@@ -549,7 +549,7 @@
       },
       "tier": 5,
       "category": "metal",
-      "color": "#F9E076",
+      "color": "#FFEF0E",
       "stats": {
         "main": {
           "durability": 12000,
@@ -616,7 +616,7 @@
       },
       "tier": 6,
       "category": "metal",
-      "color": "#38EF7D",
+      "color": "#26DE88",
       "stats": {
         "main": {
           "durability": 28000,
@@ -684,7 +684,7 @@
       },
       "tier": 7,
       "category": "metal",
-      "color": "#9B51E0",
+      "color": "#D152E3",
       "stats": {
         "main": {
           "durability": 52000,
