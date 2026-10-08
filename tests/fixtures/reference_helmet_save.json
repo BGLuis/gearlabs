@@ -1,0 +1,46 @@
+{
+  "description": "Capacete de referência do save local ATM11 (componente silentgear:construction)",
+  "gearTypeId": "helmet",
+  "parts": {
+    "main": {
+      "materialId": "silentgear:tyrian_steel",
+      "grade": "MAX",
+      "materials": [
+        { "materialId": "silentgear:tyrian_steel", "grade": "MAX" },
+        { "materialId": "silentgear:unobtainium", "grade": "MAX" },
+        { "materialId": "sgearmetalworks:uru_metal", "grade": "MAX" },
+        { "materialId": "silentgear:vibranium", "grade": "MAX" },
+        { "materialId": "silentgear:allthemodium", "grade": "MAX" }
+      ]
+    },
+    "lining": {
+      "materialId": "silentgear:leather",
+      "grade": "MAX",
+      "materials": [
+        { "materialId": "silentgear:leather", "grade": "MAX" },
+        { "materialId": "silentgear:fine_silk_cloth", "grade": "MAX" },
+        { "materialId": "silentgear:slime", "grade": "MAX" },
+        { "materialId": "silentgear:wool", "grade": "MAX" },
+        { "materialId": "silentgear:phantom_membrane", "grade": "MAX" }
+      ]
+    },
+    "tip": {
+      "materialId": "silentgear:tyrian_steel",
+      "grade": "MAX",
+      "materials": [
+        { "materialId": "silentgear:tyrian_steel", "grade": "MAX" },
+        { "materialId": "silentgear:unobtainium", "grade": "MAX" },
+        { "materialId": "sgearmetalworks:uru_metal", "grade": "MAX" },
+        { "materialId": "silentgear:vibranium", "grade": "MAX" },
+        { "materialId": "silentgear:allthemodium", "grade": "MAX" }
+      ]
+    }
+  },
+  "expectedInGameProperties": {
+    "note": "Valores gravados no componente silentgear:properties do save com Starcharged III (Issue #9)",
+    "armor": 34.32,
+    "armorToughness": 159.71,
+    "magicArmor": 955.78,
+    "armorDurability": 134099
+  }
+}
