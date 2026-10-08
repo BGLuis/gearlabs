@@ -1,4 +1,6 @@
 import { describe, it, expect } from 'vitest';
+import * as fs from 'fs';
+import * as path from 'path';
 import { renderGearToCanvas } from './canvas-renderer';
 import { ATM11_CATALOG } from '@/data/defaultCatalog';
 import { GearBuild } from '@/types/silentgear';
@@ -94,6 +96,10 @@ function createMockCanvas(initialSize = 128) {
       resizeBuffer();
     },
     getContext: (type: string) => (type === '2d' ? ctx : null),
+    toDataURL: (format = 'image/png') => {
+      const base64 = Buffer.from(buffer).toString('base64');
+      return `data:${format};base64,${base64}`;
+    },
   } as unknown as HTMLCanvasElement;
 
   return { canvas, ctx, fillRectCalls, getBuffer: () => buffer };
@@ -214,3 +220,107 @@ describe('renderGearToCanvas (Issue #11)', () => {
     expect(hoverSize).toBeLessThanOrEqual(usableWidth);
   });
 });
+
+describe('renderGearToCanvas - Texturas Oficiais do Silent Gear (Issue #13)', () => {
+  const GEAR_TYPES = [
+    'sword',
+    'katana',
+    'pickaxe',
+    'axe',
+    'helmet',
+    'chestplate',
+    'leggings',
+    'boots',
+  ] as const;
+
+  it('os oito tipos produzem oito toDataURL() distintos com o mesmo material', () => {
+    const urls = new Map<string, string>();
+
+    for (const gearTypeId of GEAR_TYPES) {
+      const { canvas } = createMockCanvas(128);
+
+      const build: GearBuild = {
+        gearTypeId,
+        parts: {
+          main: { materialId: 'silentgear:iron' },
+          rod: { materialId: 'silentgear:wood' },
+        },
+      };
+
+      renderGearToCanvas(canvas, build, ATM11_CATALOG, { size: 128 });
+
+      const dataUrl = canvas.toDataURL();
+      expect(
+        urls.has(dataUrl),
+        `Tipo ${gearTypeId} produziu sprite duplicado de ${urls.get(dataUrl)}`
+      ).toBe(false);
+      urls.set(dataUrl, gearTypeId);
+    }
+
+    expect(urls.size).toBe(8);
+  });
+
+  it('trocar só o material do coating muda o sprite de uma peça de armadura', () => {
+    // 1. Peitoral sem coating (main: ferro)
+    const { canvas: canvasNoCoating } = createMockCanvas(128);
+    const buildNoCoating: GearBuild = {
+      gearTypeId: 'chestplate',
+      parts: {
+        main: { materialId: 'silentgear:iron' },
+      },
+    };
+    renderGearToCanvas(canvasNoCoating, buildNoCoating, ATM11_CATALOG, { size: 128 });
+    const urlNoCoating = canvasNoCoating.toDataURL();
+
+    // 2. Peitoral com coating de diamante (main: ferro, coating: diamante)
+    const { canvas: canvasDiamond } = createMockCanvas(128);
+    const buildDiamond: GearBuild = {
+      gearTypeId: 'chestplate',
+      parts: {
+        main: { materialId: 'silentgear:iron' },
+        coating: { materialId: 'silentgear:diamond' },
+      },
+    };
+    renderGearToCanvas(canvasDiamond, buildDiamond, ATM11_CATALOG, { size: 128 });
+    const urlDiamond = canvasDiamond.toDataURL();
+
+    // 3. Peitoral com coating de netherite (main: ferro, coating: netherite)
+    const { canvas: canvasNetherite } = createMockCanvas(128);
+    const buildNetherite: GearBuild = {
+      gearTypeId: 'chestplate',
+      parts: {
+        main: { materialId: 'silentgear:iron' },
+        coating: { materialId: 'silentgear:netherite' },
+      },
+    };
+    renderGearToCanvas(canvasNetherite, buildNetherite, ATM11_CATALOG, { size: 128 });
+    const urlNetherite = canvasNetherite.toDataURL();
+
+    expect(urlNoCoating).not.toBe(urlDiamond);
+    expect(urlDiamond).not.toBe(urlNetherite);
+    expect(urlNoCoating).not.toBe(urlNetherite);
+  });
+
+  it('o aviso de licença MIT do Silent Gear acompanha as texturas copiadas em public/textures/LICENSE', () => {
+    const licensePath = path.resolve(__dirname, '../../public/textures/LICENSE');
+    expect(fs.existsSync(licensePath)).toBe(true);
+
+    const licenseContent = fs.readFileSync(licensePath, 'utf-8');
+    expect(licenseContent).toContain('The MIT License');
+    expect(licenseContent).toContain('SilentChaos512');
+  });
+
+  it('as pastas e arquivos de texturas dos 8 tipos existem em public/textures/item/', () => {
+    const texturesDir = path.resolve(__dirname, '../../public/textures/item');
+    expect(fs.existsSync(texturesDir)).toBe(true);
+
+    for (const gearType of GEAR_TYPES) {
+      const typeDir = path.join(texturesDir, gearType);
+      expect(fs.existsSync(typeDir), `Diretório ${typeDir} deve existir`).toBe(true);
+      const files = fs.readdirSync(typeDir);
+      expect(files.length, `Diretório ${typeDir} deve conter texturas PNG`).toBeGreaterThan(0);
+      expect(files.some((f) => f.endsWith('.png'))).toBe(true);
+    }
+  });
+});
+

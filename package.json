@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "extract-data": "tsx scripts/extract-official-data.ts"
+    "extract-data": "tsx scripts/extract-official-data.ts",
+    "extract-textures": "tsx scripts/download-silentgear-textures.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",
