@@ -834,7 +834,8 @@ export function calculateGearStats(
   const finalMagicArmor = Number(baseMagicArmor.toFixed(1));
   const finalKnockbackResistance = Number((baseKnockback / 10).toFixed(2));
   const finalDamage = Number(baseDamage.toFixed(1));
-  const finalAttackSpeed = Number(Math.max(0.4, baseAttackSpeed).toFixed(2));
+  // Limites da propriedade attack_speed no Silent Gear (GearProperties.java: [-3.9, 4.0])
+  const finalAttackSpeed = Number(Math.min(4.0, Math.max(-3.9, baseAttackSpeed)).toFixed(2));
   const finalHarvestSpeed = Number(baseHarvestSpeed.toFixed(1));
   const finalDps = Number((finalDamage * finalAttackSpeed).toFixed(1));
 

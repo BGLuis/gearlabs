@@ -317,4 +317,24 @@ describe('findBestBuilds', () => {
     const optimizerCode = fs.readFileSync(optimizerFilePath, 'utf-8');
     expect(optimizerCode.includes('slice(0, 15)')).toBe(false);
   });
+
+  it('findBestBuilds com meta max_dps no catálogo atm11 nunca devolve stats.attackSpeed > 4 (Issue #35)', () => {
+    const available = Object.keys(ATM11_CATALOG.materials);
+
+    const results = findBestBuilds(
+      {
+        gearTypeId: 'sword',
+        availableMaterials: available,
+        goal: 'max_dps',
+      },
+      ATM11_CATALOG,
+      10
+    );
+
+    expect(results.length).toBeGreaterThan(0);
+    for (const res of results) {
+      expect(res.stats.attackSpeed).toBeLessThanOrEqual(4);
+    }
+  });
 });
+
