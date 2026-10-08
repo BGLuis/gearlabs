@@ -816,42 +816,6 @@
         "en": "Pulls nearby dropped items toward the player.",
         "pt": "Atrai itens caídos no chão diretamente para o jogador."
       }
-    },
-    "allthemodium:indestructible": {
-      "id": "allthemodium:indestructible",
-      "maxLevel": 1,
-      "name": {
-        "en": "Indestructible",
-        "pt": "Indestrutível"
-      },
-      "description": {
-        "en": "Immune to all durability damage, explosions, and void damage.",
-        "pt": "Imune a dano de durabilidade, explosões e dano do vazio."
-      }
-    },
-    "allthemodium:vibranium_shield": {
-      "id": "allthemodium:vibranium_shield",
-      "maxLevel": 1,
-      "name": {
-        "en": "Vibranium Kinetic Shield",
-        "pt": "Escudo Cinético de Vibranium"
-      },
-      "description": {
-        "en": "Absorbs kinetic impact and grants extreme regeneration.",
-        "pt": "Absorve impactos cinéticos e concede regeneração acelerada."
-      }
-    },
-    "allthemodium:godlike": {
-      "id": "allthemodium:godlike",
-      "maxLevel": 1,
-      "name": {
-        "en": "Godlike Transcendence",
-        "pt": "Transcendência Divina"
-      },
-      "description": {
-        "en": "Ultimate power tier: massive resistance and cosmic damage amplification.",
-        "pt": "Poder supremo: resistência absoluta e amplificação cósmica de dano."
-      }
     }
   }
 }

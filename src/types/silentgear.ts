@@ -79,6 +79,7 @@ export interface Material {
   };
   tier: number;
   category: MaterialCategory;
+  categories?: string[];
   color: string; // Hex color for layer tinting (e.g. "#33EBCB")
   harvest_tier?: string;
   stats: Partial<Record<PartSlot, MaterialStats>>;
@@ -157,6 +158,7 @@ export interface CalculatedGearStats {
 
 export interface VersionCatalog {
   version: string;
+  sourceCommit?: string;
   materials: Record<string, Material>;
   gearTypes: Record<string, GearType>;
   traits: Record<string, TraitInfo>;

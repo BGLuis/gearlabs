@@ -1,0 +1,62 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "organic",
+      "fiber",
+      "basic"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": "silentgear:fine_silk",
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFCCFFFF",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_flat",
+      "compound_asset_id": "silentgear:generic_flat",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.fine_silk"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:binding": {
+      "magic_armor": {
+        "operation": "ADD",
+        "value": 2.0
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:lucky"
+        },
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    },
+    "silentgear:cord": {
+      "ranged_damage": {
+        "operation": "MULTIPLY_BASE",
+        "value": 0.07
+      },
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    }
+  }
+}

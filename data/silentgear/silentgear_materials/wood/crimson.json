@@ -1,0 +1,45 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:wood",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [],
+    "gear_type_blacklist": [],
+    "ingredient": "minecraft:crimson_planks",
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FF7E3A56",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_flat",
+      "compound_asset_id": "silentgear:generic_flat",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.wood.crimson"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "traits": [
+        {
+          "conditions": [],
+          "level": 1,
+          "trait": "silentgear:jagged"
+        }
+      ]
+    },
+    "silentgear:rod": {
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:flexible"
+        }
+      ]
+    }
+  }
+}

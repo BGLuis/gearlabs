@@ -1,45 +1,619 @@
 {
   "version": "atm9",
+  "sourceCommit": "220614ecfacee7a4099696970471fe70ab7c72ed",
   "materials": {
-    "silentgear:iron": {
-      "id": "silentgear:iron",
+    "silentgear:aluminum": {
+      "id": "silentgear:aluminum",
       "name": {
-        "en": "Iron",
-        "pt": "Ferro"
+        "en": "Aluminum",
+        "pt": "Aluminum"
       },
       "tier": 2,
       "category": "metal",
-      "color": "#FFFFFF",
+      "categories": [
+        "metal",
+        "casting",
+        "intermediate"
+      ],
+      "color": "#BFD4DE",
       "stats": {
         "main": {
-          "durability": 250,
-          "armor": 15,
-          "armor_toughness": 0,
-          "magic_armor": 0,
+          "durability": 365,
+          "armor": 14,
+          "armor_durability": 15,
+          "armor_toughness": 0.5,
+          "magic_armor": 3,
           "melee_damage": 2,
-          "attack_speed": 0,
-          "harvest_speed": 6,
-          "harvest_tier": "minecraft:iron",
-          "rarity": 20
+          "attack_speed": 0.2,
+          "harvest_speed": 8,
+          "ranged_damage": 2,
+          "rarity": 25,
+          "enchantment_value": 14,
+          "charging_value": 0.9,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 6,
+            "leggings": 4,
+            "boots": 2
+          }
         },
-        "rod": {
-          "durability": 50
-        },
-        "tip": {
-          "durability": 64,
-          "melee_damage": 1,
-          "harvest_speed": 1
-        },
-        "coating": {
-          "durability": 60,
-          "armor": 2
-        }
-      },
-      "statModifiers": {
         "rod": {
           "durability": {
-            "mul2": 0.1
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "ranged_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 30
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 2
+          },
+          {
+            "name": "silentgear:synergistic",
+            "level": 1
           }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:synergistic",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:aluminum_steel": {
+      "id": "silentgear:aluminum_steel",
+      "name": {
+        "en": "Aluminum Steel",
+        "pt": "Aluminum Steel"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "advanced"
+      ],
+      "color": "#98D9DA",
+      "stats": {
+        "main": {
+          "durability": 660,
+          "armor": 18,
+          "armor_durability": 18,
+          "armor_toughness": 2,
+          "magic_armor": 6,
+          "melee_damage": 4,
+          "attack_speed": 0.1,
+          "harvest_speed": 8,
+          "ranged_damage": 2,
+          "rarity": 45,
+          "enchantment_value": 11,
+          "charging_value": 1,
+          "harvest_tier": "diamond",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 7,
+            "leggings": 5,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.3,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 45
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 4
+          },
+          {
+            "name": "silentgear:synergistic",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:synergistic",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:amethyst": {
+      "id": "silentgear:amethyst",
+      "name": {
+        "en": "Amethyst",
+        "pt": "Amethyst"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#A31DE6",
+      "stats": {
+        "main": {
+          "durability": 210,
+          "armor": 15,
+          "armor_durability": 10,
+          "magic_armor": 10,
+          "melee_damage": 1,
+          "attack_speed": 0,
+          "harvest_speed": 6,
+          "ranged_damage": 1,
+          "rarity": 35,
+          "enchantment_value": 16,
+          "charging_value": 1.3,
+          "harvest_tier": "amethyst",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 5,
+            "leggings": 4,
+            "boots": 3
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": -0.25,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_tier": "amethyst"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:renew",
+            "level": 1
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:silky",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:azure_electrum": {
+      "id": "silentgear:azure_electrum",
+      "name": {
+        "en": "Azure Electrum",
+        "pt": "Electro Lazúli"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "endgame",
+        "casting"
+      ],
+      "color": "#4575E3",
+      "stats": {
+        "main": {
+          "durability": 1259,
+          "armor": 19,
+          "armor_durability": 61,
+          "armor_toughness": 8,
+          "magic_armor": 19,
+          "melee_damage": 7,
+          "attack_speed": 0,
+          "harvest_speed": 29,
+          "ranged_damage": 3,
+          "rarity": 109,
+          "enchantment_value": 37,
+          "charging_value": 1.5,
+          "harvest_tier": "azure_electrum",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 7,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 3,
+            "operation": "ADD"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 401,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 11,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 5,
+            "operation": "ADD"
+          },
+          "harvest_tier": "azure_electrum"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:accelerate",
+            "level": 3
+          },
+          {
+            "name": "silentgear:light",
+            "level": 4
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          },
+          {
+            "name": "silentgear:accelerate",
+            "level": 5
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:azure_silver": {
+      "id": "silentgear:azure_silver",
+      "name": {
+        "en": "Azure Silver",
+        "pt": "Prata Lazúli"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "advanced",
+        "casting"
+      ],
+      "color": "#CBBAFF",
+      "stats": {
+        "main": {
+          "durability": 197,
+          "armor": 13,
+          "armor_durability": 17,
+          "magic_armor": 13,
+          "melee_damage": 5,
+          "attack_speed": 0,
+          "harvest_speed": 19,
+          "ranged_damage": 2,
+          "rarity": 83,
+          "enchantment_value": 29,
+          "charging_value": 1.4,
+          "harvest_tier": "azure_silver",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 5,
+            "leggings": 4,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": -0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 3,
+            "operation": "ADD"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 83,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 3,
+            "operation": "ADD"
+          },
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 3,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 31,
+            "operation": "ADD"
+          },
+          "harvest_tier": "azure_silver"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 2
+          },
+          {
+            "name": "silentgear:moonwalker",
+            "level": 4
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:bending",
+            "level": 2
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          },
+          {
+            "name": "silentgear:fortunate",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:bamboo": {
+      "id": "silentgear:bamboo",
+      "name": {
+        "en": "Bamboo",
+        "pt": "Bamboo"
+      },
+      "tier": 2,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "wood",
+        "basic"
+      ],
+      "color": "#9AC162",
+      "stats": {
+        "main": {
+          "durability": 65,
+          "armor": 7,
+          "armor_durability": 9,
+          "magic_armor": 2,
+          "melee_damage": 0,
+          "attack_speed": 0,
+          "harvest_speed": 2,
+          "ranged_damage": 0,
+          "rarity": 4,
+          "enchantment_value": 15,
+          "charging_value": 0.7,
+          "harvest_tier": "bamboo",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flammable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:barrier": {
+      "id": "silentgear:barrier",
+      "name": {
+        "en": "Barrier",
+        "pt": "Barrier"
+      },
+      "tier": 2,
+      "category": "intangible",
+      "categories": [
+        "intangible"
+      ],
+      "color": "#FF0000",
+      "stats": {
+        "main": {
+          "durability": 1337,
+          "armor": 20,
+          "armor_durability": 84,
+          "armor_toughness": 10,
+          "magic_armor": 10,
+          "melee_damage": 1,
+          "attack_speed": 0,
+          "harvest_speed": 5,
+          "ranged_damage": 1,
+          "rarity": 111,
+          "enchantment_value": 5,
+          "charging_value": 0.5,
+          "harvest_tier": "wood",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:adamant",
+            "level": 5
+          },
+          {
+            "name": "silentgear:holy",
+            "level": 5
+          }
+        ]
+      }
+    },
+    "silentgear:basalt": {
+      "id": "silentgear:basalt",
+      "name": {
+        "en": "Basalt",
+        "pt": "Basalt"
+      },
+      "tier": 2,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#4F4B4F",
+      "stats": {
+        "main": {
+          "durability": 137,
+          "armor": 6,
+          "armor_durability": 4,
+          "melee_damage": 1,
+          "attack_speed": 0,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 6,
+          "charging_value": 0.7,
+          "harvest_tier": "basalt",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 1,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": -0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 3
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:bismuth": {
+      "id": "silentgear:bismuth",
+      "name": {
+        "en": "Bismuth",
+        "pt": "Bismuth"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "intermediate"
+      ],
+      "color": "#D1C2D5",
+      "stats": {
+        "main": {
+          "durability": 330,
+          "armor": 16,
+          "armor_durability": 10,
+          "armor_toughness": 2,
+          "magic_armor": 6,
+          "melee_damage": 2.5,
+          "attack_speed": 0.1,
+          "harvest_speed": 5,
+          "ranged_damage": 1,
+          "rarity": 35,
+          "enchantment_value": 12,
+          "charging_value": 0.9,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 35
         }
       },
       "traits": {
@@ -47,6 +621,627 @@
           {
             "name": "silentgear:malleable",
             "level": 2
+          },
+          {
+            "name": "silentgear:lustrous",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:bismuth_brass": {
+      "id": "silentgear:bismuth_brass",
+      "name": {
+        "en": "Bismuth Brass",
+        "pt": "Bismuth Brass"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "intermediate"
+      ],
+      "color": "#E9C1B4",
+      "stats": {
+        "main": {
+          "durability": 580,
+          "armor": 18,
+          "armor_durability": 15,
+          "armor_toughness": 2,
+          "magic_armor": 8,
+          "melee_damage": 3,
+          "attack_speed": 0.1,
+          "harvest_speed": 9,
+          "ranged_damage": 2,
+          "rarity": 50,
+          "enchantment_value": 14,
+          "charging_value": 1.1,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 7,
+            "leggings": 5,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": -0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 50
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          },
+          {
+            "name": "silentgear:lustrous",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:bismuth_steel": {
+      "id": "silentgear:bismuth_steel",
+      "name": {
+        "en": "Bismuth Steel",
+        "pt": "Bismuth Steel"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "advanced"
+      ],
+      "color": "#DC9FE7",
+      "stats": {
+        "main": {
+          "durability": 1050,
+          "armor": 20,
+          "armor_durability": 25,
+          "armor_toughness": 4,
+          "magic_armor": 8,
+          "melee_damage": 4,
+          "attack_speed": -0.1,
+          "harvest_speed": 10,
+          "ranged_damage": 3,
+          "rarity": 60,
+          "enchantment_value": 14,
+          "charging_value": 1,
+          "harvest_tier": "diamond",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.25,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.15,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 60
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:lustrous",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:blackstone": {
+      "id": "silentgear:blackstone",
+      "name": {
+        "en": "Blackstone",
+        "pt": "Blackstone"
+      },
+      "tier": 2,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#3C3947",
+      "stats": {
+        "main": {
+          "durability": 151,
+          "armor": 5,
+          "armor_durability": 5,
+          "melee_damage": 1,
+          "attack_speed": 0,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 9,
+          "enchantment_value": 4,
+          "charging_value": 0.6,
+          "harvest_tier": "blackstone",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": -0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 2
+          },
+          {
+            "name": "silentgear:hard",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 2
+          },
+          {
+            "name": "silentgear:hard",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:blaze_gold": {
+      "id": "silentgear:blaze_gold",
+      "name": {
+        "en": "Blaze Gold",
+        "pt": "Blaze Gold"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "advanced",
+        "casting"
+      ],
+      "color": "#DD8500",
+      "stats": {
+        "main": {
+          "durability": 69,
+          "armor": 13,
+          "armor_durability": 9,
+          "armor_toughness": 1,
+          "magic_armor": 10,
+          "melee_damage": 2,
+          "attack_speed": 0.1,
+          "harvest_speed": 15,
+          "ranged_damage": 1,
+          "rarity": 45,
+          "enchantment_value": 24,
+          "charging_value": 1.2,
+          "harvest_tier": "blaze_gold",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 5,
+            "leggings": 4,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 32,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 3,
+            "operation": "ADD"
+          },
+          "melee_damage": {
+            "value": 1,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 4,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 14,
+            "operation": "ADD"
+          },
+          "harvest_tier": "blaze_gold"
+        },
+        "coating": {
+          "durability": {
+            "value": -0.05,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "armor_durability": {
+            "value": -0.05,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": {
+            "value": 20,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brilliant",
+            "level": 1
+          },
+          {
+            "name": "silentgear:greedy",
+            "level": 3
+          },
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 3
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:soft",
+            "level": 2
+          },
+          {
+            "name": "silentgear:fiery",
+            "level": 2
+          }
+        ],
+        "coating": [
+          {
+            "name": "silentgear:brilliant",
+            "level": 1
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:blaze_rod": {
+      "id": "silentgear:blaze_rod",
+      "name": {
+        "en": "Blaze Rod",
+        "pt": "Blaze Rod"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [
+        "metal"
+      ],
+      "color": "#FFC600",
+      "stats": {
+        "rod": {
+          "melee_damage": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "ranged_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 4
+          },
+          {
+            "name": "silentgear:reach",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:bone": {
+      "id": "silentgear:bone",
+      "name": {
+        "en": "Bone",
+        "pt": "Bone"
+      },
+      "tier": 2,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "basic",
+        "crude"
+      ],
+      "color": "#FCFBED",
+      "stats": {
+        "main": {
+          "durability": 108,
+          "armor": 5,
+          "armor_durability": 4,
+          "magic_armor": 1,
+          "melee_damage": 2,
+          "attack_speed": 0.1,
+          "harvest_speed": 4,
+          "ranged_damage": 1,
+          "rarity": 8,
+          "enchantment_value": 5,
+          "charging_value": 0.9,
+          "harvest_tier": "bone",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:brass": {
+      "id": "silentgear:brass",
+      "name": {
+        "en": "Brass",
+        "pt": "Brass"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "intermediate"
+      ],
+      "color": "#F2D458",
+      "stats": {
+        "main": {
+          "durability": 240,
+          "armor": 14,
+          "armor_durability": 8,
+          "armor_toughness": 1,
+          "magic_armor": 6,
+          "melee_damage": 1.5,
+          "attack_speed": 0.1,
+          "harvest_speed": 7,
+          "ranged_damage": 2,
+          "rarity": 25,
+          "enchantment_value": 13,
+          "charging_value": 1.2,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 6,
+            "leggings": 4,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.05,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.05,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 25
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          },
+          {
+            "name": "silentgear:silky",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:breeze_rod": {
+      "id": "silentgear:breeze_rod",
+      "name": {
+        "en": "Breeze Rod",
+        "pt": "Haste de Brisa"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [
+        "metal"
+      ],
+      "color": "#9398C1",
+      "stats": {
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "ranged_damage": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 4
+          },
+          {
+            "name": "silentgear:wind_blast",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:bronze": {
+      "id": "silentgear:bronze",
+      "name": {
+        "en": "Bronze",
+        "pt": "Bronze"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#D6903B",
+      "stats": {
+        "main": {
+          "durability": 300,
+          "armor": 15,
+          "armor_durability": 13,
+          "armor_toughness": 1,
+          "magic_armor": 6,
+          "melee_damage": 2.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 6,
+          "ranged_damage": 2,
+          "rarity": 15,
+          "enchantment_value": 12,
+          "charging_value": 1.1,
+          "harvest_tier": "bronze",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 6,
+            "leggings": 4,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.05,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 96,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "melee_damage": {
+            "value": 0.75,
+            "operation": "ADD"
+          },
+          "attack_speed": {
+            "value": 0.1,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.75,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 6,
+            "operation": "ADD"
+          },
+          "harvest_tier": "bronze"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:sharp",
+            "level": 1
           }
         ],
         "rod": [
@@ -57,137 +1252,159 @@
         ],
         "tip": [
           {
-            "name": "silentgear:magnetic",
-            "level": 1
+            "name": "silentgear:malleable",
+            "level": 2
           }
         ]
       }
     },
-    "silentgear:diamond": {
-      "id": "silentgear:diamond",
+    "silentgear:compressed_iron": {
+      "id": "silentgear:compressed_iron",
       "name": {
-        "en": "Diamond",
-        "pt": "Diamante"
+        "en": "Compressed Iron",
+        "pt": "Compressed Iron"
       },
-      "tier": 3,
-      "category": "gem",
-      "color": "#33EBCB",
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "advanced"
+      ],
+      "color": "#A6A6A6",
       "stats": {
         "main": {
-          "durability": 1561,
+          "durability": 1024,
           "armor": 20,
-          "armor_toughness": 8,
+          "armor_durability": 24,
+          "armor_toughness": 2,
           "magic_armor": 4,
-          "melee_damage": 3,
-          "attack_speed": 0,
-          "harvest_speed": 8,
-          "harvest_tier": "minecraft:diamond",
-          "rarity": 70
-        },
-        "rod": {},
-        "tip": {
-          "durability": 256,
-          "melee_damage": 2,
-          "harvest_speed": 2,
-          "rarity": 20
-        }
-      },
-      "statModifiers": {
-        "rod": {
-          "harvest_speed": {
-            "mul2": 0.2
+          "melee_damage": 4,
+          "attack_speed": -0.2,
+          "harvest_speed": 9,
+          "ranged_damage": 3,
+          "rarity": 40,
+          "enchantment_value": 12,
+          "charging_value": 0.8,
+          "harvest_tier": "diamond",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
           }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.25,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 40
         }
       },
       "traits": {
         "main": [
           {
-            "name": "silentgear:brittle",
+            "name": "silentgear:malleable",
             "level": 2
           },
           {
-            "name": "silentgear:lustrous",
+            "name": "silentgear:hard",
+            "level": 3
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:copper": {
+      "id": "silentgear:copper",
+      "name": {
+        "en": "Copper",
+        "pt": "Cobre"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "basic",
+        "casting"
+      ],
+      "color": "#FD804C",
+      "stats": {
+        "main": {
+          "durability": 151,
+          "armor": 10,
+          "armor_durability": 12,
+          "magic_armor": 8,
+          "melee_damage": 1.5,
+          "attack_speed": 0.1,
+          "harvest_speed": 5,
+          "ranged_damage": 0.1,
+          "rarity": 12,
+          "enchantment_value": 15,
+          "charging_value": 1.3,
+          "harvest_tier": "copper",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 4,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 32,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 1,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 1,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 4,
+            "operation": "ADD"
+          },
+          "harvest_tier": "copper"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:soft",
             "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:bending",
+            "level": 3
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 3
           }
         ],
         "tip": [
           {
-            "name": "silentgear:brittle",
-            "level": 1
-          }
-        ]
-      }
-    },
-    "silentgear:netherite": {
-      "id": "silentgear:netherite",
-      "name": {
-        "en": "Netherite",
-        "pt": "Netherita"
-      },
-      "tier": 4,
-      "category": "metal",
-      "color": "#867B86",
-      "stats": {
-        "main": {
-          "durability": 2031,
-          "armor": 20,
-          "armor_toughness": 12,
-          "magic_armor": 6,
-          "melee_damage": 4,
-          "attack_speed": 0,
-          "harvest_speed": 9,
-          "harvest_tier": "minecraft:netherite",
-          "rarity": 100
-        },
-        "coating": {
-          "armor_toughness": {
-            "operation": "ADD",
-            "value": 4
-          },
-          "knockback_resistance": {
-            "operation": "ADD",
-            "value": 1
-          },
-          "armor_durability": {
-            "operation": "MULTIPLY_TOTAL",
-            "value": 0.1212
-          },
-          "durability": {
-            "operation": "MULTIPLY_TOTAL",
-            "value": 0.3
-          },
-          "melee_damage": {
-            "operation": "MULTIPLY_TOTAL",
-            "value": 0.3333
-          }
-        },
-        "tip": {
-          "durability": 400,
-          "melee_damage": 2.5,
-          "harvest_speed": 2.5
-        }
-      },
-      "statModifiers": {
-        "rod": {
-          "durability": {
-            "mul2": 0.3
-          }
-        }
-      },
-      "traits": {
-        "main": [
-          {
-            "name": "silentgear:fireproof",
+            "name": "silentgear:malleable",
             "level": 1
           },
           {
-            "name": "silentgear:heavy",
-            "level": 1
-          }
-        ],
-        "coating": [
-          {
-            "name": "silentgear:fireproof",
+            "name": "silentgear:dulling",
             "level": 1
           }
         ]
@@ -201,39 +1418,3971 @@
       },
       "tier": 2,
       "category": "metal",
+      "categories": [
+        "metal",
+        "advanced",
+        "casting"
+      ],
       "color": "#FF6189",
       "stats": {
         "main": {
-          "durability": 450,
-          "armor": 16,
+          "durability": 420,
+          "armor": 18,
+          "armor_durability": 27,
           "armor_toughness": 2,
-          "magic_armor": 4,
-          "melee_damage": 2.5,
-          "attack_speed": 0,
-          "harvest_speed": 6.5,
-          "harvest_tier": "minecraft:diamond",
-          "rarity": 40
+          "magic_armor": 6,
+          "melee_damage": 3,
+          "attack_speed": -0.1,
+          "harvest_speed": 10,
+          "ranged_damage": 2,
+          "rarity": 31,
+          "enchantment_value": 14,
+          "charging_value": 0.7,
+          "harvest_tier": "crimson_iron",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 7,
+            "leggings": 5,
+            "boots": 3
+          }
         },
         "rod": {
-          "durability": 80
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
         },
         "tip": {
-          "durability": 120,
-          "melee_damage": 1.5,
-          "harvest_speed": 1.5
+          "durability": {
+            "value": 224,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 8,
+            "operation": "ADD"
+          },
+          "melee_damage": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 10,
+            "operation": "ADD"
+          },
+          "harvest_tier": "crimson_iron"
         }
       },
-      "statModifiers": {
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:hard",
+            "level": 2
+          },
+          {
+            "name": "silentgear:heat_resistant",
+            "level": 4
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 3
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:fiery",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:crimson_steel": {
+      "id": "silentgear:crimson_steel",
+      "name": {
+        "en": "Crimson Steel",
+        "pt": "Aço Carmesim"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "endgame",
+        "casting"
+      ],
+      "color": "#DC143C",
+      "stats": {
+        "main": {
+          "durability": 2400,
+          "armor": 22,
+          "armor_durability": 42,
+          "armor_toughness": 10,
+          "magic_armor": 10,
+          "melee_damage": 6,
+          "attack_speed": -0.1,
+          "harvest_speed": 15,
+          "ranged_damage": 3,
+          "rarity": 83,
+          "enchantment_value": 19,
+          "charging_value": 0.9,
+          "harvest_tier": "crimson_steel",
+          "armor_by_piece": {
+            "helmet": 4,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 4
+          }
+        },
         "rod": {
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "ranged_damage": {
+            "value": 1,
+            "operation": "ADD"
+          }
+        },
+        "tip": {
           "durability": {
-            "mul2": 0.15
+            "value": 448,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 16,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 20,
+            "operation": "ADD"
+          },
+          "harvest_tier": "crimson_steel"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 5
+          },
+          {
+            "name": "silentgear:hard",
+            "level": 3
+          },
+          {
+            "name": "silentgear:flame_ward",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 4
+          },
+          {
+            "name": "silentgear:sturdy",
+            "level": 1
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:magmatic",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:crude_alloy": {
+      "id": "silentgear:crude_alloy",
+      "name": {
+        "en": "Crude Alloy",
+        "pt": "Crude Alloy"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#FFFFFF",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:crushed_shulker_shell": {
+      "id": "silentgear:crushed_shulker_shell",
+      "name": {
+        "en": "Crushed Shulker Shell",
+        "pt": "Crushed Shulker Shell"
+      },
+      "tier": 1,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "dust",
+        "endgame"
+      ],
+      "color": "#E08BDF",
+      "stats": {
+        "main": {
+          "durability": 2500,
+          "armor_durability": 50,
+          "rarity": 91,
+          "enchantment_value": 10,
+          "charging_value": -0.15
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:eroded",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:diamond": {
+      "id": "silentgear:diamond",
+      "name": {
+        "en": "Diamond",
+        "pt": "Diamante"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced",
+        "casting"
+      ],
+      "color": "#33EBCB",
+      "stats": {
+        "main": {
+          "durability": 1561,
+          "armor": 20,
+          "armor_durability": 33,
+          "armor_toughness": 8,
+          "magic_armor": 4,
+          "melee_damage": 3,
+          "attack_speed": 0,
+          "harvest_speed": 8,
+          "ranged_damage": 2,
+          "rarity": 70,
+          "enchantment_value": 10,
+          "charging_value": 0.8,
+          "harvest_tier": "diamond",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 256,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 9,
+            "operation": "ADD"
+          },
+          "melee_damage": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "ranged_damage": {
+            "value": 0.5,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 20,
+            "operation": "ADD"
+          },
+          "harvest_tier": "diamond"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:lustrous",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 5
+          },
+          {
+            "name": "silentgear:lustrous",
+            "level": 4
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:lustrous",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:dimerald": {
+      "id": "silentgear:dimerald",
+      "name": {
+        "en": "Dimerald",
+        "pt": "Dimerald"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced"
+      ],
+      "color": "#1ACE82",
+      "stats": {
+        "main": {
+          "durability": 1776,
+          "armor": 22,
+          "armor_durability": 36,
+          "armor_toughness": 10,
+          "magic_armor": 10,
+          "melee_damage": 3,
+          "attack_speed": 0.1,
+          "harvest_speed": 9,
+          "ranged_damage": 3,
+          "rarity": 80,
+          "enchantment_value": 12,
+          "charging_value": 0.7,
+          "harvest_tier": "dimerald",
+          "armor_by_piece": {
+            "helmet": 4,
+            "chestplate": 9,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.15,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 360,
+            "operation": "ADD"
+          },
+          "melee_damage": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "ranged_damage": {
+            "value": 0.5,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 25,
+            "operation": "ADD"
           }
         }
       },
       "traits": {
         "main": [
           {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:gold_digger",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:ancient",
+            "level": 3
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:imperial",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:electrum": {
+      "id": "silentgear:electrum",
+      "name": {
+        "en": "Electrum",
+        "pt": "Electrum"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "intermediate"
+      ],
+      "color": "#D6E037",
+      "stats": {
+        "main": {
+          "durability": 96,
+          "armor": 15,
+          "armor_durability": 10,
+          "magic_armor": 11,
+          "melee_damage": 2,
+          "attack_speed": 0.3,
+          "harvest_speed": 14,
+          "ranged_damage": 1,
+          "rarity": 40,
+          "enchantment_value": 25,
+          "charging_value": 1.5,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "attack_speed": {
+            "value": 0.1,
+            "operation": "ADD"
+          },
+          "rarity": 40
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:lustrous",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:emerald": {
+      "id": "silentgear:emerald",
+      "name": {
+        "en": "Emerald",
+        "pt": "Emerald"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced",
+        "casting"
+      ],
+      "color": "#00B038",
+      "stats": {
+        "main": {
+          "durability": 1080,
+          "armor": 16,
+          "armor_durability": 24,
+          "armor_toughness": 4,
+          "magic_armor": 6,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 10,
+          "ranged_damage": 1,
+          "rarity": 40,
+          "enchantment_value": 16,
+          "charging_value": 1,
+          "harvest_tier": "emerald",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 6,
+            "leggings": 4,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.3,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 512,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 12,
+            "operation": "ADD"
+          },
+          "melee_damage": {
+            "value": 1,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "ranged_damage": {
+            "value": 1,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 20,
+            "operation": "ADD"
+          },
+          "harvest_tier": "emerald"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:synergistic",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 4
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:synergistic",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:end_rod": {
+      "id": "silentgear:end_rod",
+      "name": {
+        "en": "End Rod",
+        "pt": "End Rod"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [
+        "metal"
+      ],
+      "color": "#F6E2CD",
+      "stats": {
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "ranged_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 4
+          },
+          {
+            "name": "silentgear:sturdy",
+            "level": 2
+          },
+          {
+            "name": "silentgear:refractive",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:end_stone": {
+      "id": "silentgear:end_stone",
+      "name": {
+        "en": "End Stone",
+        "pt": "End Stone"
+      },
+      "tier": 2,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#FFFFCC",
+      "stats": {
+        "main": {
+          "durability": 1164,
+          "armor": 15,
+          "armor_durability": 15,
+          "armor_toughness": 1,
+          "magic_armor": 6,
+          "melee_damage": 2,
+          "attack_speed": 0.1,
+          "harvest_speed": 7,
+          "ranged_damage": 0,
+          "rarity": 32,
+          "enchantment_value": 10,
+          "charging_value": 0.9,
+          "harvest_tier": "end_stone",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 5,
+            "leggings": 4,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 1,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:jagged",
+            "level": 3
+          },
+          {
+            "name": "silentgear:ancient",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:ancient",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:enderium": {
+      "id": "silentgear:enderium",
+      "name": {
+        "en": "Enderium",
+        "pt": "Enderium"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "endgame"
+      ],
+      "color": "#468C75",
+      "stats": {
+        "main": {
+          "durability": 1200,
+          "armor": 22,
+          "armor_durability": 34,
+          "armor_toughness": 8,
+          "magic_armor": 10,
+          "melee_damage": 6,
+          "attack_speed": 0,
+          "harvest_speed": 18,
+          "ranged_damage": 3,
+          "rarity": 80,
+          "enchantment_value": 13,
+          "charging_value": 1.2,
+          "harvest_tier": "netherite",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 9,
+            "leggings": 7,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 60
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:example": {
+      "id": "silentgear:example",
+      "name": {
+        "en": "Example",
+        "pt": "Example"
+      },
+      "tier": 2,
+      "category": "intangible",
+      "categories": [
+        "intangible"
+      ],
+      "color": "#FFFFFF",
+      "stats": {
+        "main": {
+          "durability": 100,
+          "armor": 4,
+          "armor_durability": 6,
+          "armor_toughness": 1,
+          "magic_armor": 1,
+          "melee_damage": 1,
+          "attack_speed": 0,
+          "harvest_speed": 1,
+          "ranged_damage": 0,
+          "rarity": 0,
+          "enchantment_value": 1,
+          "charging_value": 1,
+          "harvest_tier": "wood",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 1,
+            "leggings": 1,
+            "boots": 1
+          }
+        },
+        "rod": {},
+        "tip": {},
+        "coating": {},
+        "grip": {},
+        "lining": {},
+        "binding": {}
+      },
+      "traits": {}
+    },
+    "silentgear:feather": {
+      "id": "silentgear:feather",
+      "name": {
+        "en": "Feather",
+        "pt": "Feather"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "basic"
+      ],
+      "color": "#FFFFFF",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 3,
+          "armor_durability": 2,
+          "rarity": 1,
+          "enchantment_value": 9,
+          "charging_value": 1.1,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 1,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flutter",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:fine_silk": {
+      "id": "silentgear:fine_silk",
+      "name": {
+        "en": "Fine Silk",
+        "pt": "Fine Silk"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "fiber",
+        "basic"
+      ],
+      "color": "#CCFFFF",
+      "stats": {
+        "binding": {
+          "magic_armor": {
+            "value": 2,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "binding": [
+          {
+            "name": "silentgear:lucky",
+            "level": 1
+          },
+          {
+            "name": "silentgear:flexible",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:fine_silk_cloth": {
+      "id": "silentgear:fine_silk_cloth",
+      "name": {
+        "en": "Fine Silk Cloth",
+        "pt": "Fine Silk Cloth"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "intermediate"
+      ],
+      "color": "#C3B9A1",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 6,
+          "armor_durability": 14,
+          "magic_armor": 14,
+          "rarity": 40,
+          "enchantment_value": 14,
+          "charging_value": 0.9,
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 2,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "grip": {
+          "harvest_speed": {
+            "value": 0.15,
+            "operation": "MULTIPLY_BASE"
+          }
+        },
+        "lining": {
+          "magic_armor": {
+            "value": 2,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:accelerate",
+            "level": 1
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:flax": {
+      "id": "silentgear:flax",
+      "name": {
+        "en": "Flax",
+        "pt": "Flax"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "fiber",
+        "basic"
+      ],
+      "color": "#845E37",
+      "stats": {
+        "binding": {
+          "armor_durability": {
+            "value": 0.05,
+            "operation": "MULTIPLY_BASE"
+          },
+          "harvest_speed": {
+            "value": 0.05,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "binding": [
+          {
+            "name": "silentgear:flexible",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:flint": {
+      "id": "silentgear:flint",
+      "name": {
+        "en": "Flint",
+        "pt": "Flint"
+      },
+      "tier": 2,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#969696",
+      "stats": {
+        "main": {
+          "durability": 124,
+          "armor": 4,
+          "armor_durability": 4,
+          "melee_damage": 2,
+          "attack_speed": -0.1,
+          "harvest_speed": 5,
+          "ranged_damage": 1,
+          "rarity": 6,
+          "enchantment_value": 3,
+          "charging_value": 0.8,
+          "harvest_tier": "flint",
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "rod": {},
+        "tip": {
+          "durability": {
+            "value": 31,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:jagged",
+            "level": 3
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:fluffy_string": {
+      "id": "silentgear:fluffy_string",
+      "name": {
+        "en": "Fluffy String",
+        "pt": "Fluffy String"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "fiber",
+        "basic"
+      ],
+      "color": "#FFFAE5",
+      "stats": {
+        "binding": {
+          "armor_durability": {
+            "value": 0.05,
+            "operation": "MULTIPLY_BASE"
+          },
+          "harvest_speed": {
+            "value": -0.05,
+            "operation": "MULTIPLY_BASE"
+          }
+        }
+      },
+      "traits": {
+        "binding": [
+          {
+            "name": "silentgear:flexible",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:glowstone": {
+      "id": "silentgear:glowstone",
+      "name": {
+        "en": "Glowstone",
+        "pt": "Glowstone"
+      },
+      "tier": 1,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "dust",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#D2D200",
+      "stats": {
+        "main": {
+          "melee_damage": 3,
+          "attack_speed": 0.4,
+          "harvest_speed": 15,
+          "ranged_damage": 3,
+          "rarity": 40,
+          "charging_value": {
+            "value": 0.15,
+            "operation": "MULTIPLY_BASE"
+          }
+        },
+        "tip": {
+          "melee_damage": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.4,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": {
+            "value": 15,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:renew",
+            "level": 3
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:refractive",
+            "level": 1
+          },
+          {
+            "name": "silentgear:lustrous",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:gold": {
+      "id": "silentgear:gold",
+      "name": {
+        "en": "Gold",
+        "pt": "Ouro"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#FDFF70",
+      "stats": {
+        "main": {
+          "durability": 32,
+          "armor": 11,
+          "armor_durability": 7,
+          "magic_armor": 8,
+          "melee_damage": 0,
+          "attack_speed": 0,
+          "harvest_speed": 12,
+          "ranged_damage": 0,
+          "rarity": 50,
+          "enchantment_value": 22,
+          "charging_value": 1.2,
+          "harvest_tier": "gold",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 5,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 3,
+            "operation": "ADD"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 16,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 1,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 6,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 30,
+            "operation": "ADD"
+          }
+        },
+        "coating": {
+          "durability": {
+            "value": -0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "armor_durability": {
+            "value": -0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": {
+            "value": 10,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brilliant",
+            "level": 1
+          },
+          {
+            "name": "silentgear:malleable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 3
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:bending",
+            "level": 4
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:malleable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 3
+          }
+        ],
+        "coating": [
+          {
+            "name": "silentgear:brilliant",
+            "level": 1
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:high_carbon_steel": {
+      "id": "silentgear:high_carbon_steel",
+      "name": {
+        "en": "High Carbon Steel",
+        "pt": "High Carbon Steel"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "advanced"
+      ],
+      "color": "#848484",
+      "stats": {
+        "main": {
+          "durability": 420,
+          "armor": 20,
+          "armor_durability": 24,
+          "armor_toughness": 2,
+          "magic_armor": 6,
+          "melee_damage": 4,
+          "attack_speed": -0.2,
+          "harvest_speed": 6,
+          "ranged_damage": 2,
+          "rarity": 40,
+          "enchantment_value": 11,
+          "charging_value": 0.8,
+          "harvest_tier": "high_carbon_steel",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:hybrid_gem": {
+      "id": "silentgear:hybrid_gem",
+      "name": {
+        "en": "Hybrid Gem",
+        "pt": "Hybrid Gem"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#FFFFFF",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:invar": {
+      "id": "silentgear:invar",
+      "name": {
+        "en": "Invar",
+        "pt": "Invar"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "intermediate"
+      ],
+      "color": "#C2CBB8",
+      "stats": {
+        "main": {
+          "durability": 640,
+          "armor": 18,
+          "armor_durability": 20,
+          "armor_toughness": 2,
+          "magic_armor": 6,
+          "melee_damage": 3.5,
+          "attack_speed": 0,
+          "harvest_speed": 7,
+          "ranged_damage": 2,
+          "rarity": 50,
+          "enchantment_value": 13,
+          "charging_value": 1.2,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.3,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 50
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:adamant",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:iron": {
+      "id": "silentgear:iron",
+      "name": {
+        "en": "Iron",
+        "pt": "Ferro"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#FFFFFF",
+      "stats": {
+        "main": {
+          "durability": 250,
+          "armor": 15,
+          "armor_durability": 15,
+          "magic_armor": 6,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 6,
+          "ranged_damage": 1,
+          "rarity": 20,
+          "enchantment_value": 14,
+          "charging_value": 0.7,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {},
+        "tip": {
+          "durability": {
+            "value": 128,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 4,
+            "operation": "ADD"
+          },
+          "melee_damage": {
+            "value": 1,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 1,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 8,
+            "operation": "ADD"
+          },
+          "harvest_tier": "iron"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:lapis_lazuli": {
+      "id": "silentgear:lapis_lazuli",
+      "name": {
+        "en": "Lapis Lazuli",
+        "pt": "Lapis Lazuli"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#224BAF",
+      "stats": {
+        "main": {
+          "durability": 200,
+          "armor": 15,
+          "armor_durability": 13,
+          "magic_armor": 10,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 5,
+          "ranged_damage": 0,
+          "rarity": 30,
+          "enchantment_value": 17,
+          "charging_value": 1.3,
+          "harvest_tier": "lapis_lazuli",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "tip": {
+          "attack_speed": {
+            "value": 0.3,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": -0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_tier": "lapis_lazuli"
+        }
+      },
+      "traits": {
+        "tip": [
+          {
+            "name": "silentgear:holy",
+            "level": 1
+          },
+          {
+            "name": "silentgear:lucky",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:lead": {
+      "id": "silentgear:lead",
+      "name": {
+        "en": "Lead",
+        "pt": "Lead"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "intermediate"
+      ],
+      "color": "#C2CBB8",
+      "stats": {
+        "main": {
+          "durability": 260,
+          "armor": 13,
+          "armor_durability": 14,
+          "magic_armor": 4,
+          "melee_damage": 2,
+          "attack_speed": -0.4,
+          "harvest_speed": 4,
+          "ranged_damage": 1,
+          "rarity": 40,
+          "enchantment_value": 15,
+          "charging_value": 0.8,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 5,
+            "leggings": 4,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": -0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 40
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          },
+          {
+            "name": "silentgear:aquatic",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:soft",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:leather": {
+      "id": "silentgear:leather",
+      "name": {
+        "en": "Leather",
+        "pt": "Leather"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#805133",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 7,
+          "armor_durability": 5,
+          "magic_armor": 8,
+          "rarity": 11,
+          "enchantment_value": 15,
+          "charging_value": 0.8,
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.15,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.15,
+            "operation": "MULTIPLY_BASE"
+          }
+        },
+        "lining": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 3
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:leaves": {
+      "id": "silentgear:leaves",
+      "name": {
+        "en": "Leaves",
+        "pt": "Leaves"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "basic"
+      ],
+      "color": "#4A8F28",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 3,
+          "armor_durability": 2,
+          "rarity": 1,
+          "enchantment_value": 12,
+          "charging_value": 1.1,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 1,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flammable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:light",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:lumium": {
+      "id": "silentgear:lumium",
+      "name": {
+        "en": "Lumium",
+        "pt": "Lumium"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "advanced"
+      ],
+      "color": "#FFD789",
+      "stats": {
+        "main": {
+          "durability": 920,
+          "armor": 18,
+          "armor_durability": 20,
+          "armor_toughness": 4,
+          "magic_armor": 10,
+          "melee_damage": 4,
+          "attack_speed": 0.2,
+          "harvest_speed": 15,
+          "ranged_damage": 2,
+          "rarity": 75,
+          "enchantment_value": 14,
+          "charging_value": 1.3,
+          "harvest_tier": "diamond",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "ranged_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 75
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:refractive",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:refractive",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:metal_alloy": {
+      "id": "silentgear:metal_alloy",
+      "name": {
+        "en": "Metal Alloy",
+        "pt": "Metal Alloy"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#FFFFFF",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:mixed_fabric": {
+      "id": "silentgear:mixed_fabric",
+      "name": {
+        "en": "Mixed Fabric",
+        "pt": "Mixed Fabric"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#FFFFFF",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:netherite": {
+      "id": "silentgear:netherite",
+      "name": {
+        "en": "Netherite",
+        "pt": "Netherita"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "endgame",
+        "casting"
+      ],
+      "color": "#867B86",
+      "stats": {
+        "coating": {
+          "durability": [
+            {
+              "value": 0.3,
+              "operation": "MULTIPLY_TOTAL"
+            },
+            {
+              "value": 2,
+              "operation": "ADD"
+            }
+          ],
+          "armor_durability": {
+            "value": 0.121212125,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "armor_toughness": {
+            "value": 4,
+            "operation": "ADD"
+          },
+          "knockback_resistance": {
+            "value": 1,
+            "operation": "ADD"
+          },
+          "melee_damage": {
+            "value": 0.33333334,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.125,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "ranged_damage": {
+            "value": 0.33333334,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "enchantment_value": {
+            "value": 5,
+            "operation": "ADD"
+          },
+          "harvest_tier": "netherite"
+        }
+      },
+      "traits": {
+        "coating": [
+          {
             "name": "silentgear:fireproof",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:netherrack": {
+      "id": "silentgear:netherrack",
+      "name": {
+        "en": "Netherrack",
+        "pt": "Netherrack"
+      },
+      "tier": 2,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "organic",
+        "basic"
+      ],
+      "color": "#854242",
+      "stats": {
+        "main": {
+          "durability": 142,
+          "armor": 8,
+          "armor_durability": 5,
+          "magic_armor": 4,
+          "melee_damage": 0.5,
+          "attack_speed": 0,
+          "harvest_speed": 5,
+          "ranged_damage": 0.5,
+          "rarity": 11,
+          "enchantment_value": 8,
+          "charging_value": 0.8,
+          "harvest_tier": "netherrack",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 4,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:eroded",
+            "level": 3
+          },
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:eroded",
+            "level": 2
+          },
+          {
+            "name": "silentgear:bending",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:netherwood": {
+      "id": "silentgear:netherwood",
+      "name": {
+        "en": "Netherwood",
+        "pt": "Netherwood"
+      },
+      "tier": 2,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "wood"
+      ],
+      "color": "#7D272D",
+      "stats": {
+        "main": {
+          "durability": 72,
+          "armor": 8,
+          "armor_durability": 12,
+          "magic_armor": 6,
+          "melee_damage": 0,
+          "attack_speed": 0.2,
+          "harvest_speed": 2,
+          "ranged_damage": 0,
+          "rarity": 4,
+          "enchantment_value": 13,
+          "charging_value": 0.7,
+          "harvest_tier": "netherwood",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 4,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.5,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 1,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flexible",
+            "level": 3
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:nickel": {
+      "id": "silentgear:nickel",
+      "name": {
+        "en": "Nickel",
+        "pt": "Nickel"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "intermediate"
+      ],
+      "color": "#EFE87B",
+      "stats": {
+        "main": {
+          "durability": 380,
+          "armor": 13,
+          "armor_durability": 17,
+          "magic_armor": 6,
+          "melee_damage": 2.5,
+          "attack_speed": 0.1,
+          "harvest_speed": 7,
+          "ranged_damage": 0.5,
+          "rarity": 40,
+          "enchantment_value": 12,
+          "charging_value": 1,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 5,
+            "leggings": 4,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 40
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:adamant",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:obsidian": {
+      "id": "silentgear:obsidian",
+      "name": {
+        "en": "Obsidian",
+        "pt": "Obsidian"
+      },
+      "tier": 2,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "advanced",
+        "casting"
+      ],
+      "color": "#443464",
+      "stats": {
+        "main": {
+          "durability": 1024,
+          "armor": 20,
+          "armor_durability": 13,
+          "armor_toughness": 4,
+          "magic_armor": 8,
+          "melee_damage": 3,
+          "attack_speed": -0.4,
+          "harvest_speed": 6,
+          "ranged_damage": 0,
+          "rarity": 10,
+          "enchantment_value": 7,
+          "charging_value": 0.6,
+          "harvest_tier": "obsidian",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": -0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:jagged",
+            "level": 3
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:osmium": {
+      "id": "silentgear:osmium",
+      "name": {
+        "en": "Osmium",
+        "pt": "Osmium"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "intermediate"
+      ],
+      "color": "#92A6B8",
+      "stats": {
+        "main": {
+          "durability": 500,
+          "armor": 17,
+          "armor_durability": 30,
+          "magic_armor": 4,
+          "melee_damage": 4,
+          "attack_speed": 0.1,
+          "harvest_speed": 10,
+          "ranged_damage": 1,
+          "rarity": 35,
+          "enchantment_value": 12,
+          "charging_value": 1.1,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 35
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:paper": {
+      "id": "silentgear:paper",
+      "name": {
+        "en": "Paper",
+        "pt": "Paper"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "sheet",
+        "basic"
+      ],
+      "color": "#FFFFFF",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 2,
+          "rarity": 3,
+          "enchantment_value": 11,
+          "charging_value": 1,
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 1,
+            "leggings": 1,
+            "boots": 1
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flammable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:phantom_membrane": {
+      "id": "silentgear:phantom_membrane",
+      "name": {
+        "en": "Phantom Membrane",
+        "pt": "Phantom Membrane"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "intermediate"
+      ],
+      "color": "#C3B9A1",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 6,
+          "armor_durability": 12,
+          "magic_armor": 8,
+          "rarity": 35,
+          "enchantment_value": 10,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 2,
+            "leggings": 2,
+            "boots": 1
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        },
+        "lining": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:renew",
+            "level": 2
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:ancient",
+            "level": 2
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:light",
+            "level": 2
+          },
+          {
+            "name": "silentgear:flexible",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:platinum": {
+      "id": "silentgear:platinum",
+      "name": {
+        "en": "Platinum",
+        "pt": "Platinum"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "advanced"
+      ],
+      "color": "#B3B3FF",
+      "stats": {
+        "main": {
+          "durability": 900,
+          "armor": 18,
+          "armor_durability": 21,
+          "armor_toughness": 2,
+          "magic_armor": 12,
+          "melee_damage": 4,
+          "attack_speed": 0,
+          "harvest_speed": 12,
+          "ranged_damage": 1,
+          "rarity": 80,
+          "enchantment_value": 14,
+          "charging_value": 1.2,
+          "harvest_tier": "diamond",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": -0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 70
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:prismarine": {
+      "id": "silentgear:prismarine",
+      "name": {
+        "en": "Prismarine",
+        "pt": "Prismarine"
+      },
+      "tier": 1,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "organic",
+        "advanced"
+      ],
+      "color": "#91C5B7",
+      "stats": {
+        "coating": {
+          "durability": {
+            "value": 0.075,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "armor_durability": {
+            "value": 0.125,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "armor_toughness": {
+            "value": 1,
+            "operation": "ADD"
+          },
+          "knockback_resistance": {
+            "value": 0.25,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "coating": [
+          {
+            "name": "silentgear:aquatic",
+            "level": 5
+          },
+          {
+            "name": "silentgear:aquatic",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:quartz": {
+      "id": "silentgear:quartz",
+      "name": {
+        "en": "Quartz",
+        "pt": "Quartz"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#D4CABA",
+      "stats": {
+        "main": {
+          "durability": 330,
+          "armor": 14,
+          "armor_durability": 13,
+          "magic_armor": 4,
+          "melee_damage": 2,
+          "attack_speed": 0.1,
+          "harvest_speed": 7,
+          "ranged_damage": 0,
+          "rarity": 40,
+          "enchantment_value": 10,
+          "charging_value": 1.2,
+          "harvest_tier": "quartz",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 5,
+            "leggings": 4,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 64,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 4,
+            "operation": "ADD"
+          },
+          "melee_damage": {
+            "value": 4,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "ranged_damage": {
+            "value": 1.5,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 20,
+            "operation": "ADD"
+          },
+          "harvest_tier": "quartz"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:crushing",
+            "level": 3
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:chipping",
+            "level": 1
+          },
+          {
+            "name": "silentgear:jagged",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:redstone": {
+      "id": "silentgear:redstone",
+      "name": {
+        "en": "Redstone",
+        "pt": "Redstone"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "dust",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#BB0000",
+      "stats": {
+        "main": {
+          "melee_damage": 4,
+          "harvest_speed": 12,
+          "ranged_damage": 2,
+          "rarity": 30,
+          "enchantment_value": {
+            "value": -0.1,
+            "operation": "MULTIPLY_BASE"
+          },
+          "charging_value": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        },
+        "tip": {
+          "melee_damage": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "attack_speed": {
+            "value": 0.3,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "ranged_damage": {
+            "value": 2,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 10,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:imperial",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:redstone_alloy": {
+      "id": "silentgear:redstone_alloy",
+      "name": {
+        "en": "Redstone Alloy",
+        "pt": "Redstone Alloy"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "intermediate"
+      ],
+      "color": "#E60006",
+      "stats": {
+        "main": {
+          "durability": 840,
+          "armor": 17,
+          "armor_durability": 20,
+          "armor_toughness": 1,
+          "magic_armor": 8,
+          "melee_damage": 2,
+          "attack_speed": 0.2,
+          "harvest_speed": 11,
+          "ranged_damage": 1,
+          "rarity": 45,
+          "enchantment_value": 18,
+          "charging_value": 0.9,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 7,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 45
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:eroded",
+            "level": 3
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:refined_glowstone": {
+      "id": "silentgear:refined_glowstone",
+      "name": {
+        "en": "Refined Glowstone",
+        "pt": "Refined Glowstone"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "advanced"
+      ],
+      "color": "#FDE054",
+      "stats": {
+        "main": {
+          "durability": 300,
+          "armor": 19,
+          "armor_durability": 18,
+          "magic_armor": 8,
+          "melee_damage": 5,
+          "attack_speed": 0,
+          "harvest_speed": 14,
+          "ranged_damage": 3,
+          "rarity": 45,
+          "enchantment_value": 18,
+          "charging_value": 0.8,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 7,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": -0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "harvest_speed": {
+            "value": 0.2,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 45
+        },
+        "tip": {
+          "harvest_speed": {
+            "value": 5,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          },
+          {
+            "name": "silentgear:lustrous",
+            "level": 4
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 4
+          },
+          {
+            "name": "silentgear:lustrous",
+            "level": 1
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:refractive",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:refined_iron": {
+      "id": "silentgear:refined_iron",
+      "name": {
+        "en": "Refined Iron",
+        "pt": "Refined Iron"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "intermediate"
+      ],
+      "color": "#D7D7D7",
+      "stats": {
+        "main": {
+          "durability": 512,
+          "armor": 18,
+          "armor_durability": 20,
+          "armor_toughness": 2,
+          "magic_armor": 6,
+          "melee_damage": 3,
+          "attack_speed": 0,
+          "harvest_speed": 7,
+          "ranged_damage": 2,
+          "rarity": 25,
+          "enchantment_value": 15,
+          "charging_value": 0.8,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 7,
+            "leggings": 5,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.15,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "ranged_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 25
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 4
+          },
+          {
+            "name": "silentgear:stellar",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:refined_obsidian": {
+      "id": "silentgear:refined_obsidian",
+      "name": {
+        "en": "Refined Obsidian",
+        "pt": "Refined Obsidian"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "endgame"
+      ],
+      "color": "#665482",
+      "stats": {
+        "main": {
+          "durability": 2500,
+          "armor": 30,
+          "armor_durability": 50,
+          "armor_toughness": 16,
+          "magic_armor": 6,
+          "melee_damage": 10,
+          "attack_speed": 0.3,
+          "harvest_speed": 20,
+          "ranged_damage": 4,
+          "rarity": 70,
+          "enchantment_value": 40,
+          "charging_value": 0.8,
+          "harvest_tier": "diamond",
+          "armor_by_piece": {
+            "helmet": 5,
+            "chestplate": 12,
+            "leggings": 8,
+            "boots": 5
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.25,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 70
+        },
+        "tip": {
+          "durability": {
+            "value": 600,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 3
+          },
+          {
+            "name": "silentgear:hard",
+            "level": 4
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 4
+          },
+          {
+            "name": "silentgear:hard",
+            "level": 3
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:vulcan",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:red": {
+      "id": "silentgear:red",
+      "name": {
+        "en": "Red",
+        "pt": "Red"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#A12722",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:sandstone": {
+      "id": "silentgear:sandstone",
+      "name": {
+        "en": "Sandstone",
+        "pt": "Sandstone"
+      },
+      "tier": 2,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#E3DBB0",
+      "stats": {
+        "main": {
+          "durability": 117,
+          "armor": 5,
+          "armor_durability": 6,
+          "melee_damage": 1,
+          "attack_speed": 0.1,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "harvest_tier": "sandstone",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 1
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:sheet_metal": {
+      "id": "silentgear:sheet_metal",
+      "name": {
+        "en": "Sheet Metal",
+        "pt": "Sheet Metal"
+      },
+      "tier": 1,
+      "category": "sheet",
+      "categories": [
+        "sheet"
+      ],
+      "color": "#FFFFFF",
+      "stats": {
+        "main": {
+          "durability": {
+            "value": -1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "armor": {
+            "value": -0.5,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "armor_durability": {
+            "value": -0.4,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "armor_toughness": {
+            "value": -0.5,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {}
+    },
+    "silentgear:signalum": {
+      "id": "silentgear:signalum",
+      "name": {
+        "en": "Signalum",
+        "pt": "Signalum"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "endgame"
+      ],
+      "color": "#FF5E28",
+      "stats": {
+        "main": {
+          "durability": 800,
+          "armor": 16,
+          "armor_durability": 25,
+          "armor_toughness": 2,
+          "magic_armor": 4,
+          "melee_damage": 3,
+          "attack_speed": 0,
+          "harvest_speed": 13,
+          "ranged_damage": 2,
+          "rarity": 50,
+          "enchantment_value": 16,
+          "charging_value": 1.2,
+          "harvest_tier": "diamond",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 7,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.3,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 50
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          },
+          {
+            "name": "silentgear:lustrous",
+            "level": 4
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 4
+          },
+          {
+            "name": "silentgear:lustrous",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:silver": {
+      "id": "silentgear:silver",
+      "name": {
+        "en": "Silver",
+        "pt": "Silver"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "intermediate"
+      ],
+      "color": "#CBCCEA",
+      "stats": {
+        "main": {
+          "durability": 64,
+          "armor": 11,
+          "armor_durability": 9,
+          "magic_armor": 10,
+          "melee_damage": 0,
+          "attack_speed": 0.2,
+          "harvest_speed": 11,
+          "ranged_damage": 0,
+          "rarity": 40,
+          "enchantment_value": 20,
+          "charging_value": 1.1,
+          "harvest_tier": "gold",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 5,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 40
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:sinew": {
+      "id": "silentgear:sinew",
+      "name": {
+        "en": "Sinew",
+        "pt": "Sinew"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "fiber",
+        "basic"
+      ],
+      "color": "#D8995B",
+      "stats": {
+        "binding": {}
+      },
+      "traits": {
+        "binding": [
+          {
+            "name": "silentgear:flexible",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:slime": {
+      "id": "silentgear:slime",
+      "name": {
+        "en": "Slime",
+        "pt": "Slime"
+      },
+      "tier": 1,
+      "category": "slime",
+      "categories": [
+        "slime",
+        "organic",
+        "intermediate"
+      ],
+      "color": "#8CD782",
+      "stats": {
+        "lining": {
+          "armor_toughness": {
+            "value": 0.5,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "lining": [
+          {
+            "name": "silentgear:bounce",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:steel": {
+      "id": "silentgear:steel",
+      "name": {
+        "en": "Steel",
+        "pt": "Steel"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "intermediate"
+      ],
+      "color": "#929292",
+      "stats": {
+        "main": {
+          "durability": 500,
+          "armor": 20,
+          "armor_durability": 20,
+          "armor_toughness": 2,
+          "magic_armor": 6,
+          "melee_damage": 4,
+          "attack_speed": -0.2,
+          "harvest_speed": 6,
+          "ranged_damage": 2,
+          "rarity": 40,
+          "enchantment_value": 11,
+          "charging_value": 0.8,
+          "harvest_tier": "iron",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.25,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 40
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 5
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 5
+          }
+        ]
+      }
+    },
+    "silentgear:andesite": {
+      "id": "silentgear:andesite",
+      "name": {
+        "en": "Andesite",
+        "pt": "Andesite"
+      },
+      "tier": 1,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#8A8A8E",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:diorite": {
+      "id": "silentgear:diorite",
+      "name": {
+        "en": "Diorite",
+        "pt": "Diorite"
+      },
+      "tier": 1,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#FFFFFF",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:granite": {
+      "id": "silentgear:granite",
+      "name": {
+        "en": "Granite",
+        "pt": "Granite"
+      },
+      "tier": 1,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#9F6B58",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:stone": {
+      "id": "silentgear:stone",
+      "name": {
+        "en": "Stone",
+        "pt": "Pedra"
+      },
+      "tier": 2,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#9A9A9A",
+      "stats": {
+        "main": {
+          "durability": 131,
+          "armor": 5,
+          "armor_durability": 5,
+          "melee_damage": 1,
+          "attack_speed": 0,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 4,
+          "enchantment_value": 5,
+          "charging_value": 0.5,
+          "harvest_tier": "stone",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:ancient",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:string": {
+      "id": "silentgear:string",
+      "name": {
+        "en": "String",
+        "pt": "String"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "fiber",
+        "basic"
+      ],
+      "color": "#FFFFFF",
+      "stats": {
+        "binding": {}
+      },
+      "traits": {
+        "binding": [
+          {
+            "name": "silentgear:flexible",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:super_alloy": {
+      "id": "silentgear:super_alloy",
+      "name": {
+        "en": "Super Alloy",
+        "pt": "Super Alloy"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#FFFFFF",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:black": {
+      "id": "silentgear:black",
+      "name": {
+        "en": "Black",
+        "pt": "Black"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#141519",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:blue": {
+      "id": "silentgear:blue",
+      "name": {
+        "en": "Blue",
+        "pt": "Blue"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#35399D",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:brown": {
+      "id": "silentgear:brown",
+      "name": {
+        "en": "Brown",
+        "pt": "Brown"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#724728",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:cyan": {
+      "id": "silentgear:cyan",
+      "name": {
+        "en": "Cyan",
+        "pt": "Cyan"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#158991",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:gray": {
+      "id": "silentgear:gray",
+      "name": {
+        "en": "Gray",
+        "pt": "Gray"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#3E4447",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:green": {
+      "id": "silentgear:green",
+      "name": {
+        "en": "Green",
+        "pt": "Green"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#546D1B",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:light_blue": {
+      "id": "silentgear:light_blue",
+      "name": {
+        "en": "Light Blue",
+        "pt": "Light Blue"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#3AAFD9",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:light_gray": {
+      "id": "silentgear:light_gray",
+      "name": {
+        "en": "Light Gray",
+        "pt": "Light Gray"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#8E8E86",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:lime": {
+      "id": "silentgear:lime",
+      "name": {
+        "en": "Lime",
+        "pt": "Lime"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#70B919",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:magenta": {
+      "id": "silentgear:magenta",
+      "name": {
+        "en": "Magenta",
+        "pt": "Magenta"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#BD44B3",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:orange": {
+      "id": "silentgear:orange",
+      "name": {
+        "en": "Orange",
+        "pt": "Orange"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#F07613",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:pink": {
+      "id": "silentgear:pink",
+      "name": {
+        "en": "Pink",
+        "pt": "Pink"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#ED8DAC",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:purple": {
+      "id": "silentgear:purple",
+      "name": {
+        "en": "Purple",
+        "pt": "Purple"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#792AAC",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:white": {
+      "id": "silentgear:white",
+      "name": {
+        "en": "White",
+        "pt": "White"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#E9ECEC",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:yellow": {
+      "id": "silentgear:yellow",
+      "name": {
+        "en": "Yellow",
+        "pt": "Yellow"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#F8C627",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:terracotta": {
+      "id": "silentgear:terracotta",
+      "name": {
+        "en": "Terracotta",
+        "pt": "Terracotta"
+      },
+      "tier": 2,
+      "category": "rock",
+      "categories": [
+        "rock",
+        "basic"
+      ],
+      "color": "#985F45",
+      "stats": {
+        "main": {
+          "durability": 165,
+          "armor": 9,
+          "armor_durability": 11,
+          "magic_armor": 3,
+          "melee_damage": 1.5,
+          "attack_speed": 0.2,
+          "harvest_speed": 4,
+          "ranged_damage": 0,
+          "rarity": 7,
+          "enchantment_value": 9,
+          "charging_value": 0.8,
+          "harvest_tier": "terracotta",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 3,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "melee_damage": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          },
+          {
+            "name": "silentgear:chipping",
+            "level": 2
+          },
+          {
+            "name": "silentgear:rustic",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:tin": {
+      "id": "silentgear:tin",
+      "name": {
+        "en": "Tin",
+        "pt": "Tin"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "basic"
+      ],
+      "color": "#89A5B4",
+      "stats": {
+        "main": {
+          "durability": 192,
+          "armor": 12,
+          "armor_durability": 13,
+          "magic_armor": 2,
+          "melee_damage": 1.5,
+          "attack_speed": 0,
+          "harvest_speed": 5,
+          "ranged_damage": 0.5,
+          "rarity": 15,
+          "enchantment_value": 12,
+          "charging_value": 1.1,
+          "harvest_tier": "stone",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 5,
+            "leggings": 3,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "rarity": 15
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:titanium": {
+      "id": "silentgear:titanium",
+      "name": {
+        "en": "Titanium",
+        "pt": "Titanium"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "endgame"
+      ],
+      "color": "#2E4CE6",
+      "stats": {
+        "main": {
+          "durability": 1600,
+          "armor": 24,
+          "armor_durability": 37,
+          "armor_toughness": 8,
+          "magic_armor": 4,
+          "melee_damage": 6,
+          "attack_speed": 0,
+          "harvest_speed": 8,
+          "ranged_damage": 1,
+          "rarity": 80,
+          "enchantment_value": 12,
+          "charging_value": 1,
+          "harvest_tier": "netherite",
+          "armor_by_piece": {
+            "helmet": 4,
+            "chestplate": 9,
+            "leggings": 7,
+            "boots": 4
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "melee_damage": [
+            {
+              "value": 0.2,
+              "operation": "MULTIPLY_TOTAL"
+            },
+            {
+              "value": 2,
+              "operation": "ADD"
+            }
+          ],
+          "rarity": 80
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          },
+          {
+            "name": "silentgear:hard",
+            "level": 4
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          },
+          {
+            "name": "silentgear:hard",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgear:turtle": {
+      "id": "silentgear:turtle",
+      "name": {
+        "en": "Turtle",
+        "pt": "Turtle"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "intermediate"
+      ],
+      "color": "#47BF4A",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "magic_armor": 4,
+          "rarity": 20,
+          "enchantment_value": 9,
+          "charging_value": 0.5,
+          "armor_by_piece": {
+            "helmet": 2
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:turtle",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgear:tyrian_steel": {
+      "id": "silentgear:tyrian_steel",
+      "name": {
+        "en": "Tyrian Steel",
+        "pt": "Aço Tiriano"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "endgame",
+        "casting"
+      ],
+      "color": "#B01080",
+      "stats": {
+        "main": {
+          "durability": 3652,
+          "armor": 25,
+          "armor_durability": 81,
+          "armor_toughness": 12,
+          "magic_armor": 12,
+          "melee_damage": 8,
+          "attack_speed": 0,
+          "harvest_speed": 18,
+          "ranged_damage": 4,
+          "rarity": 100,
+          "enchantment_value": 16,
+          "charging_value": 1.1,
+          "harvest_tier": "tyrian_steel",
+          "armor_by_piece": {
+            "helmet": 5,
+            "chestplate": 9,
+            "leggings": 7,
+            "boots": 4
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": -2,
+            "operation": "ADD"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 251,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 30,
+            "operation": "ADD"
+          },
+          "harvest_tier": "tyrian_steel"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:sturdy",
+            "level": 3
+          },
+          {
+            "name": "silentgear:void_ward",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:sturdy",
+            "level": 4
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:imperial",
+            "level": 3
+          },
+          {
+            "name": "silentgear:gold_digger",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgear:uranium": {
+      "id": "silentgear:uranium",
+      "name": {
+        "en": "Uranium",
+        "pt": "Uranium"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "advanced"
+      ],
+      "color": "#21FF0F",
+      "stats": {
+        "main": {
+          "durability": 800,
+          "armor": 13,
+          "armor_durability": 20,
+          "armor_toughness": 1,
+          "magic_armor": 3,
+          "melee_damage": 2,
+          "attack_speed": 0.1,
+          "harvest_speed": 6,
+          "ranged_damage": 0.5,
+          "rarity": 50,
+          "enchantment_value": 17,
+          "charging_value": 1.5,
+          "harvest_tier": "diamond",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 5,
+            "leggings": 4,
+            "boots": 2
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 40
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:vine": {
+      "id": "silentgear:vine",
+      "name": {
+        "en": "Vine",
+        "pt": "Vine"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "basic"
+      ],
+      "color": "#007F0E",
+      "stats": {
+        "binding": {}
+      },
+      "traits": {}
+    },
+    "silentgear:acacia": {
+      "id": "silentgear:acacia",
+      "name": {
+        "en": "Acacia",
+        "pt": "Acacia"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#BA6337",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:birch": {
+      "id": "silentgear:birch",
+      "name": {
+        "en": "Birch",
+        "pt": "Birch"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#D7C185",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:crimson": {
+      "id": "silentgear:crimson",
+      "name": {
+        "en": "Crimson",
+        "pt": "Crimson"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#7E3A56",
+      "stats": {
+        "main": {},
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:jagged",
             "level": 1
           }
         ],
@@ -245,254 +5394,82 @@
         ]
       }
     },
-    "silentgear:crimson_steel": {
-      "id": "silentgear:crimson_steel",
+    "silentgear:dark_oak": {
+      "id": "silentgear:dark_oak",
       "name": {
-        "en": "Crimson Steel",
-        "pt": "Aço Carmesim"
+        "en": "Dark Oak",
+        "pt": "Dark Oak"
       },
-      "tier": 3,
+      "tier": 1,
       "category": "metal",
-      "color": "#DC143C",
-      "stats": {
-        "main": {
-          "durability": 1650,
-          "armor": 22,
-          "armor_toughness": 9,
-          "magic_armor": 8,
-          "melee_damage": 4.5,
-          "attack_speed": 0,
-          "harvest_speed": 8.5,
-          "harvest_tier": "minecraft:netherite",
-          "rarity": 80
-        },
-        "tip": {
-          "durability": 300,
-          "melee_damage": 2.5,
-          "harvest_speed": 2
-        },
-        "coating": {
-          "armor_toughness": {
-            "operation": "ADD",
-            "value": 4
-          },
-          "knockback_resistance": {
-            "operation": "ADD",
-            "value": 1
-          },
-          "armor_durability": {
-            "operation": "MULTIPLY_TOTAL",
-            "value": 0.1212
-          },
-          "durability": {
-            "operation": "MULTIPLY_TOTAL",
-            "value": 0.3
-          },
-          "melee_damage": {
-            "operation": "MULTIPLY_TOTAL",
-            "value": 0.3333
-          }
-        }
+      "categories": [],
+      "color": "#4F3218",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:jungle": {
+      "id": "silentgear:jungle",
+      "name": {
+        "en": "Jungle",
+        "pt": "Jungle"
       },
-      "statModifiers": {
-        "rod": {
-          "durability": {
-            "mul2": 0.25
-          }
-        }
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#B88764",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:oak": {
+      "id": "silentgear:oak",
+      "name": {
+        "en": "Oak",
+        "pt": "Oak"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#B8945F",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:spruce": {
+      "id": "silentgear:spruce",
+      "name": {
+        "en": "Spruce",
+        "pt": "Spruce"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#82613A",
+      "stats": {},
+      "traits": {}
+    },
+    "silentgear:warped": {
+      "id": "silentgear:warped",
+      "name": {
+        "en": "Warped",
+        "pt": "Warped"
+      },
+      "tier": 1,
+      "category": "metal",
+      "categories": [],
+      "color": "#398382",
+      "stats": {
+        "main": {},
+        "rod": {}
       },
       "traits": {
         "main": [
-          {
-            "name": "silentgear:fireproof",
-            "level": 1
-          },
           {
             "name": "silentgear:jagged",
-            "level": 2
-          }
-        ]
-      }
-    },
-    "silentgear:azure_silver": {
-      "id": "silentgear:azure_silver",
-      "name": {
-        "en": "Azure Silver",
-        "pt": "Prata Azul"
-      },
-      "tier": 3,
-      "category": "metal",
-      "color": "#CBBAFF",
-      "stats": {
-        "main": {
-          "durability": 850,
-          "armor": 17,
-          "armor_toughness": 6,
-          "magic_armor": 12,
-          "melee_damage": 3.5,
-          "attack_speed": 0.2,
-          "harvest_speed": 11,
-          "harvest_tier": "minecraft:diamond",
-          "rarity": 75
-        },
-        "rod": {
-          "durability": 100
-        }
-      },
-      "statModifiers": {
-        "rod": {
-          "attack_speed": {
-            "add": 0.15
-          },
-          "harvest_speed": {
-            "mul2": 0.2
-          }
-        }
-      },
-      "traits": {
-        "main": [
-          {
-            "name": "silentgear:holy",
-            "level": 2
-          }
-        ],
-        "rod": [
-          {
-            "name": "silentgear:light",
-            "level": 1
-          }
-        ]
-      }
-    },
-    "silentgear:azure_electrum": {
-      "id": "silentgear:azure_electrum",
-      "name": {
-        "en": "Azure Electrum",
-        "pt": "Electrum Azul"
-      },
-      "tier": 4,
-      "category": "metal",
-      "color": "#4575E3",
-      "stats": {
-        "main": {
-          "durability": 1850,
-          "armor": 20,
-          "armor_toughness": 10,
-          "magic_armor": 16,
-          "melee_damage": 4,
-          "attack_speed": 0.3,
-          "harvest_speed": 13,
-          "harvest_tier": "minecraft:netherite",
-          "rarity": 95
-        }
-      },
-      "statModifiers": {
-        "rod": {
-          "attack_speed": {
-            "add": 0.25
-          }
-        }
-      },
-      "traits": {
-        "main": [
-          {
-            "name": "silentgear:swift",
-            "level": 2
-          },
-          {
-            "name": "silentgear:holy",
-            "level": 3
-          }
-        ]
-      }
-    },
-    "silentgear:gold": {
-      "id": "silentgear:gold",
-      "name": {
-        "en": "Gold",
-        "pt": "Ouro"
-      },
-      "tier": 1,
-      "category": "metal",
-      "color": "#FDFF70",
-      "stats": {
-        "main": {
-          "durability": 32,
-          "armor": 11,
-          "armor_toughness": 0,
-          "magic_armor": 10,
-          "melee_damage": 1,
-          "attack_speed": 0.4,
-          "harvest_speed": 12,
-          "harvest_tier": "minecraft:wood",
-          "rarity": 30
-        },
-        "tip": {
-          "harvest_speed": 4
-        }
-      },
-      "statModifiers": {
-        "rod": {
-          "attack_speed": {
-            "add": 0.2
-          }
-        }
-      },
-      "traits": {
-        "main": [
-          {
-            "name": "silentgear:soft",
-            "level": 2
-          },
-          {
-            "name": "silentgear:lustrous",
-            "level": 3
-          }
-        ]
-      }
-    },
-    "silentgear:copper": {
-      "id": "silentgear:copper",
-      "name": {
-        "en": "Copper",
-        "pt": "Cobre"
-      },
-      "tier": 1,
-      "category": "metal",
-      "color": "#FD804C",
-      "stats": {
-        "main": {
-          "durability": 180,
-          "armor": 12,
-          "armor_toughness": 0,
-          "magic_armor": 2,
-          "melee_damage": 1.5,
-          "attack_speed": 0,
-          "harvest_speed": 5,
-          "harvest_tier": "minecraft:stone",
-          "rarity": 15
-        },
-        "rod": {
-          "durability": 30
-        }
-      },
-      "statModifiers": {
-        "rod": {
-          "durability": {
-            "mul2": 0.05
-          }
-        }
-      },
-      "traits": {
-        "main": [
-          {
-            "name": "silentgear:malleable",
             "level": 1
           }
         ],
         "rod": [
           {
-            "name": "silentgear:conductive",
+            "name": "silentgear:flexible",
             "level": 2
           }
         ]
@@ -504,281 +5481,1842 @@
         "en": "Wood",
         "pt": "Madeira"
       },
-      "tier": 0,
-      "category": "wood",
+      "tier": 2,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "wood"
+      ],
       "color": "#896727",
       "stats": {
         "main": {
           "durability": 59,
-          "armor": 4,
-          "armor_toughness": 0,
-          "magic_armor": 0,
-          "melee_damage": 1,
+          "armor": 7,
+          "armor_durability": 8,
+          "magic_armor": 2,
+          "melee_damage": 0,
           "attack_speed": 0,
           "harvest_speed": 2,
-          "harvest_tier": "minecraft:wood",
-          "rarity": 5
-        },
-        "rod": {
-          "durability": 15
-        }
-      },
-      "statModifiers": {
-        "rod": {
-          "durability": {
-            "mul2": 0
+          "ranged_damage": 0,
+          "rarity": 1,
+          "enchantment_value": 15,
+          "charging_value": 0.6,
+          "harvest_tier": "wood",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 3,
+            "leggings": 2,
+            "boots": 1
           }
-        }
+        },
+        "rod": {}
       },
       "traits": {
         "main": [
           {
-            "name": "silentgear:flexible",
+            "name": "silentgear:flammable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:jagged",
             "level": 1
           }
         ],
         "rod": [
           {
             "name": "silentgear:flexible",
-            "level": 1
-          }
-        ]
-      }
-    },
-    "silentgear:breeze_rod": {
-      "id": "silentgear:breeze_rod",
-      "name": {
-        "en": "Breeze Rod",
-        "pt": "Haste de Brisa"
-      },
-      "tier": 2,
-      "category": "metal",
-      "color": "#9398C1",
-      "stats": {
-        "rod": {
-          "durability": 150,
-          "attack_speed": 0.35
-        }
-      },
-      "statModifiers": {
-        "rod": {
-          "attack_speed": {
-            "add": 0.35
-          }
-        }
-      },
-      "traits": {
-        "rod": [
-          {
-            "name": "silentgear:swift",
             "level": 2
           }
         ]
       }
     },
-    "allthemodium:allthemodium": {
-      "id": "allthemodium:allthemodium",
+    "silentgear:wool": {
+      "id": "silentgear:wool",
+      "name": {
+        "en": "Wool",
+        "pt": "Wool"
+      },
+      "tier": 1,
+      "category": "organic",
+      "categories": [
+        "organic",
+        "cloth",
+        "basic"
+      ],
+      "color": "#FFFFFF",
+      "stats": {
+        "main": {
+          "durability": 0,
+          "armor": 4,
+          "armor_durability": 4,
+          "magic_armor": 4,
+          "rarity": 7,
+          "enchantment_value": 7,
+          "charging_value": 0.7,
+          "armor_by_piece": {
+            "helmet": 0.5,
+            "chestplate": 2,
+            "leggings": 1,
+            "boots": 0.5
+          }
+        },
+        "grip": {
+          "attack_speed": {
+            "value": 0.2,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 0.1,
+            "operation": "MULTIPLY_BASE"
+          }
+        },
+        "lining": {
+          "knockback_resistance": {
+            "value": 0.1,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:snow_walker",
+            "level": 1
+          }
+        ],
+        "grip": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ],
+        "lining": [
+          {
+            "name": "silentgear:flexible",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:zinc": {
+      "id": "silentgear:zinc",
+      "name": {
+        "en": "Zinc",
+        "pt": "Zinc"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "casting",
+        "basic"
+      ],
+      "color": "#C9D3CE",
+      "stats": {
+        "main": {
+          "durability": 192,
+          "armor": 10,
+          "armor_durability": 10,
+          "magic_armor": 2,
+          "melee_damage": 1.5,
+          "attack_speed": 0,
+          "harvest_speed": 3,
+          "ranged_damage": 0,
+          "rarity": 10,
+          "enchantment_value": 15,
+          "charging_value": 1.1,
+          "harvest_tier": "stone",
+          "armor_by_piece": {
+            "helmet": 1,
+            "chestplate": 5,
+            "leggings": 3,
+            "boots": 1
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": -0.05,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "melee_damage": {
+            "value": 0.05,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 15
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 1
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:malleable",
+            "level": 2
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "sgearmetalworks:meat": {
+      "id": "sgearmetalworks:meat",
+      "name": {
+        "en": "Meat",
+        "pt": "Meat"
+      },
+      "tier": 1,
+      "category": "casting",
+      "categories": [
+        "casting"
+      ],
+      "color": "#FD4E67",
+      "stats": {
+        "main": {
+          "durability": 1024,
+          "armor": 20,
+          "armor_durability": 13,
+          "armor_toughness": 4,
+          "magic_armor": 8,
+          "melee_damage": 3,
+          "attack_speed": -0.4,
+          "harvest_speed": 6,
+          "ranged_damage": 0,
+          "rarity": 10,
+          "enchantment_value": 7,
+          "charging_value": 0.6,
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {
+          "harvest_speed": {
+            "value": -0.1,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 68,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": -0.1,
+            "operation": "ADD"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:organic",
+            "level": 2
+          },
+          {
+            "name": "silentgear:bending",
+            "level": 3
+          },
+          {
+            "name": "silentgear:yummy",
+            "level": 3
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:organic",
+            "level": 2
+          },
+          {
+            "name": "silentgear:flexible",
+            "level": 5
+          },
+          {
+            "name": "silentgear:yummy",
+            "level": 3
+          },
+          {
+            "name": "silentgear:bulky",
+            "level": 1
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:yummy",
+            "level": 3
+          },
+          {
+            "name": "silentgear:soft",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "sgearmetalworks:uru_metal": {
+      "id": "sgearmetalworks:uru_metal",
+      "name": {
+        "en": "Uru Metal",
+        "pt": "Metal Uru"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "endgame",
+        "casting",
+        "infusing"
+      ],
+      "color": "#0B2037",
+      "stats": {
+        "main": {
+          "durability": 15000,
+          "armor": 42,
+          "armor_durability": 50000,
+          "armor_toughness": 100,
+          "magic_armor": 600,
+          "melee_damage": 35,
+          "attack_speed": 18,
+          "harvest_speed": 29,
+          "ranged_damage": 8,
+          "rarity": 200,
+          "enchantment_value": 1500,
+          "charging_value": 1.5,
+          "harvest_tier": "unobtainium",
+          "armor_by_piece": {
+            "helmet": 8,
+            "chestplate": 14,
+            "leggings": 12,
+            "boots": 8
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 3.5,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": {
+            "value": 99,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "enchantment_value": {
+            "value": 23,
+            "operation": "ADD"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 16,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 1,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 6,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 60,
+            "operation": "MULTIPLY_TOTAL"
+          }
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 6
+          },
+          {
+            "name": "silentgear:indestructible",
+            "level": 1
+          },
+          {
+            "name": "silentgear:aquatic",
+            "level": 1
+          },
+          {
+            "name": "silentgear:brilliant",
+            "level": 1
+          },
+          {
+            "name": "silentgear:flame_ward",
+            "level": 1
+          },
+          {
+            "name": "silentgear:cure_wither",
+            "level": 1
+          },
+          {
+            "name": "silentgear:cure_poison",
+            "level": 1
+          },
+          {
+            "name": "silentgear:sting_resist",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:hard",
+            "level": 5
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:malleable",
+            "level": 5
+          },
+          {
+            "name": "silentgear:hard",
+            "level": 5
+          }
+        ]
+      }
+    },
+    "silentgems:alexandrite": {
+      "id": "silentgems:alexandrite",
+      "name": {
+        "en": "Alexandrite",
+        "pt": "Alexandrite"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#AB37E5",
+      "stats": {
+        "main": {
+          "durability": 1024,
+          "armor": 18,
+          "armor_durability": 29,
+          "armor_toughness": 5,
+          "magic_armor": 10,
+          "melee_damage": 3,
+          "attack_speed": 0,
+          "harvest_speed": 9,
+          "ranged_damage": 2,
+          "rarity": 45,
+          "enchantment_value": 15,
+          "charging_value": 1.3,
+          "harvest_tier": "alexandrite",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:imperial",
+            "level": 5
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 1
+          }
+        ]
+      }
+    },
+    "silentgems:ammolite": {
+      "id": "silentgems:ammolite",
+      "name": {
+        "en": "Ammolite",
+        "pt": "Ammolite"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced",
+        "casting"
+      ],
+      "color": "#DB2BFF",
+      "stats": {
+        "main": {
+          "durability": 1024,
+          "armor": 22,
+          "armor_durability": 40,
+          "armor_toughness": 12,
+          "magic_armor": 16,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 8,
+          "ranged_damage": 1,
+          "rarity": 60,
+          "enchantment_value": 12,
+          "charging_value": 1.2,
+          "harvest_tier": "ammolite",
+          "armor_by_piece": {
+            "helmet": 4,
+            "chestplate": 9,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgems:fractal",
+            "level": 4
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgems:aquamarine": {
+      "id": "silentgems:aquamarine",
+      "name": {
+        "en": "Aquamarine",
+        "pt": "Aquamarine"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#6EE9F4",
+      "stats": {
+        "main": {
+          "durability": 1024,
+          "armor": 15,
+          "armor_durability": 34,
+          "armor_toughness": 4,
+          "magic_armor": 6,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 6,
+          "ranged_damage": 1,
+          "rarity": 40,
+          "enchantment_value": 12,
+          "charging_value": 1.3,
+          "harvest_tier": "aquamarine",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:fortunate",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:fortunate",
+            "level": 1
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgems:black_diamond": {
+      "id": "silentgems:black_diamond",
+      "name": {
+        "en": "Black Diamond",
+        "pt": "Black Diamond"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced",
+        "casting"
+      ],
+      "color": "#5F524C",
+      "stats": {
+        "main": {
+          "durability": 1792,
+          "armor": 20,
+          "armor_durability": 39,
+          "armor_toughness": 8,
+          "magic_armor": 10,
+          "melee_damage": 4,
+          "attack_speed": 0,
+          "harvest_speed": 9,
+          "ranged_damage": 3,
+          "rarity": 55,
+          "enchantment_value": 12,
+          "charging_value": 1,
+          "harvest_tier": "black_diamond",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:flame_ward",
+            "level": 1
+          },
+          {
+            "name": "silentgear:sturdy",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgems:carnelian": {
+      "id": "silentgems:carnelian",
+      "name": {
+        "en": "Carnelian",
+        "pt": "Carnelian"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#E04D1D",
+      "stats": {
+        "main": {
+          "durability": 1280,
+          "armor": 16,
+          "armor_durability": 37,
+          "armor_toughness": 4,
+          "magic_armor": 8,
+          "melee_damage": 3,
+          "attack_speed": 0,
+          "harvest_speed": 7,
+          "ranged_damage": 2,
+          "rarity": 45,
+          "enchantment_value": 10,
+          "charging_value": 1.2,
+          "harvest_tier": "carnelian",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:gold_digger",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgems:citrine": {
+      "id": "silentgems:citrine",
+      "name": {
+        "en": "Citrine",
+        "pt": "Citrine"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#C78B03",
+      "stats": {
+        "main": {
+          "durability": 768,
+          "armor": 16,
+          "armor_durability": 26,
+          "armor_toughness": 4,
+          "magic_armor": 8,
+          "melee_damage": 3,
+          "attack_speed": 0,
+          "harvest_speed": 10,
+          "ranged_damage": 2,
+          "rarity": 45,
+          "enchantment_value": 10,
+          "charging_value": 1.2,
+          "harvest_tier": "citrine",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:ancient",
+            "level": 4
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgems:garnet": {
+      "id": "silentgems:garnet",
+      "name": {
+        "en": "Garnet",
+        "pt": "Garnet"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#970000",
+      "stats": {
+        "main": {
+          "durability": 512,
+          "armor": 15,
+          "armor_durability": 21,
+          "armor_toughness": 4,
+          "magic_armor": 6,
+          "melee_damage": 3,
+          "attack_speed": 0,
+          "harvest_speed": 6,
+          "ranged_damage": 2,
+          "rarity": 40,
+          "enchantment_value": 12,
+          "charging_value": 1.3,
+          "harvest_tier": "peridot",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgems:critical_strike",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:jagged",
+            "level": 3
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgems:heliodor": {
+      "id": "silentgems:heliodor",
+      "name": {
+        "en": "Heliodor",
+        "pt": "Heliodor"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced",
+        "casting"
+      ],
+      "color": "#E6C51D",
+      "stats": {
+        "main": {
+          "durability": 1024,
+          "armor": 16,
+          "armor_durability": 34,
+          "armor_toughness": 4,
+          "magic_armor": 8,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 14,
+          "ranged_damage": 1,
+          "rarity": 60,
+          "enchantment_value": 10,
+          "charging_value": 1.2,
+          "harvest_tier": "heliodor",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:chipping",
+            "level": 4
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgems:iolite": {
+      "id": "silentgems:iolite",
+      "name": {
+        "en": "Iolite",
+        "pt": "Iolite"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#7543F5",
+      "stats": {
+        "main": {
+          "durability": 768,
+          "armor": 20,
+          "armor_durability": 32,
+          "armor_toughness": 6,
+          "magic_armor": 14,
+          "melee_damage": 3,
+          "attack_speed": 0,
+          "harvest_speed": 7,
+          "ranged_damage": 2,
+          "rarity": 45,
+          "enchantment_value": 10,
+          "charging_value": 1.2,
+          "harvest_tier": "iolite",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:crushing",
+            "level": 3
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgems:kyanite": {
+      "id": "silentgems:kyanite",
+      "name": {
+        "en": "Kyanite",
+        "pt": "Kyanite"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced",
+        "casting"
+      ],
+      "color": "#41C4F3",
+      "stats": {
+        "main": {
+          "durability": 1280,
+          "armor": 20,
+          "armor_durability": 38,
+          "armor_toughness": 8,
+          "magic_armor": 14,
+          "melee_damage": 4,
+          "attack_speed": 0,
+          "harvest_speed": 12,
+          "ranged_damage": 2,
+          "rarity": 60,
+          "enchantment_value": 17,
+          "charging_value": 1.4,
+          "harvest_tier": "kyanite",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:chilled",
+            "level": 4
+          },
+          {
+            "name": "silentgear:stellar",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgems:moldavite": {
+      "id": "silentgems:moldavite",
+      "name": {
+        "en": "Moldavite",
+        "pt": "Moldavite"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#A6D923",
+      "stats": {
+        "main": {
+          "durability": 512,
+          "armor": 16,
+          "armor_durability": 26,
+          "armor_toughness": 4,
+          "magic_armor": 8,
+          "melee_damage": 4,
+          "attack_speed": 0,
+          "harvest_speed": 6,
+          "ranged_damage": 3,
+          "rarity": 45,
+          "enchantment_value": 10,
+          "charging_value": 1.2,
+          "harvest_tier": "moldavite",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:sharp",
+            "level": 3
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgems:opal": {
+      "id": "silentgems:opal",
+      "name": {
+        "en": "Opal",
+        "pt": "Opal"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced",
+        "casting"
+      ],
+      "color": "#DDFFE4",
+      "stats": {
+        "main": {
+          "durability": 1024,
+          "armor": 18,
+          "armor_durability": 36,
+          "armor_toughness": 4,
+          "magic_armor": 8,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 13,
+          "ranged_damage": 1,
+          "rarity": 60,
+          "enchantment_value": 10,
+          "charging_value": 1.3,
+          "harvest_tier": "opal",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgems:freeze_resistant",
+            "level": 4
+          },
+          {
+            "name": "silentgems:enderbane",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          },
+          {
+            "name": "silentgems:enderbane",
+            "level": 4
+          }
+        ]
+      }
+    },
+    "silentgems:pearl": {
+      "id": "silentgems:pearl",
+      "name": {
+        "en": "Pearl",
+        "pt": "Pearl"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced",
+        "casting"
+      ],
+      "color": "#D3CBBF",
+      "stats": {
+        "main": {
+          "durability": 1024,
+          "armor": 20,
+          "armor_durability": 44,
+          "armor_toughness": 12,
+          "magic_armor": 16,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 8,
+          "ranged_damage": 2,
+          "rarity": 65,
+          "enchantment_value": 12,
+          "charging_value": 1.3,
+          "harvest_tier": "pearl",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 6,
+            "boots": 3
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgems:neptunes_blessing",
+            "level": 3
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:aquatic",
+            "level": 4
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgems:peridot": {
+      "id": "silentgems:peridot",
+      "name": {
+        "en": "Peridot",
+        "pt": "Peridot"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#29DB18",
+      "stats": {
+        "main": {
+          "durability": 512,
+          "armor": 15,
+          "armor_durability": 21,
+          "armor_toughness": 4,
+          "magic_armor": 6,
+          "melee_damage": 3,
+          "attack_speed": 0,
+          "harvest_speed": 6,
+          "ranged_damage": 2,
+          "rarity": 30,
+          "enchantment_value": 12,
+          "charging_value": 1.3,
+          "harvest_tier": "peridot",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:jagged",
+            "level": 2
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgems:rose_quartz": {
+      "id": "silentgems:rose_quartz",
+      "name": {
+        "en": "Rose Quartz",
+        "pt": "Rose Quartz"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced",
+        "casting"
+      ],
+      "color": "#FF4EAB",
+      "stats": {
+        "main": {
+          "durability": 1024,
+          "armor": 16,
+          "armor_durability": 34,
+          "armor_toughness": 4,
+          "magic_armor": 8,
+          "melee_damage": 6,
+          "attack_speed": 0,
+          "harvest_speed": 14,
+          "ranged_damage": 3,
+          "rarity": 60,
+          "enchantment_value": 12,
+          "charging_value": 1.2,
+          "harvest_tier": "rose_quartz",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgems:critical_strike",
+            "level": 3
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgems:ruby": {
+      "id": "silentgems:ruby",
+      "name": {
+        "en": "Ruby",
+        "pt": "Ruby"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#E61D1D",
+      "stats": {
+        "main": {
+          "durability": 1024,
+          "armor": 15,
+          "armor_durability": 34,
+          "armor_toughness": 4,
+          "magic_armor": 6,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 6,
+          "ranged_damage": 1,
+          "rarity": 30,
+          "enchantment_value": 12,
+          "charging_value": 1.3,
+          "harvest_tier": "ruby",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:imperial",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgems:sapphire": {
+      "id": "silentgems:sapphire",
+      "name": {
+        "en": "Sapphire",
+        "pt": "Sapphire"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#1D60E5",
+      "stats": {
+        "main": {
+          "durability": 512,
+          "armor": 18,
+          "armor_durability": 28,
+          "armor_toughness": 6,
+          "magic_armor": 10,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 6,
+          "ranged_damage": 1,
+          "rarity": 30,
+          "enchantment_value": 12,
+          "charging_value": 1.3,
+          "harvest_tier": "sapphire",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:aquatic",
+            "level": 2
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgems:tanzanite": {
+      "id": "silentgems:tanzanite",
+      "name": {
+        "en": "Tanzanite",
+        "pt": "Tanzanite"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#3D00B9",
+      "stats": {
+        "main": {
+          "durability": 768,
+          "armor": 18,
+          "armor_durability": 28,
+          "armor_toughness": 5,
+          "magic_armor": 10,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 9,
+          "ranged_damage": 2,
+          "rarity": 50,
+          "enchantment_value": 15,
+          "charging_value": 1.2,
+          "harvest_tier": "tanzanite",
+          "armor_by_piece": {
+            "helmet": 3,
+            "chestplate": 8,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:light",
+            "level": 2
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:sharp",
+            "level": 2
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 3
+          }
+        ]
+      }
+    },
+    "silentgems:topaz": {
+      "id": "silentgems:topaz",
+      "name": {
+        "en": "Topaz",
+        "pt": "Topaz"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "intermediate",
+        "casting"
+      ],
+      "color": "#E6711D",
+      "stats": {
+        "main": {
+          "durability": 512,
+          "armor": 15,
+          "armor_durability": 21,
+          "armor_toughness": 4,
+          "magic_armor": 6,
+          "melee_damage": 2,
+          "attack_speed": 0,
+          "harvest_speed": 8,
+          "ranged_damage": 1,
+          "rarity": 30,
+          "enchantment_value": 12,
+          "charging_value": 1.3,
+          "harvest_tier": "topaz",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:lustrous",
+            "level": 1
+          },
+          {
+            "name": "silentgear:brittle",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgems:turquoise": {
+      "id": "silentgems:turquoise",
+      "name": {
+        "en": "Turquoise",
+        "pt": "Turquoise"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced",
+        "casting"
+      ],
+      "color": "#3DF4BD",
+      "stats": {
+        "main": {
+          "durability": 1536,
+          "armor": 15,
+          "armor_durability": 40,
+          "armor_toughness": 6,
+          "magic_armor": 20,
+          "melee_damage": 3,
+          "attack_speed": 0,
+          "harvest_speed": 8,
+          "ranged_damage": 2,
+          "rarity": 45,
+          "enchantment_value": 15,
+          "charging_value": 1.3,
+          "harvest_tier": "turquoise",
+          "armor_by_piece": {
+            "helmet": 2,
+            "chestplate": 6,
+            "leggings": 5,
+            "boots": 2
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:turtle",
+            "level": 1
+          },
+          {
+            "name": "silentgems:barrier_jacket",
+            "level": 5
+          }
+        ]
+      }
+    },
+    "silentgems:white_diamond": {
+      "id": "silentgems:white_diamond",
+      "name": {
+        "en": "White Diamond",
+        "pt": "White Diamond"
+      },
+      "tier": 2,
+      "category": "gem",
+      "categories": [
+        "gem",
+        "advanced",
+        "casting"
+      ],
+      "color": "#D5C1D2",
+      "stats": {
+        "main": {
+          "durability": 2048,
+          "armor": 24,
+          "armor_durability": 44,
+          "armor_toughness": 16,
+          "magic_armor": 20,
+          "melee_damage": 5,
+          "attack_speed": 0,
+          "harvest_speed": 12,
+          "ranged_damage": 3,
+          "rarity": 70,
+          "enchantment_value": 14,
+          "charging_value": 1,
+          "harvest_tier": "white_diamond",
+          "armor_by_piece": {
+            "helmet": 4,
+            "chestplate": 9,
+            "leggings": 7,
+            "boots": 4
+          }
+        },
+        "rod": {}
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:void_ward",
+            "level": 1
+          },
+          {
+            "name": "silentgear:sturdy",
+            "level": 2
+          }
+        ]
+      }
+    },
+    "silentgear:allthemodium": {
+      "id": "silentgear:allthemodium",
       "name": {
         "en": "Allthemodium",
         "pt": "Allthemodium"
       },
-      "tier": 5,
+      "tier": 2,
       "category": "metal",
+      "categories": [
+        "metal",
+        "endgame"
+      ],
       "color": "#FFEF0E",
       "stats": {
         "main": {
-          "durability": 12000,
-          "armor": 25,
-          "armor_toughness": 12,
-          "magic_armor": 8,
-          "melee_damage": 7,
-          "harvest_speed": 14,
-          "harvest_tier": "allthemodium:allthemodium",
-          "rarity": 150
+          "durability": 5500,
+          "armor": 60,
+          "armor_durability": 60,
+          "armor_toughness": 60,
+          "magic_armor": 200,
+          "melee_damage": 22,
+          "attack_speed": 8.2,
+          "harvest_speed": 8,
+          "ranged_damage": 0,
+          "rarity": 90,
+          "enchantment_value": 85,
+          "harvest_tier": "allthemodium",
+          "armor_by_piece": {
+            "helmet": 15,
+            "chestplate": 15,
+            "leggings": 15,
+            "boots": 15
+          }
         },
-        "rod": {
-          "durability": 1000
-        },
-        "tip": {
-          "durability": 2000,
-          "melee_damage": 3,
-          "harvest_speed": 4
-        },
-        "coating": {
-          "durability": 1500,
-          "armor": 4,
-          "melee_damage": 2
-        }
-      },
-      "statModifiers": {
         "rod": {
           "durability": {
-            "mul2": 0.4
+            "value": 1.5,
+            "operation": "MULTIPLY_TOTAL"
           },
-          "attack_speed": {
-            "add": 0.1
+          "rarity": 70,
+          "enchantment_value": {
+            "value": 3,
+            "operation": "ADD"
           }
+        },
+        "tip": {
+          "durability": {
+            "value": 16,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 10,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 6,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 30,
+            "operation": "ADD"
+          },
+          "harvest_tier": "allthemodium"
         }
       },
       "traits": {
         "main": [
-          {
-            "name": "allthemodium:indestructible",
-            "level": 1
-          },
-          {
-            "name": "silentgear:fireproof",
-            "level": 1
-          },
           {
             "name": "silentgear:malleable",
-            "level": 3
+            "level": 4
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 4
+          },
+          {
+            "name": "silentgear:brilliant",
+            "level": 1
+          },
+          {
+            "name": "silentgear:advanced_aquatic",
+            "level": 1
+          },
+          {
+            "name": "silentgear:advanced_flame_ward",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:hard",
+            "level": 5
           }
         ],
         "tip": [
           {
-            "name": "silentgear:lustrous",
-            "level": 2
-          }
-        ]
-      }
-    },
-    "allthemodium:vibranium": {
-      "id": "allthemodium:vibranium",
-      "name": {
-        "en": "Vibranium",
-        "pt": "Vibranium"
-      },
-      "tier": 6,
-      "category": "metal",
-      "color": "#26DE88",
-      "stats": {
-        "main": {
-          "durability": 28000,
-          "armor": 30,
-          "armor_toughness": 16,
-          "magic_armor": 14,
-          "melee_damage": 11,
-          "attack_speed": 0.2,
-          "harvest_speed": 20,
-          "harvest_tier": "allthemodium:vibranium",
-          "rarity": 220
-        },
-        "rod": {
-          "durability": 2500
-        },
-        "tip": {
-          "durability": 5000,
-          "melee_damage": 5,
-          "harvest_speed": 6
-        },
-        "coating": {
-          "durability": 3500,
-          "armor": 6,
-          "melee_damage": 3.5
-        }
-      },
-      "statModifiers": {
-        "rod": {
-          "durability": {
-            "mul2": 0.6
-          },
-          "attack_speed": {
-            "add": 0.2
-          }
-        }
-      },
-      "traits": {
-        "main": [
-          {
-            "name": "allthemodium:vibranium_shield",
-            "level": 1
+            "name": "silentgear:malleable",
+            "level": 4
           },
           {
-            "name": "silentgear:swift",
-            "level": 3
-          },
-          {
-            "name": "silentgear:fireproof",
-            "level": 1
-          }
-        ],
-        "tip": [
-          {
-            "name": "silentgear:jagged",
+            "name": "silentgear:soft",
             "level": 3
           }
         ]
       }
     },
-    "allthemodium:unobtainium": {
-      "id": "allthemodium:unobtainium",
+    "silentgear:unobtainium": {
+      "id": "silentgear:unobtainium",
       "name": {
         "en": "Unobtainium",
         "pt": "Unobtainium"
       },
-      "tier": 7,
+      "tier": 2,
       "category": "metal",
+      "categories": [
+        "metal",
+        "endgame"
+      ],
       "color": "#D152E3",
       "stats": {
         "main": {
-          "durability": 52000,
-          "armor": 35,
-          "armor_toughness": 20,
-          "magic_armor": 20,
-          "melee_damage": 16,
-          "attack_speed": 0.3,
-          "harvest_speed": 26,
-          "harvest_tier": "allthemodium:unobtainium",
-          "rarity": 300
+          "durability": 9500,
+          "armor": 90,
+          "armor_durability": 120,
+          "armor_toughness": 90,
+          "magic_armor": 600,
+          "melee_damage": 35,
+          "attack_speed": 18.2,
+          "harvest_speed": 18,
+          "ranged_damage": 0,
+          "rarity": 99,
+          "enchantment_value": 175,
+          "harvest_tier": "unobtainium",
+          "armor_by_piece": {
+            "helmet": 20,
+            "chestplate": 25,
+            "leggings": 25,
+            "boots": 20
+          }
         },
-        "rod": {
-          "durability": 5000
-        },
-        "tip": {
-          "durability": 10000,
-          "melee_damage": 8,
-          "harvest_speed": 8
-        },
-        "coating": {
-          "durability": 8000,
-          "armor": 8,
-          "melee_damage": 5
-        }
-      },
-      "statModifiers": {
         "rod": {
           "durability": {
-            "mul2": 1
+            "value": 1.5,
+            "operation": "MULTIPLY_TOTAL"
           },
-          "attack_speed": {
-            "add": 0.3
+          "rarity": 90,
+          "enchantment_value": {
+            "value": 13,
+            "operation": "ADD"
           }
+        },
+        "tip": {
+          "durability": {
+            "value": 16,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 10,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 6,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 60,
+            "operation": "ADD"
+          },
+          "harvest_tier": "unobtainium"
         }
       },
       "traits": {
         "main": [
           {
-            "name": "allthemodium:godlike",
-            "level": 1
-          },
-          {
-            "name": "silentgear:holy",
+            "name": "silentgear:malleable",
             "level": 5
           },
           {
-            "name": "silentgear:fireproof",
+            "name": "silentgear:crushing",
+            "level": 5
+          },
+          {
+            "name": "silentgear:advanced_aquatic",
             "level": 1
+          },
+          {
+            "name": "silentgear:brilliant",
+            "level": 1
+          },
+          {
+            "name": "silentgear:advanced_flame_ward",
+            "level": 1
+          },
+          {
+            "name": "silentgear:cure_wither",
+            "level": 1
+          },
+          {
+            "name": "silentgear:cure_nausea",
+            "level": 1
+          },
+          {
+            "name": "silentgear:cure_levitation",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:hard",
+            "level": 7
           }
         ],
         "tip": [
           {
-            "name": "silentgear:holy",
-            "level": 3
+            "name": "silentgear:malleable",
+            "level": 5
           },
           {
-            "name": "silentgear:jagged",
-            "level": 4
+            "name": "silentgear:hard",
+            "level": 5
+          }
+        ]
+      }
+    },
+    "silentgear:vibranium": {
+      "id": "silentgear:vibranium",
+      "name": {
+        "en": "Vibranium",
+        "pt": "Vibranium"
+      },
+      "tier": 2,
+      "category": "metal",
+      "categories": [
+        "metal",
+        "endgame"
+      ],
+      "color": "#26DE88",
+      "stats": {
+        "main": {
+          "durability": 7500,
+          "armor": 70,
+          "armor_durability": 90,
+          "armor_toughness": 70,
+          "magic_armor": 400,
+          "melee_damage": 27,
+          "attack_speed": 12.2,
+          "harvest_speed": 9,
+          "ranged_damage": 0,
+          "rarity": 90,
+          "enchantment_value": 105,
+          "harvest_tier": "vibranium",
+          "armor_by_piece": {
+            "helmet": 15,
+            "chestplate": 20,
+            "leggings": 20,
+            "boots": 15
+          }
+        },
+        "rod": {
+          "durability": {
+            "value": 2.5,
+            "operation": "MULTIPLY_TOTAL"
+          },
+          "rarity": 99,
+          "enchantment_value": {
+            "value": 23,
+            "operation": "ADD"
+          }
+        },
+        "tip": {
+          "durability": {
+            "value": 16,
+            "operation": "ADD"
+          },
+          "armor_durability": {
+            "value": 10,
+            "operation": "ADD"
+          },
+          "harvest_speed": {
+            "value": 6,
+            "operation": "ADD"
+          },
+          "rarity": {
+            "value": 60,
+            "operation": "ADD"
+          },
+          "harvest_tier": "vibranium"
+        }
+      },
+      "traits": {
+        "main": [
+          {
+            "name": "silentgear:malleable",
+            "level": 5
+          },
+          {
+            "name": "silentgear:crushing",
+            "level": 5
+          },
+          {
+            "name": "silentgear:advanced_aquatic",
+            "level": 1
+          },
+          {
+            "name": "silentgear:brilliant",
+            "level": 1
+          },
+          {
+            "name": "silentgear:advanced_flame_ward",
+            "level": 1
+          },
+          {
+            "name": "silentgear:cure_wither",
+            "level": 1
+          },
+          {
+            "name": "silentgear:cure_nausea",
+            "level": 1
+          }
+        ],
+        "rod": [
+          {
+            "name": "silentgear:hard",
+            "level": 6
+          }
+        ],
+        "tip": [
+          {
+            "name": "silentgear:malleable",
+            "level": 5
+          },
+          {
+            "name": "silentgear:hard",
+            "level": 5
           }
         ]
       }
@@ -1055,40 +7593,220 @@
         "pt": "Atrai itens caídos no chão diretamente para o jogador."
       }
     },
-    "allthemodium:indestructible": {
-      "id": "allthemodium:indestructible",
+    "silentgear:indestructible": {
+      "id": "silentgear:indestructible",
       "maxLevel": 1,
       "name": {
         "en": "Indestructible",
         "pt": "Indestrutível"
       },
       "description": {
-        "en": "Immune to all durability damage, explosions, and void damage.",
-        "pt": "Imune a dano de durabilidade, explosões e dano do vazio."
+        "en": "Item does not take durability damage and is immune to void damage.",
+        "pt": "O item não sofre dano de durabilidade e é imune ao dano do vazio."
       }
     },
-    "allthemodium:vibranium_shield": {
-      "id": "allthemodium:vibranium_shield",
-      "maxLevel": 1,
+    "silentgear:crushing": {
+      "id": "silentgear:crushing",
+      "maxLevel": 5,
       "name": {
-        "en": "Vibranium Kinetic Shield",
-        "pt": "Escudo Cinético de Vibranium"
+        "en": "Crushing",
+        "pt": "Esmagador"
       },
       "description": {
-        "en": "Absorbs kinetic impact and grants extreme regeneration.",
-        "pt": "Absorve impactos cinéticos e concede regeneração acelerada."
+        "en": "Increases armor bypass or impact damage.",
+        "pt": "Aumenta a perfuração de armadura ou o impacto do golpe."
       }
     },
-    "allthemodium:godlike": {
-      "id": "allthemodium:godlike",
+    "silentgear:brilliant": {
+      "id": "silentgear:brilliant",
       "maxLevel": 1,
       "name": {
-        "en": "Godlike Transcendence",
-        "pt": "Transcendência Divina"
+        "en": "Brilliant",
+        "pt": "Brilhante"
       },
       "description": {
-        "en": "Ultimate power tier: massive resistance and cosmic damage amplification.",
-        "pt": "Poder supremo: resistência absoluta e amplificação cósmica de dano."
+        "en": "Increases experience gained.",
+        "pt": "Aumenta a experiência obtida ao usar a ferramenta ou arma."
+      }
+    },
+    "silentgear:sturdy": {
+      "id": "silentgear:sturdy",
+      "maxLevel": 5,
+      "name": {
+        "en": "Sturdy",
+        "pt": "Robusto"
+      },
+      "description": {
+        "en": "Increases durability and armor toughness.",
+        "pt": "Aumenta a durabilidade e a tenacidade da armadura."
+      }
+    },
+    "silentgear:void_ward": {
+      "id": "silentgear:void_ward",
+      "maxLevel": 1,
+      "name": {
+        "en": "Void Ward",
+        "pt": "Proteção do Vazio"
+      },
+      "description": {
+        "en": "Protects the holder from falling into the void.",
+        "pt": "Protege o portador de quedas no vazio."
+      }
+    },
+    "silentgear:aquatic": {
+      "id": "silentgear:aquatic",
+      "maxLevel": 1,
+      "name": {
+        "en": "Aquatic",
+        "pt": "Aquático"
+      },
+      "description": {
+        "en": "Improves underwater efficiency and mobility.",
+        "pt": "Melhora a eficiência e mobilidade debaixo d’água."
+      }
+    },
+    "silentgear:advanced_aquatic": {
+      "id": "silentgear:advanced_aquatic",
+      "maxLevel": 1,
+      "name": {
+        "en": "Advanced Aquatic",
+        "pt": "Aquático Avançado"
+      },
+      "description": {
+        "en": "Grants superior underwater breathing and mobility.",
+        "pt": "Concede respiração aquática superior e extrema mobilidade na água."
+      }
+    },
+    "silentgear:flame_ward": {
+      "id": "silentgear:flame_ward",
+      "maxLevel": 1,
+      "name": {
+        "en": "Flame Ward",
+        "pt": "Proteção de Chamas"
+      },
+      "description": {
+        "en": "Protects against burning and fire damage.",
+        "pt": "Protege contra queimaduras e dano por fogo."
+      }
+    },
+    "silentgear:advanced_flame_ward": {
+      "id": "silentgear:advanced_flame_ward",
+      "maxLevel": 1,
+      "name": {
+        "en": "Advanced Flame Ward",
+        "pt": "Proteção de Chamas Avançada"
+      },
+      "description": {
+        "en": "Complete immunity to fire, lava, and burning.",
+        "pt": "Imunidade completa a fogo, lava e queimaduras."
+      }
+    },
+    "silentgear:cure_wither": {
+      "id": "silentgear:cure_wither",
+      "maxLevel": 1,
+      "name": {
+        "en": "Cure Wither",
+        "pt": "Cura Decomposição"
+      },
+      "description": {
+        "en": "Neutralizes the wither effect.",
+        "pt": "Neutraliza o efeito de decomposição (wither)."
+      }
+    },
+    "silentgear:cure_nausea": {
+      "id": "silentgear:cure_nausea",
+      "maxLevel": 1,
+      "name": {
+        "en": "Cure Nausea",
+        "pt": "Cura Náusea"
+      },
+      "description": {
+        "en": "Neutralizes nausea and dizziness effects.",
+        "pt": "Neutraliza náusea e tontura."
+      }
+    },
+    "silentgear:cure_poison": {
+      "id": "silentgear:cure_poison",
+      "maxLevel": 1,
+      "name": {
+        "en": "Cure Poison",
+        "pt": "Cura Veneno"
+      },
+      "description": {
+        "en": "Neutralizes poison effects.",
+        "pt": "Neutraliza efeitos de veneno."
+      }
+    },
+    "silentgear:cure_levitation": {
+      "id": "silentgear:cure_levitation",
+      "maxLevel": 1,
+      "name": {
+        "en": "Cure Levitation",
+        "pt": "Cura Levitação"
+      },
+      "description": {
+        "en": "Neutralizes levitation effect.",
+        "pt": "Neutraliza o efeito de levitação."
+      }
+    },
+    "silentgear:sting_resist": {
+      "id": "silentgear:sting_resist",
+      "maxLevel": 1,
+      "name": {
+        "en": "Sting Resist",
+        "pt": "Resistência a Ferroadas"
+      },
+      "description": {
+        "en": "Reduces damage and sting effects from arthropods.",
+        "pt": "Reduz o dano e ferrões de artrópodes."
+      }
+    },
+    "silentgear:hard": {
+      "id": "silentgear:hard",
+      "maxLevel": 10,
+      "name": {
+        "en": "Hard",
+        "pt": "Duro"
+      },
+      "description": {
+        "en": "Increases durability and armor.",
+        "pt": "Aumenta a durabilidade e o valor de armadura."
+      }
+    },
+    "silentgear:soft": {
+      "id": "silentgear:soft",
+      "maxLevel": 5,
+      "name": {
+        "en": "Soft",
+        "pt": "Macio"
+      },
+      "description": {
+        "en": "Decreases durability slightly but increases flexibility.",
+        "pt": "Reduz levemente a durabilidade mas aumenta a flexibilidade."
+      }
+    },
+    "silentgear:imperial": {
+      "id": "silentgear:imperial",
+      "maxLevel": 5,
+      "name": {
+        "en": "Imperial",
+        "pt": "Imperial"
+      },
+      "description": {
+        "en": "Increases luck and treasure yield.",
+        "pt": "Aumenta a sorte e a obtenção de tesouros."
+      }
+    },
+    "silentgear:gold_digger": {
+      "id": "silentgear:gold_digger",
+      "maxLevel": 5,
+      "name": {
+        "en": "Gold Digger",
+        "pt": "Garimpeiro"
+      },
+      "description": {
+        "en": "Increases gold drops from mining.",
+        "pt": "Aumenta a chance de extrair ouro ao minerar."
       }
     }
   }

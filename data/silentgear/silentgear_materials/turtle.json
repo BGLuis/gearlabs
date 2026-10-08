@@ -1,0 +1,51 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "organic",
+      "intermediate"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": "minecraft:turtle_scute",
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FF47BF4A",
+    "equippable": {
+      "always_use_tint": true,
+      "asset_id": "silentgear:generic_flat",
+      "compound_asset_id": "silentgear:generic_flat",
+      "equip_sound": "minecraft:item.armor.equip_generic"
+    },
+    "main_texture_type": "LOW_CONTRAST",
+    "name": {
+      "translate": "material.silentgear.turtle"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "armor/helmet": 2.0,
+      "armor_durability/helmet": 25.0,
+      "charging_value": 0.5,
+      "durability": 0.0,
+      "enchantment_value": 9.0,
+      "magic_armor": 4.0,
+      "rarity": 20.0,
+      "traits": [
+        {
+          "conditions": [
+            {
+              "type": "silentgear:material_count",
+              "count": 2
+            }
+          ],
+          "level": 1,
+          "trait": "silentgear:turtle"
+        }
+      ]
+    }
+  }
+}
