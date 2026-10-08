@@ -1,0 +1,22 @@
+{
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": "silentgear:spearhead"
+  },
+  "display": {
+    "name": {
+      "translate": "item.silentgear.spearhead"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:spear",
+  "part_type": "silentgear:main",
+  "properties": {
+    "attack_speed": {
+      "operation": "ADD",
+      "value": 1.3
+    }
+  }
+}

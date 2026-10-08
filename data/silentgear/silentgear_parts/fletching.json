@@ -1,0 +1,17 @@
+{
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": "silentgear:fletching"
+  },
+  "display": {
+    "name": {
+      "translate": "item.silentgear.fletching"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:projectile",
+  "part_type": "silentgear:fletching",
+  "properties": {}
+}
