@@ -91,7 +91,7 @@ export default function HomePage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Coluna Esquerda (5 cols): Canvas + Painel de Atributos */}
         <div className="lg:col-span-5 space-y-4">
-          <GearCanvas size={180} />
+          <GearCanvas size={128} />
 
           {/* Card de Atributos Calculados */}
           <div className="p-4 bg-mc-surface border border-mc-border rounded-xl shadow-sm space-y-4">

@@ -149,7 +149,9 @@ export function renderGearToCanvas(
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, size, size);
 
-  const pixelScale = size / 16;
+  const pixelScale = Math.max(1, Math.floor(size / 16));
+  const offsetX = Math.floor((size - pixelScale * 16) / 2);
+  const offsetY = Math.floor((size - pixelScale * 16) / 2);
 
   const mainMat = build.parts.main ? catalog.materials[build.parts.main.materialId] : null;
   const rodMat = build.parts.rod ? catalog.materials[build.parts.rod.materialId] : null;
@@ -187,7 +189,12 @@ export function renderGearToCanvas(
       }
 
       ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-      ctx.fillRect(p.x * pixelScale, p.y * pixelScale, pixelScale, pixelScale);
+      ctx.fillRect(
+        offsetX + p.x * pixelScale,
+        offsetY + p.y * pixelScale,
+        pixelScale,
+        pixelScale
+      );
     }
   }
 
