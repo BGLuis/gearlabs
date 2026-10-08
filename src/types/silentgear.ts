@@ -19,9 +19,12 @@ export const GRADE_MULTIPLIERS: Record<Grade, number> = {
   MAX: 0.30,
 };
 
+export type ArmorPiece = 'helmet' | 'chestplate' | 'leggings' | 'boots';
+
 export interface MaterialStats {
   durability?: number;
   armor?: number;
+  armor_by_piece?: Partial<Record<ArmorPiece, number>>;
   armor_durability?: number;
   armor_toughness?: number;
   magic_armor?: number;
