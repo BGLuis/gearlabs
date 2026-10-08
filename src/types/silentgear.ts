@@ -120,12 +120,16 @@ export interface TraitInfo {
 export interface SubMaterialSelection {
   materialId: string;
   grade?: Grade;
+  starcharge?: StarchargeLevel;
 }
+
+export type StarchargeLevel = 0 | 1 | 2 | 3;
 
 export interface GearPartSelection {
   materialId: string;
   grade?: Grade;
   materials?: SubMaterialSelection[];
+  starcharge?: StarchargeLevel;
 }
 
 export interface GearBuild {

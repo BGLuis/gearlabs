@@ -9,6 +9,7 @@ import {
   Grade,
   PartSlot,
   SubMaterialSelection,
+  StarchargeLevel,
 } from '@/types/silentgear';
 import {
   ATM11_CATALOG,
@@ -27,12 +28,13 @@ interface GearContextType {
   build: GearBuild;
   stats: CalculatedGearStats;
   setGearType: (typeId: string) => void;
-  setPartMaterial: (slot: PartSlot, materialId: string, grade?: Grade) => void;
+  setPartMaterial: (slot: PartSlot, materialId: string, grade?: Grade, starcharge?: StarchargeLevel) => void;
   setPartSubMaterials: (slot: PartSlot, materials: SubMaterialSelection[]) => void;
   addSubMaterial: (slot: PartSlot, materialId: string, grade?: Grade) => void;
   removeSubMaterial: (slot: PartSlot, index: number) => void;
   reorderSubMaterials: (slot: PartSlot, fromIndex: number, toIndex: number) => void;
   updateSubMaterial: (slot: PartSlot, index: number, materialId: string, grade?: Grade) => void;
+  setPartStarcharge: (slot: PartSlot, starcharge: StarchargeLevel) => void;
   removePart: (slot: PartSlot) => void;
   loadBuild: (newBuild: GearBuild) => void;
   inventory: Set<string>;
@@ -208,14 +210,15 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     setBuild({ gearTypeId: typeId, parts: newParts });
   }
 
-  function setPartMaterial(slot: PartSlot, materialId: string, grade?: Grade) {
+  function setPartMaterial(slot: PartSlot, materialId: string, grade?: Grade, starcharge?: StarchargeLevel) {
     setBuild((prev) => ({
       ...prev,
       parts: {
         ...prev.parts,
         [slot]: {
           materialId,
-          grade: grade || prev.parts[slot]?.grade || 'NONE',
+          grade: grade !== undefined ? grade : (prev.parts[slot]?.grade || 'NONE'),
+          starcharge: starcharge !== undefined ? starcharge : (prev.parts[slot]?.starcharge || 0),
           materials: undefined,
         },
       },
@@ -233,6 +236,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
           [slot]: {
             materialId: primary?.materialId || current?.materialId || '',
             grade: current?.grade || primary?.grade || 'NONE',
+            starcharge: current?.starcharge || 0,
             materials,
           },
         },
@@ -304,7 +308,6 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
       const nextMaterials = [...current.materials];
       const [moved] = nextMaterials.splice(fromIndex, 1);
       nextMaterials.splice(toIndex, 0, moved);
-
       return {
         ...prev,
         parts: {
@@ -336,6 +339,23 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
             ...current,
             materialId: nextMaterials[0].materialId,
             materials: nextMaterials,
+          },
+        },
+      };
+    });
+  }
+
+  function setPartStarcharge(slot: PartSlot, starcharge: StarchargeLevel) {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      if (!current) return prev;
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: {
+            ...current,
+            starcharge,
           },
         },
       };
@@ -425,6 +445,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         removeSubMaterial,
         reorderSubMaterials,
         updateSubMaterial,
+        setPartStarcharge,
         removePart,
         loadBuild,
         inventory,

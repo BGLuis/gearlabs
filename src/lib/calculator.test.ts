@@ -7,6 +7,8 @@ import {
   applyGradeBonus,
   computeNumberProperty,
   compressModifiersForProperty,
+  applyStarcharge,
+  applyEnhancementsToModifiers,
 } from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
@@ -683,6 +685,213 @@ describe('calculateGearStats', () => {
       // Traits acumuladas dos sub-materiais da liga e forro devem estar presentes
       const traitIds = stats.traits.map((t) => t.id);
       expect(traitIds).toContain('silentgear:indestructible');
+    });
+  });
+
+  describe('Issue #9: Starlight Charger (starcharged)', () => {
+    it('Critério de aceite 1: com c = 2, armor_durability 60 vira 72,6 (60 × 1,1²) e armor 15 vira 19', () => {
+      // 1. Função pura applyStarcharge com c = 2 (nível 2, charging_value 1.0)
+      const modifiedDurability = applyStarcharge(60, 'armor_durability', 2, 1.0, 'AVERAGE');
+      expect(Number(modifiedDurability.toFixed(2))).toBe(72.6);
+
+      const modifiedArmor = applyStarcharge(15, 'armor', 2, 1.0, 'AVERAGE');
+      expect(modifiedArmor).toBe(19);
+
+      // 2. Integração em calculateGearStats com material e build de teste
+      const testCatalog: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:starcharged_mat': {
+            id: 'test:starcharged_mat',
+            name: { en: 'Starcharged Test Mat', pt: 'Mat Teste Starcharge' },
+            tier: 2,
+            category: 'metal',
+            color: '#55FFFF',
+            stats: {
+              main: {
+                armor: 15,
+                armor_durability: 60,
+                charging_value: 1.0,
+              },
+            },
+            traits: {},
+          },
+        },
+      };
+
+      const buildStarcharged: GearBuild = {
+        gearTypeId: 'helmet',
+        parts: {
+          main: { materialId: 'test:starcharged_mat', starcharge: 2 },
+        },
+      };
+
+      const stats = calculateGearStats(buildStarcharged, testCatalog);
+      // Armor 15 vira 19
+      expect(stats.armor).toBe(19);
+      // Durabilidade de capacete: armor_durability vira 72.6, multiplicado por 11 (capacete) = 798.6 -> 799
+      expect(stats.durability).toBe(799);
+    });
+
+    it('Critério de aceite 2: sem starcharge, os valores permanecem inalterados', () => {
+      const testCatalog: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:starcharged_mat': {
+            id: 'test:starcharged_mat',
+            name: { en: 'Starcharged Test Mat', pt: 'Mat Teste Starcharge' },
+            tier: 2,
+            category: 'metal',
+            color: '#55FFFF',
+            stats: {
+              main: {
+                armor: 15,
+                armor_durability: 60,
+                charging_value: 1.0,
+              },
+            },
+            traits: {},
+          },
+        },
+      };
+
+      const buildNone: GearBuild = {
+        gearTypeId: 'helmet',
+        parts: {
+          main: { materialId: 'test:starcharged_mat', starcharge: 0 },
+        },
+      };
+      const buildUndefined: GearBuild = {
+        gearTypeId: 'helmet',
+        parts: {
+          main: { materialId: 'test:starcharged_mat' },
+        },
+      };
+
+      const statsNone = calculateGearStats(buildNone, testCatalog);
+      const statsUndefined = calculateGearStats(buildUndefined, testCatalog);
+
+      expect(statsNone.armor).toBe(15);
+      expect(statsNone.durability).toBe(660); // 60 * 11
+      expect(statsUndefined.armor).toBe(15);
+      expect(statsUndefined.durability).toBe(660);
+    });
+
+    it('aplica corretamente as fórmulas de outras propriedades conforme StarchargedMaterialModifier.java', () => {
+      // durability: valor * 1.25^c
+      expect(applyStarcharge(100, 'durability', 2, 1.0, 'AVERAGE')).toBe(100 * 1.25 * 1.25);
+
+      // harvest_speed: valor + 1.5 * level * c (para level=2, c=2: 6.0 + 1.5*2*2 = 12.0)
+      expect(applyStarcharge(6.0, 'harvest_speed', 2, 1.0, 'AVERAGE')).toBe(12.0);
+
+      // attack_damage / melee_damage: valor + c
+      expect(applyStarcharge(5.0, 'melee_damage', 2, 1.0, 'ADD')).toBe(7.0);
+
+      // ranged_damage: valor + c / 2
+      expect(applyStarcharge(4.0, 'ranged_damage', 2, 1.0, 'ADD')).toBe(5.0);
+
+      // armor_toughness: valor + 2c
+      expect(applyStarcharge(10.0, 'armor_toughness', 2, 1.0, 'AVERAGE')).toBe(14.0);
+
+      // magic_armor: valor + 2c
+      expect(applyStarcharge(20.0, 'magic_armor', 2, 1.0, 'AVERAGE')).toBe(24.0);
+    });
+
+    it('aplica bônus de Grau primeiro e depois aplica Starcharge sobre o resultado graduado', () => {
+      // Material com armor 10, charging_value 1.0.
+      // Com Grade MAX (+30%): 10 * 1.30 = 13.0.
+      // Com Starcharge II (c = 2): 13.0 + 2 * 2 = 17.0.
+      const testCatalog: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:combo_mat': {
+            id: 'test:combo_mat',
+            name: { en: 'Combo Mat', pt: 'Mat Combo' },
+            tier: 2,
+            category: 'metal',
+            color: '#ffffff',
+            stats: {
+              main: {
+                armor: 10,
+                charging_value: 1.0,
+              },
+            },
+            traits: {},
+          },
+        },
+      };
+
+      const build: GearBuild = {
+        gearTypeId: 'helmet',
+        parts: {
+          main: { materialId: 'test:combo_mat', grade: 'MAX', starcharge: 2 },
+        },
+      };
+
+      const stats = calculateGearStats(build, testCatalog);
+      expect(stats.armor).toBe(17.0);
+    });
+
+    it('aplica Starcharge em slots secundários (ex: coating com Starcharge)', () => {
+      const testCatalog: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:main_mat': {
+            id: 'test:main_mat',
+            name: { en: 'Main Mat', pt: 'Mat Principal' },
+            tier: 2,
+            category: 'metal',
+            color: '#ffffff',
+            stats: {
+              main: {
+                armor: 10,
+                armor_toughness: 5,
+              },
+            },
+            traits: {},
+          },
+          'test:coating_mat': {
+            id: 'test:coating_mat',
+            name: { en: 'Coating Mat', pt: 'Mat Coating' },
+            tier: 2,
+            category: 'metal',
+            color: '#aaaaaa',
+            stats: {
+              main: {
+                charging_value: 1.5,
+              },
+              coating: {
+                armor_toughness: 4,
+              },
+            },
+            traits: {},
+          },
+        },
+      };
+
+      // Coating com starcharge 2: c = 2 * 1.5 = 3.0.
+      // Toughness do coating: 4 + 2 * 3.0 = 10.
+      // Toughness total: 5 (main) + 10 (coating) = 15.
+      const build: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: { materialId: 'test:main_mat' },
+          coating: { materialId: 'test:coating_mat', starcharge: 2 },
+        },
+      };
+
+      const stats = calculateGearStats(build, testCatalog);
+      expect(stats.armorToughness).toBe(15.0);
+    });
+
+    it('não modifica operações multiplicativas (MULTIPLY_BASE, MULTIPLY_TOTAL)', () => {
+      // Modificador com MULTIPLY_TOTAL deve ser preservado intacto por isSupportedModifierOp
+      expect(applyStarcharge(0.2, 'durability', 3, 1.5, 'MULTIPLY_TOTAL')).toBe(0.2);
+      expect(applyStarcharge(0.1, 'harvest_speed', 3, 1.5, 'MULTIPLY_BASE')).toBe(0.1);
     });
   });
 });
