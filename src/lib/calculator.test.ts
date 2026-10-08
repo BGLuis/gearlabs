@@ -894,4 +894,22 @@ describe('calculateGearStats', () => {
       expect(applyStarcharge(0.1, 'harvest_speed', 3, 1.5, 'MULTIPLY_BASE')).toBe(0.1);
     });
   });
+
+  describe('Issue #35: Velocidade de ataque limitada ao teto de 4.0 do mod', () => {
+    it('espada Unobtainium + haste Wood no catálogo atm11 retorna attackSpeed 4 e dps 152', () => {
+      const build: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:unobtainium' },
+          rod: { materialId: 'silentgear:wood' },
+        },
+      };
+
+      const stats = calculateGearStats(build, ATM11_CATALOG);
+
+      expect(stats.attackSpeed).toBe(4);
+      expect(stats.dps).toBe(152);
+    });
+  });
 });
+
