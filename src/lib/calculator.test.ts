@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateGearStats, calculateSynergy, applyGradeBonus } from './calculator';
+import { calculateGearStats, calculateSynergy, applyGradeBonus, computeNumberProperty } from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
   OFFICIAL_GEAR_TYPES,
@@ -54,7 +54,7 @@ describe('calculateGearStats', () => {
     expect(stats.synergy).toBe(100);
   });
 
-  it('capacete com main Unobtainium + coating Netherite retorna synergy === 100 e não infla atributos do main', () => {
+  it('capacete com main Unobtainium + coating Netherite retorna synergy === 100, não infla armor e adiciona toughness e knockback', () => {
     const buildAlone: GearBuild = {
       gearTypeId: 'helmet',
       parts: {
@@ -74,11 +74,12 @@ describe('calculateGearStats', () => {
 
     // Sinergia deve ser neutra (100%), sem o bônus de 1.05 entre metais
     expect(statsWithCoating.synergy).toBe(100);
-    // O armor base do main (35) + coating (4 no catálogo atual, cf. #5) = 39,
-    // sem a multiplicação incorreta por 1.05 (que inflaria para 41)
-    expect(statsWithCoating.armor).toBe(
-      statsAlone.armor + (ATM11_CATALOG.materials['silentgear:netherite'].stats.coating?.armor || 0)
-    );
+    // Coating de Netherite oficial não concede armor, preservando o armor do main
+    expect(statsWithCoating.armor).toBe(statsAlone.armor);
+    // Coating de Netherite concede +4 de toughness oficial
+    expect(statsWithCoating.armorToughness).toBe(statsAlone.armorToughness + 4);
+    // Coating de Netherite concede +1 knockback_resistance (exibida ÷ 10 = 0.1)
+    expect(statsWithCoating.knockbackResistance).toBe(0.1);
   });
 
   it('preserva armadura inalterada ao adicionar coating sem stat de armor', () => {
@@ -363,6 +364,210 @@ describe('calculateGearStats', () => {
       expect(chestStats.durability).toBe(960); // 60 * 16
       expect(leggingsStats.durability).toBe(900); // 60 * 15
       expect(bootsStats.durability).toBe(780); // 60 * 13
+    });
+  });
+
+  describe('Issue #5: Slots secundários com operações e magic_armor', () => {
+    it('critério 1: coating com armor_toughness ADD 4 sobre main de toughness 60 resulta em 64; armor inalterado', () => {
+      const testCatalog: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:toughness_main': {
+            id: 'test:toughness_main',
+            name: { en: 'Toughness Main', pt: 'Main Tenacidade' },
+            tier: 1,
+            category: 'metal',
+            color: '#ffffff',
+            stats: {
+              main: {
+                armor: 25,
+                armor_toughness: 60,
+              },
+            },
+            traits: {},
+          },
+          'test:toughness_coating': {
+            id: 'test:toughness_coating',
+            name: { en: 'Toughness Coating', pt: 'Coating Tenacidade' },
+            tier: 1,
+            category: 'metal',
+            color: '#aaaaaa',
+            stats: {
+              coating: {
+                armor_toughness: { operation: 'ADD', value: 4 },
+              },
+            },
+            traits: {},
+          },
+        },
+      };
+
+      const build: GearBuild = {
+        gearTypeId: 'helmet',
+        parts: {
+          main: { materialId: 'test:toughness_main' },
+          coating: { materialId: 'test:toughness_coating' },
+        },
+      };
+
+      const stats = calculateGearStats(build, testCatalog);
+      expect(stats.armorToughness).toBe(64);
+      expect(stats.armor).toBe(25);
+    });
+
+    it('critério 2: modificador mul2 0,5 sobre durabilidade de armadura 660 resulta em 990', () => {
+      const testCatalog: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:durability_main': {
+            id: 'test:durability_main',
+            name: { en: 'Durability Main', pt: 'Main Durabilidade' },
+            tier: 1,
+            category: 'metal',
+            color: '#ffffff',
+            stats: {
+              main: {
+                armor_durability: 60, // 60 * 11 = 660 no capacete
+              },
+            },
+            traits: {},
+          },
+          'test:mul2_coating': {
+            id: 'test:mul2_coating',
+            name: { en: 'Mul2 Coating', pt: 'Coating Mul2' },
+            tier: 1,
+            category: 'metal',
+            color: '#aaaaaa',
+            stats: {
+              coating: {
+                durability: { operation: 'MULTIPLY_TOTAL', value: 0.5 },
+              },
+            },
+            traits: {},
+          },
+        },
+      };
+
+      const build: GearBuild = {
+        gearTypeId: 'helmet',
+        parts: {
+          main: { materialId: 'test:durability_main' },
+          coating: { materialId: 'test:mul2_coating' },
+        },
+      };
+
+      const stats = calculateGearStats(build, testCatalog);
+      expect(stats.durability).toBe(990);
+    });
+
+    it('slot secundário com magic_armor ADD soma à magic_armor do main', () => {
+      const testCatalog: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:magic_main': {
+            id: 'test:magic_main',
+            name: { en: 'Magic Main', pt: 'Main Mágico' },
+            tier: 1,
+            category: 'metal',
+            color: '#ffffff',
+            stats: {
+              main: {
+                magic_armor: 10,
+              },
+            },
+            traits: {},
+          },
+          'test:magic_lining': {
+            id: 'test:magic_lining',
+            name: { en: 'Magic Lining', pt: 'Forro Mágico' },
+            tier: 1,
+            category: 'cloth',
+            color: '#eeeeee',
+            stats: {
+              lining: {
+                magic_armor: { operation: 'ADD', value: 5 },
+              },
+            },
+            traits: {},
+          },
+        },
+      };
+
+      const build: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: { materialId: 'test:magic_main' },
+          lining: { materialId: 'test:magic_lining' },
+        },
+      };
+
+      const stats = calculateGearStats(build, testCatalog);
+      expect(stats.magicArmor).toBe(15);
+    });
+
+    it('knockback_resistance de slot secundário é somada e dividida por 10', () => {
+      const testCatalog: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:kb_main': {
+            id: 'test:kb_main',
+            name: { en: 'KB Main', pt: 'Main KB' },
+            tier: 1,
+            category: 'metal',
+            color: '#ffffff',
+            stats: {
+              main: {
+                armor: 10,
+              },
+            },
+            traits: {},
+          },
+          'test:kb_coating': {
+            id: 'test:kb_coating',
+            name: { en: 'KB Coating', pt: 'Coating KB' },
+            tier: 1,
+            category: 'metal',
+            color: '#aaaaaa',
+            stats: {
+              coating: {
+                knockback_resistance: { operation: 'ADD', value: 1.0 },
+              },
+            },
+            traits: {},
+          },
+        },
+      };
+
+      const build: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: { materialId: 'test:kb_main' },
+          coating: { materialId: 'test:kb_coating' },
+        },
+      };
+
+      const stats = calculateGearStats(build, testCatalog);
+      expect(stats.knockbackResistance).toBe(0.1);
+    });
+
+    it('aplica a ordem canônica do NumberProperty.compute (AVERAGE -> MAX -> MUL1 -> MUL2 -> ADD)', () => {
+      // AVERAGE 60
+      // MAX 70 -> vira 70
+      // MUL1 0.1 -> 70 + 70*0.1 = 77
+      // MUL2 0.2 -> 77 * 1.2 = 92.4
+      // ADD 5 -> 92.4 + 5 = 97.4
+      const result = computeNumberProperty(0, [
+        { value: 60, operation: 'AVERAGE' },
+        { value: 70, operation: 'MAX' },
+        { value: 0.1, operation: 'MULTIPLY_BASE' },
+        { value: 0.2, operation: 'MULTIPLY_TOTAL' },
+        { value: 5, operation: 'ADD' },
+      ]);
+      expect(Number(result.toFixed(2))).toBe(97.4);
     });
   });
 });

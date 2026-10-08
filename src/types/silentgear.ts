@@ -21,23 +21,43 @@ export const GRADE_MULTIPLIERS: Record<Grade, number> = {
 
 export type ArmorPiece = 'helmet' | 'chestplate' | 'leggings' | 'boots';
 
+export type StatOperation =
+  | 'AVERAGE'
+  | 'MAX'
+  | 'ADD'
+  | 'MULTIPLY_BASE'
+  | 'MULTIPLY_TOTAL'
+  | 'avg'
+  | 'max'
+  | 'add'
+  | 'mul1'
+  | 'mul2';
+
+export interface StatValueModifier {
+  value: number;
+  operation?: StatOperation;
+}
+
+export type StatModifierEntry = number | StatValueModifier | StatValueModifier[];
+
 export interface MaterialStats {
-  durability?: number;
-  armor?: number;
-  armor_by_piece?: Partial<Record<ArmorPiece, number>>;
-  armor_durability?: number;
-  armor_toughness?: number;
-  magic_armor?: number;
-  melee_damage?: number;
-  attack_speed?: number;
-  harvest_speed?: number;
+  durability?: StatModifierEntry;
+  armor?: StatModifierEntry;
+  armor_by_piece?: Partial<Record<ArmorPiece, StatModifierEntry>>;
+  armor_durability?: StatModifierEntry;
+  armor_toughness?: StatModifierEntry;
+  magic_armor?: StatModifierEntry;
+  knockback_resistance?: StatModifierEntry;
+  melee_damage?: StatModifierEntry;
+  attack_speed?: StatModifierEntry;
+  harvest_speed?: StatModifierEntry;
   harvest_tier?: string;
-  ranged_damage?: number;
-  ranged_speed?: number;
-  rarity?: number;
-  synergy?: number;
-  enchantment_value?: number;
-  charging_value?: number;
+  ranged_damage?: StatModifierEntry;
+  ranged_speed?: StatModifierEntry;
+  rarity?: StatModifierEntry;
+  synergy?: StatModifierEntry;
+  enchantment_value?: StatModifierEntry;
+  charging_value?: StatModifierEntry;
 }
 
 export interface StatModifier {
@@ -124,6 +144,7 @@ export interface CalculatedGearStats {
   armor: number;
   armorToughness: number;
   magicArmor: number;
+  knockbackResistance?: number;
   meleeDamage: number;
   attackSpeed: number;
   dps: number;

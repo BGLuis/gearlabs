@@ -140,9 +140,26 @@
           "rarity": 100
         },
         "coating": {
-          "durability": 300,
-          "armor": 4,
-          "melee_damage": 1.5
+          "armor_toughness": {
+            "operation": "ADD",
+            "value": 4
+          },
+          "knockback_resistance": {
+            "operation": "ADD",
+            "value": 1
+          },
+          "armor_durability": {
+            "operation": "MULTIPLY_TOTAL",
+            "value": 0.1212
+          },
+          "durability": {
+            "operation": "MULTIPLY_TOTAL",
+            "value": 0.3
+          },
+          "melee_damage": {
+            "operation": "MULTIPLY_TOTAL",
+            "value": 0.3333
+          }
         },
         "tip": {
           "durability": 400,
@@ -255,8 +272,26 @@
           "harvest_speed": 2
         },
         "coating": {
-          "durability": 250,
-          "armor": 3
+          "armor_toughness": {
+            "operation": "ADD",
+            "value": 4
+          },
+          "knockback_resistance": {
+            "operation": "ADD",
+            "value": 1
+          },
+          "armor_durability": {
+            "operation": "MULTIPLY_TOTAL",
+            "value": 0.1212
+          },
+          "durability": {
+            "operation": "MULTIPLY_TOTAL",
+            "value": 0.3
+          },
+          "melee_damage": {
+            "operation": "MULTIPLY_TOTAL",
+            "value": 0.3333
+          }
         }
       },
       "statModifiers": {

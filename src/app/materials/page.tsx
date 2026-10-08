@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { useGear } from '@/context/GearContext';
-import { MaterialCategory } from '@/types/silentgear';
+import { MaterialCategory, StatModifierEntry } from '@/types/silentgear';
+import { getNumericStatValue } from '@/lib/calculator';
 import {
   Search,
   CheckCircle2,
@@ -13,6 +14,14 @@ import {
   Sparkles,
 } from 'lucide-react';
 import Link from 'next/link';
+
+function formatStatValue(stat: StatModifierEntry | undefined): string | number {
+  if (stat === undefined || stat === null) return '-';
+  if (typeof stat === 'number') return stat;
+  if (Array.isArray(stat)) return stat.map((s) => s.value).join(', ');
+  if (typeof stat === 'object' && 'value' in stat) return stat.value;
+  return '-';
+}
 
 export default function MaterialsPage() {
   const { catalog, inventory, toggleInventoryMaterial, setAllInventory, setPartMaterial, lang } =
@@ -45,14 +54,14 @@ export default function MaterialsPage() {
       valA = a.tier;
       valB = b.tier;
     } else if (sortBy === 'durability') {
-      valA = a.stats.main?.durability || 0;
-      valB = b.stats.main?.durability || 0;
+      valA = getNumericStatValue(a.stats.main?.durability, 0);
+      valB = getNumericStatValue(b.stats.main?.durability, 0);
     } else if (sortBy === 'damage') {
-      valA = a.stats.main?.melee_damage || 0;
-      valB = b.stats.main?.melee_damage || 0;
+      valA = getNumericStatValue(a.stats.main?.melee_damage, 0);
+      valB = getNumericStatValue(b.stats.main?.melee_damage, 0);
     } else if (sortBy === 'armor') {
-      valA = a.stats.main?.armor || 0;
-      valB = b.stats.main?.armor || 0;
+      valA = getNumericStatValue(a.stats.main?.armor, 0);
+      valB = getNumericStatValue(b.stats.main?.armor, 0);
     }
     return sortAsc ? valA - valB : valB - valA;
   });
@@ -221,21 +230,21 @@ export default function MaterialsPage() {
                     {/* Durabilidade */}
                     <td className="p-3">
                       <span className="text-mc-accent font-bold">
-                        {mainStats?.durability || '-'}
+                        {formatStatValue(mainStats?.durability)}
                       </span>
                     </td>
 
                     {/* Dano */}
                     <td className="p-3">
                       <span className="text-mc-crimson font-bold">
-                        {mainStats?.melee_damage ? `+${mainStats.melee_damage}` : '-'}
+                        {mainStats?.melee_damage !== undefined ? `+${formatStatValue(mainStats.melee_damage)}` : '-'}
                       </span>
                     </td>
 
                     {/* Armadura */}
                     <td className="p-3">
                       <span className="text-mc-primary font-bold">
-                        {mainStats?.armor ? `+${mainStats.armor}` : '-'}
+                        {mainStats?.armor !== undefined ? `+${formatStatValue(mainStats.armor)}` : '-'}
                       </span>
                     </td>
 
