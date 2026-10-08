@@ -935,4 +935,72 @@ describe('calculateGearStats', () => {
       expect(initialInventory.size).toBe(materialCount);
     });
   });
+
+  describe('Issue #26: Grau em ligas (nível da peça)', () => {
+    it('Critério de aceite 1: liga de cinco metais com grade: MAX e starcharge: 3 na parte, no peitoral, resulta em armor 39.7 (±0.1)', () => {
+      const build: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: {
+            materialId: 'silentgear:tyrian_steel',
+            grade: 'MAX',
+            starcharge: 3,
+            materials: [
+              { materialId: 'silentgear:tyrian_steel' },
+              { materialId: 'silentgear:unobtainium' },
+              { materialId: 'sgearmetalworks:uru_metal' },
+              { materialId: 'silentgear:vibranium' },
+              { materialId: 'silentgear:allthemodium' },
+            ],
+          },
+        },
+      };
+
+      const stats = calculateGearStats(build, ATM11_CATALOG);
+      expect(stats.armor).toBeCloseTo(39.7, 1);
+    });
+
+    it('Critério de aceite 2: grade nos sub-materiais (materials[i]) não altera nenhum stat', () => {
+      const buildWithoutSubGrades: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: {
+            materialId: 'silentgear:tyrian_steel',
+            grade: 'MAX',
+            starcharge: 3,
+            materials: [
+              { materialId: 'silentgear:tyrian_steel' },
+              { materialId: 'silentgear:unobtainium' },
+              { materialId: 'sgearmetalworks:uru_metal' },
+              { materialId: 'silentgear:vibranium' },
+              { materialId: 'silentgear:allthemodium' },
+            ],
+          },
+        },
+      };
+
+      const buildWithSubGrades: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: {
+            materialId: 'silentgear:tyrian_steel',
+            grade: 'MAX',
+            starcharge: 3,
+            materials: [
+              { materialId: 'silentgear:tyrian_steel', grade: 'D' },
+              { materialId: 'silentgear:unobtainium', grade: 'C' },
+              { materialId: 'sgearmetalworks:uru_metal', grade: 'B' },
+              { materialId: 'silentgear:vibranium', grade: 'A' },
+              { materialId: 'silentgear:allthemodium', grade: 'S' },
+            ],
+          },
+        },
+      };
+
+      const statsWithout = calculateGearStats(buildWithoutSubGrades, ATM11_CATALOG);
+      const statsWith = calculateGearStats(buildWithSubGrades, ATM11_CATALOG);
+
+      expect(statsWith).toEqual(statsWithout);
+    });
+  });
 });

@@ -26,7 +26,6 @@ export function encodeBuildToHash(build: GearBuild, version: string): string {
       if (sel.materials && sel.materials.length > 0) {
         partData.mats = sel.materials.map((sub) => ({
           m: sub.materialId,
-          ...(sub.grade && sub.grade !== 'NONE' ? { g: sub.grade } : {}),
         }));
       }
       parts[slot] = partData;
@@ -59,12 +58,11 @@ export function decodeBuildFromHash(
     for (const [slot, data] of Object.entries(parsed.p)) {
       if (data) {
         const primaryId = data.m || data.mats?.[0]?.m || '';
-        const primaryGrade = data.g || data.mats?.[0]?.g || 'NONE';
+        const primaryGrade = data.g || 'NONE';
         const materials: SubMaterialSelection[] | undefined =
           data.mats && data.mats.length > 0
             ? data.mats.map((sub) => ({
                 materialId: sub.m,
-                grade: sub.g || 'NONE',
               }))
             : undefined;
 

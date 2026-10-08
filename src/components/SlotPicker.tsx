@@ -26,6 +26,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
     catalog,
     build,
     setPartMaterial,
+    setPartGrade,
     setPartSubMaterials,
     addSubMaterial,
     removeSubMaterial,
@@ -79,8 +80,8 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
     const primaryId = currentSelection?.materialId || validMaterials[0]?.id || 'silentgear:iron';
     const fallbackId = validMaterials.find((m) => m.id !== primaryId)?.id || primaryId;
     const initialMats: SubMaterialSelection[] = [
-      { materialId: primaryId, grade: currentGrade },
-      { materialId: fallbackId, grade: 'NONE' },
+      { materialId: primaryId },
+      { materialId: fallbackId },
     ];
     setPartSubMaterials(slot, initialMats);
   }
@@ -148,6 +149,26 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                   ⚡ {getNumericStatValue(currentMat.stats.main.charging_value)}
                 </span>
               )}
+              {/* Seletor de Grau da Liga */}
+              <div className="flex items-center gap-1 bg-mc-bg border border-mc-border rounded px-1.5 py-0.5">
+                <span className="text-[10px] text-mc-muted font-mono">{lang === 'pt' ? 'Grau:' : 'Grade:'}</span>
+                <select
+                  value={currentGrade}
+                  onChange={(e) => {
+                    if (currentSelection) {
+                      setPartGrade(slot, e.target.value as Grade);
+                    }
+                  }}
+                  className="bg-transparent text-mc-gold font-bold text-xs font-mono focus:outline-none cursor-pointer"
+                  title={lang === 'pt' ? 'Grau da liga' : 'Alloy grade'}
+                >
+                  {GRADES.map((g) => (
+                    <option key={g} value={g} className="bg-mc-surface text-mc-text">
+                      {g}
+                    </option>
+                  ))}
+                </select>
+              </div>
               {/* Seletor de Carga Estelar (Starcharge) no modo composto */}
               <div className="flex items-center gap-1 bg-mc-bg border border-mc-border rounded px-1.5 py-0.5">
                 <span className="text-[10px] text-mc-muted font-mono">{lang === 'pt' ? 'Carga:' : 'Charge:'}</span>
@@ -200,7 +221,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                     <MaterialCombobox
                       materials={validMaterials}
                       selectedMaterialId={subMat.materialId}
-                      onSelect={(matId) => updateSubMaterial(slot, idx, matId, subMat.grade)}
+                      onSelect={(matId) => updateSubMaterial(slot, idx, matId)}
                       slot={slot}
                       inventory={inventory}
                       lang={lang}
@@ -208,20 +229,6 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                       compact={true}
                     />
                   </div>
-
-                  {/* Seletor de Grau Individual */}
-                  <select
-                    value={subMat.grade || 'NONE'}
-                    onChange={(e) => updateSubMaterial(slot, idx, subMat.materialId, e.target.value as Grade)}
-                    className="bg-mc-surface text-mc-gold font-bold text-[11px] font-mono rounded px-1 py-0.5 border border-mc-border/50 focus:outline-none cursor-pointer"
-                    title={lang === 'pt' ? 'Grau do sub-material' : 'Sub-material grade'}
-                  >
-                    {GRADES.map((g) => (
-                      <option key={g} value={g} className="bg-mc-surface text-mc-text">
-                        {g}
-                      </option>
-                    ))}
-                  </select>
 
                   {/* Controles de Reordenação e Remoção */}
                   <div className="flex items-center gap-0.5 shrink-0">
@@ -261,7 +268,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                 const nextId = validMaterials.find(
                   (m) => !currentSelection.materials!.some((sm) => sm.materialId === m.id)
                 )?.id || validMaterials[0]?.id || 'silentgear:iron';
-                addSubMaterial(slot, nextId, 'NONE');
+                addSubMaterial(slot, nextId);
               }}
               disabled={currentSelection.materials!.length >= MAX_SUB_MATERIALS}
               className="flex items-center gap-1 text-[11px] font-mono px-2 py-1 rounded bg-mc-card hover:bg-mc-border text-mc-text border border-mc-border disabled:opacity-40 transition-colors"
@@ -309,7 +316,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                 value={currentGrade}
                 onChange={(e) => {
                   if (currentSelection) {
-                    setPartMaterial(slot, currentSelection.materialId, e.target.value as Grade, currentStarcharge);
+                    setPartGrade(slot, e.target.value as Grade);
                   }
                 }}
                 disabled={!currentSelection}
