@@ -1,0 +1,22 @@
+{
+  "type": "silentgear:core",
+  "crafting": {
+    "can_salvage": true,
+    "gear_type_blacklist": [],
+    "ingredient": "silentgear:arrow_heads"
+  },
+  "display": {
+    "name": {
+      "translate": "item.silentgear.arrow_heads"
+    },
+    "name_prefix": ""
+  },
+  "gear_type": "silentgear:arrow",
+  "part_type": "silentgear:main",
+  "properties": {
+    "enchantment_value": {
+      "operation": "MULTIPLY_TOTAL",
+      "value": 0.0
+    }
+  }
+}

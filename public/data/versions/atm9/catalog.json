@@ -7337,7 +7337,8 @@
       "optionalSlots": [
         "tip",
         "grip",
-        "coating"
+        "coating",
+        "binding"
       ],
       "baseDamage": 3,
       "baseAttackSpeed": 1.6,
@@ -7358,7 +7359,8 @@
       "optionalSlots": [
         "tip",
         "grip",
-        "coating"
+        "coating",
+        "binding"
       ],
       "baseDamage": 3.5,
       "baseAttackSpeed": 1.7,
@@ -7379,6 +7381,7 @@
       "optionalSlots": [
         "tip",
         "grip",
+        "coating",
         "binding"
       ],
       "baseDamage": 1,
@@ -7400,6 +7403,7 @@
       "optionalSlots": [
         "tip",
         "grip",
+        "coating",
         "binding"
       ],
       "baseDamage": 5,
@@ -7418,8 +7422,10 @@
         "main"
       ],
       "optionalSlots": [
+        "tip",
         "lining",
-        "coating"
+        "coating",
+        "binding"
       ],
       "baseDamage": 0,
       "baseAttackSpeed": 0,
@@ -7437,8 +7443,10 @@
         "main"
       ],
       "optionalSlots": [
+        "tip",
         "lining",
-        "coating"
+        "coating",
+        "binding"
       ],
       "baseDamage": 0,
       "baseAttackSpeed": 0,
@@ -7456,8 +7464,10 @@
         "main"
       ],
       "optionalSlots": [
+        "tip",
         "lining",
-        "coating"
+        "coating",
+        "binding"
       ],
       "baseDamage": 0,
       "baseAttackSpeed": 0,
@@ -7475,8 +7485,10 @@
         "main"
       ],
       "optionalSlots": [
+        "tip",
         "lining",
-        "coating"
+        "coating",
+        "binding"
       ],
       "baseDamage": 0,
       "baseAttackSpeed": 0,

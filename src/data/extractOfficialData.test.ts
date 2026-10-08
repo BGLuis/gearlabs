@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ATM11_CATALOG } from './defaultCatalog';
+import { ATM11_CATALOG, OFFICIAL_GEAR_TYPES } from './defaultCatalog';
 import { VersionCatalog } from '@/types/silentgear';
+import { deriveGearTypes } from '../../scripts/extract-official-data';
 
 describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issue #6)', () => {
   const projectRoot = path.resolve(__dirname, '../..');
@@ -135,3 +136,104 @@ describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issu
     expect(publicMatches, `Arquivos com trait proibido em public/: ${publicMatches.join(', ')}`).toEqual([]);
   });
 });
+
+describe('Derivação de Slots Opcionais por Tipo de Equipamento (Issue #63)', () => {
+  const projectRoot = path.resolve(__dirname, '../..');
+  const catalogPath = path.join(projectRoot, 'public/data/versions/atm11/catalog.json');
+  const rawCatalog = fs.readFileSync(catalogPath, 'utf-8');
+  const catalog: VersionCatalog = JSON.parse(rawCatalog);
+
+  it('Critério 1: espada oferece tip, grip, coating, binding; armadura oferece tip, lining, coating, binding', () => {
+    expect(OFFICIAL_GEAR_TYPES.sword.optionalSlots).toEqual(['tip', 'grip', 'coating', 'binding']);
+    expect(OFFICIAL_GEAR_TYPES.katana.optionalSlots).toEqual(['tip', 'grip', 'coating', 'binding']);
+    expect(OFFICIAL_GEAR_TYPES.pickaxe.optionalSlots).toEqual(['tip', 'grip', 'coating', 'binding']);
+    expect(OFFICIAL_GEAR_TYPES.axe.optionalSlots).toEqual(['tip', 'grip', 'coating', 'binding']);
+
+    expect(OFFICIAL_GEAR_TYPES.helmet.optionalSlots).toEqual(['tip', 'lining', 'coating', 'binding']);
+    expect(OFFICIAL_GEAR_TYPES.chestplate.optionalSlots).toEqual(['tip', 'lining', 'coating', 'binding']);
+    expect(OFFICIAL_GEAR_TYPES.leggings.optionalSlots).toEqual(['tip', 'lining', 'coating', 'binding']);
+    expect(OFFICIAL_GEAR_TYPES.boots.optionalSlots).toEqual(['tip', 'lining', 'coating', 'binding']);
+
+    const atm11GearTypes = catalog.gearTypes;
+    expect(atm11GearTypes.sword.optionalSlots).toEqual(['tip', 'grip', 'coating', 'binding']);
+    expect(atm11GearTypes.helmet.optionalSlots).toEqual(['tip', 'lining', 'coating', 'binding']);
+    expect(atm11GearTypes.chestplate.optionalSlots).toEqual(['tip', 'lining', 'coating', 'binding']);
+    expect(atm11GearTypes.leggings.optionalSlots).toEqual(['tip', 'lining', 'coating', 'binding']);
+    expect(atm11GearTypes.boots.optionalSlots).toEqual(['tip', 'lining', 'coating', 'binding']);
+  });
+
+  it('Critério 2 (Snapshot): para cada tipo de OFFICIAL_GEAR_TYPES, os slots coincidem com os gear_type das partes', () => {
+    const derived = deriveGearTypes(OFFICIAL_GEAR_TYPES, projectRoot);
+
+    for (const [id, gearType] of Object.entries(OFFICIAL_GEAR_TYPES)) {
+      expect(
+        gearType.optionalSlots,
+        `Slots opcionais de ${id} devem coincidir com os derivados das partes oficiais`
+      ).toEqual(derived[id].optionalSlots);
+    }
+
+    const slotSnapshot = Object.fromEntries(
+      Object.entries(OFFICIAL_GEAR_TYPES).map(([id, gt]) => [id, gt.optionalSlots])
+    );
+    expect(slotSnapshot).toMatchInlineSnapshot(`
+      {
+        "axe": [
+          "tip",
+          "grip",
+          "coating",
+          "binding",
+        ],
+        "boots": [
+          "tip",
+          "lining",
+          "coating",
+          "binding",
+        ],
+        "chestplate": [
+          "tip",
+          "lining",
+          "coating",
+          "binding",
+        ],
+        "helmet": [
+          "tip",
+          "lining",
+          "coating",
+          "binding",
+        ],
+        "katana": [
+          "tip",
+          "grip",
+          "coating",
+          "binding",
+        ],
+        "leggings": [
+          "tip",
+          "lining",
+          "coating",
+          "binding",
+        ],
+        "pickaxe": [
+          "tip",
+          "grip",
+          "coating",
+          "binding",
+        ],
+        "sword": [
+          "tip",
+          "grip",
+          "coating",
+          "binding",
+        ],
+      }
+    `);
+  });
+
+  it('Critério 3: grep -n "optionalSlots: [\'lining\', \'coating\']" src/data/defaultCatalog.ts retorna 0 resultados', () => {
+    const defaultCatalogPath = path.join(projectRoot, 'src/data/defaultCatalog.ts');
+    const content = fs.readFileSync(defaultCatalogPath, 'utf-8');
+    const matches = content.match(/optionalSlots:\s*\['lining',\s*'coating'\]/g);
+    expect(matches).toBeNull();
+  });
+});
+
