@@ -82,7 +82,13 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         harvest_tier: 'minecraft:netherite',
         rarity: 100,
       },
-      coating: { durability: 300, armor: 4, melee_damage: 1.5 },
+      coating: {
+        armor_toughness: { operation: 'ADD', value: 4 },
+        knockback_resistance: { operation: 'ADD', value: 1 },
+        armor_durability: { operation: 'MULTIPLY_TOTAL', value: 0.1212 },
+        durability: { operation: 'MULTIPLY_TOTAL', value: 0.3 },
+        melee_damage: { operation: 'MULTIPLY_TOTAL', value: 0.3333 },
+      },
       tip: { durability: 400, melee_damage: 2.5, harvest_speed: 2.5 },
     },
     statModifiers: {
@@ -144,7 +150,13 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         rarity: 80,
       },
       tip: { durability: 300, melee_damage: 2.5, harvest_speed: 2.0 },
-      coating: { durability: 250, armor: 3 },
+      coating: {
+        armor_toughness: { operation: 'ADD', value: 4 },
+        knockback_resistance: { operation: 'ADD', value: 1 },
+        armor_durability: { operation: 'MULTIPLY_TOTAL', value: 0.1212 },
+        durability: { operation: 'MULTIPLY_TOTAL', value: 0.3 },
+        melee_damage: { operation: 'MULTIPLY_TOTAL', value: 0.3333 },
+      },
     },
     statModifiers: {
       rod: { durability: { mul2: 0.25 } },
