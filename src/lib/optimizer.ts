@@ -71,6 +71,15 @@ function generateHighlights(
 }
 
 export const MAX_SECONDARY_CANDIDATES = 12;
+// Cada slot opcional pode ficar vazio, então o espaço cresce multiplicativamente a cada slot opcional
+export const MAX_OPTIONAL_CANDIDATES = 1;
+
+function materialFitsSlot(m: Material, slot: PartSlot): boolean {
+  if (slot === 'main') return !!m.stats.main;
+  if (slot === 'rod') return !!m.stats.rod || !!m.statModifiers?.rod;
+  if (slot === 'tip') return !!m.stats.tip;
+  return !!m.stats[slot];
+}
 
 function beamSearchAlloys(
   mainCandidates: Material[],
@@ -197,7 +206,8 @@ export function findBestBuilds(
   request: OptimizationRequest,
   catalog: VersionCatalog,
   topN: number = 3,
-  maxSecondaryCandidates: number = MAX_SECONDARY_CANDIDATES
+  maxSecondaryCandidates: number = MAX_SECONDARY_CANDIDATES,
+  maxOptionalCandidates: number = MAX_OPTIONAL_CANDIDATES
 ): OptimizedBuildResult[] {
   const gearType = catalog.gearTypes[request.gearTypeId];
   if (!gearType) {
@@ -226,12 +236,11 @@ export function findBestBuilds(
     return [];
   }
 
-  // Slots obrigatórios e slots opcionais chave
+  // Slots obrigatórios e slots opcionais com pelo menos um material elegível
   const slotsToFill: PartSlot[] = [...gearType.requiredSlots];
-  // Adiciona slot 'tip' se for ferramenta/arma e estiver disponível em algum material
-  if (['weapon', 'tool'].includes(gearType.category) && !slotsToFill.includes('tip')) {
-    const hasTip = eligibleMaterials.some((m) => !!m.stats.tip);
-    if (hasTip) slotsToFill.push('tip');
+  for (const slot of gearType.optionalSlots) {
+    if (slotsToFill.includes(slot)) continue;
+    if (eligibleMaterials.some((m) => materialFitsSlot(m, slot))) slotsToFill.push(slot);
   }
 
   // Candidatos viáveis por slot
@@ -244,12 +253,7 @@ export function findBestBuilds(
       continue;
     }
 
-    const valid = eligibleMaterials.filter((m) => {
-      if (slot === 'main') return !!m.stats.main;
-      if (slot === 'rod') return !!m.stats.rod || !!m.statModifiers?.rod;
-      if (slot === 'tip') return !!m.stats.tip;
-      return !!m.stats[slot];
-    });
+    const valid = eligibleMaterials.filter((m) => materialFitsSlot(m, slot));
 
     if (slot === 'main') {
       const pureCandidates = valid.map((m) => makePart(m.id));
@@ -291,9 +295,10 @@ export function findBestBuilds(
       });
 
       // Poda: se houver mais candidatos que o teto para slot secundário, pegar os melhores
+      const cap = gearType.requiredSlots.includes(slot) ? maxSecondaryCandidates : maxOptionalCandidates;
       let selectedSecondary = scoredCandidates;
-      if (scoredCandidates.length > maxSecondaryCandidates) {
-        selectedSecondary = scoredCandidates.slice(0, maxSecondaryCandidates);
+      if (scoredCandidates.length > cap) {
+        selectedSecondary = scoredCandidates.slice(0, cap);
       }
 
       candidatePartsBySlot[slot] = selectedSecondary.map((c) => makePart(c.material.id));
@@ -343,6 +348,9 @@ export function findBestBuilds(
       explore(slotIndex + 1, currentParts);
     }
     delete currentParts[currentSlot];
+    // Slot opcional pode ficar vazio: a ponta, por exemplo, nem sempre melhora o objetivo
+    const isOptional = !gearType.requiredSlots.includes(currentSlot) && !request.fixedSlots?.[currentSlot];
+    if (isOptional) explore(slotIndex + 1, currentParts);
   }
 
   explore(0, {});
@@ -350,9 +358,11 @@ export function findBestBuilds(
   // Ordenar decrescente pelo score
   results.sort((a, b) => b.score - a.score);
 
-  // Deduplicar builds equivalentes e retornar top N
+  // Top N com um representante por principal distinto; se faltarem principais, completa com as melhores restantes
   const seenBuilds = new Set<string>();
-  const uniqueResults: OptimizedBuildResult[] = [];
+  const seenMains = new Set<string>();
+  const selected: OptimizedBuildResult[] = [];
+  const sameMainFallback: OptimizedBuildResult[] = [];
   for (const res of results) {
     const key = Object.entries(res.build.parts)
       .sort(([a], [b]) => a.localeCompare(b))
@@ -361,12 +371,26 @@ export function findBestBuilds(
         return `${slot}:${part?.materialId}:${sub}:${part?.grade ?? ''}:${part?.starcharge ?? ''}`;
       })
       .join('|');
-    if (!seenBuilds.has(key)) {
-      seenBuilds.add(key);
-      uniqueResults.push(res);
-      if (uniqueResults.length >= topN) break;
+    if (seenBuilds.has(key)) continue;
+    seenBuilds.add(key);
+
+    const mainKey = (res.build.parts.main?.materials ?? [{ materialId: res.build.parts.main?.materialId }])
+      .map((m) => m.materialId)
+      .sort()
+      .join('+');
+    if (seenMains.has(mainKey)) {
+      sameMainFallback.push(res);
+      continue;
     }
+    seenMains.add(mainKey);
+    selected.push(res);
+    if (selected.length >= topN) break;
   }
 
-  return uniqueResults;
+  for (const res of sameMainFallback) {
+    if (selected.length >= topN) break;
+    selected.push(res);
+  }
+
+  return selected.sort((a, b) => b.score - a.score);
 }
