@@ -414,7 +414,7 @@ export function composeCompoundSlotModifiers(
   alloyType?: AlloyType
 ) {
   const isMain = slot === 'main';
-  const defaultOp: NormalizedOperation = isMain ? 'AVERAGE' : 'ADD';
+  const defaultOp: NormalizedOperation = 'AVERAGE';
   // Traits
   const traits: MaterialTraitRef[] = [];
   for (const mat of subMaterials) {
@@ -1052,7 +1052,7 @@ export function calculateGearStats(
   }
 
   // Armadura sem armor_durability no main não é uma construção válida (material não craftável).
-  // Builds só com secundários (usadas para ranquear slots no otimizador) não têm main e não passam por aqui.
+  // Builds sem main (ranking de slots no otimizador) pulam esta checagem; a durabilidade delas não é um build de armadura.
   if (isArmor && mainSelection && armorDurMods.length === 0) {
     throw new Error(`Main material of armor '${build.gearTypeId}' has no armor_durability.`);
   }
