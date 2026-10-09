@@ -1378,4 +1378,77 @@ describe('calculateGearStats', () => {
       expect(ATM11_CATALOG.traits['silentgear:crude'].maxLevel).toBe(5);
     });
   });
+
+  describe('Issue #37: Calculadora: durabilidade de armadura arredonda onde o mod trunca', () => {
+    it('Critério 1: peitoral de silentgear:feather com grau MAX tem durabilidade 32', () => {
+      const buildFeatherMax: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: {
+            materialId: 'silentgear:feather',
+            grade: 'MAX',
+          },
+        },
+      };
+      const statsMax = calculateGearStats(buildFeatherMax, atm11Catalog);
+      // feather tem armor_durability = 2; com grau MAX (+30%) vira 2.6
+      // trunc(2.6) * 16 = 2 * 16 = 32 (anteriormente round(2.6 * 16) daria 42)
+      expect(statsMax.durability).toBe(32);
+
+      // Sem grau: 2 * 16 = 32
+      const buildFeatherNone: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: {
+            materialId: 'silentgear:feather',
+            grade: 'NONE',
+          },
+        },
+      };
+      const statsNone = calculateGearStats(buildFeatherNone, atm11Catalog);
+      expect(statsNone.durability).toBe(32);
+    });
+
+    it('Critério 2: teste de regressão com o conjunto do save (#29)', () => {
+      const fixturePath = path.resolve(__dirname, '../../tests/fixtures/reference_armor_save.json');
+      const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+
+      const helmetStats = calculateGearStats({ gearTypeId: 'helmet', parts: fixture.pieces.helmet.parts }, atm11Catalog);
+      expect(helmetStats.durability).toBe(1475089);
+
+      const chestStats = calculateGearStats({ gearTypeId: 'chestplate', parts: fixture.pieces.chestplate.parts }, atm11Catalog);
+      expect(chestStats.durability).toBe(2145312);
+
+      const leggingsStats = calculateGearStats({ gearTypeId: 'leggings', parts: fixture.pieces.leggings.parts }, atm11Catalog);
+      expect(leggingsStats.durability).toBe(2011485);
+
+      const bootsStats = calculateGearStats({ gearTypeId: 'boots', parts: fixture.pieces.boots.parts }, atm11Catalog);
+      expect(bootsStats.durability).toBe(1743287);
+    });
+
+    it('Critério 3: ferramentas continuam arredondando com Math.round', () => {
+      // Espada padrão de diamante + madeira segue passando com 1576
+      const buildSword: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:diamond' },
+          rod: { materialId: 'silentgear:wood' },
+        },
+      };
+      const swordStats = calculateGearStats(buildSword, catalog);
+      expect(swordStats.durability).toBe(1576);
+
+      // Espada com grau gerando valor fracionário arredonda para cima (1591.61 -> 1592 em vez de truncar para 1591)
+      const buildSwordGradeE: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:diamond', grade: 'E' },
+          rod: { materialId: 'silentgear:wood' },
+        },
+      };
+      const swordStatsGradeE = calculateGearStats(buildSwordGradeE, catalog);
+      expect(swordStatsGradeE.durability).toBe(1592);
+    });
+  });
 });
+
