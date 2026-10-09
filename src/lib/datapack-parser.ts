@@ -148,7 +148,7 @@ export function parseStatValueEntry(val: any): StatModifierEntry | undefined {
   if (Array.isArray(val)) {
     return val.map((item) => {
       if (typeof item === 'number') {
-        return { value: item, operation: 'ADD' };
+        return { value: item, operation: 'AVERAGE' };
       }
       return {
         value: item.value,

@@ -4,6 +4,7 @@ import {
   extractMaterialIdFromPath,
   parseMaterialJson,
   parseDumpTsv,
+  parseStatValueEntry,
   parseTsvCellValue,
   resolveMaterialParents,
 } from './datapack-parser';
@@ -231,6 +232,22 @@ describe('datapack-parser (Issue #7)', () => {
     it('retorna undefined para células vazias ou com traço', () => {
       expect(parseTsvCellValue('')).toBeUndefined();
       expect(parseTsvCellValue('-')).toBeUndefined();
+    });
+  });
+
+  describe('parseStatValueEntry', () => {
+    it('lista de números simples usa AVERAGE como operação padrão (NumberProperty.java:30-41)', () => {
+      expect(parseStatValueEntry([15, 40])).toEqual([
+        { value: 15, operation: 'AVERAGE' },
+        { value: 40, operation: 'AVERAGE' },
+      ]);
+    });
+
+    it('preserva a operação explícita dos itens de uma lista', () => {
+      expect(parseStatValueEntry([{ value: 2, operation: 'ADD' }, 3])).toEqual([
+        { value: 2, operation: 'ADD' },
+        { value: 3, operation: 'AVERAGE' },
+      ]);
     });
   });
 

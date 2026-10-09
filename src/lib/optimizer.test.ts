@@ -68,7 +68,9 @@ describe('findBestBuilds', () => {
     }
   });
 
-  it('encontra a melhor armadura para máxima proteção (max_protection)', () => {
+  it('encontra a melhor armadura entre materiais craftáveis como armadura (max_protection)', () => {
+    // Só iron tem armor_durability no main no catálogo 1.20.1; diamond, netherite e crimson_steel
+    // não são construção válida de armadura e não podem ser sugeridos
     const available = [
       'silentgear:iron',
       'silentgear:diamond',
@@ -88,11 +90,23 @@ describe('findBestBuilds', () => {
 
     expect(results.length).toBe(1);
     const best = results[0];
-    // Netherite e Crimson Steel possuem armadura alta e toughness elevada
-    expect(['silentgear:netherite', 'silentgear:crimson_steel']).toContain(
-      best.build.parts.main?.materialId
+    expect(best.build.parts.main?.materialId).toBe('silentgear:iron');
+    expect(best.stats.armor).toBeGreaterThan(0);
+  });
+
+  it('não sugere armadura com main fixado que não tem armor_durability (não craftável)', () => {
+    const results = findBestBuilds(
+      {
+        gearTypeId: 'chestplate',
+        availableMaterials: ['silentgear:iron'],
+        fixedSlots: { main: 'silentgear:wood' },
+        goal: 'max_protection',
+      },
+      catalog,
+      1
     );
-    expect(best.stats.armor).toBeGreaterThanOrEqual(20);
+
+    expect(results).toEqual([]);
   });
 
   it('executa em tempo ultrarrápido (< 50ms)', () => {
@@ -424,7 +438,7 @@ describe('findBestBuilds', () => {
           tier: 1,
           category: 'metal',
           color: '#FFFFFF',
-          stats: { main: { durability: 500, armor: 5, armor_toughness: 1 } },
+          stats: { main: { durability: 500, armor: 5, armor_durability: 60, armor_toughness: 1 } },
           traits: {},
         },
         'test:lining': {
@@ -433,7 +447,7 @@ describe('findBestBuilds', () => {
           tier: 1,
           category: 'metal',
           color: '#888888',
-          stats: { lining: { durability: 100, armor: 4 } },
+          stats: { lining: { durability: 100, armor: { value: 4, operation: 'ADD' } } },
           traits: {},
         },
       };
@@ -477,7 +491,7 @@ describe('findBestBuilds', () => {
           tier: 1,
           category: 'gem',
           color: '#AAAAAA',
-          stats: { tip: { durability: 50, melee_damage: -3.0 } },
+          stats: { tip: { durability: 50, melee_damage: { value: -3.0, operation: 'ADD' } } },
           traits: {},
         },
       };

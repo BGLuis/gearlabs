@@ -10218,9 +10218,9 @@
         "coating",
         "binding"
       ],
-      "baseDamage": 3.5,
-      "baseAttackSpeed": 1.7,
-      "durabilityMultiplier": 1.1,
+      "baseDamage": 4,
+      "baseAttackSpeed": 1.4,
+      "durabilityMultiplier": 1.125,
       "iconName": "katana"
     },
     "pickaxe": {

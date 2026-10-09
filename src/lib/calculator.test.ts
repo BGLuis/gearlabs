@@ -13,6 +13,7 @@ import {
   composeCompoundSlotModifiers,
   resolveSlotInstances,
   resolveTypedStat,
+  computeTraits,
 } from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
@@ -46,8 +47,8 @@ describe('calculateGearStats', () => {
 
     // Dano base espada (3.0) + Diamante (3.0) = 6.0
     expect(stats.meleeDamage).toBe(6.0);
-    // Durabilidade: Diamante (1561) + Madeira rod (15) = 1576
-    expect(stats.durability).toBe(1576);
+    // Madeira no rod é número simples (AVERAGE) e entra na média ponderada com o Diamante, não é somada
+    expect(stats.durability).toBe(1042);
     // Sinergia padrão entre gema e madeira = 100%
     expect(stats.synergy).toBe(100);
     // Traits: Diamante tem Brittle II e Lustrous I; Madeira tem Flexible I
@@ -199,7 +200,7 @@ describe('calculateGearStats', () => {
           stats: {
             main: {
               armor: 10,
-              durability: 100,
+              armor_durability: 100,
             },
           },
           traits: {},
@@ -238,7 +239,7 @@ describe('calculateGearStats', () => {
     expect(applyGradeBonus(-10, 0.0)).toBe(-10);
   });
 
-  it('aplica adições da ponta (Tip Slot)', () => {
+  it('ponta de número simples entra na média ponderada da durabilidade, não é somada', () => {
     const buildWithoutTip: GearBuild = {
       gearTypeId: 'pickaxe',
       parts: {
@@ -258,8 +259,8 @@ describe('calculateGearStats', () => {
     const withoutTip = calculateGearStats(buildWithoutTip, catalog);
     const withTip = calculateGearStats(buildWithTip, catalog);
 
-    // Diamante no tip adiciona +256 durabilidade e +2 dano
-    expect(withTip.durability).toBe(withoutTip.durability + 256);
+    expect(withoutTip.durability).toBe(169);
+    expect(withTip.durability).toBe(203);
     expect(withTip.meleeDamage).toBe(withoutTip.meleeDamage + 2.0);
   });
 
@@ -300,6 +301,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 60,
+                armor_durability: 60,
                 armor_by_piece: {
                   helmet: 15,
                 },
@@ -323,6 +325,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 60,
+                armor_durability: 60,
               },
             },
             traits: {},
@@ -421,6 +424,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 25,
+                armor_durability: 60,
                 armor_toughness: 60,
               },
             },
@@ -481,7 +485,7 @@ describe('calculateGearStats', () => {
             color: '#aaaaaa',
             stats: {
               coating: {
-                durability: { operation: 'MULTIPLY_TOTAL', value: 0.5 },
+                armor_durability: { operation: 'MULTIPLY_TOTAL', value: 0.5 },
               },
             },
             traits: {},
@@ -515,6 +519,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 magic_armor: 10,
+                armor_durability: 60,
               },
             },
             traits: {},
@@ -561,6 +566,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 10,
+                armor_durability: 60,
               },
             },
             traits: {},
@@ -885,6 +891,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 10,
+                armor_durability: 60,
                 charging_value: 1.0,
               },
             },
@@ -918,6 +925,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 10,
+                armor_durability: 60,
                 armor_toughness: 5,
               },
             },
@@ -943,8 +951,8 @@ describe('calculateGearStats', () => {
       };
 
       // Coating com starcharge 2: c = 2 * 1.5 = 3.0.
-      // Toughness do coating: 4 + 2 * 3.0 = 10.
-      // Toughness total: 5 (main) + 10 (coating) = 15.
+      // Toughness do coating: 4 + 2 * 3.0 = 10, número simples (AVERAGE) pesado junto ao main (5):
+      // (5 * (1 + 5/6) + 10 * (1 + 10/6)) / ((1 + 5/6) + (1 + 10/6)) = 7.96 -> 8.0
       const build: GearBuild = {
         gearTypeId: 'chestplate',
         parts: {
@@ -954,7 +962,7 @@ describe('calculateGearStats', () => {
       };
 
       const stats = calculateGearStats(build, testCatalog);
-      expect(stats.armorToughness).toBe(15.0);
+      expect(stats.armorToughness).toBe(8.0);
     });
 
     it('não modifica operações multiplicativas (MULTIPLY_BASE, MULTIPLY_TOTAL)', () => {
@@ -978,6 +986,24 @@ describe('calculateGearStats', () => {
 
       expect(stats.attackSpeed).toBe(4);
       expect(stats.dps).toBe(152);
+    });
+  });
+
+  describe('Issue #39: Katana usa as constantes da cabeça do mod 4.2.3', () => {
+    it('katana de ferro + haste Wood tem dano 6, velocidade 1.4 e durabilidade 281', () => {
+      const build: GearBuild = {
+        gearTypeId: 'katana',
+        parts: {
+          main: { materialId: 'silentgear:iron' },
+          rod: { materialId: 'silentgear:wood' },
+        },
+      };
+
+      const stats = calculateGearStats(build, atm11Catalog);
+
+      expect(stats.meleeDamage).toBe(6);
+      expect(stats.attackSpeed).toBe(1.4);
+      expect(stats.durability).toBe(281);
     });
   });
 
@@ -1551,7 +1577,7 @@ describe('calculateGearStats', () => {
       // peso MAX: 1 + 19.5 / 20.5 = 1.9512195
       // peso NONE: 1 + 15.0 / 20.5 = 1.7317073
       // media = (1.9512195 * 19.5 + 1.7317073 * 15.0) / (1.9512195 + 1.7317073) = 17.3841
-      // Durabilidade final esperada: 1561 + 17.3841 = 1578.38 -> 1578
+      // Madeira é número simples (AVERAGE), então a durabilidade é média ponderada do Diamante (1561) e das instâncias do rod
       const buildSwordMixedRod: GearBuild = {
         gearTypeId: 'sword',
         parts: {
@@ -1586,9 +1612,9 @@ describe('calculateGearStats', () => {
       const statsMax = calculateGearStats(buildSwordAllMaxRod, ATM11_CATALOG);
       const statsNone = calculateGearStats(buildSwordAllNoneRod, ATM11_CATALOG);
 
-      expect(statsNone.durability).toBe(1576);
-      expect(statsMax.durability).toBe(1581);
-      expect(statsMixed.durability).toBe(1578);
+      expect(statsNone.durability).toBe(1042);
+      expect(statsMax.durability).toBe(1043);
+      expect(statsMixed.durability).toBe(1043);
     });
 
     it('resolveSlotInstances poda adequadamente instâncias quando gearTypeId exige menos instâncias', () => {
@@ -1670,7 +1696,7 @@ describe('calculateGearStats', () => {
     });
 
     it('Critério 3: ferramentas continuam arredondando com Math.round', () => {
-      // Espada padrão de diamante + madeira segue passando com 1576
+      // Espada padrão de diamante + madeira: média ponderada (AVERAGE), não soma
       const buildSword: GearBuild = {
         gearTypeId: 'sword',
         parts: {
@@ -1679,9 +1705,9 @@ describe('calculateGearStats', () => {
         },
       };
       const swordStats = calculateGearStats(buildSword, catalog);
-      expect(swordStats.durability).toBe(1576);
+      expect(swordStats.durability).toBe(1042);
 
-      // Espada com grau gerando valor fracionário arredonda para cima (1591.61 -> 1592 em vez de truncar para 1591)
+      // Espada com grau E: média ponderada de 1576.61 (main) e 15 (rod) = 1052.9, arredonda para cima (1053 em vez de truncar para 1052)
       const buildSwordGradeE: GearBuild = {
         gearTypeId: 'sword',
         parts: {
@@ -1690,8 +1716,107 @@ describe('calculateGearStats', () => {
         },
       };
       const swordStatsGradeE = calculateGearStats(buildSwordGradeE, catalog);
-      expect(swordStatsGradeE.durability).toBe(1592);
+      expect(swordStatsGradeE.durability).toBe(1053);
+    });
+  });
+  describe('Issues #41 e #42: sem valores padrão inventados e número simples é AVERAGE', () => {
+    it('material sem harvest_speed dá velocidade de mineração 0 (padrão do mod)', () => {
+      const build: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:crushed_shulker_shell' },
+          rod: { materialId: 'silentgear:wood' },
+        },
+      };
+
+      expect(calculateGearStats(build, atm11Catalog).harvestSpeed).toBe(0);
+    });
+
+    it('ferro (raridade 20) com haste de zinco (raridade 15) dá raridade média ponderada ≈ 18, não a soma 35', () => {
+      const build: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:iron' },
+          rod: { materialId: 'silentgear:zinc' },
+        },
+      };
+
+      expect(calculateGearStats(build, atm11Catalog).rarity).toBeCloseTo(18, 0);
+    });
+
+    it('armadura cujo main só tem durability (sem armor_durability) não é construção válida', () => {
+      const testCatalog: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:only_durability': {
+            id: 'test:only_durability',
+            name: { en: 'Only Durability', pt: 'Só Durabilidade' },
+            tier: 1,
+            category: 'metal',
+            color: '#ffffff',
+            stats: { main: { armor: 10, durability: 5000 } },
+            traits: {},
+          },
+        },
+      };
+      const build: GearBuild = {
+        gearTypeId: 'helmet',
+        parts: { main: { materialId: 'test:only_durability' } },
+      };
+
+      expect(() => calculateGearStats(build, testCatalog)).toThrow(/armor_durability/);
+    });
+  });
+
+  describe('Issue #43: nível de trait normalizado como TraitListProperty.computeTraits', () => {
+    const traitInfo = (id: string, maxLevel: number) => ({
+      id,
+      maxLevel,
+      name: { en: id, pt: id },
+      description: { en: '', pt: '' },
+    });
+    const catalogTraits = {
+      'test:x': traitInfo('test:x', 5),
+      'test:y': traitInfo('test:y', 5),
+      'test:q': traitInfo('test:q', 2),
+    };
+    const filler = (n: number) => Array.from({ length: n }, (_, i) => ({ name: `test:filler${i}`, level: 1 }));
+    const levelOf = (traits: { name: string; level: number }[], id: string) =>
+      computeTraits(traits, catalogTraits).find((t) => t.id === id)?.level;
+
+    it('divide a soma pelas ocorrências quando n_traits / 2 é maior (8 traits: 2 + 2 dividem por 2, não somam 4)', () => {
+      // n = 8, n/2 = 4, ocorrências de x = 2 -> divisor 2 -> round(4 / 2) = 2
+      const traits = [{ name: 'test:x', level: 2 }, { name: 'test:x', level: 2 }, ...filler(6)];
+      expect(levelOf(traits, 'test:x')).toBe(2);
+    });
+
+    it('limita o divisor a n_traits / 2 quando há mais ocorrências que a metade (4 traits de nível 2 dão 4, não 8)', () => {
+      // n = 4, n/2 = 2 < ocorrências (4) -> divisor 2 -> 8 / 2 = 4
+      const traits = [2, 2, 2, 2].map((level) => ({ name: 'test:x', level }));
+      expect(levelOf(traits, 'test:x')).toBe(4);
+    });
+
+    it('arredonda meio para cima e limita entre 1 e maxLevel (1+2 em n=4 dá 2; 3+3 com maxLevel 2 dá 2)', () => {
+      // n = 4, divisor 2 -> round(3 / 2 = 1.5) = 2 (Math.round, como Java Math.round)
+      const halfUp = [{ name: 'test:y', level: 1 }, { name: 'test:y', level: 2 }, ...filler(2)];
+      expect(levelOf(halfUp, 'test:y')).toBe(2);
+
+      // n = 2, divisor min(1, 2) = 1 -> 6, limitado ao maxLevel 2
+      const clamped = [{ name: 'test:q', level: 3 }, { name: 'test:q', level: 3 }];
+      expect(levelOf(clamped, 'test:q')).toBe(2);
+    });
+
+    it('capacete do save ATM11 (reference_helmet_save.json): Malleable 5 e Crushing 5 após normalização', () => {
+      const fixturePath = path.resolve(__dirname, '../../tests/fixtures/reference_helmet_save.json');
+      const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+      const build: GearBuild = { gearTypeId: fixture.gearTypeId, parts: fixture.parts };
+
+      const stats = calculateGearStats(build, atm11Catalog);
+      const levels = Object.fromEntries(stats.traits.map((t) => [t.id, t.level]));
+
+      expect(levels['silentgear:malleable']).toBe(5);
+      expect(levels['silentgear:crushing']).toBe(5);
     });
   });
 });
-

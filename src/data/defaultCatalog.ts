@@ -690,9 +690,9 @@ export const OFFICIAL_GEAR_TYPES: Record<string, GearType> = {
     category: 'weapon',
     requiredSlots: ['main', 'rod'],
     optionalSlots: ['tip', 'grip', 'coating', 'binding'],
-    baseDamage: 3.5,
-    baseAttackSpeed: 1.7,
-    durabilityMultiplier: 1.1,
+    baseDamage: 4.0,
+    baseAttackSpeed: 1.4,
+    durabilityMultiplier: 1.125,
     iconName: 'katana',
   },
   pickaxe: {
