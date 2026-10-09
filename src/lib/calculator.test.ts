@@ -9,6 +9,7 @@ import {
   compressModifiersForProperty,
   applyStarcharge,
   applyEnhancementsToModifiers,
+  calculateCompoundChargingValue,
 } from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
@@ -1026,6 +1027,70 @@ describe('calculateGearStats', () => {
       const statsWith = calculateGearStats(buildWithSubGrades, ATM11_CATALOG);
 
       expect(statsWith).toEqual(statsWithout);
+    });
+  });
+
+  describe('Issue #27: Ligas: charging_value usa média ponderada dos submaterials', () => {
+    it('calcula charging_value composto via média ponderada (~1.31) para a liga pentametálica', () => {
+      const subMaterials = [
+        ATM11_CATALOG.materials['silentgear:tyrian_steel'],
+        ATM11_CATALOG.materials['silentgear:unobtainium'],
+        ATM11_CATALOG.materials['sgearmetalworks:uru_metal'],
+        ATM11_CATALOG.materials['silentgear:vibranium'],
+        ATM11_CATALOG.materials['silentgear:allthemodium'],
+      ];
+
+      const cv = calculateCompoundChargingValue(subMaterials, 'main');
+      expect(cv).toBeDefined();
+      expect(cv).toBeCloseTo(1.3118, 3);
+      // O selo de charging_value da UI mostra ~1,31
+      expect(Number(cv!.toFixed(2))).toBe(1.31);
+    });
+
+    it('peitoral do save (#29) com grau MAX e starcharge 3 tem armor 40,97 (±0,05)', () => {
+      const build: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: {
+            materialId: 'silentgear:tyrian_steel',
+            grade: 'MAX',
+            starcharge: 3,
+            materials: [
+              { materialId: 'silentgear:tyrian_steel' },
+              { materialId: 'silentgear:unobtainium' },
+              { materialId: 'sgearmetalworks:uru_metal' },
+              { materialId: 'silentgear:vibranium' },
+              { materialId: 'silentgear:allthemodium' },
+            ],
+          },
+        },
+      };
+
+      const stats = calculateGearStats(build, ATM11_CATALOG);
+      // No jogo gravado no NBT: armor = 40.9728
+      expect(Math.abs(stats.armor - 40.97)).toBeLessThanOrEqual(0.05);
+      expect(stats.armor).toBeCloseTo(41.0, 1);
+    });
+
+    it('retorna undefined para liga sem nenhum submaterial com charging_value', () => {
+      const subMaterials = [
+        ATM11_CATALOG.materials['silentgear:iron'],
+        ATM11_CATALOG.materials['silentgear:gold'],
+      ];
+
+      const cv = calculateCompoundChargingValue(subMaterials, 'main');
+      expect(cv).toBeUndefined();
+    });
+
+    it('suporta charging_value em slots secundários compostos derivando de stats.main', () => {
+      const subMaterials = [
+        ATM11_CATALOG.materials['silentgear:tyrian_steel'],
+        ATM11_CATALOG.materials['sgearmetalworks:uru_metal'],
+      ];
+
+      const cvLining = calculateCompoundChargingValue(subMaterials, 'lining');
+      expect(cvLining).toBeDefined();
+      expect(cvLining).toBeCloseTo(1.3118, 3);
     });
   });
 });

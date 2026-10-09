@@ -4,7 +4,7 @@ import React from 'react';
 import { useGear } from '@/context/GearContext';
 import { Grade, PartSlot, SubMaterialSelection, StarchargeLevel } from '@/types/silentgear';
 import { X, ArrowUp, ArrowDown, Plus, Layers, Sparkles } from 'lucide-react';
-import { calculateSynergy, getNumericStatValue } from '@/lib/calculator';
+import { calculateSynergy, getNumericStatValue, calculateCompoundChargingValue } from '@/lib/calculator';
 import { MaterialCombobox } from '@/components/MaterialCombobox';
 
 interface SlotPickerProps {
@@ -76,6 +76,10 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
     ? calculateSynergy(subMaterials, slot)
     : 1.0;
 
+  const compoundChargingValue = isCompound && subMaterials.length > 0
+    ? calculateCompoundChargingValue(subMaterials, slot)
+    : undefined;
+
   function handleConvertToCompound() {
     const primaryId = currentSelection?.materialId || validMaterials[0]?.id || 'silentgear:iron';
     const fallbackId = validMaterials.find((m) => m.id !== primaryId)?.id || primaryId;
@@ -144,9 +148,9 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
               <span className="text-[11px] font-bold text-mc-primary">
                 ⚡ {Math.round(compoundSynergy * 100)}% {lang === 'pt' ? 'Sinergia' : 'Synergy'}
               </span>
-              {currentMat?.stats.main?.charging_value !== undefined && (
+              {compoundChargingValue !== undefined && (
                 <span className="text-[10px] px-1 rounded bg-cyan-950/60 border border-cyan-800 text-cyan-400" title="Valor base de carga (charging_value)">
-                  ⚡ {getNumericStatValue(currentMat.stats.main.charging_value)}
+                  ⚡ {Number(compoundChargingValue.toFixed(2))}
                 </span>
               )}
               {/* Seletor de Grau da Liga */}
