@@ -1,6 +1,5 @@
 import JSZip from 'jszip';
 import {
-  ArmorPiece,
   Material,
   MaterialCategory,
   MaterialStats,
@@ -232,22 +231,39 @@ function parseSlotStats(slotData: any): MaterialStats {
     stats.harvest_tier = String(slotData.harvest_tier);
   }
 
-  // Armor by piece (armor/helmet, armor/chestplate, armor/leggings, armor/boots)
-  const helmet = parseStatValueEntry(slotData['armor/helmet'] ?? slotData.armor_by_piece?.helmet);
-  const chestplate = parseStatValueEntry(slotData['armor/chestplate'] ?? slotData.armor_by_piece?.chestplate);
-  const leggings = parseStatValueEntry(slotData['armor/leggings'] ?? slotData.armor_by_piece?.leggings);
-  const boots = parseStatValueEntry(slotData['armor/boots'] ?? slotData.armor_by_piece?.boots);
-
-  if (helmet !== undefined || chestplate !== undefined || leggings !== undefined || boots !== undefined) {
-    const armorByPiece: Partial<Record<ArmorPiece, StatModifierEntry>> = {};
-    if (helmet !== undefined) armorByPiece.helmet = helmet;
-    if (chestplate !== undefined) armorByPiece.chestplate = chestplate;
-    if (leggings !== undefined) armorByPiece.leggings = leggings;
-    if (boots !== undefined) armorByPiece.boots = boots;
-    stats.armor_by_piece = armorByPiece;
-  }
+  const byType = parseByTypeStats(slotData);
+  if (byType) stats.by_type = byType;
 
   return stats;
+}
+
+/**
+ * Guarda toda chave `<propriedade>/<tipo>` (ex.: `attack_speed/axe`, `armor/helmet`),
+ * agrupada por propriedade e depois por tipo.
+ */
+function parseByTypeStats(slotData: Record<string, unknown>): MaterialStats['by_type'] {
+  const byType: NonNullable<MaterialStats['by_type']> = {};
+  for (const key of Object.keys(slotData)) {
+    const separator = key.indexOf('/');
+    if (separator <= 0) continue;
+    const entry = parseStatValueEntry(slotData[key]);
+    if (entry === undefined) continue;
+    const property = key.slice(0, separator);
+    const gearType = key.slice(separator + 1);
+    byType[property] = { ...byType[property], [gearType]: entry };
+  }
+  return Object.keys(byType).length > 0 ? byType : undefined;
+}
+
+function mergeByType(
+  parent: MaterialStats['by_type'],
+  child: MaterialStats['by_type']
+): MaterialStats['by_type'] {
+  const merged: NonNullable<MaterialStats['by_type']> = {};
+  for (const property of new Set([...Object.keys(parent ?? {}), ...Object.keys(child ?? {})])) {
+    merged[property] = { ...parent?.[property], ...child?.[property] };
+  }
+  return merged;
 }
 
 /**
@@ -419,15 +435,15 @@ export function resolveMaterialParents(
       if (!childSlotStats && parentSlotStats) {
         mergedStats[slot] = {
           ...parentSlotStats,
-          ...(parentSlotStats.armor_by_piece && {
-            armor_by_piece: { ...parentSlotStats.armor_by_piece },
+          ...(parentSlotStats.by_type && {
+            by_type: mergeByType(parentSlotStats.by_type, undefined),
           }),
         };
       } else if (childSlotStats && !parentSlotStats) {
         mergedStats[slot] = {
           ...childSlotStats,
-          ...(childSlotStats.armor_by_piece && {
-            armor_by_piece: { ...childSlotStats.armor_by_piece },
+          ...(childSlotStats.by_type && {
+            by_type: mergeByType(undefined, childSlotStats.by_type),
           }),
         };
       } else if (childSlotStats && parentSlotStats) {
@@ -435,11 +451,8 @@ export function resolveMaterialParents(
           ...parentSlotStats,
           ...childSlotStats,
         };
-        if (parentSlotStats.armor_by_piece || childSlotStats.armor_by_piece) {
-          combined.armor_by_piece = {
-            ...(parentSlotStats.armor_by_piece || {}),
-            ...(childSlotStats.armor_by_piece || {}),
-          };
+        if (parentSlotStats.by_type || childSlotStats.by_type) {
+          combined.by_type = mergeByType(parentSlotStats.by_type, childSlotStats.by_type);
         }
         mergedStats[slot] = combined;
       }

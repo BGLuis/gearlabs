@@ -40,9 +40,15 @@ export interface StatValueModifier {
 
 export type StatModifierEntry = number | StatValueModifier | StatValueModifier[];
 
+/** Propriedades que o mod resolve por tipo de item (`<propriedade>/<tipo>` no datapack). */
+export type TypedStatProperty = 'armor' | 'armor_durability' | 'attack_speed';
+
 export interface MaterialStats {
   durability?: StatModifierEntry;
   armor?: StatModifierEntry;
+  /** Por propriedade, indexado pelo id do tipo sem prefixo (ex.: `attack_speed.axe`). */
+  by_type?: Partial<Record<string, Partial<Record<string, StatModifierEntry>>>>;
+  /** @deprecated Formato anterior de `by_type.armor`; mantido para catálogos já salvos. */
   armor_by_piece?: Partial<Record<ArmorPiece, StatModifierEntry>>;
   armor_durability?: StatModifierEntry;
   armor_toughness?: StatModifierEntry;

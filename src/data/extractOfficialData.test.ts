@@ -18,10 +18,10 @@ describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issu
     expect(mat, 'silentgear:allthemodium deve existir no catálogo ATM11').toBeDefined();
 
     expect(mat.stats.main?.armor).toBe(60);
-    expect(mat.stats.main?.armor_by_piece?.helmet).toBe(15);
-    expect(mat.stats.main?.armor_by_piece?.chestplate).toBe(15);
-    expect(mat.stats.main?.armor_by_piece?.leggings).toBe(15);
-    expect(mat.stats.main?.armor_by_piece?.boots).toBe(15);
+    expect(mat.stats.main?.by_type?.armor?.helmet).toBe(15);
+    expect(mat.stats.main?.by_type?.armor?.chestplate).toBe(15);
+    expect(mat.stats.main?.by_type?.armor?.leggings).toBe(15);
+    expect(mat.stats.main?.by_type?.armor?.boots).toBe(15);
     expect(mat.stats.main?.armor_toughness).toBe(60);
     expect(mat.stats.main?.magic_armor).toBe(200);
     expect(mat.stats.main?.armor_durability).toBe(60);
@@ -30,10 +30,15 @@ describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issu
     const defaultMat = ATM11_CATALOG.materials['silentgear:allthemodium'];
     expect(defaultMat).toBeDefined();
     expect(defaultMat.stats.main?.armor).toBe(60);
-    expect(defaultMat.stats.main?.armor_by_piece?.helmet).toBe(15);
+    expect(defaultMat.stats.main?.by_type?.armor?.helmet).toBe(15);
     expect(defaultMat.stats.main?.armor_toughness).toBe(60);
     expect(defaultMat.stats.main?.magic_armor).toBe(200);
     expect(defaultMat.stats.main?.armor_durability).toBe(60);
+  });
+
+  it('Issue #40: silentgear:turtle tem armor_durability 25 só para helmet no catálogo ATM11', () => {
+    const turtle = catalog.materials['silentgear:turtle'];
+    expect(turtle.stats.main?.by_type?.armor_durability).toEqual({ helmet: 25 });
   });
 
   it('Critério 2: uru_metal e tyrian_steel existem no catálogo ATM11, com tyrian_steel contendo metal, endgame e casting', () => {

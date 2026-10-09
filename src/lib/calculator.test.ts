@@ -12,6 +12,7 @@ import {
   calculateCompoundChargingValue,
   composeCompoundSlotModifiers,
   resolveSlotInstances,
+  resolveTypedStat,
 } from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
@@ -19,7 +20,7 @@ import {
   OFFICIAL_TRAITS,
   ATM11_CATALOG,
 } from '@/data/defaultCatalog';
-import { VersionCatalog, GearBuild, Material } from '@/types/silentgear';
+import { VersionCatalog, GearBuild, Material, MaterialStats } from '@/types/silentgear';
 
 const catalog: VersionCatalog = {
   version: '1.20.1',
@@ -999,6 +1000,43 @@ describe('calculateGearStats', () => {
 
       const initialInventory = new Set(Object.keys(atm11Catalog.materials));
       expect(initialInventory.size).toBe(materialCount);
+    });
+  });
+
+  describe('Issue #40: propriedades por tipo de item (by_type)', () => {
+    const axeWithHaste = (head: string, haste: string) => calculateGearStats(
+      {
+        gearTypeId: 'axe',
+        parts: {
+          main: { materialId: head },
+          rod: { materialId: haste },
+        },
+      },
+      atm11Catalog
+    );
+
+    it('machado de ferro com haste de madeira tem attackSpeed 0.9 (attack_speed/axe do ferro)', () => {
+      expect(axeWithHaste('silentgear:iron', 'silentgear:wood').attackSpeed).toBeCloseTo(0.9, 6);
+    });
+
+    it('machado de bambu com haste de madeira tem attackSpeed 0.8 (attack_speed/axe do bambu)', () => {
+      expect(axeWithHaste('silentgear:bamboo', 'silentgear:wood').attackSpeed).toBeCloseTo(0.8, 6);
+    });
+
+    it('resolve tipo específico antes do pai e do genérico', () => {
+      const stats: MaterialStats = {
+        attack_speed: 0.5,
+        by_type: { attack_speed: { harvest_tool: 0.2, axe: -0.1 } },
+      };
+      expect(resolveTypedStat(stats, 'attack_speed', 'axe')).toBe(-0.1);
+      expect(resolveTypedStat(stats, 'attack_speed', 'hoe')).toBe(0.2);
+      expect(resolveTypedStat(stats, 'attack_speed', 'sword')).toBe(0.5);
+    });
+
+    it('catálogos salvos com armor_by_piece continuam resolvendo a peça', () => {
+      const stats: MaterialStats = { armor: 9, armor_by_piece: { helmet: 4 } };
+      expect(resolveTypedStat(stats, 'armor', 'helmet')).toBe(4);
+      expect(resolveTypedStat(stats, 'armor', 'boots')).toBe(9);
     });
   });
 
