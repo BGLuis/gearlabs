@@ -45,8 +45,8 @@ describe('calculateGearStats', () => {
 
     // Dano base espada (3.0) + Diamante (3.0) = 6.0
     expect(stats.meleeDamage).toBe(6.0);
-    // Durabilidade: Diamante (1561) + Madeira rod (15) = 1576
-    expect(stats.durability).toBe(1576);
+    // Madeira no rod é número simples (AVERAGE) e entra na média ponderada com o Diamante, não é somada
+    expect(stats.durability).toBe(1042);
     // Sinergia padrão entre gema e madeira = 100%
     expect(stats.synergy).toBe(100);
     // Traits: Diamante tem Brittle II e Lustrous I; Madeira tem Flexible I
@@ -198,7 +198,7 @@ describe('calculateGearStats', () => {
           stats: {
             main: {
               armor: 10,
-              durability: 100,
+              armor_durability: 100,
             },
           },
           traits: {},
@@ -237,7 +237,7 @@ describe('calculateGearStats', () => {
     expect(applyGradeBonus(-10, 0.0)).toBe(-10);
   });
 
-  it('aplica adições da ponta (Tip Slot)', () => {
+  it('ponta de número simples entra na média ponderada da durabilidade, não é somada', () => {
     const buildWithoutTip: GearBuild = {
       gearTypeId: 'pickaxe',
       parts: {
@@ -257,8 +257,8 @@ describe('calculateGearStats', () => {
     const withoutTip = calculateGearStats(buildWithoutTip, catalog);
     const withTip = calculateGearStats(buildWithTip, catalog);
 
-    // Diamante no tip adiciona +256 durabilidade e +2 dano
-    expect(withTip.durability).toBe(withoutTip.durability + 256);
+    expect(withoutTip.durability).toBe(169);
+    expect(withTip.durability).toBe(203);
     expect(withTip.meleeDamage).toBe(withoutTip.meleeDamage + 2.0);
   });
 
@@ -299,6 +299,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 60,
+                armor_durability: 60,
                 armor_by_piece: {
                   helmet: 15,
                 },
@@ -322,6 +323,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 60,
+                armor_durability: 60,
               },
             },
             traits: {},
@@ -420,6 +422,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 25,
+                armor_durability: 60,
                 armor_toughness: 60,
               },
             },
@@ -480,7 +483,7 @@ describe('calculateGearStats', () => {
             color: '#aaaaaa',
             stats: {
               coating: {
-                durability: { operation: 'MULTIPLY_TOTAL', value: 0.5 },
+                armor_durability: { operation: 'MULTIPLY_TOTAL', value: 0.5 },
               },
             },
             traits: {},
@@ -514,6 +517,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 magic_armor: 10,
+                armor_durability: 60,
               },
             },
             traits: {},
@@ -560,6 +564,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 10,
+                armor_durability: 60,
               },
             },
             traits: {},
@@ -884,6 +889,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 10,
+                armor_durability: 60,
                 charging_value: 1.0,
               },
             },
@@ -917,6 +923,7 @@ describe('calculateGearStats', () => {
             stats: {
               main: {
                 armor: 10,
+                armor_durability: 60,
                 armor_toughness: 5,
               },
             },
@@ -942,8 +949,8 @@ describe('calculateGearStats', () => {
       };
 
       // Coating com starcharge 2: c = 2 * 1.5 = 3.0.
-      // Toughness do coating: 4 + 2 * 3.0 = 10.
-      // Toughness total: 5 (main) + 10 (coating) = 15.
+      // Toughness do coating: 4 + 2 * 3.0 = 10, número simples (AVERAGE) pesado junto ao main (5):
+      // (5 * (1 + 5/6) + 10 * (1 + 10/6)) / ((1 + 5/6) + (1 + 10/6)) = 7.96 -> 8.0
       const build: GearBuild = {
         gearTypeId: 'chestplate',
         parts: {
@@ -953,7 +960,7 @@ describe('calculateGearStats', () => {
       };
 
       const stats = calculateGearStats(build, testCatalog);
-      expect(stats.armorToughness).toBe(15.0);
+      expect(stats.armorToughness).toBe(8.0);
     });
 
     it('não modifica operações multiplicativas (MULTIPLY_BASE, MULTIPLY_TOTAL)', () => {
@@ -1513,7 +1520,7 @@ describe('calculateGearStats', () => {
       // peso MAX: 1 + 19.5 / 20.5 = 1.9512195
       // peso NONE: 1 + 15.0 / 20.5 = 1.7317073
       // media = (1.9512195 * 19.5 + 1.7317073 * 15.0) / (1.9512195 + 1.7317073) = 17.3841
-      // Durabilidade final esperada: 1561 + 17.3841 = 1578.38 -> 1578
+      // Madeira é número simples (AVERAGE), então a durabilidade é média ponderada do Diamante (1561) e das instâncias do rod
       const buildSwordMixedRod: GearBuild = {
         gearTypeId: 'sword',
         parts: {
@@ -1548,9 +1555,9 @@ describe('calculateGearStats', () => {
       const statsMax = calculateGearStats(buildSwordAllMaxRod, ATM11_CATALOG);
       const statsNone = calculateGearStats(buildSwordAllNoneRod, ATM11_CATALOG);
 
-      expect(statsNone.durability).toBe(1576);
-      expect(statsMax.durability).toBe(1581);
-      expect(statsMixed.durability).toBe(1578);
+      expect(statsNone.durability).toBe(1042);
+      expect(statsMax.durability).toBe(1043);
+      expect(statsMixed.durability).toBe(1043);
     });
 
     it('resolveSlotInstances poda adequadamente instâncias quando gearTypeId exige menos instâncias', () => {
@@ -1632,7 +1639,7 @@ describe('calculateGearStats', () => {
     });
 
     it('Critério 3: ferramentas continuam arredondando com Math.round', () => {
-      // Espada padrão de diamante + madeira segue passando com 1576
+      // Espada padrão de diamante + madeira: média ponderada (AVERAGE), não soma
       const buildSword: GearBuild = {
         gearTypeId: 'sword',
         parts: {
@@ -1641,9 +1648,9 @@ describe('calculateGearStats', () => {
         },
       };
       const swordStats = calculateGearStats(buildSword, catalog);
-      expect(swordStats.durability).toBe(1576);
+      expect(swordStats.durability).toBe(1042);
 
-      // Espada com grau gerando valor fracionário arredonda para cima (1591.61 -> 1592 em vez de truncar para 1591)
+      // Espada com grau E: média ponderada de 1576.61 (main) e 15 (rod) = 1052.9, arredonda para cima (1053 em vez de truncar para 1052)
       const buildSwordGradeE: GearBuild = {
         gearTypeId: 'sword',
         parts: {
@@ -1652,7 +1659,56 @@ describe('calculateGearStats', () => {
         },
       };
       const swordStatsGradeE = calculateGearStats(buildSwordGradeE, catalog);
-      expect(swordStatsGradeE.durability).toBe(1592);
+      expect(swordStatsGradeE.durability).toBe(1053);
+    });
+  });
+  describe('Issues #41 e #42: sem valores padrão inventados e número simples é AVERAGE', () => {
+    it('material sem harvest_speed dá velocidade de mineração 0 (padrão do mod)', () => {
+      const build: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:crushed_shulker_shell' },
+          rod: { materialId: 'silentgear:wood' },
+        },
+      };
+
+      expect(calculateGearStats(build, atm11Catalog).harvestSpeed).toBe(0);
+    });
+
+    it('ferro (raridade 20) com haste de zinco (raridade 15) dá raridade média ponderada ≈ 18, não a soma 35', () => {
+      const build: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:iron' },
+          rod: { materialId: 'silentgear:zinc' },
+        },
+      };
+
+      expect(calculateGearStats(build, atm11Catalog).rarity).toBeCloseTo(18, 0);
+    });
+
+    it('armadura cujo main só tem durability (sem armor_durability) não é construção válida', () => {
+      const testCatalog: VersionCatalog = {
+        ...catalog,
+        materials: {
+          ...catalog.materials,
+          'test:only_durability': {
+            id: 'test:only_durability',
+            name: { en: 'Only Durability', pt: 'Só Durabilidade' },
+            tier: 1,
+            category: 'metal',
+            color: '#ffffff',
+            stats: { main: { armor: 10, durability: 5000 } },
+            traits: {},
+          },
+        },
+      };
+      const build: GearBuild = {
+        gearTypeId: 'helmet',
+        parts: { main: { materialId: 'test:only_durability' } },
+      };
+
+      expect(() => calculateGearStats(build, testCatalog)).toThrow(/armor_durability/);
     });
   });
 });

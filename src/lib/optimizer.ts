@@ -74,8 +74,8 @@ export const MAX_SECONDARY_CANDIDATES = 12;
 // Cada slot opcional pode ficar vazio, então o espaço cresce multiplicativamente a cada slot opcional
 export const MAX_OPTIONAL_CANDIDATES = 1;
 
-function materialFitsSlot(m: Material, slot: PartSlot): boolean {
-  if (slot === 'main') return !!m.stats.main;
+function materialFitsSlot(m: Material, slot: PartSlot, isArmor: boolean = false): boolean {
+  if (slot === 'main') return !!m.stats.main && (!isArmor || m.stats.main.armor_durability !== undefined);
   if (slot === 'rod') return !!m.stats.rod || !!m.statModifiers?.rod;
   if (slot === 'tip') return !!m.stats.tip;
   return !!m.stats[slot];
@@ -213,6 +213,7 @@ export function findBestBuilds(
   if (!gearType) {
     throw new Error(`GearType '${request.gearTypeId}' not found.`);
   }
+  const isArmor = gearType.category === 'armor';
 
   const targetGrade: Grade | undefined = request.grade ?? request.maxGrade;
   const targetStarcharge: StarchargeLevel | undefined = request.starcharge;
@@ -240,7 +241,7 @@ export function findBestBuilds(
   const slotsToFill: PartSlot[] = [...gearType.requiredSlots];
   for (const slot of gearType.optionalSlots) {
     if (slotsToFill.includes(slot)) continue;
-    if (eligibleMaterials.some((m) => materialFitsSlot(m, slot))) slotsToFill.push(slot);
+    if (eligibleMaterials.some((m) => materialFitsSlot(m, slot, isArmor))) slotsToFill.push(slot);
   }
 
   // Candidatos viáveis por slot
@@ -249,11 +250,13 @@ export function findBestBuilds(
   for (const slot of slotsToFill) {
     // Se o usuário fixou o slot, usa apenas a escolha dele com grade e starcharge aplicados
     if (request.fixedSlots?.[slot]) {
-      candidatePartsBySlot[slot] = [makePart(request.fixedSlots[slot]!)];
+      const fixedPart = makePart(request.fixedSlots[slot]!);
+      const isInvalidArmorMain = slot === 'main' && isArmor && catalog.materials[fixedPart.materialId]?.stats.main?.armor_durability === undefined;
+      candidatePartsBySlot[slot] = isInvalidArmorMain ? [] : [fixedPart];
       continue;
     }
 
-    const valid = eligibleMaterials.filter((m) => materialFitsSlot(m, slot));
+    const valid = eligibleMaterials.filter((m) => materialFitsSlot(m, slot, isArmor));
 
     if (slot === 'main') {
       const pureCandidates = valid.map((m) => makePart(m.id));
