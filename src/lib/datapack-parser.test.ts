@@ -4,6 +4,7 @@ import {
   parseMaterialJson,
   parseDumpTsv,
   parseTsvCellValue,
+  resolveMaterialParents,
 } from './datapack-parser';
 
 describe('datapack-parser (Issue #7)', () => {
@@ -24,6 +25,24 @@ describe('datapack-parser (Issue #7)', () => {
       expect(
         extractMaterialIdFromPath('data/sgearmetalworks/silentgear_materials/uru_metal.json')
       ).toBe('sgearmetalworks:uru_metal');
+    });
+
+    it('extracts nested subpaths like wood/oak, wool/white, terracotta/magenta, stone/granite', () => {
+      expect(
+        extractMaterialIdFromPath('data/silentgear/silentgear_materials/wood/oak.json')
+      ).toBe('silentgear:wood/oak');
+      expect(
+        extractMaterialIdFromPath('data/silentgear/silentgear_materials/wool/white.json')
+      ).toBe('silentgear:wool/white');
+      expect(
+        extractMaterialIdFromPath('data/silentgear/silentgear_materials/terracotta/magenta.json')
+      ).toBe('silentgear:terracotta/magenta');
+      expect(
+        extractMaterialIdFromPath('data/silentgear/silentgear_materials/stone/granite.json')
+      ).toBe('silentgear:stone/granite');
+      expect(
+        extractMaterialIdFromPath('data/silentgear/silentgear_materials/sandstone/red.json')
+      ).toBe('silentgear:sandstone/red');
     });
 
     it('returns null for non-material paths', () => {
@@ -273,6 +292,170 @@ describe('datapack-parser (Issue #7)', () => {
       expect(mat.tier).toBe(2);
       expect(mat.stats.main?.durability).toBe(300);
       expect(mat.stats.main?.melee_damage).toBe(4.5);
+    });
+  });
+
+  describe('resolveMaterialParents (Issue #46)', () => {
+    it('material filho sem properties herda stats, traits e categorias do pai', () => {
+      const parentJson = {
+        type: 'silentgear:simple',
+        crafting: { categories: ['wood', 'organic'] },
+        display: { color: '#896727' },
+        properties: {
+          'silentgear:main': {
+            durability: 59,
+            armor: 7,
+            armor_durability: 8,
+            harvest_tier: { name: 'wood' },
+            traits: [
+              { trait: 'silentgear:flammable', level: 1 },
+              { trait: 'silentgear:jagged', level: 1 },
+            ],
+          },
+          'silentgear:rod': {
+            traits: [{ trait: 'silentgear:flexible', level: 2 }],
+          },
+        },
+      };
+
+      const childOakJson = {
+        type: 'silentgear:simple',
+        parent: 'silentgear:wood',
+        crafting: { categories: [] },
+        display: { color: '#B8945F' },
+        properties: {},
+      };
+
+      const parentMat = parseMaterialJson('data/silentgear/silentgear_materials/wood.json', parentJson)!;
+      const childMat = parseMaterialJson('data/silentgear/silentgear_materials/wood/oak.json', childOakJson)!;
+
+      expect(childMat.id).toBe('silentgear:wood/oak');
+      expect(childMat.parent).toBe('silentgear:wood');
+      expect(childMat.name.en).toBe('Oak Wood');
+      expect(childMat.name.pt).toBe('Madeira de Carvalho');
+
+      const resolved = resolveMaterialParents({
+        [parentMat.id]: parentMat,
+        [childMat.id]: childMat,
+      });
+
+      const oak = resolved['silentgear:wood/oak'];
+      expect(oak).toBeDefined();
+      expect(oak.category).toBe('wood');
+      expect(oak.categories).toEqual(['wood', 'organic']);
+      expect(oak.stats.main?.durability).toBe(59);
+      expect(oak.stats.main?.armor).toBe(7);
+      expect(oak.stats.main?.harvest_tier).toBe('wood');
+      expect(oak.traits.main).toEqual([
+        { name: 'silentgear:flammable', level: 1 },
+        { name: 'silentgear:jagged', level: 1 },
+      ]);
+      expect(oak.traits.rod).toEqual([{ name: 'silentgear:flexible', level: 2 }]);
+      expect(oak.color).toBe('#B8945F');
+    });
+
+    it('material filho com traits personalizados sobrepõe traits do pai mas herda stats', () => {
+      const parentMat = parseMaterialJson('data/silentgear/silentgear_materials/wood.json', {
+        crafting: { categories: ['wood'] },
+        properties: {
+          'silentgear:main': {
+            durability: 59,
+            armor: 7,
+            traits: [{ trait: 'silentgear:flammable', level: 1 }],
+          },
+        },
+      })!;
+
+      const childWarpedMat = parseMaterialJson('data/silentgear/silentgear_materials/wood/warped.json', {
+        parent: 'silentgear:wood',
+        crafting: { categories: [] },
+        properties: {
+          'silentgear:main': {
+            traits: [{ trait: 'silentgear:jagged', level: 1 }],
+          },
+        },
+      })!;
+
+      const resolved = resolveMaterialParents({
+        [parentMat.id]: parentMat,
+        [childWarpedMat.id]: childWarpedMat,
+      });
+
+      const warped = resolved['silentgear:wood/warped'];
+      expect(warped.stats.main?.durability).toBe(59);
+      expect(warped.stats.main?.armor).toBe(7);
+      // Mantém exclusivamente traits do filho (não inflamável)
+      expect(warped.traits.main).toEqual([{ name: 'silentgear:jagged', level: 1 }]);
+    });
+
+    it('resolve múltiplos slots incluindo lining para materiais de lã', () => {
+      const woolMat = parseMaterialJson('data/silentgear/silentgear_materials/wool.json', {
+        crafting: { categories: ['cloth', 'organic'] },
+        properties: {
+          'silentgear:main': { armor: 4 },
+          'silentgear:grip': { attack_speed: { operation: 'ADD', value: 0.2 } },
+          'silentgear:lining': {
+            knockback_resistance: { operation: 'ADD', value: 0.1 },
+            traits: [{ trait: 'silentgear:flexible', level: 2 }],
+          },
+        },
+      })!;
+
+      const whiteWoolMat = parseMaterialJson('data/silentgear/silentgear_materials/wool/white.json', {
+        parent: 'silentgear:wool',
+        crafting: { categories: [] },
+        properties: {},
+      })!;
+
+      const resolved = resolveMaterialParents({
+        [woolMat.id]: woolMat,
+        [whiteWoolMat.id]: whiteWoolMat,
+      });
+
+      const whiteWool = resolved['silentgear:wool/white'];
+      expect(whiteWool.id).toBe('silentgear:wool/white');
+      expect(whiteWool.name.en).toBe('White Wool');
+      expect(whiteWool.name.pt).toBe('Lã Branca');
+      expect(whiteWool.stats.main?.armor).toBe(4);
+      expect(whiteWool.stats.lining?.knockback_resistance).toEqual({ operation: 'ADD', value: 0.1 });
+      expect(whiteWool.traits.lining).toEqual([{ name: 'silentgear:flexible', level: 2 }]);
+    });
+
+    it('detecta ciclos na hierarquia sem entrar em loop infinito', () => {
+      const matA = parseMaterialJson('data/silentgear/silentgear_materials/a.json', {
+        parent: 'silentgear:b',
+        properties: { 'silentgear:main': { durability: 100 } },
+      })!;
+      const matB = parseMaterialJson('data/silentgear/silentgear_materials/b.json', {
+        parent: 'silentgear:a',
+        properties: { 'silentgear:main': { durability: 200 } },
+      })!;
+
+      const resolved = resolveMaterialParents({
+        'silentgear:a': matA,
+        'silentgear:b': matB,
+      });
+
+      expect(resolved['silentgear:a']).toBeDefined();
+      expect(resolved['silentgear:b']).toBeDefined();
+    });
+
+    it('resolve herança contra catálogo de fallback se o pai não estiver no lote', () => {
+      const childMat = parseMaterialJson('data/custom/silentgear_materials/wood/cherry.json', {
+        parent: 'silentgear:wood',
+        properties: {},
+      })!;
+
+      const fallbackMat = parseMaterialJson('data/silentgear/silentgear_materials/wood.json', {
+        properties: { 'silentgear:main': { durability: 60 } },
+      })!;
+
+      const resolved = resolveMaterialParents(
+        { [childMat.id]: childMat },
+        { [fallbackMat.id]: fallbackMat }
+      );
+
+      expect(resolved['custom:wood/cherry'].stats.main?.durability).toBe(60);
     });
   });
 });

@@ -237,3 +237,98 @@ describe('Derivação de Slots Opcionais por Tipo de Equipamento (Issue #63)', (
   });
 });
 
+describe('Resolução de IDs aninhados e Herança de Parent (Issue #46)', () => {
+  const projectRoot = path.resolve(__dirname, '../..');
+  const catalogPath = path.join(projectRoot, 'public/data/versions/atm11/catalog.json');
+  const rawCatalog = fs.readFileSync(catalogPath, 'utf-8');
+  const catalog: VersionCatalog = JSON.parse(rawCatalog);
+
+  it('Critério 1: o catálogo gerado contém silentgear:wool/white, silentgear:wood/oak etc. com os stats do pai', () => {
+    // 1. Madeiras
+    const oak = catalog.materials['silentgear:wood/oak'];
+    expect(oak, 'silentgear:wood/oak deve existir no catálogo').toBeDefined();
+    expect(oak.name.en).toBe('Oak Wood');
+    expect(oak.name.pt).toBe('Madeira de Carvalho');
+    expect(oak.stats.main?.durability).toBe(59);
+    expect(oak.stats.main?.armor).toBe(7);
+    expect(oak.stats.main?.harvest_tier).toBe('wood');
+    expect(oak.stats.rod).toBeDefined();
+
+    // 2. Lãs
+    const whiteWool = catalog.materials['silentgear:wool/white'];
+    expect(whiteWool, 'silentgear:wool/white deve existir no catálogo').toBeDefined();
+    expect(whiteWool.name.en).toBe('White Wool');
+    expect(whiteWool.name.pt).toBe('Lã Branca');
+    expect(whiteWool.stats.main?.armor).toBe(4);
+    expect(whiteWool.stats.main?.armor_durability).toBe(4);
+
+    // 3. Terracotas
+    const whiteTerracotta = catalog.materials['silentgear:terracotta/white'];
+    expect(whiteTerracotta, 'silentgear:terracotta/white deve existir no catálogo').toBeDefined();
+    expect(whiteTerracotta.name.en).toBe('White Terracotta');
+    expect(whiteTerracotta.stats.main?.durability).toBe(165);
+
+    // 4. Pedras e Arenito
+    const granite = catalog.materials['silentgear:stone/granite'];
+    expect(granite, 'silentgear:stone/granite deve existir no catálogo').toBeDefined();
+    expect(granite.stats.main?.durability).toBe(131);
+
+    const redSandstone = catalog.materials['silentgear:sandstone/red'];
+    expect(redSandstone, 'silentgear:sandstone/red deve existir no catálogo').toBeDefined();
+    expect(redSandstone.stats.main?.durability).toBe(117);
+  });
+
+  it('Critério 2: nenhum ID truncado colidente como silentgear:red, silentgear:oak, silentgear:white existe', () => {
+    const invalidIds = [
+      'silentgear:red',
+      'silentgear:oak',
+      'silentgear:white',
+      'silentgear:granite',
+      'silentgear:diorite',
+      'silentgear:andesite',
+      'silentgear:birch',
+      'silentgear:spruce',
+    ];
+    for (const invalidId of invalidIds) {
+      expect(catalog.materials[invalidId], `ID colidente ${invalidId} não deve existir no catálogo`).toBeUndefined();
+    }
+  });
+
+  it('Critério 3: silentgear:wool/white possui stats no slot lining', () => {
+    const whiteWool = catalog.materials['silentgear:wool/white'];
+    expect(whiteWool).toBeDefined();
+    expect(whiteWool.stats.lining).toBeDefined();
+    expect(whiteWool.stats.lining?.knockback_resistance).toEqual({ operation: 'ADD', value: 0.1 });
+    expect(whiteWool.traits.lining).toEqual([{ name: 'silentgear:flexible', level: 2 }]);
+  });
+
+  it('Critério 4: entradas sem stats de principal ou haste só restam para materiais que legitimamente não os têm', () => {
+    const missingMainAndRod: string[] = [];
+    for (const [id, mat] of Object.entries(catalog.materials)) {
+      if (!mat.stats?.main && !mat.stats?.rod) {
+        missingMainAndRod.push(id);
+      }
+    }
+
+    // Apenas ligas compostas, netherite (apenas coating) e materiais exclusivos de utilidade (corda/lining/setting)
+    const expectedWithoutMainOrRod = [
+      'silentgear:crude_alloy',
+      'silentgear:fine_silk',
+      'silentgear:flax',
+      'silentgear:fluffy_string',
+      'silentgear:hybrid_gem',
+      'silentgear:metal_alloy',
+      'silentgear:mixed_fabric',
+      'silentgear:netherite',
+      'silentgear:prismarine',
+      'silentgear:sinew',
+      'silentgear:slime',
+      'silentgear:string',
+      'silentgear:super_alloy',
+      'silentgear:vine',
+    ];
+
+    expect(missingMainAndRod.sort()).toEqual(expectedWithoutMainOrRod.sort());
+  });
+});
+

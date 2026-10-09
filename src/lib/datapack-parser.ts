@@ -9,9 +9,112 @@ import {
   StatModifierEntry,
   VersionCatalog,
 } from '@/types/silentgear';
-import { OFFICIAL_GEAR_TYPES, OFFICIAL_TRAITS } from '@/data/defaultCatalog';
+import { OFFICIAL_GEAR_TYPES, OFFICIAL_TRAITS, OFFICIAL_MATERIALS_1_20 } from '@/data/defaultCatalog';
 
-const ALL_SLOTS: PartSlot[] = ['main', 'rod', 'tip', 'coating', 'lining', 'grip', 'binding'];
+export const ALL_SLOTS: PartSlot[] = ['main', 'rod', 'tip', 'coating', 'lining', 'grip', 'binding'];
+
+export const NESTED_MATERIAL_TRANSLATIONS: Record<string, { en: string; pt: string }> = {
+  // Madeiras
+  'wood/oak': { en: 'Oak Wood', pt: 'Madeira de Carvalho' },
+  'wood/birch': { en: 'Birch Wood', pt: 'Madeira de Bétula' },
+  'wood/spruce': { en: 'Spruce Wood', pt: 'Madeira de Pinheiro' },
+  'wood/jungle': { en: 'Jungle Wood', pt: 'Madeira da Selva' },
+  'wood/acacia': { en: 'Acacia Wood', pt: 'Madeira de Acácia' },
+  'wood/dark_oak': { en: 'Dark Oak Wood', pt: 'Madeira de Carvalho Escuro' },
+  'wood/crimson': { en: 'Crimson Wood', pt: 'Madeira Carmesim' },
+  'wood/warped': { en: 'Warped Wood', pt: 'Madeira Distorcida' },
+
+  // Pedras
+  'stone/granite': { en: 'Granite', pt: 'Granito' },
+  'stone/diorite': { en: 'Diorite', pt: 'Diorito' },
+  'stone/andesite': { en: 'Andesite', pt: 'Andesito' },
+
+  // Arenito
+  'sandstone/red': { en: 'Red Sandstone', pt: 'Arenito Vermelho' },
+
+  // Lãs
+  'wool/white': { en: 'White Wool', pt: 'Lã Branca' },
+  'wool/orange': { en: 'Orange Wool', pt: 'Lã Laranja' },
+  'wool/magenta': { en: 'Magenta Wool', pt: 'Lã Magenta' },
+  'wool/light_blue': { en: 'Light Blue Wool', pt: 'Lã Azul Clara' },
+  'wool/yellow': { en: 'Yellow Wool', pt: 'Lã Amarela' },
+  'wool/lime': { en: 'Lime Wool', pt: 'Lã Verde Limão' },
+  'wool/pink': { en: 'Pink Wool', pt: 'Lã Rosa' },
+  'wool/gray': { en: 'Gray Wool', pt: 'Lã Cinza' },
+  'wool/light_gray': { en: 'Light Gray Wool', pt: 'Lã Cinza Clara' },
+  'wool/cyan': { en: 'Cyan Wool', pt: 'Lã Ciano' },
+  'wool/purple': { en: 'Purple Wool', pt: 'Lã Roxa' },
+  'wool/blue': { en: 'Blue Wool', pt: 'Lã Azul' },
+  'wool/brown': { en: 'Brown Wool', pt: 'Lã Marrom' },
+  'wool/green': { en: 'Green Wool', pt: 'Lã Verde' },
+  'wool/red': { en: 'Red Wool', pt: 'Lã Vermelha' },
+  'wool/black': { en: 'Black Wool', pt: 'Lã Preta' },
+
+  // Terracotas
+  'terracotta/white': { en: 'White Terracotta', pt: 'Terracota Branca' },
+  'terracotta/orange': { en: 'Orange Terracotta', pt: 'Terracota Laranja' },
+  'terracotta/magenta': { en: 'Magenta Terracotta', pt: 'Terracota Magenta' },
+  'terracotta/light_blue': { en: 'Light Blue Terracotta', pt: 'Terracota Azul Clara' },
+  'terracotta/yellow': { en: 'Yellow Terracotta', pt: 'Terracota Amarela' },
+  'terracotta/lime': { en: 'Lime Terracotta', pt: 'Terracota Verde Limão' },
+  'terracotta/pink': { en: 'Pink Terracotta', pt: 'Terracota Rosa' },
+  'terracotta/gray': { en: 'Gray Terracotta', pt: 'Terracota Cinza' },
+  'terracotta/light_gray': { en: 'Light Gray Terracotta', pt: 'Terracota Cinza Clara' },
+  'terracotta/cyan': { en: 'Cyan Terracotta', pt: 'Terracota Ciano' },
+  'terracotta/purple': { en: 'Purple Terracotta', pt: 'Terracota Roxa' },
+  'terracotta/blue': { en: 'Blue Terracotta', pt: 'Terracota Azul' },
+  'terracotta/brown': { en: 'Brown Terracotta', pt: 'Terracota Marrom' },
+  'terracotta/green': { en: 'Green Terracotta', pt: 'Terracota Verde' },
+  'terracotta/red': { en: 'Red Terracotta', pt: 'Terracota Vermelha' },
+  'terracotta/black': { en: 'Black Terracotta', pt: 'Terracota Preta' },
+
+  // Nomes canônicos gerais
+  allthemodium: { en: 'Allthemodium', pt: 'Allthemodium' },
+  vibranium: { en: 'Vibranium', pt: 'Vibranium' },
+  unobtainium: { en: 'Unobtainium', pt: 'Unobtainium' },
+  uru_metal: { en: 'Uru Metal', pt: 'Metal Uru' },
+  tyrian_steel: { en: 'Tyrian Steel', pt: 'Aço Tiriano' },
+  crimson_iron: { en: 'Crimson Iron', pt: 'Ferro Carmesim' },
+  crimson_steel: { en: 'Crimson Steel', pt: 'Aço Carmesim' },
+  azure_silver: { en: 'Azure Silver', pt: 'Prata Lazúli' },
+  azure_electrum: { en: 'Azure Electrum', pt: 'Electro Lazúli' },
+  breeze_rod: { en: 'Breeze Rod', pt: 'Haste de Brisa' },
+  iron: { en: 'Iron', pt: 'Ferro' },
+  diamond: { en: 'Diamond', pt: 'Diamante' },
+  netherite: { en: 'Netherite', pt: 'Netherita' },
+  gold: { en: 'Gold', pt: 'Ouro' },
+  copper: { en: 'Copper', pt: 'Cobre' },
+  wood: { en: 'Wood', pt: 'Madeira' },
+  stone: { en: 'Stone', pt: 'Pedra' },
+  wool: { en: 'Wool', pt: 'Lã' },
+  terracotta: { en: 'Terracotta', pt: 'Terracota' },
+  sandstone: { en: 'Sandstone', pt: 'Arenito' },
+};
+
+export function formatMaterialName(subPath: string): { en: string; pt: string } {
+  const normalized = subPath.replace(/\\/g, '/').toLowerCase();
+  if (NESTED_MATERIAL_TRANSLATIONS[normalized]) {
+    return NESTED_MATERIAL_TRANSLATIONS[normalized];
+  }
+
+  // Fallback para nomes arbitrários
+  const parts = normalized.split('/');
+  const formatted = parts
+    .map((p) => p.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()))
+    .join(' - ');
+
+  return { en: formatted, pt: formatted };
+}
+
+export function normalizeColor(color: string | undefined): string {
+  if (!color || typeof color !== 'string') return '#FFFFFF';
+  let c = color.trim().toUpperCase();
+  if (c.startsWith('#') && c.length === 9) {
+    // #AARRGGBB -> #RRGGBB
+    c = '#' + c.slice(3);
+  }
+  return c;
+}
 
 /**
  * Extrai o ID com namespace a partir do caminho do arquivo no datapack.
@@ -19,9 +122,12 @@ const ALL_SLOTS: PartSlot[] = ['main', 'rod', 'tip', 'coating', 'lining', 'grip'
  *  - "data/silentgear/silentgear_materials/allthemodium.json" -> "silentgear:allthemodium"
  *  - "kubejs/dynamic_data/silentgear/silentgear_materials/allthemodium.json" -> "silentgear:allthemodium"
  *  - "data/sgearmetalworks/silentgear_materials/uru_metal.json" -> "sgearmetalworks:uru_metal"
+ *  - "data/silentgear/silentgear_materials/wood/oak.json" -> "silentgear:wood/oak"
+ *  - "data/silentgear/silentgear_materials/wool/white.json" -> "silentgear:wool/white"
  */
 export function extractMaterialIdFromPath(filePath: string): string | null {
-  const match = filePath.match(/(?:^|\/)([^/]+)\/silentgear_materials\/([^/]+)\.json$/);
+  const normalized = filePath.replace(/\\/g, '/');
+  const match = normalized.match(/(?:^|\/)([^/]+)\/silentgear_materials\/(.+)\.json$/);
   if (match) {
     return `${match[1]}:${match[2]}`;
   }
@@ -114,9 +220,12 @@ function parseSlotStats(slotData: any): MaterialStats {
   const chargingValue = parseStatValueEntry(slotData.charging_value);
   if (chargingValue !== undefined) stats.charging_value = chargingValue;
 
-  // Harvest Tier (suporta objeto com .name ou string/número)
+  // Harvest Tier (suporta objeto com .name, .id ou .incorrect_blocks_for_tool, ou string/número)
   if (typeof slotData.harvest_tier === 'object' && slotData.harvest_tier !== null) {
-    stats.harvest_tier = slotData.harvest_tier.name ?? slotData.harvest_tier.id;
+    stats.harvest_tier =
+      slotData.harvest_tier.name ??
+      slotData.harvest_tier.id ??
+      slotData.harvest_tier.incorrect_blocks_for_tool;
   } else if (typeof slotData.harvest_tier === 'string') {
     stats.harvest_tier = slotData.harvest_tier;
   } else if (typeof slotData.harvest_tier === 'number') {
@@ -157,38 +266,40 @@ export function parseMaterialJson(filePath: string, json: any): Material | null 
     return null;
   }
 
-  const baseName = filePath.split('/').pop()?.replace('.json', '') || 'custom';
-  const id = extractMaterialIdFromPath(filePath) || json.id || `custom:${baseName}`;
+  const normalizedPath = filePath.replace(/\\/g, '/');
+  const fullId = extractMaterialIdFromPath(filePath);
+  const subPathMatch = normalizedPath.match(/(?:^|\/)[^/]+\/silentgear_materials\/(.+)\.json$/);
+  const baseName = normalizedPath.split('/').pop()?.replace('.json', '') || 'custom';
+  const subPath = subPathMatch ? subPathMatch[1] : (fullId ? fullId.replace(/^[^:]+:/, '') : baseName);
+
+  const id = fullId || json.id || `custom:${baseName}`;
 
   // Categorias: formato 1.21+ usa crafting.categories, 1.20 usa availability.categories
-  const rawCategories = json.crafting?.categories ?? json.availability?.categories ?? ['metal'];
+  const rawCategories = json.crafting?.categories ?? json.availability?.categories;
   const categories: string[] = Array.isArray(rawCategories)
     ? rawCategories.map((c) => String(c))
-    : [String(rawCategories)];
+    : rawCategories !== undefined
+    ? [String(rawCategories)]
+    : [];
   const category = (categories[0] || 'metal') as MaterialCategory;
 
-  // Nível / Tier
-  const tier = json.availability?.tier ?? json.tier ?? 1;
-
   // Cor (suporta #RRGGBB ou #AARRGGBB)
-  let color = json.display?.color || json.model?.color || '#D8D8D8';
-  if (typeof color === 'string' && color.startsWith('#FF') && color.length === 9) {
-    color = '#' + color.slice(3);
-  }
+  const color = normalizeColor(json.display?.color || json.model?.color || '#D8D8D8');
 
   // Nome (inglês e português)
+  const defaultNames = formatMaterialName(subPath);
   const nameEn =
     (typeof json.name === 'string' ? json.name : null) ??
     json.name?.en ??
     (typeof json.display?.name === 'string' ? json.display.name : null) ??
     json.display?.name?.en ??
-    baseName.replace(/_/g, ' ');
+    defaultNames.en;
   const namePt =
     (typeof json.name === 'string' ? json.name : null) ??
     json.name?.pt ??
     (typeof json.display?.name === 'string' ? json.display.name : null) ??
     json.display?.name?.pt ??
-    nameEn;
+    defaultNames.pt;
 
   // Stats e Traits por slot
   const rawStats = json.stats || {};
@@ -205,11 +316,14 @@ export function parseMaterialJson(filePath: string, json: any): Material | null 
       if (Array.isArray(slotData.traits)) {
         traits[slot] = slotData.traits.map((t: any) => ({
           name: t.trait ?? t.name,
-          level: t.level ?? 1,
+          level: typeof t.level === 'number' ? t.level : 1,
         }));
       }
     }
   }
+
+  // Nível / Tier
+  const tier = json.availability?.tier ?? json.tier ?? (stats.main?.harvest_tier ? 2 : 1);
 
   const material: Material = {
     id,
@@ -225,11 +339,144 @@ export function parseMaterialJson(filePath: string, json: any): Material | null 
     traits,
   };
 
-  if (json.parent) {
+  if (json.parent && json.parent !== 'silentgear:empty') {
     material.parent = json.parent;
   }
 
   return material;
+}
+
+/**
+ * Resolve a herança de materiais que possuem 'parent' definido conforme Silent Gear 4.2.3 (AbstractMaterial.java).
+ *
+ * Regras:
+ * 1. Categorias: se as categorias do filho forem vazias ([]), herda categorias do pai.
+ * 2. Stats por slot: se o filho não tiver o slot, herda integralmente do pai. Se ambos tiverem,
+ *    mescla propriedade por propriedade (o filho sobrepõe, e propriedades faltantes caem para as do pai).
+ * 3. Traits por slot: se o filho definiu traits para o slot (mesmo que específicos), mantém os do filho;
+ *    se não definiu o slot nos traits, herda do pai.
+ * 4. Tier: se ausente/padrão, herda do pai caso este possua.
+ * 5. Ciclos e referências ausentes são tratados com segurança sem crash.
+ */
+export function resolveMaterialParents(
+  materials: Record<string, Material>,
+  fallbackMaterials: Record<string, Material> = {}
+): Record<string, Material> {
+  const allAvailable = { ...fallbackMaterials, ...materials };
+  const resolved: Record<string, Material> = {};
+  const resolving = new Set<string>();
+
+  function resolve(id: string): Material | undefined {
+    if (resolved[id]) return resolved[id];
+    const raw = allAvailable[id];
+    if (!raw) return undefined;
+
+    const parentId = raw.parent;
+    if (!parentId || parentId === 'silentgear:empty' || parentId === id) {
+      resolved[id] = { ...raw };
+      return resolved[id];
+    }
+
+    if (resolving.has(id)) {
+      console.warn(`[datapack-parser] Ciclo detectado na hierarquia de parent: ${id}`);
+      resolved[id] = { ...raw };
+      return resolved[id];
+    }
+
+    resolving.add(id);
+    const parentMat = resolve(parentId);
+    resolving.delete(id);
+
+    if (!parentMat) {
+      resolved[id] = { ...raw };
+      return resolved[id];
+    }
+
+    // 1. Categorias: se vazio no filho, herda do pai
+    const childHasCategories = raw.categories && raw.categories.length > 0;
+    const categories = childHasCategories
+      ? raw.categories!
+      : (parentMat.categories && parentMat.categories.length > 0
+          ? parentMat.categories
+          : [parentMat.category]);
+    const category = childHasCategories ? raw.category : parentMat.category;
+
+    // 2. Mesclar stats e traits por slot
+    const mergedStats: Partial<Record<PartSlot, MaterialStats>> = {};
+    const mergedTraits: Partial<Record<PartSlot, MaterialTraitRef[]>> = {};
+
+    const allSlots = new Set<PartSlot>([
+      ...(Object.keys(parentMat.stats || {}) as PartSlot[]),
+      ...(Object.keys(raw.stats || {}) as PartSlot[]),
+      ...(Object.keys(parentMat.traits || {}) as PartSlot[]),
+      ...(Object.keys(raw.traits || {}) as PartSlot[]),
+    ]);
+
+    for (const slot of allSlots) {
+      const parentSlotStats = parentMat.stats?.[slot];
+      const childSlotStats = raw.stats?.[slot];
+
+      if (!childSlotStats && parentSlotStats) {
+        mergedStats[slot] = {
+          ...parentSlotStats,
+          ...(parentSlotStats.armor_by_piece && {
+            armor_by_piece: { ...parentSlotStats.armor_by_piece },
+          }),
+        };
+      } else if (childSlotStats && !parentSlotStats) {
+        mergedStats[slot] = {
+          ...childSlotStats,
+          ...(childSlotStats.armor_by_piece && {
+            armor_by_piece: { ...childSlotStats.armor_by_piece },
+          }),
+        };
+      } else if (childSlotStats && parentSlotStats) {
+        const combined: MaterialStats = {
+          ...parentSlotStats,
+          ...childSlotStats,
+        };
+        if (parentSlotStats.armor_by_piece || childSlotStats.armor_by_piece) {
+          combined.armor_by_piece = {
+            ...(parentSlotStats.armor_by_piece || {}),
+            ...(childSlotStats.armor_by_piece || {}),
+          };
+        }
+        mergedStats[slot] = combined;
+      }
+
+      // Traits: filho sobrescreve pai se definiu explicitamente para o slot
+      const parentSlotTraits = parentMat.traits?.[slot];
+      const childSlotTraits = raw.traits?.[slot];
+
+      if (childSlotTraits !== undefined) {
+        mergedTraits[slot] = [...childSlotTraits];
+      } else if (parentSlotTraits) {
+        mergedTraits[slot] = [...parentSlotTraits];
+      }
+    }
+
+    // Tier: herda do pai se o filho não possuir harvest_tier próprio
+    const tier = raw.tier ?? parentMat.tier ?? (mergedStats.main?.harvest_tier ? 2 : 1);
+
+    const result: Material = {
+      ...raw,
+      category,
+      categories,
+      tier,
+      stats: mergedStats,
+      traits: mergedTraits,
+    };
+
+    resolved[id] = result;
+    return result;
+  }
+
+  const finalMaterials: Record<string, Material> = {};
+  for (const id of Object.keys(materials)) {
+    finalMaterials[id] = resolve(id) || materials[id];
+  }
+
+  return finalMaterials;
 }
 
 /**
@@ -262,9 +509,11 @@ export async function parseDatapackZip(file: File): Promise<VersionCatalog> {
     }
   }
 
+  const resolvedMaterials = resolveMaterialParents(materials, OFFICIAL_MATERIALS_1_20);
+
   return {
     version: 'custom',
-    materials,
+    materials: resolvedMaterials,
     gearTypes: OFFICIAL_GEAR_TYPES,
     traits: OFFICIAL_TRAITS,
   };
