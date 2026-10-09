@@ -10,6 +10,7 @@ import {
   applyStarcharge,
   applyEnhancementsToModifiers,
   calculateCompoundChargingValue,
+  composeCompoundSlotModifiers,
 } from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
@@ -1091,6 +1092,94 @@ describe('calculateGearStats', () => {
       const cvLining = calculateCompoundChargingValue(subMaterials, 'lining');
       expect(cvLining).toBeDefined();
       expect(cvLining).toBeCloseTo(1.3118, 3);
+    });
+  });
+
+  describe('Issue #30: Multiplicador da Liga Crua e Tipos de Liga', () => {
+    it('liga crua multiplica por 0,8 as propriedades afetadas por sinergia e preserva propriedades não afetadas (Critério 2)', () => {
+      const iron = ATM11_CATALOG.materials['silentgear:iron']!;
+      const gold = ATM11_CATALOG.materials['silentgear:gold']!;
+
+      const subMaterials = [iron, gold];
+
+      // Compor como metal (padrão / 1.0x)
+      const metalComposed = composeCompoundSlotModifiers(subMaterials, 'main', false, 'sword', 'metal');
+
+      // Compor como crude (0.8x)
+      const crudeComposed = composeCompoundSlotModifiers(subMaterials, 'main', false, 'sword', 'crude');
+
+      expect(metalComposed.synergy).toBeCloseTo(crudeComposed.synergy, 5);
+
+      // Durabilidade (afetada por sinergia): deve ter exatamente x0.8
+      const metalDur = metalComposed.durabilityMods[0].value;
+      const crudeDur = crudeComposed.durabilityMods[0].value;
+      expect(crudeDur).toBeCloseTo(metalDur * 0.8, 4);
+
+      // Dano corpo a corpo (afetado por sinergia): deve ter exatamente x0.8
+      const metalDamage = metalComposed.meleeDamageMods[0].value;
+      const crudeDamage = crudeComposed.meleeDamageMods[0].value;
+      expect(crudeDamage).toBeCloseTo(metalDamage * 0.8, 4);
+
+      // Velocidade de colheita (afetada por sinergia): deve ter exatamente x0.8
+      const metalHarvest = metalComposed.harvestSpeedMods[0].value;
+      const crudeHarvest = crudeComposed.harvestSpeedMods[0].value;
+      expect(crudeHarvest).toBeCloseTo(metalHarvest * 0.8, 4);
+
+      // Velocidade de ataque (NÃO afetada por sinergia): NÃO deve ser multiplicada por 0.8
+      const metalAtkSpd = metalComposed.attackSpeedMods[0].value;
+      const crudeAtkSpd = crudeComposed.attackSpeedMods[0].value;
+      expect(crudeAtkSpd).toBeCloseTo(metalAtkSpd, 4);
+
+      // Rarity (NÃO afetada por sinergia): NÃO deve ser multiplicada por 0.8
+      const metalRarity = metalComposed.rarityMods[0].value;
+      const crudeRarity = crudeComposed.rarityMods[0].value;
+      expect(crudeRarity).toBeCloseTo(metalRarity, 4);
+    });
+
+    it('calculateGearStats aplica penalidade da liga crua no resultado final da arma', () => {
+      const buildMetal: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: {
+            materialId: 'silentgear:iron',
+            alloyType: 'metal',
+            materials: [{ materialId: 'silentgear:iron' }, { materialId: 'silentgear:gold' }],
+          },
+          rod: { materialId: 'silentgear:rough_rod' },
+        },
+      };
+
+      const buildCrude: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: {
+            materialId: 'silentgear:iron',
+            alloyType: 'crude',
+            materials: [{ materialId: 'silentgear:iron' }, { materialId: 'silentgear:gold' }],
+          },
+          rod: { materialId: 'silentgear:rough_rod' },
+        },
+      };
+
+      const statsMetal = calculateGearStats(buildMetal, ATM11_CATALOG);
+      const statsCrude = calculateGearStats(buildCrude, ATM11_CATALOG);
+
+      // Durabilidade e dano menores na crua devido à penalidade de 20%
+      expect(statsCrude.durability).toBeLessThan(statsMetal.durability);
+      expect(statsCrude.meleeDamage).toBeLessThan(statsMetal.meleeDamage);
+      // Velocidade de ataque inalterada
+      expect(statsCrude.attackSpeed).toBeCloseTo(statsMetal.attackSpeed, 2);
+    });
+
+    it('super liga e liga de metais mantêm multiplicador de 1.0 (sem penalidade)', () => {
+      const iron = ATM11_CATALOG.materials['silentgear:iron']!;
+      const gold = ATM11_CATALOG.materials['silentgear:gold']!;
+
+      const metalComposed = composeCompoundSlotModifiers([iron, gold], 'main', false, 'sword', 'metal');
+      const superComposed = composeCompoundSlotModifiers([iron, gold], 'main', false, 'sword', 'super');
+
+      expect(superComposed.durabilityMods[0].value).toBeCloseTo(metalComposed.durabilityMods[0].value, 4);
+      expect(superComposed.meleeDamageMods[0].value).toBeCloseTo(metalComposed.meleeDamageMods[0].value, 4);
     });
   });
 });

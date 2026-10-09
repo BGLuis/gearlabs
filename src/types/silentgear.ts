@@ -125,11 +125,14 @@ export interface SubMaterialSelection {
 
 export type StarchargeLevel = 0 | 1 | 2 | 3;
 
+export type AlloyType = 'metal' | 'gem' | 'fabric' | 'crude' | 'super';
+
 export interface GearPartSelection {
   materialId: string;
   grade?: Grade;
   materials?: SubMaterialSelection[];
   starcharge?: StarchargeLevel;
+  alloyType?: AlloyType;
 }
 
 export interface GearBuild {

@@ -14,6 +14,7 @@ import {
   StatValueModifier,
   TraitInfo,
   VersionCatalog,
+  AlloyType,
 } from '@/types/silentgear';
 
 /**
@@ -352,19 +353,24 @@ export function calculateCompoundChargingValue(
   return compressed.length > 0 ? compressed[0].value : undefined;
 }
 
+export const CRUDE_PROPERTY_MULTIPLIER = 0.8;
+
 /**
  * Compõe as propriedades de um slot feito de múltiplos sub-materiais (liga ou tecido misto),
- * aplicando média ponderada e sinergia de SynergyUtils antes do fluxo canônico.
+ * aplicando média ponderada, sinergia de SynergyUtils e penalidade de liga crua antes do fluxo canônico.
  */
 export function composeCompoundSlotModifiers(
   subMaterials: Material[],
   slot: PartSlot,
   isArmor: boolean,
-  gearPieceId?: string
+  gearPieceId?: string,
+  alloyType?: AlloyType
 ) {
   const isMain = slot === 'main';
   const defaultOp: NormalizedOperation = isMain ? 'AVERAGE' : 'ADD';
   const synergy = calculateSynergy(subMaterials, slot);
+  const isCrude = alloyType === 'crude';
+  const crudeMultiplier = isCrude ? CRUDE_PROPERTY_MULTIPLIER : 1.0;
 
   function processStat(
     extractor: (mat: Material) => StatModifierEntry | undefined,
@@ -379,13 +385,22 @@ export function composeCompoundSlotModifiers(
     }
     if (rawMods.length === 0) return [];
     const compressed = compressModifiersForProperty(rawMods, defaultOp);
-    if (!affectedBySynergy || Math.abs(synergy - 1.0) < 1e-6) {
+    if (!affectedBySynergy) {
       return compressed;
     }
-    return compressed.map((m) => ({
-      ...m,
-      value: applySynergyBonus(m.value, synergy),
-    }));
+    return compressed.map((m) => {
+      let val = m.value;
+      if (Math.abs(synergy - 1.0) >= 1e-6) {
+        val = applySynergyBonus(val, synergy);
+      }
+      if (isCrude) {
+        val = val * crudeMultiplier;
+      }
+      return {
+        ...m,
+        value: val,
+      };
+    });
   }
 
   // Armor
@@ -553,7 +568,13 @@ export function calculateGearStats(
   let mainSynergy = 1.0;
   let composedMain: ReturnType<typeof composeCompoundSlotModifiers> | null = null;
   if (isMainCompound) {
-    composedMain = composeCompoundSlotModifiers(mainSubMaterials, 'main', isArmor, gearType.id);
+    composedMain = composeCompoundSlotModifiers(
+      mainSubMaterials,
+      'main',
+      isArmor,
+      gearType.id,
+      mainSelection?.alloyType
+    );
     mainSynergy = composedMain.synergy;
   }
 
@@ -654,7 +675,13 @@ export function calculateGearStats(
     let slotChargingValue = getNumericStatValue(mat?.stats[slot]?.charging_value ?? mat?.stats.main?.charging_value, 0);
 
     if (isSlotCompound) {
-      const composedSlot = composeCompoundSlotModifiers(slotSubMaterials, slot, isArmor, gearType.id);
+      const composedSlot = composeCompoundSlotModifiers(
+        slotSubMaterials,
+        slot,
+        isArmor,
+        gearType.id,
+        sel.alloyType
+      );
       if (composedSlot.chargingValueMods.length > 0) {
         slotChargingValue = composedSlot.chargingValueMods[0].value;
       }

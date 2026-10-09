@@ -10,6 +10,7 @@ import {
   PartSlot,
   SubMaterialSelection,
   StarchargeLevel,
+  AlloyType,
 } from '@/types/silentgear';
 import {
   ATM11_CATALOG,
@@ -25,6 +26,7 @@ import {
   reorderPartSubMaterials,
   updatePartSubMaterial,
   setPartSubMaterialsInPart,
+  setPartAlloyTypeInPart,
 } from '@/lib/parts';
 
 interface GearContextType {
@@ -37,7 +39,8 @@ interface GearContextType {
   setGearType: (typeId: string) => void;
   setPartMaterial: (slot: PartSlot, materialId: string, grade?: Grade, starcharge?: StarchargeLevel) => void;
   setPartGrade: (slot: PartSlot, grade: Grade) => void;
-  setPartSubMaterials: (slot: PartSlot, materials: SubMaterialSelection[]) => void;
+  setPartSubMaterials: (slot: PartSlot, materials: SubMaterialSelection[], alloyType?: AlloyType) => void;
+  setPartAlloyType: (slot: PartSlot, alloyType: AlloyType) => void;
   addSubMaterial: (slot: PartSlot, materialId: string, grade?: Grade) => void;
   removeSubMaterial: (slot: PartSlot, index: number) => void;
   reorderSubMaterials: (slot: PartSlot, fromIndex: number, toIndex: number) => void;
@@ -243,10 +246,27 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     });
   }
 
-  function setPartSubMaterials(slot: PartSlot, materials: SubMaterialSelection[]) {
+  function setPartSubMaterials(slot: PartSlot, materials: SubMaterialSelection[], alloyType?: AlloyType) {
     setBuild((prev) => {
       const current = prev.parts[slot];
-      const nextPart = setPartSubMaterialsInPart(current, materials);
+      const nextPart = setPartSubMaterialsInPart(current, materials, alloyType);
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: {
+            ...nextPart,
+            starcharge: current?.starcharge || 0,
+          },
+        },
+      };
+    });
+  }
+
+  function setPartAlloyType(slot: PartSlot, alloyType: AlloyType) {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      const nextPart = setPartAlloyTypeInPart(current, alloyType);
       return {
         ...prev,
         parts: {
@@ -263,7 +283,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
   function addSubMaterial(slot: PartSlot, materialId: string, _grade: Grade = 'NONE') {
     setBuild((prev) => {
       const current = prev.parts[slot];
-      const nextPart = addPartSubMaterial(current, materialId);
+      const nextPart = addPartSubMaterial(current, materialId, current?.alloyType);
       if (nextPart === current) return prev;
       return {
         ...prev,
@@ -428,6 +448,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         setPartMaterial,
         setPartGrade,
         setPartSubMaterials,
+        setPartAlloyType,
         addSubMaterial,
         removeSubMaterial,
         reorderSubMaterials,

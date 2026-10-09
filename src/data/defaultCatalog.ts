@@ -315,6 +315,36 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
       rod: [{ name: 'silentgear:flexible', level: 1 }],
     },
   },
+  'silentgear:wool': {
+    id: 'silentgear:wool',
+    name: { en: 'Wool', pt: 'Lã' },
+    tier: 1,
+    category: 'organic',
+    categories: ['organic', 'cloth', 'basic'],
+    color: '#FFFFFF',
+    stats: {
+      main: {
+        durability: 0,
+        armor: 4,
+        armor_durability: 4,
+        magic_armor: 4,
+        rarity: 7,
+        enchantment_value: 7,
+        charging_value: 0.7,
+      },
+      lining: {
+        knockback_resistance: { value: 0.1, operation: 'ADD' },
+      },
+      grip: {
+        attack_speed: { value: 0.2, operation: 'ADD' },
+      },
+    },
+    traits: {
+      main: [{ name: 'silentgear:snow_walker', level: 1 }],
+      lining: [{ name: 'silentgear:flexible', level: 2 }],
+      grip: [{ name: 'silentgear:flexible', level: 2 }],
+    },
+  },
 };
 
 // Novos materiais oficiais do Minecraft 1.21+ / Tricky Trials e ATM11

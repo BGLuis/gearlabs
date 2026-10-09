@@ -1,10 +1,19 @@
 import LZString from 'lz-string';
-import { GearBuild, PartSlot, Grade, GearPartSelection, SubMaterialSelection, StarchargeLevel } from '@/types/silentgear';
+import {
+  GearBuild,
+  PartSlot,
+  Grade,
+  GearPartSelection,
+  SubMaterialSelection,
+  StarchargeLevel,
+  AlloyType,
+} from '@/types/silentgear';
 
 interface SerializedPartState {
   m?: string;
   g?: Grade;
   s?: StarchargeLevel;
+  a?: AlloyType;
   mats?: { m: string; g?: Grade }[];
 }
 
@@ -22,6 +31,7 @@ export function encodeBuildToHash(build: GearBuild, version: string): string {
         m: sel.materialId,
         ...(sel.grade && sel.grade !== 'NONE' ? { g: sel.grade } : {}),
         ...(sel.starcharge && sel.starcharge > 0 ? { s: sel.starcharge } : {}),
+        ...(sel.alloyType ? { a: sel.alloyType } : {}),
       };
       if (sel.materials && sel.materials.length > 0) {
         partData.mats = sel.materials.map((sub) => ({
@@ -72,6 +82,11 @@ export function decodeBuildFromHash(
             grade: primaryGrade,
             ...(materials ? { materials } : {}),
             ...(data.s && data.s > 0 ? { starcharge: data.s } : {}),
+            ...(data.a
+              ? { alloyType: data.a }
+              : materials && materials.length > 0
+              ? { alloyType: 'metal' }
+              : {}),
           };
         }
       }

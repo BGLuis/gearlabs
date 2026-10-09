@@ -2,10 +2,17 @@
 
 import React from 'react';
 import { useGear } from '@/context/GearContext';
-import { Grade, PartSlot, SubMaterialSelection, StarchargeLevel } from '@/types/silentgear';
-import { X, ArrowUp, ArrowDown, Plus, Layers, Sparkles } from 'lucide-react';
-import { calculateSynergy, getNumericStatValue, calculateCompoundChargingValue } from '@/lib/calculator';
+import { Grade, PartSlot, SubMaterialSelection, StarchargeLevel, AlloyType } from '@/types/silentgear';
+import { X, ArrowUp, ArrowDown, Plus, Layers, Sparkles, AlertTriangle } from 'lucide-react';
+import { calculateSynergy, calculateCompoundChargingValue } from '@/lib/calculator';
 import { MaterialCombobox } from '@/components/MaterialCombobox';
+import {
+  ALLOY_CONFIGS,
+  getMaxSubMaterials,
+  isMaterialAllowedInAlloy,
+  validateAlloy,
+  detectAlloyType,
+} from '@/lib/parts';
 
 interface SlotPickerProps {
   slot: PartSlot;
@@ -13,7 +20,6 @@ interface SlotPickerProps {
 }
 
 const GRADES: Grade[] = ['NONE', 'E', 'D', 'C', 'B', 'A', 'S', 'SS', 'SSS', 'MAX'];
-const MAX_SUB_MATERIALS = 6;
 const STARCHARD_LEVELS: { level: StarchargeLevel; label: string }[] = [
   { level: 0, label: '0' },
   { level: 1, label: 'I' },
@@ -28,6 +34,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
     setPartMaterial,
     setPartGrade,
     setPartSubMaterials,
+    setPartAlloyType,
     addSubMaterial,
     removeSubMaterial,
     reorderSubMaterials,
@@ -40,6 +47,9 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
 
   const currentSelection = build.parts[slot];
   const isCompound = !!(currentSelection?.materials && currentSelection.materials.length > 0);
+  const currentAlloyType: AlloyType = currentSelection?.alloyType || 'metal';
+  const alloyConfig = ALLOY_CONFIGS[currentAlloyType] || ALLOY_CONFIGS.metal;
+  const maxSubMaterials = getMaxSubMaterials(currentAlloyType);
 
   // Filtrar materiais que suportam este slot
   const validMaterials = Object.values(catalog.materials).filter((m) => {
@@ -48,6 +58,11 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
     if (slot === 'tip') return !!m.stats.tip;
     return !!m.stats[slot];
   });
+
+  // Materiais permitidos pela máquina ativa no modo composto
+  const compoundEligibleMaterials = validMaterials.filter((m) =>
+    isMaterialAllowedInAlloy(m, currentAlloyType)
+  );
 
   const slotLabels: Record<PartSlot, { pt: string; en: string }> = {
     main: { pt: 'Parte Principal (Lâmina/Placa)', en: 'Main Part (Blade/Plate)' },
@@ -61,9 +76,6 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
 
   const currentGrade = currentSelection?.grade || 'NONE';
   const currentStarcharge: StarchargeLevel = currentSelection?.starcharge ?? 0;
-  const currentMat = currentSelection?.materialId
-    ? catalog.materials[currentSelection.materialId]
-    : null;
 
   // Sub-materiais resolvidos para exibição e cálculo de sinergia
   const subMaterials = isCompound
@@ -80,14 +92,22 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
     ? calculateCompoundChargingValue(subMaterials, slot)
     : undefined;
 
+  // Validação das regras da máquina ativa
+  const alloyValidation = isCompound
+    ? validateAlloy(subMaterials, currentAlloyType, lang)
+    : { valid: true, errors: [], warnings: [], incompatibleMaterials: [], exceedsLimit: false, maxLimit: 6 };
+
   function handleConvertToCompound() {
     const primaryId = currentSelection?.materialId || validMaterials[0]?.id || 'silentgear:iron';
-    const fallbackId = validMaterials.find((m) => m.id !== primaryId)?.id || primaryId;
+    const primaryMat = catalog.materials[primaryId];
+    const detectedType = detectAlloyType(primaryMat ? [primaryMat] : []);
+    const candidateMats = validMaterials.filter((m) => isMaterialAllowedInAlloy(m, detectedType));
+    const fallbackId = candidateMats.find((m) => m.id !== primaryId)?.id || primaryId;
     const initialMats: SubMaterialSelection[] = [
       { materialId: primaryId },
       { materialId: fallbackId },
     ];
-    setPartSubMaterials(slot, initialMats);
+    setPartSubMaterials(slot, initialMats, detectedType);
   }
 
   function handleRevertToSimple() {
@@ -118,7 +138,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
           {isCompound && (
             <span className="flex items-center gap-1 text-[10px] px-1.5 py-0.2 rounded bg-mc-primary/20 border border-mc-primary/40 text-mc-primary font-mono font-bold">
               <Layers className="w-2.5 h-2.5" />
-              {lang === 'pt' ? 'Liga/Composto' : 'Alloy/Compound'}
+              {alloyConfig.machineName[lang]} ({alloyConfig.name[lang]})
             </span>
           )}
         </div>
@@ -139,15 +159,44 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
       {/* Modo Material Composto */}
       {isCompound ? (
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-[11px] font-mono text-mc-muted px-1">
-            <span className="flex items-center gap-1 text-mc-gold font-bold">
-              <Sparkles className="w-3 h-3" />
-              {lang === 'pt' ? 'Sub-materiais da Liga' : 'Compound Sub-materials'}:
-            </span>
+          {/* Seletor de Máquina / Tipo de Liga e Métricas */}
+          <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-mc-muted px-1">
             <div className="flex items-center gap-2">
+              <span className="flex items-center gap-1 text-mc-gold font-bold">
+                <Sparkles className="w-3 h-3" />
+                {lang === 'pt' ? 'Máquina' : 'Machine'}:
+              </span>
+              <div className="flex items-center gap-1 bg-mc-bg border border-mc-border rounded px-1.5 py-0.5">
+                <select
+                  value={currentAlloyType}
+                  onChange={(e) => setPartAlloyType(slot, e.target.value as AlloyType)}
+                  className="bg-transparent text-mc-primary font-bold text-xs font-mono focus:outline-none cursor-pointer"
+                  title={alloyConfig.description[lang]}
+                >
+                  {(Object.keys(ALLOY_CONFIGS) as AlloyType[]).map((typeKey) => {
+                    const cfg = ALLOY_CONFIGS[typeKey];
+                    return (
+                      <option key={typeKey} value={typeKey} className="bg-mc-surface text-mc-text">
+                        {cfg.machineName[lang]} ({cfg.name[lang]}) [{cfg.maxIngredients}]
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-[11px] font-bold text-mc-primary">
                 ⚡ {Math.round(compoundSynergy * 100)}% {lang === 'pt' ? 'Sinergia' : 'Synergy'}
               </span>
+              {currentAlloyType === 'crude' && (
+                <span
+                  className="text-[10px] px-1.5 py-0.5 rounded bg-red-950/60 border border-red-800 text-red-400 font-bold"
+                  title={lang === 'pt' ? 'Penalidade de -20% nas propriedades com sinergia' : '-20% penalty on synergy-affected stats'}
+                >
+                  ×0.8 {lang === 'pt' ? 'Crua' : 'Crude'}
+                </span>
+              )}
               {compoundChargingValue !== undefined && (
                 <span className="text-[10px] px-1 rounded bg-cyan-950/60 border border-cyan-800 text-cyan-400" title="Valor base de carga (charging_value)">
                   ⚡ {Number(compoundChargingValue.toFixed(2))}
@@ -196,17 +245,32 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
             </div>
           </div>
 
+          {/* Banner de Aviso de Validação (Carregamento de Builds Antigas ou Troca de Máquina) */}
+          {!alloyValidation.valid && (
+            <div className="flex items-start gap-2 p-2 rounded bg-amber-500/10 border border-amber-500/40 text-amber-300 text-xs font-mono">
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <div className="space-y-0.5">
+                {alloyValidation.warnings.map((warn, i) => (
+                  <div key={i}>{warn}</div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Lista de Sub-materiais com reordenação */}
           <div className="space-y-1.5">
             {currentSelection.materials!.map((subMat, idx) => {
-              const matObj = catalog.materials[subMat.materialId];
               const isFirst = idx === 0;
               const isLast = idx === currentSelection.materials!.length - 1;
+              const matObj = catalog.materials[subMat.materialId];
+              const isMatAllowed = matObj ? isMaterialAllowedInAlloy(matObj, currentAlloyType) : true;
 
               return (
                 <div
                   key={`${subMat.materialId}-${idx}`}
-                  className="flex items-center gap-1.5 bg-mc-bg border border-mc-border/80 rounded p-1.5"
+                  className={`flex items-center gap-1.5 bg-mc-bg border rounded p-1.5 ${
+                    !isMatAllowed ? 'border-amber-500/60 bg-amber-500/5' : 'border-mc-border/80'
+                  }`}
                 >
                   {/* Indicador de Ordem / Primário */}
                   <span
@@ -220,10 +284,10 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                     {idx + 1}º{isFirst ? (lang === 'pt' ? ' Primário' : ' Primary') : ''}
                   </span>
 
-                  {/* Seletor do Sub-Material via Combobox */}
+                  {/* Seletor do Sub-Material via Combobox (com materiais elegíveis pela máquina) */}
                   <div className="flex-1 min-w-0">
                     <MaterialCombobox
-                      materials={validMaterials}
+                      materials={compoundEligibleMaterials.length > 0 ? compoundEligibleMaterials : validMaterials}
                       selectedMaterialId={subMat.materialId}
                       onSelect={(matId) => updateSubMaterial(slot, idx, matId)}
                       slot={slot}
@@ -269,16 +333,17 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
           <div className="flex items-center justify-between pt-1">
             <button
               onClick={() => {
-                const nextId = validMaterials.find(
+                const pool = compoundEligibleMaterials.length > 0 ? compoundEligibleMaterials : validMaterials;
+                const nextId = pool.find(
                   (m) => !currentSelection.materials!.some((sm) => sm.materialId === m.id)
-                )?.id || validMaterials[0]?.id || 'silentgear:iron';
+                )?.id || pool[0]?.id || 'silentgear:iron';
                 addSubMaterial(slot, nextId);
               }}
-              disabled={currentSelection.materials!.length >= MAX_SUB_MATERIALS}
+              disabled={currentSelection.materials!.length >= maxSubMaterials}
               className="flex items-center gap-1 text-[11px] font-mono px-2 py-1 rounded bg-mc-card hover:bg-mc-border text-mc-text border border-mc-border disabled:opacity-40 transition-colors"
             >
               <Plus className="w-3 h-3" />
-              {lang === 'pt' ? 'Adicionar Sub-material' : 'Add Sub-material'} ({currentSelection.materials!.length}/{MAX_SUB_MATERIALS})
+              {lang === 'pt' ? 'Adicionar Sub-material' : 'Add Sub-material'} ({currentSelection.materials!.length}/{maxSubMaterials})
             </button>
 
             <button

@@ -27,6 +27,7 @@ export const EXPECTED_MATERIAL_COLORS: Record<string, string> = {
   'silentgear:unobtainium': '#D152E3',
   'sgearmetalworks:uru_metal': '#0B2037',
   'silentgear:tyrian_steel': '#B01080',
+  'silentgear:wool': '#FFFFFF',
 };
 
 describe('Catálogo Padrão - Cores dos Materiais (Issue #12)', () => {
