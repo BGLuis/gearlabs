@@ -2,9 +2,18 @@
 
 import React, { useState } from 'react';
 import { useGear } from '@/context/GearContext';
-import { Grade, OptimizationGoal, OptimizedBuildResult, StarchargeLevel } from '@/types/silentgear';
+import { Grade, OptimizationGoal, OptimizedBuildResult, PartSlot, StarchargeLevel } from '@/types/silentgear';
 import { findBestBuilds } from '@/lib/optimizer';
 import { Sparkles, X, Check, Shield, Swords, Zap, Pickaxe, Scale, Heart } from 'lucide-react';
+
+const secondarySlotLabels: Record<Exclude<PartSlot, 'main'>, { pt: string; en: string }> = {
+  rod: { pt: 'Haste', en: 'Rod' },
+  tip: { pt: 'Ponta', en: 'Tip' },
+  coating: { pt: 'Revestimento', en: 'Coating' },
+  grip: { pt: 'Empunhadura', en: 'Grip' },
+  lining: { pt: 'Forro', en: 'Lining' },
+  binding: { pt: 'Amarração', en: 'Binding' },
+};
 
 export function OptimizerModal() {
   const { catalog, build, inventory, loadBuild, lang } = useGear();
@@ -262,12 +271,6 @@ export function OptimizerModal() {
                       const mainMat = res.build.parts.main
                         ? catalog.materials[res.build.parts.main.materialId]
                         : null;
-                      const rodMat = res.build.parts.rod
-                        ? catalog.materials[res.build.parts.rod.materialId]
-                        : null;
-                      const tipMat = res.build.parts.tip
-                        ? catalog.materials[res.build.parts.tip.materialId]
-                        : null;
 
                       return (
                         <div
@@ -318,16 +321,16 @@ export function OptimizerModal() {
                                     </span>
                                   )
                                 )}
-                                {rodMat && (
-                                  <span className="flex items-center gap-1 text-mc-muted">
-                                    + {rodMat.name[lang]} ({lang === 'pt' ? 'Haste' : 'Rod'})
-                                  </span>
-                                )}
-                                {tipMat && (
-                                  <span className="flex items-center gap-1 text-mc-primary">
-                                    + {tipMat.name[lang]} ({lang === 'pt' ? 'Ponta' : 'Tip'})
-                                  </span>
-                                )}
+                                {Object.entries(res.build.parts).map(([slot, part]) => {
+                                  const partMat = part && slot !== 'main' ? catalog.materials[part.materialId] : undefined;
+                                  if (!partMat) return null;
+                                  const slotLabel = secondarySlotLabels[slot as Exclude<PartSlot, 'main'>];
+                                  return (
+                                    <span key={slot} className="flex items-center gap-1 text-mc-muted">
+                                      + {partMat.name[lang]} ({lang === 'pt' ? slotLabel.pt : slotLabel.en})
+                                    </span>
+                                  );
+                                })}
                                 {res.build.parts.main?.grade && res.build.parts.main.grade !== 'NONE' && (
                                   <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-mc-gold/20 text-mc-gold border border-mc-gold/40">
                                     {res.build.parts.main.grade}
