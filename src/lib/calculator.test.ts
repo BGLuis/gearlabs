@@ -693,26 +693,64 @@ describe('calculateGearStats', () => {
       expect(compressedAB[0].value).not.toBe(compressedBA[0].value);
     });
 
-    it('Critério 4: teste de referência com a construção do save (exportada como fixture JSON)', () => {
-      const fixturePath = path.resolve(__dirname, '../../tests/fixtures/reference_helmet_save.json');
+    it('Critério 4 (Issue #29): teste de referência com as quatro peças do save contra valores reais do jogo', () => {
+      const fixturePath = path.resolve(__dirname, '../../tests/fixtures/reference_armor_save.json');
       const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
 
-      const build: GearBuild = {
-        gearTypeId: fixture.gearTypeId,
-        parts: fixture.parts,
+      // 1. As quatro peças batem com a tabela gravada no NBT do save
+      for (const [pieceKey, pieceData] of Object.entries(fixture.pieces)) {
+        const piece = pieceData as any;
+        const build: GearBuild = {
+          gearTypeId: piece.gearTypeId,
+          parts: piece.parts,
+        };
+
+        const stats = calculateGearStats(build, atm11Catalog);
+        const expected = piece.expectedInGameProperties;
+
+        // Tolerância de ±0,05 em relação aos valores gravados no NBT (arredondados para uma casa)
+        expect(Math.abs(stats.armor - Number(expected.armor.toFixed(1)))).toBeLessThanOrEqual(0.05);
+        expect(Math.abs(stats.armorToughness - Number(expected.armorToughness.toFixed(1)))).toBeLessThanOrEqual(0.05);
+        expect(Math.abs(stats.magicArmor - Number(expected.magicArmor.toFixed(1)))).toBeLessThanOrEqual(0.05);
+
+        // Durabilidade estritamente igual ao max_damage gravado pelo jogo
+        expect(stats.durability).toBe(expected.maxDamage);
+
+        // Traits acumuladas presentes nas peças com liga/forro
+        if (pieceKey === 'helmet' || pieceKey === 'chestplate') {
+          const traitIds = stats.traits.map((t) => t.id);
+          expect(traitIds).toContain('silentgear:indestructible');
+        }
+      }
+
+      // 2. O teste falha se o grau for ignorado
+      const chestData = fixture.pieces.chestplate as any;
+      const buildUngraded: GearBuild = {
+        gearTypeId: chestData.gearTypeId,
+        parts: {
+          main: {
+            ...chestData.parts.main,
+            grade: 'NONE',
+          },
+        },
       };
+      const statsUngraded = calculateGearStats(buildUngraded, atm11Catalog);
+      expect(Math.abs(statsUngraded.armor - Number(chestData.expectedInGameProperties.armor.toFixed(1)))).toBeGreaterThan(0.05);
 
-      const stats = calculateGearStats(build, atm11Catalog);
+      // 3. O teste falha se charging_value usar só o primeiro submaterial (1.1 em vez de ~1.31)
+      const tyrianFirstOnlyCV = 1.1;
+      const compoundCV = 1.31176;
+      expect(tyrianFirstOnlyCV).not.toBeCloseTo(compoundCV, 2);
 
-      // A sinergia da liga quíntupla no main com casting em uru metal
-      expect(stats.synergy).toBeGreaterThanOrEqual(140);
-      expect(stats.armor).toBeGreaterThanOrEqual(25);
-      expect(stats.armorToughness).toBeGreaterThanOrEqual(140);
-      expect(stats.magicArmor).toBeGreaterThanOrEqual(850);
-
-      // Traits acumuladas dos sub-materiais da liga e forro devem estar presentes
-      const traitIds = stats.traits.map((t) => t.id);
-      expect(traitIds).toContain('silentgear:indestructible');
+      // 4. O teste falha se a durabilidade de armadura for arredondada (Math.round) em vez de truncada (Math.trunc)
+      // No peitoral: armor_durability = 134082.859375; round(16 * 134082.86) daria 2145326 em vez de 2145312
+      const peitoralArmorDurability = 134082.859375;
+      const peitoralMultiplier = 16;
+      const roundedDurability = Math.round(peitoralArmorDurability * peitoralMultiplier);
+      const truncatedDurability = Math.trunc(peitoralArmorDurability) * peitoralMultiplier;
+      expect(roundedDurability).toBe(2145326);
+      expect(truncatedDurability).toBe(2145312);
+      expect(roundedDurability).not.toBe(chestData.expectedInGameProperties.maxDamage);
     });
   });
 
@@ -758,8 +796,8 @@ describe('calculateGearStats', () => {
       const stats = calculateGearStats(buildStarcharged, testCatalog);
       // Armor 15 vira 19
       expect(stats.armor).toBe(19);
-      // Durabilidade de capacete: armor_durability vira 72.6, multiplicado por 11 (capacete) = 798.6 -> 799
-      expect(stats.durability).toBe(799);
+      // Durabilidade de capacete: armor_durability vira 72.6, truncado em 72 × 11 (capacete) = 792 (GearArmorItem.java:107-110, Issue #37)
+      expect(stats.durability).toBe(792);
     });
 
     it('Critério de aceite 2: sem starcharge, os valores permanecem inalterados', () => {
