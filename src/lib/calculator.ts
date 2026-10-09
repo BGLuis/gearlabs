@@ -332,6 +332,27 @@ export function compressModifiersForProperty(
 }
 
 /**
+ * Calcula o valor base de carga (charging_value) composto para múltiplos materiais.
+ * Conforme ChargedMaterialModifier.java e CompoundMaterial.java, o valor de carga vem
+ * das propriedades de PartTypes.MAIN e é comprimido via média ponderada (AVERAGE).
+ */
+export function calculateCompoundChargingValue(
+  subMaterials: Material[],
+  slot: PartSlot = 'main'
+): number | undefined {
+  const rawMods: StatValueModifier[] = [];
+  for (const mat of subMaterials) {
+    const entry = mat.stats[slot]?.charging_value ?? mat.stats.main?.charging_value;
+    if (entry !== undefined && entry !== null) {
+      rawMods.push(...extractModifiers(entry, 'AVERAGE'));
+    }
+  }
+  if (rawMods.length === 0) return undefined;
+  const compressed = compressModifiersForProperty(rawMods, 'AVERAGE');
+  return compressed.length > 0 ? compressed[0].value : undefined;
+}
+
+/**
  * Compõe as propriedades de um slot feito de múltiplos sub-materiais (liga ou tecido misto),
  * aplicando média ponderada e sinergia de SynergyUtils antes do fluxo canônico.
  */
@@ -420,7 +441,10 @@ export function composeCompoundSlotModifiers(
   }
 
   // Charging Value (não afetado por sinergia na extração, compõe por média ponderada)
-  const chargingValueMods = processStat((mat) => mat.stats[slot]?.charging_value, false);
+  const compoundChargingVal = calculateCompoundChargingValue(subMaterials, slot);
+  const chargingValueMods: StatValueModifier[] = compoundChargingVal !== undefined
+    ? [{ value: compoundChargingVal, operation: 'AVERAGE' }]
+    : [];
 
   // Traits
   const traits: MaterialTraitRef[] = [];
