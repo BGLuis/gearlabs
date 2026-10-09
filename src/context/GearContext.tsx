@@ -19,6 +19,13 @@ import {
 } from '@/data/defaultCatalog';
 import { calculateGearStats } from '@/lib/calculator';
 import { decodeBuildFromHash, encodeBuildToHash } from '@/lib/url-state';
+import {
+  addPartSubMaterial,
+  removePartSubMaterial,
+  reorderPartSubMaterials,
+  updatePartSubMaterial,
+  setPartSubMaterialsInPart,
+} from '@/lib/parts';
 
 interface GearContextType {
   version: string;
@@ -239,40 +246,32 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
   function setPartSubMaterials(slot: PartSlot, materials: SubMaterialSelection[]) {
     setBuild((prev) => {
       const current = prev.parts[slot];
-      const primary = materials[0];
+      const nextPart = setPartSubMaterialsInPart(current, materials);
       return {
         ...prev,
         parts: {
           ...prev.parts,
           [slot]: {
-            materialId: primary?.materialId || current?.materialId || '',
-            grade: current?.grade || 'NONE',
+            ...nextPart,
             starcharge: current?.starcharge || 0,
-            materials,
           },
         },
       };
     });
   }
 
-  function addSubMaterial(slot: PartSlot, materialId: string, grade: Grade = 'NONE') {
+  function addSubMaterial(slot: PartSlot, materialId: string, _grade: Grade = 'NONE') {
     setBuild((prev) => {
       const current = prev.parts[slot];
-      const currentMaterials = current?.materials && current.materials.length > 0
-        ? [...current.materials]
-        : (current?.materialId ? [{ materialId: current.materialId }] : []);
-
-      if (currentMaterials.length >= 6) return prev;
-
-      const newMaterials = [...currentMaterials, { materialId }];
+      const nextPart = addPartSubMaterial(current, materialId);
+      if (nextPart === current) return prev;
       return {
         ...prev,
         parts: {
           ...prev.parts,
           [slot]: {
-            materialId: newMaterials[0].materialId,
-            grade: current?.grade || 'NONE',
-            materials: newMaterials,
+            ...nextPart,
+            starcharge: current?.starcharge || 0,
           },
         },
       };
@@ -282,9 +281,9 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
   function removeSubMaterial(slot: PartSlot, index: number) {
     setBuild((prev) => {
       const current = prev.parts[slot];
-      if (!current?.materials || current.materials.length <= index) return prev;
-      const nextMaterials = current.materials.filter((_, i) => i !== index);
-      if (nextMaterials.length === 0) {
+      const nextPart = removePartSubMaterial(current, index);
+      if (nextPart === current) return prev;
+      if (nextPart === null) {
         const nextParts = { ...prev.parts };
         delete nextParts[slot];
         return { ...prev, parts: nextParts };
@@ -294,9 +293,8 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         parts: {
           ...prev.parts,
           [slot]: {
-            materialId: nextMaterials[0].materialId,
-            grade: current.grade || 'NONE',
-            materials: nextMaterials.length > 1 ? nextMaterials : undefined,
+            ...nextPart,
+            starcharge: current?.starcharge || 0,
           },
         },
       };
@@ -306,28 +304,13 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
   function reorderSubMaterials(slot: PartSlot, fromIndex: number, toIndex: number) {
     setBuild((prev) => {
       const current = prev.parts[slot];
-      if (!current?.materials || fromIndex === toIndex) return prev;
-      if (
-        fromIndex < 0 ||
-        fromIndex >= current.materials.length ||
-        toIndex < 0 ||
-        toIndex >= current.materials.length
-      ) {
-        return prev;
-      }
-
-      const nextMaterials = [...current.materials];
-      const [moved] = nextMaterials.splice(fromIndex, 1);
-      nextMaterials.splice(toIndex, 0, moved);
+      const nextPart = reorderPartSubMaterials(current, fromIndex, toIndex);
+      if (!nextPart || nextPart === current) return prev;
       return {
         ...prev,
         parts: {
           ...prev.parts,
-          [slot]: {
-            ...current,
-            materialId: nextMaterials[0].materialId,
-            materials: nextMaterials,
-          },
+          [slot]: nextPart,
         },
       };
     });
@@ -336,20 +319,13 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
   function updateSubMaterial(slot: PartSlot, index: number, materialId: string, _grade?: Grade) {
     setBuild((prev) => {
       const current = prev.parts[slot];
-      if (!current?.materials || index < 0 || index >= current.materials.length) return prev;
-      const nextMaterials = [...current.materials];
-      nextMaterials[index] = {
-        materialId,
-      };
+      const nextPart = updatePartSubMaterial(current, index, materialId);
+      if (!nextPart || nextPart === current) return prev;
       return {
         ...prev,
         parts: {
           ...prev.parts,
-          [slot]: {
-            ...current,
-            materialId: nextMaterials[0].materialId,
-            materials: nextMaterials,
-          },
+          [slot]: nextPart,
         },
       };
     });
