@@ -10,6 +10,7 @@ import {
   validateAlloy,
   detectAlloyType,
   getMaxSubMaterials,
+  getMainPartLabel,
   ALLOY_CONFIGS,
   getPartInstanceCount,
   createDefaultPartInstances,
@@ -19,7 +20,7 @@ import {
   setPartInstancesInPart,
 } from './parts';
 import { GearPartSelection, Material } from '@/types/silentgear';
-import { ATM11_CATALOG } from '@/data/defaultCatalog';
+import { ATM11_CATALOG, OFFICIAL_GEAR_TYPES } from '@/data/defaultCatalog';
 
 describe('parts pure transformations (Issue #28)', () => {
   it('partindo de uma parte com starcharge: 3, adicionar e remover submaterial mantém starcharge: 3', () => {
@@ -363,5 +364,41 @@ describe('alloy rules, machine limits and validation (Issue #30)', () => {
       const result = setPartInstancesInPart(part, newInst);
       expect(result.instances).toEqual(newInst);
     });
+  });
+});
+
+describe('main part label per gear type (Issue #60)', () => {
+  it('peitoral e demais armaduras são chamados de Placas', () => {
+    expect(getMainPartLabel('chestplate', 'armor', 'pt')).toBe('Placas');
+    expect(getMainPartLabel('helmet', 'armor', 'en')).toBe('Plates');
+  });
+
+  it('picareta e machado usam Cabeça, não Lâmina', () => {
+    expect(getMainPartLabel('pickaxe', 'tool', 'pt')).toBe('Cabeça');
+    expect(getMainPartLabel('axe', 'tool', 'en')).toBe('Head');
+  });
+
+  it('espada e katana usam Lâmina nos dois idiomas', () => {
+    expect(getMainPartLabel('sword', 'weapon', 'pt')).toBe('Lâmina');
+    expect(getMainPartLabel('katana', 'weapon', 'en')).toBe('Blade');
+  });
+
+  it('todo tipo do catálogo oficial recebe o rótulo da sua categoria', () => {
+    const expectedByCategory = { armor: 'Placas', tool: 'Cabeça', weapon: 'Lâmina' };
+    for (const gearType of Object.values(OFFICIAL_GEAR_TYPES)) {
+      expect(getMainPartLabel(gearType.id, gearType.category, 'pt')).toBe(
+        expectedByCategory[gearType.category as keyof typeof expectedByCategory]
+      );
+    }
+  });
+
+  it('tipo desconhecido cai no rótulo da categoria', () => {
+    expect(getMainPartLabel('shovel_custom', 'tool', 'pt')).toBe('Cabeça');
+    expect(getMainPartLabel('custom_plate', 'armor', 'en')).toBe('Plates');
+    expect(getMainPartLabel('custom_blade', 'weapon', 'pt')).toBe('Lâmina');
+  });
+
+  it('sem tipo nem categoria mantém Lâmina como padrão', () => {
+    expect(getMainPartLabel(undefined, undefined, 'pt')).toBe('Lâmina');
   });
 });

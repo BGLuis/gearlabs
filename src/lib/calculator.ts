@@ -1195,8 +1195,11 @@ export function calculateGearStats(
   let baseDurability: number;
   if (isArmor) {
     const finalArmorDurability = computeNumberProperty(0, armorDurMods);
+    // Silent Gear GearArmorItem.java:107-110: (int) multiplicador * (int) armor_durability (Issue #37)
+    // Trunca a propriedade armor_durability antes de multiplicar pelo multiplicador inteiro da peça
     baseDurability = Math.trunc(finalArmorDurability) * Math.trunc(gearType.durabilityMultiplier) + flatDurabilityAdditions;
   } else {
+    // Para ferramentas e armas, GearPropertiesData.getNumberInt mantém Math.round
     baseDurability = computeNumberProperty(0, toolDurMods);
   }
 

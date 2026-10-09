@@ -14,6 +14,7 @@ import {
   detectAlloyType,
   getPartInstanceCount,
   syncPartInstancesWithCount,
+  getMainPartLabel,
 } from '@/lib/parts';
 
 interface SlotPickerProps {
@@ -71,8 +72,12 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
     isMaterialAllowedInAlloy(m, currentAlloyType)
   );
 
+  const gearCategory = catalog.gearTypes[build.gearTypeId]?.category;
   const slotLabels: Record<PartSlot, { pt: string; en: string }> = {
-    main: { pt: 'Parte Principal (Lâmina/Placa)', en: 'Main Part (Blade/Plate)' },
+    main: {
+      pt: `Parte Principal (${getMainPartLabel(build.gearTypeId, gearCategory, 'pt')})`,
+      en: `Main Part (${getMainPartLabel(build.gearTypeId, gearCategory, 'en')})`,
+    },
     rod: { pt: 'Haste / Cabo', en: 'Rod / Handle' },
     tip: { pt: 'Ponta / Reforço', en: 'Tip Upgrade' },
     coating: { pt: 'Revestimento', en: 'Coating' },
