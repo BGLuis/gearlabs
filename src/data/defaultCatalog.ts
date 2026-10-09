@@ -393,11 +393,13 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         rarity: 90,
         enchantment_value: 85,
         harvest_tier: 'allthemodium',
-        armor_by_piece: {
-          helmet: 15,
-          chestplate: 15,
-          leggings: 15,
-          boots: 15,
+        by_type: {
+          armor: {
+            helmet: 15,
+            chestplate: 15,
+            leggings: 15,
+            boots: 15,
+          },
         },
       },
       rod: {
@@ -449,11 +451,13 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         rarity: 90,
         enchantment_value: 105,
         harvest_tier: 'vibranium',
-        armor_by_piece: {
-          helmet: 15,
-          chestplate: 20,
-          leggings: 20,
-          boots: 15,
+        by_type: {
+          armor: {
+            helmet: 15,
+            chestplate: 20,
+            leggings: 20,
+            boots: 15,
+          },
         },
       },
       rod: {
@@ -507,11 +511,13 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         rarity: 99,
         enchantment_value: 175,
         harvest_tier: 'unobtainium',
-        armor_by_piece: {
-          helmet: 20,
-          chestplate: 25,
-          leggings: 25,
-          boots: 20,
+        by_type: {
+          armor: {
+            helmet: 20,
+            chestplate: 25,
+            leggings: 25,
+            boots: 20,
+          },
         },
       },
       rod: {
@@ -567,11 +573,13 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         enchantment_value: 1500,
         charging_value: 1.5,
         harvest_tier: 'unobtainium',
-        armor_by_piece: {
-          helmet: 8,
-          chestplate: 14,
-          leggings: 12,
-          boots: 8,
+        by_type: {
+          armor: {
+            helmet: 8,
+            chestplate: 14,
+            leggings: 12,
+            boots: 8,
+          },
         },
       },
       rod: {
@@ -626,11 +634,13 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         enchantment_value: 16,
         charging_value: 1.1,
         harvest_tier: 'tyrian_steel',
-        armor_by_piece: {
-          helmet: 5,
-          chestplate: 9,
-          leggings: 7,
-          boots: 4,
+        by_type: {
+          armor: {
+            helmet: 5,
+            chestplate: 9,
+            leggings: 7,
+            boots: 4,
+          },
         },
       },
       rod: {

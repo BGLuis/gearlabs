@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import type { Material } from '@/types/silentgear';
 import {
   extractMaterialIdFromPath,
   parseMaterialJson,
@@ -157,7 +158,7 @@ describe('datapack-parser (Issue #7)', () => {
       expect(mat?.stats.main?.armor).toBe(60.0);
       expect(mat?.stats.main?.armor_toughness).toBe(60.0);
       expect(mat?.stats.main?.magic_armor).toBe(200.0);
-      expect(mat?.stats.main?.armor_by_piece).toEqual({
+      expect(mat?.stats.main?.by_type?.armor).toEqual({
         helmet: 15.0,
         chestplate: 15.0,
         leggings: 15.0,
@@ -473,6 +474,28 @@ describe('datapack-parser (Issue #7)', () => {
       );
 
       expect(resolved['custom:wood/cherry'].stats.main?.durability).toBe(60);
+    });
+
+    it('filho sobrescreve só os tipos que define e mantém os tipos herdados do pai (Issue #40)', () => {
+      const base = { name: { en: 'Base', pt: 'Base' }, tier: 2, category: 'metal', color: '#FFFFFF', traits: {} };
+      const parent = {
+        ...base,
+        id: 'silentgear:base',
+        stats: { main: { by_type: { attack_speed: { axe: -0.1, hoe: 0 } } } },
+      } as unknown as Material;
+      const child = {
+        ...base,
+        id: 'silentgear:child',
+        parent: 'silentgear:base',
+        stats: { main: { by_type: { attack_speed: { axe: -0.3 }, armor: { helmet: 2 } } } },
+      } as unknown as Material;
+
+      const resolved = resolveMaterialParents({ [parent.id]: parent, [child.id]: child });
+
+      expect(resolved['silentgear:child'].stats.main?.by_type).toEqual({
+        attack_speed: { axe: -0.3, hoe: 0 },
+        armor: { helmet: 2 },
+      });
     });
   });
 });
