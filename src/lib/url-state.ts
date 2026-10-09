@@ -9,7 +9,7 @@ import {
   AlloyType,
   PartMaterialInstance,
 } from '@/types/silentgear';
-import { getPartInstanceCount } from './parts';
+import { getPartInstanceCount, syncPartInstancesWithCount } from './parts';
 
 interface SerializedInstance {
   g?: Grade;
@@ -52,11 +52,14 @@ export function encodeBuildToHash(build: GearBuild, version: string): string {
 
       // Se houver instâncias heterogêneas, serializa instâncias (Issue #33)
       if (sel.instances && sel.instances.length > 1) {
+        const defaultMatsKey = sel.materials ? JSON.stringify(sel.materials) : '';
         const hasHeterogeneous = sel.instances.some(
           (inst) =>
             (inst.grade && inst.grade !== (sel.grade || 'NONE')) ||
             (inst.starcharge !== undefined && inst.starcharge !== (sel.starcharge || 0)) ||
-            (inst.materialId && inst.materialId !== sel.materialId)
+            (inst.materialId && inst.materialId !== sel.materialId) ||
+            (inst.alloyType && inst.alloyType !== sel.alloyType) ||
+            (inst.materials && JSON.stringify(inst.materials) !== defaultMatsKey)
         );
         if (hasHeterogeneous) {
           partData.inst = sel.instances.map((i) => ({
@@ -109,17 +112,21 @@ export function decodeBuildFromHash(
 
         if (primaryId) {
           let instances: PartMaterialInstance[] | undefined;
+          const count = getPartInstanceCount(parsed.t, slot as PartSlot);
           if (data.inst && data.inst.length > 0) {
-            instances = data.inst.map((i) => ({
+            const decodedInst: PartMaterialInstance[] = data.inst.map((i) => ({
               grade: i.g || 'NONE',
               ...(i.s && i.s > 0 ? { starcharge: i.s } : {}),
               ...(i.m ? { materialId: i.m } : {}),
               ...(i.a ? { alloyType: i.a } : {}),
               ...(i.mats ? { materials: i.mats.map((sm) => ({ materialId: sm.m })) } : {}),
             }));
+            instances = syncPartInstancesWithCount(
+              { materialId: primaryId, grade: primaryGrade, starcharge: data.s || 0, instances: decodedInst },
+              count
+            );
           } else {
             // Critério 2 (Issue #33): Builds de URL antigas carregam como lista de uma instância repetida
-            const count = getPartInstanceCount(parsed.t, slot as PartSlot);
             instances = [];
             for (let i = 0; i < count; i++) {
               instances.push({

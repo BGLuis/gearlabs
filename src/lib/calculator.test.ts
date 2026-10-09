@@ -11,6 +11,7 @@ import {
   applyEnhancementsToModifiers,
   calculateCompoundChargingValue,
   composeCompoundSlotModifiers,
+  resolveSlotInstances,
 } from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
@@ -1502,6 +1503,84 @@ describe('calculateGearStats', () => {
 
       const stats = calculateGearStats(build4None4Max, ATM11_CATALOG);
       expect(stats.armor).toBe(Number(expectedInverted.toFixed(1)));
+    });
+
+    it('slot secundário rod com 1 MAX e 1 NONE calcula durabilidade via média ponderada', () => {
+      // Espada de diamante (durabilidade 1561) + haste de madeira (base durability: 15)
+      // 1 MAX (+30%): 19.5
+      // 1 NONE (+0%): 15.0
+      // primaryMod = 19.5
+      // peso MAX: 1 + 19.5 / 20.5 = 1.9512195
+      // peso NONE: 1 + 15.0 / 20.5 = 1.7317073
+      // media = (1.9512195 * 19.5 + 1.7317073 * 15.0) / (1.9512195 + 1.7317073) = 17.3841
+      // Durabilidade final esperada: 1561 + 17.3841 = 1578.38 -> 1578
+      const buildSwordMixedRod: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:diamond', grade: 'NONE' },
+          rod: {
+            materialId: 'silentgear:wood',
+            instances: [
+              { grade: 'MAX' },
+              { grade: 'NONE' },
+            ],
+          },
+        },
+      };
+
+      const buildSwordAllMaxRod: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:diamond', grade: 'NONE' },
+          rod: { materialId: 'silentgear:wood', grade: 'MAX' },
+        },
+      };
+
+      const buildSwordAllNoneRod: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:diamond', grade: 'NONE' },
+          rod: { materialId: 'silentgear:wood', grade: 'NONE' },
+        },
+      };
+
+      const statsMixed = calculateGearStats(buildSwordMixedRod, ATM11_CATALOG);
+      const statsMax = calculateGearStats(buildSwordAllMaxRod, ATM11_CATALOG);
+      const statsNone = calculateGearStats(buildSwordAllNoneRod, ATM11_CATALOG);
+
+      expect(statsNone.durability).toBe(1576);
+      expect(statsMax.durability).toBe(1581);
+      expect(statsMixed.durability).toBe(1578);
+    });
+
+    it('resolveSlotInstances poda adequadamente instâncias quando gearTypeId exige menos instâncias', () => {
+      // 8 instâncias configuradas para peitoral, mas calculadas para botas (4 instâncias)
+      const buildBootsWith8Instances: GearBuild = {
+        gearTypeId: 'boots',
+        parts: {
+          main: {
+            materialId: 'silentgear:iron',
+            instances: [
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+              { grade: 'NONE' },
+              { grade: 'NONE' },
+              // Excedentes (não devem afetar botas)
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+            ],
+          },
+        },
+      };
+
+      const resolved = resolveSlotInstances(buildBootsWith8Instances.parts.main, 'boots', 'main');
+      expect(resolved).toHaveLength(4);
+      expect(resolved[0].grade).toBe('MAX');
+      expect(resolved[1].grade).toBe('MAX');
+      expect(resolved[2].grade).toBe('NONE');
+      expect(resolved[3].grade).toBe('NONE');
     });
   });
 });
