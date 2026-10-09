@@ -67,7 +67,7 @@ export function OptimizerModal() {
     return ['max_damage', 'max_dps', 'max_durability', 'balanced'].includes(g.id);
   });
 
-  const availableList = Array.from(inventory);
+  const availableList = React.useMemo(() => Array.from(inventory), [inventory]);
 
   const results: OptimizedBuildResult[] = React.useMemo(() => {
     if (!isOpen) return [];
