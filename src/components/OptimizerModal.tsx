@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useGear } from '@/context/GearContext';
 import { Grade, OptimizationGoal, OptimizedBuildResult, PartSlot, StarchargeLevel } from '@/types/silentgear';
 import { findBestBuilds } from '@/lib/optimizer';
+import { getMainPartLabel } from '@/lib/parts';
 import { Sparkles, X, Check, Shield, Swords, Zap, Pickaxe, Scale, Heart } from 'lucide-react';
 
 const secondarySlotLabels: Record<Exclude<PartSlot, 'main'>, { pt: string; en: string }> = {
@@ -76,7 +77,7 @@ export function OptimizerModal() {
     return ['max_damage', 'max_dps', 'max_durability', 'balanced'].includes(g.id);
   });
 
-  const availableList = Array.from(inventory);
+  const availableList = React.useMemo(() => Array.from(inventory), [inventory]);
 
   const results: OptimizedBuildResult[] = React.useMemo(() => {
     if (!isOpen) return [];
@@ -317,7 +318,7 @@ export function OptimizerModal() {
                                         className="w-2 h-2 rounded-full inline-block"
                                         style={{ backgroundColor: mainMat.color }}
                                       />
-                                      {mainMat.name[lang]} ({isArmor ? (lang === 'pt' ? 'Placa' : 'Plate') : (lang === 'pt' ? 'Lâmina' : 'Blade')})
+                                      {mainMat.name[lang]} ({getMainPartLabel(build.gearTypeId, currentGearType?.category, lang)})
                                     </span>
                                   )
                                 )}

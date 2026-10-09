@@ -358,9 +358,11 @@ export function findBestBuilds(
   // Ordenar decrescente pelo score
   results.sort((a, b) => b.score - a.score);
 
-  // Deduplicar builds equivalentes e retornar top N
+  // Top N com um representante por principal distinto; se faltarem principais, completa com as melhores restantes
   const seenBuilds = new Set<string>();
-  const uniqueResults: OptimizedBuildResult[] = [];
+  const seenMains = new Set<string>();
+  const selected: OptimizedBuildResult[] = [];
+  const sameMainFallback: OptimizedBuildResult[] = [];
   for (const res of results) {
     const key = Object.entries(res.build.parts)
       .sort(([a], [b]) => a.localeCompare(b))
@@ -369,12 +371,26 @@ export function findBestBuilds(
         return `${slot}:${part?.materialId}:${sub}:${part?.grade ?? ''}:${part?.starcharge ?? ''}`;
       })
       .join('|');
-    if (!seenBuilds.has(key)) {
-      seenBuilds.add(key);
-      uniqueResults.push(res);
-      if (uniqueResults.length >= topN) break;
+    if (seenBuilds.has(key)) continue;
+    seenBuilds.add(key);
+
+    const mainKey = (res.build.parts.main?.materials ?? [{ materialId: res.build.parts.main?.materialId }])
+      .map((m) => m.materialId)
+      .sort()
+      .join('+');
+    if (seenMains.has(mainKey)) {
+      sameMainFallback.push(res);
+      continue;
     }
+    seenMains.add(mainKey);
+    selected.push(res);
+    if (selected.length >= topN) break;
   }
 
-  return uniqueResults;
+  for (const res of sameMainFallback) {
+    if (selected.length >= topN) break;
+    selected.push(res);
+  }
+
+  return selected.sort((a, b) => b.score - a.score);
 }
