@@ -12,6 +12,7 @@ import {
   calculateCompoundChargingValue,
   composeCompoundSlotModifiers,
   resolveSlotInstances,
+  computeTraits,
 } from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
@@ -1729,5 +1730,55 @@ describe('calculateGearStats', () => {
       expect(() => calculateGearStats(build, testCatalog)).toThrow(/armor_durability/);
     });
   });
-});
 
+  describe('Issue #43: nível de trait normalizado como TraitListProperty.computeTraits', () => {
+    const traitInfo = (id: string, maxLevel: number) => ({
+      id,
+      maxLevel,
+      name: { en: id, pt: id },
+      description: { en: '', pt: '' },
+    });
+    const catalogTraits = {
+      'test:x': traitInfo('test:x', 5),
+      'test:y': traitInfo('test:y', 5),
+      'test:q': traitInfo('test:q', 2),
+    };
+    const filler = (n: number) => Array.from({ length: n }, (_, i) => ({ name: `test:filler${i}`, level: 1 }));
+    const levelOf = (traits: { name: string; level: number }[], id: string) =>
+      computeTraits(traits, catalogTraits).find((t) => t.id === id)?.level;
+
+    it('divide a soma pelas ocorrências quando n_traits / 2 é maior (8 traits: 2 + 2 dividem por 2, não somam 4)', () => {
+      // n = 8, n/2 = 4, ocorrências de x = 2 -> divisor 2 -> round(4 / 2) = 2
+      const traits = [{ name: 'test:x', level: 2 }, { name: 'test:x', level: 2 }, ...filler(6)];
+      expect(levelOf(traits, 'test:x')).toBe(2);
+    });
+
+    it('limita o divisor a n_traits / 2 quando há mais ocorrências que a metade (4 traits de nível 2 dão 4, não 8)', () => {
+      // n = 4, n/2 = 2 < ocorrências (4) -> divisor 2 -> 8 / 2 = 4
+      const traits = [2, 2, 2, 2].map((level) => ({ name: 'test:x', level }));
+      expect(levelOf(traits, 'test:x')).toBe(4);
+    });
+
+    it('arredonda meio para cima e limita entre 1 e maxLevel (1+2 em n=4 dá 2; 3+3 com maxLevel 2 dá 2)', () => {
+      // n = 4, divisor 2 -> round(3 / 2 = 1.5) = 2 (Math.round, como Java Math.round)
+      const halfUp = [{ name: 'test:y', level: 1 }, { name: 'test:y', level: 2 }, ...filler(2)];
+      expect(levelOf(halfUp, 'test:y')).toBe(2);
+
+      // n = 2, divisor min(1, 2) = 1 -> 6, limitado ao maxLevel 2
+      const clamped = [{ name: 'test:q', level: 3 }, { name: 'test:q', level: 3 }];
+      expect(levelOf(clamped, 'test:q')).toBe(2);
+    });
+
+    it('capacete do save ATM11 (reference_helmet_save.json): Malleable 5 e Crushing 5 após normalização', () => {
+      const fixturePath = path.resolve(__dirname, '../../tests/fixtures/reference_helmet_save.json');
+      const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+      const build: GearBuild = { gearTypeId: fixture.gearTypeId, parts: fixture.parts };
+
+      const stats = calculateGearStats(build, atm11Catalog);
+      const levels = Object.fromEntries(stats.traits.map((t) => [t.id, t.level]));
+
+      expect(levels['silentgear:malleable']).toBe(5);
+      expect(levels['silentgear:crushing']).toBe(5);
+    });
+  });
+});
