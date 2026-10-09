@@ -1220,4 +1220,162 @@ describe('calculateGearStats', () => {
       expect(superComposed.meleeDamageMods[0].value).toBeCloseTo(metalComposed.meleeDamageMods[0].value, 4);
     });
   });
+
+  describe('Issue #32: Traits de sinergia (synergistic, rustic, crude)', () => {
+    const baseMetal1: Material = {
+      id: 'test:synergy_mat1',
+      name: { en: 'Synergy Mat 1', pt: 'Synergy Mat 1' },
+      tier: 2,
+      category: 'metal',
+      color: '#aaaaaa',
+      stats: { main: { rarity: 10 } },
+      traits: {},
+    };
+
+    const baseMetal2: Material = {
+      id: 'test:synergy_mat2',
+      name: { en: 'Synergy Mat 2', pt: 'Synergy Mat 2' },
+      tier: 2,
+      category: 'metal',
+      color: '#bbbbbb',
+      stats: { main: { rarity: 10 } },
+      traits: {},
+    };
+
+    it('Critério 1: liga com um material synergistic 2 e sinergia base maior que 1,0 soma 0,08', () => {
+      const baseSynergy = calculateSynergy([baseMetal1, baseMetal2], 'main');
+      expect(baseSynergy).toBeGreaterThan(1.0);
+
+      const matWithSynergistic: Material = {
+        ...baseMetal1,
+        traits: {
+          main: [{ name: 'silentgear:synergistic', level: 2 }],
+        },
+      };
+
+      const synergyWithTrait = calculateSynergy([matWithSynergistic, baseMetal2], 'main');
+      expect(synergyWithTrait).toBeCloseTo(baseSynergy + 0.08, 5);
+    });
+
+    it('não aplica synergistic quando a sinergia base é menor ou igual a 1,0', () => {
+      // Sem categorias compartilhadas: penalidade de -0.2 resulta em sinergia base < 1.0 (~0.9859)
+      const woodMat: Material = {
+        ...baseMetal2,
+        id: 'test:wood_mat',
+        category: 'wood',
+        traits: {},
+      };
+
+      const baseSynergyNoShared = calculateSynergy([baseMetal1, woodMat], 'main');
+      expect(baseSynergyNoShared).toBeLessThan(1.0);
+
+      const matWithSynergistic: Material = {
+        ...baseMetal1,
+        traits: {
+          main: [{ name: 'silentgear:synergistic', level: 2 }],
+        },
+      };
+
+      const synergyWithTrait = calculateSynergy([matWithSynergistic, woodMat], 'main');
+      expect(synergyWithTrait).toBeCloseTo(baseSynergyNoShared, 5);
+    });
+
+    it('Critério 2: trait rustic só soma quando a sinergia está entre 0,749 e 1,001', () => {
+      const woodMat: Material = {
+        ...baseMetal2,
+        id: 'test:wood_mat',
+        category: 'wood',
+        traits: {},
+      };
+
+      // 1. Dentro da faixa [0.749, 1.001]: sinergia base ~0.9859
+      const baseSynergy = calculateSynergy([baseMetal1, woodMat], 'main');
+      expect(baseSynergy).toBeGreaterThan(0.749);
+      expect(baseSynergy).toBeLessThan(1.001);
+
+      const matWithRustic1: Material = {
+        ...baseMetal1,
+        traits: {
+          main: [{ name: 'silentgear:rustic', level: 1 }],
+        },
+      };
+      const matWithRustic2: Material = {
+        ...baseMetal1,
+        traits: {
+          main: [{ name: 'silentgear:rustic', level: 2 }],
+        },
+      };
+
+      const synergyRustic1 = calculateSynergy([matWithRustic1, woodMat], 'main');
+      expect(synergyRustic1).toBeCloseTo(baseSynergy + 0.05, 5);
+
+      const synergyRustic2 = calculateSynergy([matWithRustic2, woodMat], 'main');
+      expect(synergyRustic2).toBeCloseTo(baseSynergy + 0.10, 5);
+
+      // 2. Acima da faixa (> 1.001): baseSynergy > 1.001 (~1.2159) -> rustic NÃO soma
+      const highBaseSynergy = calculateSynergy([baseMetal1, baseMetal2], 'main');
+      expect(highBaseSynergy).toBeGreaterThan(1.001);
+
+      const synergyRusticHigh = calculateSynergy([matWithRustic1, baseMetal2], 'main');
+      expect(synergyRusticHigh).toBeCloseTo(highBaseSynergy, 5);
+
+      // 3. Abaixo da faixa (< 0.749): material com penalidade severa de raridade -> rustic NÃO soma
+      const lowRarityMat: Material = {
+        ...woodMat,
+        stats: { main: { rarity: 300 } },
+      };
+      const lowBaseSynergy = calculateSynergy([baseMetal1, lowRarityMat], 'main');
+      expect(lowBaseSynergy).toBeLessThan(0.749);
+
+      const synergyRusticLow = calculateSynergy([matWithRustic1, lowRarityMat], 'main');
+      expect(synergyRusticLow).toBeCloseTo(lowBaseSynergy, 5);
+    });
+
+    it('trait crude reduz sinergia em -0.04 por nível quando sinergia > 0.0', () => {
+      const baseSynergy = calculateSynergy([baseMetal1, baseMetal2], 'main');
+      const matWithCrude1: Material = {
+        ...baseMetal1,
+        traits: {
+          main: [{ name: 'silentgear:crude', level: 1 }],
+        },
+      };
+      const matWithCrude2: Material = {
+        ...baseMetal1,
+        traits: {
+          main: [{ name: 'silentgear:crude', level: 2 }],
+        },
+      };
+
+      const synergyCrude1 = calculateSynergy([matWithCrude1, baseMetal2], 'main');
+      expect(synergyCrude1).toBeCloseTo(baseSynergy - 0.04, 5);
+
+      const synergyCrude2 = calculateSynergy([matWithCrude2, baseMetal2], 'main');
+      expect(synergyCrude2).toBeCloseTo(baseSynergy - 0.08, 5);
+    });
+
+    it('composeCompoundSlotModifiers repassa traits para o cálculo de sinergia', () => {
+      const matWithSynergistic: Material = {
+        ...baseMetal1,
+        traits: {
+          main: [{ name: 'silentgear:synergistic', level: 2 }],
+        },
+      };
+
+      const composedNoTrait = composeCompoundSlotModifiers([baseMetal1, baseMetal2], 'main', false);
+      const composedWithTrait = composeCompoundSlotModifiers([matWithSynergistic, baseMetal2], 'main', false);
+
+      expect(composedWithTrait.synergy).toBeCloseTo(composedNoTrait.synergy + 0.08, 5);
+    });
+
+    it('os três traits existem no catálogo oficial com maxLevel = 5', () => {
+      expect(ATM11_CATALOG.traits['silentgear:synergistic']).toBeDefined();
+      expect(ATM11_CATALOG.traits['silentgear:synergistic'].maxLevel).toBe(5);
+
+      expect(ATM11_CATALOG.traits['silentgear:rustic']).toBeDefined();
+      expect(ATM11_CATALOG.traits['silentgear:rustic'].maxLevel).toBe(5);
+
+      expect(ATM11_CATALOG.traits['silentgear:crude']).toBeDefined();
+      expect(ATM11_CATALOG.traits['silentgear:crude'].maxLevel).toBe(5);
+    });
+  });
 });
