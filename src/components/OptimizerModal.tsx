@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useGear } from '@/context/GearContext';
 import { Grade, OptimizationGoal, OptimizedBuildResult, StarchargeLevel } from '@/types/silentgear';
 import { findBestBuilds } from '@/lib/optimizer';
+import { getMainPartLabel } from '@/lib/parts';
 import { Sparkles, X, Check, Shield, Swords, Zap, Pickaxe, Scale, Heart } from 'lucide-react';
 
 export function OptimizerModal() {
@@ -314,7 +315,7 @@ export function OptimizerModal() {
                                         className="w-2 h-2 rounded-full inline-block"
                                         style={{ backgroundColor: mainMat.color }}
                                       />
-                                      {mainMat.name[lang]} ({isArmor ? (lang === 'pt' ? 'Placa' : 'Plate') : (lang === 'pt' ? 'Lâmina' : 'Blade')})
+                                      {mainMat.name[lang]} ({getMainPartLabel(build.gearTypeId, currentGearType?.category, lang)})
                                     </span>
                                   )
                                 )}

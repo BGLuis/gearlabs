@@ -1,4 +1,4 @@
-import { GearPartSelection, SubMaterialSelection, AlloyType, Material } from '@/types/silentgear';
+import { GearPartSelection, SubMaterialSelection, AlloyType, Material, GearCategory } from '@/types/silentgear';
 
 export const MAX_SUB_MATERIALS = 6;
 
@@ -309,6 +309,44 @@ export function setPartAlloyTypeInPart(
     ...current,
     alloyType,
   };
+}
+
+type MainPartKind = 'blade' | 'head' | 'plates';
+
+const MAIN_PART_NAMES: Record<MainPartKind, { pt: string; en: string }> = {
+  blade: { pt: 'Lâmina', en: 'Blade' },
+  head: { pt: 'Cabeça', en: 'Head' },
+  plates: { pt: 'Placas', en: 'Plates' },
+};
+
+const MAIN_PART_BY_GEAR_TYPE: Record<string, MainPartKind> = {
+  sword: 'blade',
+  katana: 'blade',
+  pickaxe: 'head',
+  axe: 'head',
+  helmet: 'plates',
+  chestplate: 'plates',
+  leggings: 'plates',
+  boots: 'plates',
+};
+
+// Fallback para tipos fora do catálogo oficial (ex.: ferramentas adicionadas por datapack)
+const MAIN_PART_BY_CATEGORY: Partial<Record<GearCategory, MainPartKind>> = {
+  weapon: 'blade',
+  tool: 'head',
+  armor: 'plates',
+};
+
+export function getMainPartLabel(
+  gearTypeId: string | undefined,
+  category: GearCategory | undefined,
+  lang: 'pt' | 'en'
+): string {
+  const kind =
+    (gearTypeId && MAIN_PART_BY_GEAR_TYPE[gearTypeId]) ||
+    (category && MAIN_PART_BY_CATEGORY[category]) ||
+    'blade';
+  return MAIN_PART_NAMES[kind][lang];
 }
 
 // Aliases para conveniência
