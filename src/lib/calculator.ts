@@ -44,11 +44,40 @@ export function applySynergyBonus(value: number, synergy: number): number {
 }
 
 /**
+ * Configuração de efeitos de traits de sinergia ('silentgear:synergy_multiplier', SynergyTraitEffect.java).
+ * Aplicados sequencialmente em SynergyUtils.getSynergy após categorias e raridade.
+ */
+export interface SynergyTraitConfig {
+  multiplier: number;
+  rangeMin: number;
+  rangeMax: number;
+}
+
+export const SYNERGY_TRAIT_EFFECTS: Record<string, SynergyTraitConfig> = {
+  'silentgear:synergistic': {
+    multiplier: 0.04,
+    rangeMin: 1.0,
+    rangeMax: Number.POSITIVE_INFINITY,
+  },
+  'silentgear:rustic': {
+    multiplier: 0.05,
+    rangeMin: 0.749,
+    rangeMax: 1.001,
+  },
+  'silentgear:crude': {
+    multiplier: -0.04,
+    rangeMin: 0.0,
+    rangeMax: Number.POSITIVE_INFINITY,
+  },
+};
+
+/**
  * Calcula a sinergia de materiais compostos conforme SynergyUtils.java oficial (Silent Gear 4.2.3):
  * - Bônus base da curva de materiais únicos: 1.1 * (x / (x + 1.1)) + 1 / (1 + 1.1)
  * - Penalidade de -0.2 se os materiais não compartilharem ao menos uma categoria em comum
  * - Bônus para categorias compartilhadas: 0.015 * (k / (materiais.length - uniqueCount + 1)) para cada contagem k > 1
  * - Penalidade pela diferença de raridade em relação ao material primário: 0.001 * |primaryRarity - rarity|
+ * - Traits com efeito silentgear:synergy_multiplier (synergistic, rustic, crude)
  * - Clamped no intervalo canônico [0.1, 2.0]
  */
 export function calculateSynergy(
@@ -115,6 +144,18 @@ export function calculateSynergy(
         0
       );
       synergy -= 0.001 * Math.abs(primaryRarity - rarity); // RARITY_WEIGHT
+    }
+  }
+
+  // 5. Traits de sinergia (SynergyUtils.java:67-72 / SynergyTraitEffect.java: silentgear:synergy_multiplier)
+  const effectiveTraits = traits ?? materials.flatMap((m) => m.traits[partSlot] || []);
+  for (const trait of effectiveTraits) {
+    const traitKey = trait.name.startsWith('silentgear:') ? trait.name : `silentgear:${trait.name}`;
+    const effect = SYNERGY_TRAIT_EFFECTS[traitKey];
+    if (effect) {
+      if (synergy > effect.rangeMin && synergy < effect.rangeMax) {
+        synergy += trait.level * effect.multiplier;
+      }
     }
   }
 
@@ -368,7 +409,13 @@ export function composeCompoundSlotModifiers(
 ) {
   const isMain = slot === 'main';
   const defaultOp: NormalizedOperation = isMain ? 'AVERAGE' : 'ADD';
-  const synergy = calculateSynergy(subMaterials, slot);
+  // Traits
+  const traits: MaterialTraitRef[] = [];
+  for (const mat of subMaterials) {
+    const matTraits = mat.traits[slot] || [];
+    traits.push(...matTraits);
+  }
+  const synergy = calculateSynergy(subMaterials, slot, traits);
   const isCrude = alloyType === 'crude';
   const crudeMultiplier = isCrude ? CRUDE_PROPERTY_MULTIPLIER : 1.0;
 
@@ -460,13 +507,6 @@ export function composeCompoundSlotModifiers(
   const chargingValueMods: StatValueModifier[] = compoundChargingVal !== undefined
     ? [{ value: compoundChargingVal, operation: 'AVERAGE' }]
     : [];
-
-  // Traits
-  const traits: MaterialTraitRef[] = [];
-  for (const mat of subMaterials) {
-    const matTraits = mat.traits[slot] || [];
-    traits.push(...matTraits);
-  }
 
   return {
     synergy,

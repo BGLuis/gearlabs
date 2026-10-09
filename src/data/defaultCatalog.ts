@@ -997,6 +997,33 @@ export const OFFICIAL_TRAITS: Record<string, TraitInfo> = {
       pt: 'Aumenta a chance de extrair ouro ao minerar.',
     },
   },
+  'silentgear:synergistic': {
+    id: 'silentgear:synergistic',
+    maxLevel: 5,
+    name: { en: 'Synergistic', pt: 'Sinergético' },
+    description: {
+      en: 'Gear gets a synergy bonus (if base value is more than 100%).',
+      pt: 'Concede bônus de sinergia caso o valor base seja superior a 100%.',
+    },
+  },
+  'silentgear:rustic': {
+    id: 'silentgear:rustic',
+    maxLevel: 5,
+    name: { en: 'Rustic', pt: 'Rústico' },
+    description: {
+      en: "Increases synergy if it's 100% or less.",
+      pt: 'Aumenta a sinergia caso o valor base seja de 100% ou menos.',
+    },
+  },
+  'silentgear:crude': {
+    id: 'silentgear:crude',
+    maxLevel: 5,
+    name: { en: 'Crude', pt: 'Bruto' },
+    description: {
+      en: 'Reduces synergy.',
+      pt: 'Reduz a sinergia.',
+    },
+  },
 };
 
 export const VERSION_PRESETS: VersionPreset[] = [
