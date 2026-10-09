@@ -831,6 +831,44 @@ export function extractSlotRawModifiers(
   };
 }
 
+/**
+ * TraitListProperty.computeTraits (Silent Gear 4.2.3): o divisor é min(n_traits / 2, ocorrências),
+ * em que n_traits conta todas as instâncias do item. O Java divide por `2f` (float), então n ímpar
+ * não é truncado; com um único trait o divisor é 0.5 e o nível é dobrado antes do clamp.
+ */
+export function computeTraits(
+  traits: MaterialTraitRef[],
+  catalogTraits: Record<string, TraitInfo>
+): CalculatedTrait[] {
+  const sums = new Map<string, { level: number; count: number }>();
+  for (const t of traits) {
+    const entry = sums.get(t.name) ?? { level: 0, count: 0 };
+    entry.level += t.level;
+    entry.count += 1;
+    sums.set(t.name, entry);
+  }
+
+  const calculated: CalculatedTrait[] = [];
+  for (const [traitId, { level, count }] of sums) {
+    const info: TraitInfo = catalogTraits[traitId] || {
+      id: traitId,
+      maxLevel: 5,
+      name: { en: traitId.replace(/^.*:/, ''), pt: traitId.replace(/^.*:/, '') },
+      description: { en: 'In-game trait effect', pt: 'Efeito de habilidade do item' },
+    };
+    const divisor = Math.min(traits.length / 2, count);
+    const rounded = Math.round(level / divisor);
+    calculated.push({
+      id: traitId,
+      name: info.name,
+      level: Math.min(Math.max(rounded, 1), info.maxLevel),
+      maxLevel: info.maxLevel,
+      description: info.description,
+    });
+  }
+  return calculated;
+}
+
 export function calculateGearStats(
   build: GearBuild,
   catalog: VersionCatalog
@@ -1254,8 +1292,7 @@ export function calculateGearStats(
   const finalHarvestSpeed = Number(baseHarvestSpeed.toFixed(1));
   const finalDps = Number((finalDamage * finalAttackSpeed).toFixed(1));
 
-  // Resolução de Traits cumulativos (acumula de todos os sub-materiais de cada slot)
-  const traitLevelMap: Record<string, number> = {};
+  const allTraitInstances: MaterialTraitRef[] = [];
   for (const slot of Object.keys(build.parts) as PartSlot[]) {
     const sel = build.parts[slot];
     if (!sel) continue;
@@ -1264,29 +1301,10 @@ export function calculateGearStats(
       : (catalog.materials[sel.materialId] ? [catalog.materials[sel.materialId]] : []);
 
     for (const mat of subMats) {
-      const traits = mat.traits[slot] || [];
-      for (const t of traits) {
-        traitLevelMap[t.name] = (traitLevelMap[t.name] || 0) + t.level;
-      }
+      allTraitInstances.push(...(mat.traits[slot] || []));
     }
   }
-
-  const calculatedTraits: CalculatedTrait[] = [];
-  for (const [traitId, totalLevel] of Object.entries(traitLevelMap)) {
-    const info: TraitInfo = catalog.traits[traitId] || {
-      id: traitId,
-      maxLevel: 5,
-      name: { en: traitId.replace(/^.*:/, ''), pt: traitId.replace(/^.*:/, '') },
-      description: { en: 'In-game trait effect', pt: 'Efeito de habilidade do item' },
-    };
-    calculatedTraits.push({
-      id: traitId,
-      name: info.name,
-      level: Math.min(totalLevel, info.maxLevel),
-      maxLevel: info.maxLevel,
-      description: info.description,
-    });
-  }
+  const calculatedTraits = computeTraits(allTraitInstances, catalog.traits);
 
   return {
     durability: finalDurability,
