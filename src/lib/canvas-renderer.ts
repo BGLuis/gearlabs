@@ -1,17 +1,9 @@
 import { GearBuild, GearPartSelection, VersionCatalog } from '@/types/silentgear';
 import { GEAR_TEXTURES, TexturePixel } from '@/data/gear-textures';
+import { blendMixboxColors, hexToRgb } from '@/lib/color-blender';
 
 export interface RenderOptions {
   size?: number; // Tamanho do canvas (ex: 64, 128, 256)
-}
-
-function hexToRgb(hex: string): [number, number, number] {
-  let cleanHex = hex.replace('#', '');
-  if (cleanHex.length === 3) {
-    cleanHex = cleanHex.split('').map((c) => c + c).join('');
-  }
-  const num = parseInt(cleanHex, 16);
-  return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
 }
 
 function getBlendedColor(
@@ -26,18 +18,8 @@ function getBlendedColor(
       return hexToRgb(mats[0].color || defaultColor);
     }
     if (mats.length > 1) {
-      let r = 0, g = 0, b = 0;
-      for (const m of mats) {
-        const rgb = hexToRgb(m.color || defaultColor);
-        r += rgb[0];
-        g += rgb[1];
-        b += rgb[2];
-      }
-      return [
-        Math.round(r / mats.length),
-        Math.round(g / mats.length),
-        Math.round(b / mats.length),
-      ];
+      const colors = mats.map((m) => hexToRgb(m.color || defaultColor));
+      return blendMixboxColors(colors);
     }
   }
   const mat = catalog.materials[sel.materialId];
