@@ -1,0 +1,170 @@
+{
+  "description": "Conjunto de quatro peças de armadura de referência do save local ATM11 (componente silentgear:construction)",
+  "pieces": {
+    "helmet": {
+      "gearTypeId": "helmet",
+      "parts": {
+        "main": {
+          "materialId": "silentgear:tyrian_steel",
+          "grade": "MAX",
+          "starcharge": 3,
+          "materials": [
+            { "materialId": "silentgear:tyrian_steel" },
+            { "materialId": "silentgear:unobtainium" },
+            { "materialId": "sgearmetalworks:uru_metal" },
+            { "materialId": "silentgear:vibranium" },
+            { "materialId": "silentgear:allthemodium" }
+          ]
+        },
+        "lining": {
+          "materialId": "silentgear:leather",
+          "grade": "MAX",
+          "starcharge": 3,
+          "materials": [
+            { "materialId": "silentgear:leather" },
+            { "materialId": "silentgear:fine_silk_cloth" },
+            { "materialId": "silentgear:slime" },
+            { "materialId": "silentgear:wool/white" },
+            { "materialId": "silentgear:phantom_membrane" }
+          ]
+        },
+        "tip": {
+          "materialId": "silentgear:tyrian_steel",
+          "grade": "MAX",
+          "materials": [
+            { "materialId": "silentgear:tyrian_steel" },
+            { "materialId": "silentgear:unobtainium" },
+            { "materialId": "sgearmetalworks:uru_metal" },
+            { "materialId": "silentgear:vibranium" },
+            { "materialId": "silentgear:allthemodium" }
+          ]
+        }
+      },
+      "expectedInGameProperties": {
+        "armor": 34.3222,
+        "armorToughness": 159.7055,
+        "magicArmor": 955.7791,
+        "armorDurability": 134099.17,
+        "maxDamage": 1475089
+      }
+    },
+    "chestplate": {
+      "gearTypeId": "chestplate",
+      "parts": {
+        "main": {
+          "materialId": "silentgear:tyrian_steel",
+          "grade": "MAX",
+          "starcharge": 3,
+          "materials": [
+            { "materialId": "silentgear:tyrian_steel" },
+            { "materialId": "silentgear:unobtainium" },
+            { "materialId": "sgearmetalworks:uru_metal" },
+            { "materialId": "silentgear:vibranium" },
+            { "materialId": "silentgear:allthemodium" }
+          ]
+        }
+      },
+      "expectedInGameProperties": {
+        "armor": 40.9728,
+        "armorToughness": 154.0074,
+        "magicArmor": 946.9847,
+        "armorDurability": 134082.86,
+        "maxDamage": 2145312
+      }
+    },
+    "leggings": {
+      "gearTypeId": "leggings",
+      "parts": {
+        "main": {
+          "materialId": "silentgear:tyrian_steel",
+          "grade": "MAX",
+          "starcharge": 3,
+          "materials": [
+            { "materialId": "silentgear:tyrian_steel" },
+            { "materialId": "silentgear:unobtainium" },
+            { "materialId": "sgearmetalworks:uru_metal" },
+            { "materialId": "silentgear:vibranium" },
+            { "materialId": "silentgear:allthemodium" }
+          ]
+        },
+        "lining": {
+          "materialId": "silentgear:leather",
+          "grade": "MAX",
+          "starcharge": 3,
+          "materials": [
+            { "materialId": "silentgear:leather" },
+            { "materialId": "silentgear:fine_silk_cloth" },
+            { "materialId": "silentgear:slime" },
+            { "materialId": "silentgear:wool/white" },
+            { "materialId": "silentgear:phantom_membrane" }
+          ]
+        },
+        "tip": {
+          "materialId": "silentgear:tyrian_steel",
+          "grade": "MAX",
+          "materials": [
+            { "materialId": "silentgear:tyrian_steel" },
+            { "materialId": "silentgear:unobtainium" },
+            { "materialId": "sgearmetalworks:uru_metal" },
+            { "materialId": "silentgear:vibranium" },
+            { "materialId": "silentgear:allthemodium" }
+          ]
+        }
+      },
+      "expectedInGameProperties": {
+        "armor": 40.4407,
+        "armorToughness": 159.7055,
+        "magicArmor": 955.7791,
+        "armorDurability": 134099.19,
+        "maxDamage": 2011485
+      }
+    },
+    "boots": {
+      "gearTypeId": "boots",
+      "parts": {
+        "main": {
+          "materialId": "silentgear:tyrian_steel",
+          "grade": "MAX",
+          "starcharge": 3,
+          "materials": [
+            { "materialId": "silentgear:tyrian_steel" },
+            { "materialId": "silentgear:unobtainium" },
+            { "materialId": "sgearmetalworks:uru_metal" },
+            { "materialId": "silentgear:vibranium" },
+            { "materialId": "silentgear:allthemodium" }
+          ]
+        },
+        "lining": {
+          "materialId": "silentgear:leather",
+          "grade": "MAX",
+          "starcharge": 3,
+          "materials": [
+            { "materialId": "silentgear:leather" },
+            { "materialId": "silentgear:fine_silk_cloth" },
+            { "materialId": "silentgear:slime" },
+            { "materialId": "silentgear:wool/white" },
+            { "materialId": "silentgear:phantom_membrane" }
+          ]
+        },
+        "tip": {
+          "materialId": "silentgear:tyrian_steel",
+          "grade": "MAX",
+          "materials": [
+            { "materialId": "silentgear:tyrian_steel" },
+            { "materialId": "silentgear:unobtainium" },
+            { "materialId": "sgearmetalworks:uru_metal" },
+            { "materialId": "silentgear:vibranium" },
+            { "materialId": "silentgear:allthemodium" }
+          ]
+        }
+      },
+      "expectedInGameProperties": {
+        "armor": 34.4932,
+        "armorToughness": 159.7055,
+        "magicArmor": 955.7791,
+        "armorDurability": 134099.17,
+        "maxDamage": 1743287
+      }
+    }
+  }
+}

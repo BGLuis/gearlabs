@@ -95,23 +95,23 @@ export function calculateSynergy(
     }
   }
 
-  // 4. Penalidade de diferença de raridade
+  // 4. Penalidade de diferença de raridade (conforme SynergyUtils.java:54-65)
   const primary = materials[0];
   const primaryRarity = getNumericStatValue(
-    primary.stats[partSlot]?.rarity ?? primary.stats.main?.rarity,
+    primary.stats[partSlot]?.rarity,
     0
   );
   const maxRarity = Math.max(
     0,
     ...materials.map((m) =>
-      getNumericStatValue(m.stats[partSlot]?.rarity ?? m.stats.main?.rarity, 0)
+      getNumericStatValue(m.stats[partSlot]?.rarity, 0)
     )
   );
 
   if (maxRarity > 0) {
     for (const mat of uniqueMaterials) {
       const rarity = getNumericStatValue(
-        mat.stats[partSlot]?.rarity ?? mat.stats.main?.rarity,
+        mat.stats[partSlot]?.rarity,
         0
       );
       synergy -= 0.001 * Math.abs(primaryRarity - rarity); // RARITY_WEIGHT
@@ -421,12 +421,12 @@ export function composeCompoundSlotModifiers(
   // Knockback Resistance
   const knockbackMods = processStat((mat) => mat.stats[slot]?.knockback_resistance, true);
 
-  // Durability (no caso de armadura, usa armor_durability se disponível)
+  // Durability (no caso de armadura no main usa fallback; em secundários usa estritamente armor_durability)
   const durabilityMods = processStat((mat) => {
     const stats = mat.stats[slot];
     if (!stats) return undefined;
     if (isArmor) {
-      return stats.armor_durability ?? stats.durability;
+      return isMain ? (stats.armor_durability ?? stats.durability) : stats.armor_durability;
     }
     return stats.durability;
   }, true);
@@ -700,16 +700,17 @@ export function calculateGearStats(
       }
       if (composedSlot.durabilityMods.length > 0) {
         if (isArmor) {
-          for (const dm of composedSlot.durabilityMods) {
-            const op = normalizeOperation(dm.operation, 'ADD');
-            if (op === 'MULTIPLY_TOTAL' || op === 'MULTIPLY_BASE') {
-              armorDurMods.push(...applyEnhancementsToModifiers([dm], 'durability', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, op));
-            } else {
-              let val = applyGradeBonus(dm.value, slotGradeMul);
-              val = applyStarcharge(val, 'durability', slotStarchargeLevel, slotChargingValue, op);
-              flatDurabilityAdditions += val;
-            }
-          }
+          armorDurMods.push(
+            ...applyEnhancementsToModifiers(
+              composedSlot.durabilityMods,
+              'armor_durability',
+              slotGradeMul,
+              true,
+              slotStarchargeLevel,
+              slotChargingValue,
+              'ADD'
+            )
+          );
         } else {
           toolDurMods.push(...applyEnhancementsToModifiers(composedSlot.durabilityMods, 'durability', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
         }
@@ -847,7 +848,7 @@ export function calculateGearStats(
   let baseDurability: number;
   if (isArmor) {
     const finalArmorDurability = computeNumberProperty(0, armorDurMods);
-    baseDurability = Math.round(finalArmorDurability * gearType.durabilityMultiplier) + flatDurabilityAdditions;
+    baseDurability = Math.trunc(finalArmorDurability) * Math.trunc(gearType.durabilityMultiplier) + flatDurabilityAdditions;
   } else {
     baseDurability = computeNumberProperty(0, toolDurMods);
   }

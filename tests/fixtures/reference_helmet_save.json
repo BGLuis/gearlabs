@@ -5,34 +5,36 @@
     "main": {
       "materialId": "silentgear:tyrian_steel",
       "grade": "MAX",
+      "starcharge": 3,
       "materials": [
-        { "materialId": "silentgear:tyrian_steel", "grade": "MAX" },
-        { "materialId": "silentgear:unobtainium", "grade": "MAX" },
-        { "materialId": "sgearmetalworks:uru_metal", "grade": "MAX" },
-        { "materialId": "silentgear:vibranium", "grade": "MAX" },
-        { "materialId": "silentgear:allthemodium", "grade": "MAX" }
+        { "materialId": "silentgear:tyrian_steel" },
+        { "materialId": "silentgear:unobtainium" },
+        { "materialId": "sgearmetalworks:uru_metal" },
+        { "materialId": "silentgear:vibranium" },
+        { "materialId": "silentgear:allthemodium" }
       ]
     },
     "lining": {
       "materialId": "silentgear:leather",
       "grade": "MAX",
+      "starcharge": 3,
       "materials": [
-        { "materialId": "silentgear:leather", "grade": "MAX" },
-        { "materialId": "silentgear:fine_silk_cloth", "grade": "MAX" },
-        { "materialId": "silentgear:slime", "grade": "MAX" },
-        { "materialId": "silentgear:wool", "grade": "MAX" },
-        { "materialId": "silentgear:phantom_membrane", "grade": "MAX" }
+        { "materialId": "silentgear:leather" },
+        { "materialId": "silentgear:fine_silk_cloth" },
+        { "materialId": "silentgear:slime" },
+        { "materialId": "silentgear:wool/white" },
+        { "materialId": "silentgear:phantom_membrane" }
       ]
     },
     "tip": {
       "materialId": "silentgear:tyrian_steel",
       "grade": "MAX",
       "materials": [
-        { "materialId": "silentgear:tyrian_steel", "grade": "MAX" },
-        { "materialId": "silentgear:unobtainium", "grade": "MAX" },
-        { "materialId": "sgearmetalworks:uru_metal", "grade": "MAX" },
-        { "materialId": "silentgear:vibranium", "grade": "MAX" },
-        { "materialId": "silentgear:allthemodium", "grade": "MAX" }
+        { "materialId": "silentgear:tyrian_steel" },
+        { "materialId": "silentgear:unobtainium" },
+        { "materialId": "sgearmetalworks:uru_metal" },
+        { "materialId": "silentgear:vibranium" },
+        { "materialId": "silentgear:allthemodium" }
       ]
     }
   },
@@ -41,6 +43,7 @@
     "armor": 34.32,
     "armorToughness": 159.71,
     "magicArmor": 955.78,
-    "armorDurability": 134099
+    "armorDurability": 134099,
+    "maxDamage": 1475089
   }
 }
