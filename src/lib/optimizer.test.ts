@@ -413,5 +413,78 @@ describe('findBestBuilds', () => {
       expect(starchargeMatches.length).toBeGreaterThan(0);
     });
   });
+
+  describe('Issue #59: top N com principais distintos', () => {
+    function catalogWithMainsAndRods(mainMeleeDamage: Record<string, number>, rodCount: number): VersionCatalog {
+      const materials: Record<string, Material> = {};
+      for (const [id, melee] of Object.entries(mainMeleeDamage)) {
+        materials[id] = {
+          id,
+          name: { en: id, pt: id },
+          tier: 1,
+          category: 'metal',
+          color: '#FFFFFF',
+          stats: { main: { durability: 200, melee_damage: melee } },
+          traits: {},
+        };
+      }
+      for (let i = 1; i <= rodCount; i++) {
+        const id = `test:rod_${i}`;
+        materials[id] = {
+          id,
+          name: { en: `Rod ${i}`, pt: `Haste ${i}` },
+          tier: 1,
+          category: 'wood',
+          color: '#FFFFFF',
+          stats: { rod: { durability: 30 * i } },
+          traits: {},
+        };
+      }
+      return { version: 'test-59', materials, gearTypes: OFFICIAL_GEAR_TYPES, traits: {} };
+    }
+
+    it('com pelo menos três principais viáveis, as três sugestões têm principais distintos', () => {
+      const testCatalog = catalogWithMainsAndRods(
+        { 'test:main_a': 10, 'test:main_b': 6, 'test:main_c': 4 },
+        4
+      );
+
+      const results = findBestBuilds(
+        {
+          gearTypeId: 'sword',
+          availableMaterials: Object.keys(testCatalog.materials),
+          goal: 'max_damage',
+        },
+        testCatalog,
+        3
+      );
+
+      expect(results).toHaveLength(3);
+      const mains = results.map((r) => r.build.parts.main?.materialId);
+      expect(new Set(mains).size).toBe(3);
+      expect(mains[0]).toBe('test:main_a');
+    });
+
+    it('com menos principais viáveis que N, ainda devolve N builds distintas quando há builds suficientes', () => {
+      const testCatalog = catalogWithMainsAndRods(
+        { 'test:main_a': 10, 'test:main_b': 6 },
+        3
+      );
+
+      const results = findBestBuilds(
+        {
+          gearTypeId: 'sword',
+          availableMaterials: Object.keys(testCatalog.materials),
+          goal: 'max_damage',
+        },
+        testCatalog,
+        3
+      );
+
+      expect(results).toHaveLength(3);
+      const builds = new Set(results.map((r) => JSON.stringify(r.build.parts)));
+      expect(builds.size).toBe(3);
+    });
+  });
 });
 
