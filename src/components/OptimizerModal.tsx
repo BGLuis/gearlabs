@@ -1,9 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useGear } from '@/context/GearContext';
 import { Grade, OptimizationGoal, OptimizedBuildResult, PartSlot, StarchargeLevel } from '@/types/silentgear';
-import { findBestBuilds } from '@/lib/optimizer';
+import {
+  createDebouncedTask,
+  createLatestRequestTracker,
+  OptimizerSearchMessage,
+  OptimizerSearchReply,
+  runOptimizerSearch,
+  SEARCH_DEBOUNCE_MS,
+} from '@/lib/optimizer-search';
 import { getMainPartLabel } from '@/lib/parts';
 import { Sparkles, X, Check, Shield, Swords, Zap, Pickaxe, Scale, Heart } from 'lucide-react';
 
@@ -79,11 +86,41 @@ export function OptimizerModal() {
 
   const availableList = React.useMemo(() => Array.from(inventory), [inventory]);
 
-  const results: OptimizedBuildResult[] = React.useMemo(() => {
-    if (!isOpen) return [];
-    try {
-      return findBestBuilds(
-        {
+  const [results, setResults] = useState<OptimizedBuildResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchTracker] = useState(createLatestRequestTracker);
+  const workerRef = useRef<Worker | null>(null);
+
+  useEffect(
+    () => () => {
+      workerRef.current?.terminate();
+      workerRef.current = null;
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (!isOpen) {
+      setResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    const showReply = (reply: OptimizerSearchReply) => {
+      if (!searchTracker.isLatest(reply.id)) return;
+      if ('error' in reply) {
+        console.error('Error optimizing builds', reply.error);
+        setResults([]);
+      } else {
+        setResults(reply.results);
+      }
+      setIsSearching(false);
+    };
+
+    const search = createDebouncedTask(() => {
+      const message: OptimizerSearchMessage = {
+        id: searchTracker.next(),
+        request: {
           gearTypeId: build.gearTypeId,
           availableMaterials: availableList,
           goal,
@@ -92,13 +129,34 @@ export function OptimizerModal() {
           allowAlloys,
         },
         catalog,
-        3
-      );
-    } catch (e) {
-      console.error('Error optimizing builds', e);
-      return [];
-    }
-  }, [isOpen, build.gearTypeId, availableList, goal, grade, starcharge, allowAlloys, catalog]);
+        topN: 3,
+      };
+      if (typeof Worker === 'undefined') {
+        showReply(runOptimizerSearch(message));
+        return;
+      }
+      if (!workerRef.current) {
+        const worker = new Worker(new URL('../workers/optimizer.worker.ts', import.meta.url));
+        worker.onmessage = (e: MessageEvent<OptimizerSearchReply>) => showReply(e.data);
+        worker.onerror = () => {
+          console.error('Optimizer worker failed');
+          worker.terminate();
+          workerRef.current = null;
+          setIsSearching(false);
+        };
+        workerRef.current = worker;
+      }
+      workerRef.current.postMessage(message);
+    }, SEARCH_DEBOUNCE_MS);
+
+    setIsSearching(true);
+    search.schedule();
+    return () => {
+      search.cancel();
+      // Invalida respostas de buscas já enviadas: a mudança de parâmetros torna-as obsoletas.
+      searchTracker.next();
+    };
+  }, [isOpen, build.gearTypeId, availableList, goal, grade, starcharge, allowAlloys, catalog, searchTracker]);
 
   const handleApply = (res: OptimizedBuildResult) => {
     loadBuild(res.build);
@@ -252,7 +310,13 @@ export function OptimizerModal() {
                   {lang === 'pt' ? 'Top 3 Melhores Combinações Calculadas:' : 'Top 3 Calculated Builds:'}
                 </label>
 
-                {results.length === 0 ? (
+                {isSearching && (
+                  <p className="text-[11px] font-mono text-mc-muted mb-2 animate-pulse">
+                    {lang === 'pt' ? 'Calculando combinações...' : 'Calculating builds...'}
+                  </p>
+                )}
+
+                {!isSearching && results.length === 0 ? (
                   <div className="p-6 text-center border border-dashed border-mc-border rounded-lg bg-mc-bg/30">
                     <p className="text-sm text-mc-muted">
                       {lang === 'pt'
