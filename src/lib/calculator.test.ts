@@ -987,6 +987,24 @@ describe('calculateGearStats', () => {
     });
   });
 
+  describe('Issue #39: Katana usa as constantes da cabeça do mod 4.2.3', () => {
+    it('katana de ferro + haste Wood tem dano 6, velocidade 1.4 e durabilidade 281', () => {
+      const build: GearBuild = {
+        gearTypeId: 'katana',
+        parts: {
+          main: { materialId: 'silentgear:iron' },
+          rod: { materialId: 'silentgear:wood' },
+        },
+      };
+
+      const stats = calculateGearStats(build, atm11Catalog);
+
+      expect(stats.meleeDamage).toBe(6);
+      expect(stats.attackSpeed).toBe(1.4);
+      expect(stats.durability).toBe(281);
+    });
+  });
+
   describe('Issue #45: Catálogo ATM11 carregado de catalog.json', () => {
     it('botas de ferro no catálogo carregado têm armor 2', () => {
       const build: GearBuild = {

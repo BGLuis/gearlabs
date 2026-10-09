@@ -4,6 +4,7 @@ import * as path from 'path';
 import {
   OFFICIAL_MATERIALS_1_20,
   OFFICIAL_MATERIALS_1_21,
+  OFFICIAL_GEAR_TYPES,
 } from './defaultCatalog';
 import { ATM11_MATERIALS } from '../../tests/fixtures/atm11Materials';
 import { VersionCatalog } from '@/types/silentgear';
@@ -80,5 +81,37 @@ describe('Catálogo Padrão - Cores dos Materiais (Issue #12)', () => {
         }
       }
     }
+  });
+});
+
+describe('Tipos de Equipamento Manuais vs Partes Principais do Mod (Issue #39)', () => {
+  const partsDir = path.resolve(__dirname, '../../data/silentgear/silentgear_parts');
+  const mainPartByGearType: Record<string, string> = {
+    sword: 'sword_blade',
+    katana: 'katana_blade',
+    pickaxe: 'pickaxe_head',
+    axe: 'axe_head',
+    helmet: 'helmet_plates',
+    chestplate: 'chestplate_plates',
+    leggings: 'legging_plates',
+    boots: 'boot_plates',
+  };
+
+  it.each(Object.entries(mainPartByGearType))(
+    '%s: dano e velocidade base batem com a parte principal do mod',
+    (gearTypeId, partFile) => {
+      const part = JSON.parse(fs.readFileSync(path.join(partsDir, `${partFile}.json`), 'utf8'));
+      const gearType = OFFICIAL_GEAR_TYPES[gearTypeId];
+      expect(gearType, `tipo ${gearTypeId} ausente em OFFICIAL_GEAR_TYPES`).toBeDefined();
+      expect(part.properties, `${partFile}.json sem properties`).toBeDefined();
+
+      expect(gearType.baseDamage).toBe(part.properties.attack_damage?.value ?? 0);
+      expect(gearType.baseAttackSpeed).toBe(part.properties.attack_speed?.value ?? 0);
+    }
+  );
+
+  it('katana: durabilityMultiplier é 1 + MULTIPLY_BASE da lâmina do mod', () => {
+    const part = JSON.parse(fs.readFileSync(path.join(partsDir, 'katana_blade.json'), 'utf8'));
+    expect(OFFICIAL_GEAR_TYPES.katana.durabilityMultiplier).toBe(1 + part.properties.durability.value);
   });
 });
