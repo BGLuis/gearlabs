@@ -298,7 +298,7 @@ describe('findBestBuilds', () => {
       3
     );
 
-    // Busca exaustiva (sem poda: maxSecondaryCandidates = Infinity)
+    // Busca exaustiva (sem poda: maxSecondaryCandidates e maxOptionalCandidates = Infinity)
     const exhaustiveResults = findBestBuilds(
       {
         gearTypeId: 'sword',
@@ -307,6 +307,7 @@ describe('findBestBuilds', () => {
       },
       testCatalog,
       3,
+      Infinity,
       Infinity
     );
 
@@ -411,6 +412,87 @@ describe('findBestBuilds', () => {
 
       expect(gradeMatches.length).toBeGreaterThan(0);
       expect(starchargeMatches.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Issue #57: slots opcionais podem ficar vazios', () => {
+    it('um forro (lining) que aumenta a armadura entra na sugestão de proteção', () => {
+      const materials: Record<string, Material> = {
+        'test:plate': {
+          id: 'test:plate',
+          name: { en: 'Plate', pt: 'Placa' },
+          tier: 1,
+          category: 'metal',
+          color: '#FFFFFF',
+          stats: { main: { durability: 500, armor: 5, armor_toughness: 1 } },
+          traits: {},
+        },
+        'test:lining': {
+          id: 'test:lining',
+          name: { en: 'Lining', pt: 'Forro' },
+          tier: 1,
+          category: 'metal',
+          color: '#888888',
+          stats: { lining: { durability: 100, armor: 4 } },
+          traits: {},
+        },
+      };
+
+      const results = findBestBuilds(
+        {
+          gearTypeId: 'chestplate',
+          availableMaterials: Object.keys(materials),
+          goal: 'max_protection',
+        },
+        { version: 'test-57a', materials, gearTypes: OFFICIAL_GEAR_TYPES, traits: {} },
+        1
+      );
+
+      expect(results[0].build.parts.lining?.materialId).toBe('test:lining');
+    });
+
+    it('uma ponta que piora o dano é omitida da sugestão mesmo quando o tipo tem ponta', () => {
+      const materials: Record<string, Material> = {
+        'test:blade': {
+          id: 'test:blade',
+          name: { en: 'Blade', pt: 'Lâmina' },
+          tier: 1,
+          category: 'metal',
+          color: '#FFFFFF',
+          stats: { main: { durability: 500, melee_damage: 5.0, attack_speed: 0.0 } },
+          traits: {},
+        },
+        'test:haste': {
+          id: 'test:haste',
+          name: { en: 'Haste', pt: 'Haste' },
+          tier: 1,
+          category: 'wood',
+          color: '#888888',
+          stats: { rod: { durability: 50 } },
+          traits: {},
+        },
+        'test:bad_tip': {
+          id: 'test:bad_tip',
+          name: { en: 'Bad Tip', pt: 'Ponta Ruim' },
+          tier: 1,
+          category: 'gem',
+          color: '#AAAAAA',
+          stats: { tip: { durability: 50, melee_damage: -3.0 } },
+          traits: {},
+        },
+      };
+
+      const results = findBestBuilds(
+        {
+          gearTypeId: 'sword',
+          availableMaterials: Object.keys(materials),
+          goal: 'max_damage',
+        },
+        { version: 'test-57b', materials, gearTypes: OFFICIAL_GEAR_TYPES, traits: {} },
+        1
+      );
+
+      expect(results[0].build.parts.tip).toBeUndefined();
     });
   });
 
