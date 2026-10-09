@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import LZString from 'lz-string';
 import { encodeBuildToHash, decodeBuildFromHash } from './url-state';
 import { GearBuild } from '@/types/silentgear';
+import { ATM11_CATALOG } from '@/data/defaultCatalog';
+import { validateAlloy } from './parts';
 
 describe('url-state', () => {
   it('codifica e decodifica uma montagem perfeitamente', () => {
@@ -95,5 +97,65 @@ describe('url-state', () => {
     expect(decoded?.build.parts.main?.grade).toBe('MAX');
     expect(decoded?.build.parts.main?.starcharge).toBe(3);
     expect(decoded?.build.parts.main?.materials).toHaveLength(2);
+  });
+
+  it('codifica e decodifica alloyType nas partes compostas', () => {
+    const build: GearBuild = {
+      gearTypeId: 'sword',
+      parts: {
+        main: {
+          materialId: 'silentgear:iron',
+          alloyType: 'crude',
+          materials: [
+            { materialId: 'silentgear:iron' },
+            { materialId: 'silentgear:wool' },
+          ],
+        },
+      },
+    };
+
+    const hash = encodeBuildToHash(build, 'atm11');
+    const decoded = decodeBuildFromHash(hash);
+
+    expect(decoded).not.toBeNull();
+    expect(decoded?.build.parts.main?.alloyType).toBe('crude');
+    expect(decoded?.build.parts.main?.materials).toHaveLength(2);
+  });
+
+  it('uma build antiga de URL que viola a regra carrega com aviso, sem erro (Critério 3)', () => {
+    // Build legada (sem campo 'a') com combinação ferro + lã que viola a regra padrão (metal/Alloy Forge)
+    const legacyPayload = {
+      v: 'atm11',
+      t: 'sword',
+      p: {
+        main: {
+          m: 'silentgear:iron',
+          mats: [
+            { m: 'silentgear:iron' },
+            { m: 'silentgear:wool' },
+          ],
+        },
+      },
+    };
+
+    const json = JSON.stringify(legacyPayload);
+    const hash = LZString.compressToEncodedURIComponent(json);
+
+    // Deve decodificar sem lançar erro
+    expect(() => decodeBuildFromHash(hash)).not.toThrow();
+    const decoded = decodeBuildFromHash(hash);
+
+    expect(decoded).not.toBeNull();
+    expect(decoded?.build.parts.main?.materials).toHaveLength(2);
+    expect(decoded?.build.parts.main?.alloyType).toBe('metal'); // fallback legado
+
+    const mainMats = decoded!.build.parts.main!.materials!.map(
+      (sub: any) => ATM11_CATALOG.materials[sub.materialId]
+    );
+
+    const validation = validateAlloy(mainMats, decoded!.build.parts.main!.alloyType!);
+    expect(validation.valid).toBe(false);
+    expect(validation.warnings.length).toBeGreaterThan(0);
+    expect(validation.warnings[0]).toContain('não aceita');
   });
 });

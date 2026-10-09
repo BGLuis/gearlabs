@@ -1,14 +1,173 @@
-import { GearPartSelection, SubMaterialSelection } from '@/types/silentgear';
+import { GearPartSelection, SubMaterialSelection, AlloyType, Material } from '@/types/silentgear';
 
 export const MAX_SUB_MATERIALS = 6;
 
+export interface AlloyConfig {
+  id: AlloyType;
+  name: { en: string; pt: string };
+  machineName: { en: string; pt: string };
+  blockId: string;
+  maxIngredients: number;
+  allowedCategories: string[];
+  multiplier: number;
+  description: { en: string; pt: string };
+}
+
+export const ALLOY_LIMITS: Record<AlloyType, number> = {
+  metal: 6,
+  gem: 6,
+  fabric: 6,
+  crude: 4,
+  super: 8,
+};
+
+export const DEFAULT_ALLOY_TYPE: AlloyType = 'metal';
+
+export const ALLOY_CONFIGS: Record<AlloyType, AlloyConfig> = {
+  metal: {
+    id: 'metal',
+    name: { en: 'Metal Alloy', pt: 'Liga Metálica' },
+    machineName: { en: 'Alloy Forge', pt: 'Forja de Ligas' },
+    blockId: 'silentgear:alloy_forge',
+    maxIngredients: 6,
+    allowedCategories: ['metal', 'dust'],
+    multiplier: 1.0,
+    description: { en: 'Metals and dusts (up to 6 materials)', pt: 'Metais e pós (até 6 materiais)' },
+  },
+  gem: {
+    id: 'gem',
+    name: { en: 'Gem Alloy', pt: 'Liga de Gemas' },
+    machineName: { en: 'Recrystallizer', pt: 'Recristalizador' },
+    blockId: 'silentgear:recrystallizer',
+    maxIngredients: 6,
+    allowedCategories: ['gem', 'dust'],
+    multiplier: 1.0,
+    description: { en: 'Gems and dusts (up to 6 materials)', pt: 'Gemas e pós (até 6 materiais)' },
+  },
+  fabric: {
+    id: 'fabric',
+    name: { en: 'Mixed Fabric', pt: 'Tecido Misto' },
+    machineName: { en: 'Refabricator', pt: 'Refabricador' },
+    blockId: 'silentgear:refabricator',
+    maxIngredients: 6,
+    allowedCategories: ['cloth', 'fiber', 'slime'],
+    multiplier: 1.0,
+    description: { en: 'Cloth, fiber, and slime (up to 6 materials)', pt: 'Tecido, fibra e slime (até 6 materiais)' },
+  },
+  crude: {
+    id: 'crude',
+    name: { en: 'Crude Alloy', pt: 'Liga Crua' },
+    machineName: { en: 'Crude Mixer', pt: 'Misturador Rude' },
+    blockId: 'silentgear:crude_mixer',
+    maxIngredients: 4,
+    allowedCategories: [],
+    multiplier: 0.8,
+    description: { en: 'Any material (up to 4 materials, ×0.8 penalty)', pt: 'Qualquer material (até 4 materiais, penalidade de ×0.8)' },
+  },
+  super: {
+    id: 'super',
+    name: { en: 'Super Alloy', pt: 'Super Liga' },
+    machineName: { en: 'Super Mixer', pt: 'Super Misturador' },
+    blockId: 'silentgear:super_mixer',
+    maxIngredients: 8,
+    allowedCategories: [],
+    multiplier: 1.0,
+    description: { en: 'Any material (up to 8 materials)', pt: 'Qualquer material (até 8 materiais)' },
+  },
+};
+
+export function getMaxSubMaterials(alloyType?: AlloyType): number {
+  return alloyType ? ALLOY_LIMITS[alloyType] ?? 6 : 6;
+}
+
+export function isMaterialAllowedInAlloy(material: Material, alloyType: AlloyType): boolean {
+  const config = ALLOY_CONFIGS[alloyType];
+  if (!config || config.allowedCategories.length === 0) {
+    return true;
+  }
+  const matCats = new Set([
+    material.category,
+    ...(material.categories || []),
+  ].filter(Boolean));
+  return config.allowedCategories.some((cat) => matCats.has(cat));
+}
+
+export interface AlloyValidationResult {
+  valid: boolean;
+  errors: string[];
+  warnings: string[];
+  incompatibleMaterials: Material[];
+  exceedsLimit: boolean;
+  maxLimit: number;
+}
+
+export function validateAlloy(
+  materials: Material[],
+  alloyType: AlloyType,
+  lang: 'pt' | 'en' = 'pt'
+): AlloyValidationResult {
+  const config = ALLOY_CONFIGS[alloyType] || ALLOY_CONFIGS.metal;
+  const maxLimit = config.maxIngredients;
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const incompatibleMaterials: Material[] = [];
+
+  for (const mat of materials) {
+    if (!isMaterialAllowedInAlloy(mat, alloyType)) {
+      incompatibleMaterials.push(mat);
+    }
+  }
+
+  const exceedsLimit = materials.length > maxLimit;
+
+  if (incompatibleMaterials.length > 0) {
+    const matNames = incompatibleMaterials.map((m) => m.name[lang] || m.name.en).join(', ');
+    const machine = config.machineName[lang] || config.machineName.en;
+    const allowed = config.allowedCategories.join(', ');
+    const msg = lang === 'pt'
+      ? `A máquina ${machine} não aceita: ${matNames}. Categorias permitidas: ${allowed}.`
+      : `The machine ${machine} does not accept: ${matNames}. Allowed categories: ${allowed}.`;
+    errors.push(msg);
+    warnings.push(msg);
+  }
+
+  if (exceedsLimit) {
+    const machine = config.machineName[lang] || config.machineName.en;
+    const msg = lang === 'pt'
+      ? `A máquina ${machine} suporta no máximo ${maxLimit} materiais (foram fornecidos ${materials.length}).`
+      : `The machine ${machine} supports at most ${maxLimit} materials (provided ${materials.length}).`;
+    errors.push(msg);
+    warnings.push(msg);
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    warnings,
+    incompatibleMaterials,
+    exceedsLimit,
+    maxLimit,
+  };
+}
+
+export function detectAlloyType(materials: Material[]): AlloyType {
+  if (!materials || materials.length === 0) return 'metal';
+  if (materials.length > 6) return 'super';
+  if (materials.every((m) => isMaterialAllowedInAlloy(m, 'metal'))) return 'metal';
+  if (materials.every((m) => isMaterialAllowedInAlloy(m, 'gem'))) return 'gem';
+  if (materials.every((m) => isMaterialAllowedInAlloy(m, 'fabric'))) return 'fabric';
+  if (materials.length <= 4) return 'crude';
+  return 'super';
+}
+
 /**
- * Adiciona um sub-material a uma parte, preservando grau e starcharge existentes.
- * Se o limite máximo (6) for atingido, retorna a parte inalterada.
+ * Adiciona um sub-material a uma parte, preservando grau, starcharge e tipo de liga.
+ * Respeita o limite da máquina do tipo de liga.
  */
 export function addPartSubMaterial(
   current: GearPartSelection | undefined,
-  materialId: string
+  materialId: string,
+  alloyType?: AlloyType
 ): GearPartSelection {
   const currentMaterials =
     current?.materials && current.materials.length > 0
@@ -17,8 +176,11 @@ export function addPartSubMaterial(
         ? [{ materialId: current.materialId }]
         : [];
 
-  if (currentMaterials.length >= MAX_SUB_MATERIALS) {
-    return current || { materialId, grade: 'NONE', starcharge: 0 };
+  const effectiveAlloyType = alloyType ?? current?.alloyType ?? DEFAULT_ALLOY_TYPE;
+  const maxLimit = getMaxSubMaterials(effectiveAlloyType);
+
+  if (currentMaterials.length >= maxLimit) {
+    return current || { materialId, grade: 'NONE', starcharge: 0, alloyType: effectiveAlloyType };
   }
 
   const newMaterials: SubMaterialSelection[] = [...currentMaterials, { materialId }];
@@ -29,6 +191,7 @@ export function addPartSubMaterial(
     grade: current?.grade || 'NONE',
     starcharge: current?.starcharge || 0,
     materials: newMaterials,
+    alloyType: effectiveAlloyType,
   };
 }
 
@@ -36,7 +199,7 @@ export function addPartSubMaterial(
  * Remove um sub-material de uma parte pelo índice.
  * - Retorna `null` se não restar nenhum sub-material (sinaliza remoção da parte).
  * - Se restar apenas 1 sub-material, converte de volta para material simples (materials: undefined).
- * - Preserva grau e starcharge existentes.
+ * - Preserva grau, starcharge e alloyType existentes.
  */
 export function removePartSubMaterial(
   current: GearPartSelection | undefined,
@@ -58,6 +221,7 @@ export function removePartSubMaterial(
     grade: current.grade || 'NONE',
     starcharge: current.starcharge || 0,
     materials: nextMaterials.length > 1 ? nextMaterials : undefined,
+    alloyType: current.alloyType,
   };
 }
 
@@ -87,11 +251,12 @@ export function reorderPartSubMaterials(
     ...current,
     materialId: nextMaterials[0].materialId,
     materials: nextMaterials,
+    alloyType: current.alloyType,
   };
 }
 
 /**
- * Atualiza um sub-material específico mantendo grau e starcharge da parte.
+ * Atualiza um sub-material específico mantendo grau, starcharge e tipo de liga da parte.
  */
 export function updatePartSubMaterial(
   current: GearPartSelection | undefined,
@@ -107,15 +272,17 @@ export function updatePartSubMaterial(
     ...current,
     materialId: nextMaterials[0].materialId,
     materials: nextMaterials,
+    alloyType: current.alloyType,
   };
 }
 
 /**
- * Define a lista completa de sub-materiais garantindo que starcharge e grau sejam preservados.
+ * Define a lista completa de sub-materiais garantindo que starcharge, grau e tipo de liga sejam preservados.
  */
 export function setPartSubMaterialsInPart(
   current: GearPartSelection | undefined,
-  materials: SubMaterialSelection[]
+  materials: SubMaterialSelection[],
+  alloyType?: AlloyType
 ): GearPartSelection {
   const primary = materials[0];
   return {
@@ -124,6 +291,23 @@ export function setPartSubMaterialsInPart(
     grade: current?.grade || 'NONE',
     starcharge: current?.starcharge || 0,
     materials,
+    alloyType: alloyType ?? current?.alloyType ?? DEFAULT_ALLOY_TYPE,
+  };
+}
+
+/**
+ * Atualiza o tipo de liga de uma parte.
+ */
+export function setPartAlloyTypeInPart(
+  current: GearPartSelection | undefined,
+  alloyType: AlloyType
+): GearPartSelection {
+  if (!current) {
+    return { materialId: '', grade: 'NONE', starcharge: 0, alloyType };
+  }
+  return {
+    ...current,
+    alloyType,
   };
 }
 
@@ -134,4 +318,5 @@ export {
   reorderPartSubMaterials as reorderSubMaterials,
   updatePartSubMaterial as updateSubMaterial,
   setPartSubMaterialsInPart as setPartSubMaterials,
+  setPartAlloyTypeInPart as setPartAlloyType,
 };
