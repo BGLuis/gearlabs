@@ -11,6 +11,7 @@ import {
   SubMaterialSelection,
   StarchargeLevel,
   AlloyType,
+  PartMaterialInstance,
 } from '@/types/silentgear';
 import {
   ATM11_CATALOG,
@@ -27,6 +28,11 @@ import {
   updatePartSubMaterial,
   setPartSubMaterialsInPart,
   setPartAlloyTypeInPart,
+  updatePartInstanceGrade,
+  updatePartInstanceStarcharge,
+  setPartInstancesInPart,
+  createDefaultPartInstances,
+  getPartInstanceCount,
 } from '@/lib/parts';
 
 interface GearContextType {
@@ -41,6 +47,9 @@ interface GearContextType {
   setPartGrade: (slot: PartSlot, grade: Grade) => void;
   setPartSubMaterials: (slot: PartSlot, materials: SubMaterialSelection[], alloyType?: AlloyType) => void;
   setPartAlloyType: (slot: PartSlot, alloyType: AlloyType) => void;
+  setPartInstanceGrade: (slot: PartSlot, index: number, grade: Grade) => void;
+  setPartInstanceStarcharge: (slot: PartSlot, index: number, starcharge: StarchargeLevel) => void;
+  setPartInstances: (slot: PartSlot, instances: PartMaterialInstance[]) => void;
   addSubMaterial: (slot: PartSlot, materialId: string, grade?: Grade) => void;
   removeSubMaterial: (slot: PartSlot, index: number) => void;
   reorderSubMaterials: (slot: PartSlot, fromIndex: number, toIndex: number) => void;
@@ -233,6 +242,10 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     setBuild((prev) => {
       const current = prev.parts[slot];
       if (!current) return prev;
+      const count = getPartInstanceCount(prev.gearTypeId, slot);
+      const instances = current.instances
+        ? current.instances.map((i) => ({ ...i, grade }))
+        : createDefaultPartInstances(count, grade, current.starcharge || 0);
       return {
         ...prev,
         parts: {
@@ -240,7 +253,53 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
           [slot]: {
             ...current,
             grade,
+            instances,
           },
+        },
+      };
+    });
+  }
+
+  function setPartInstanceGrade(slot: PartSlot, index: number, grade: Grade) {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      if (!current) return prev;
+      const nextPart = updatePartInstanceGrade(current, index, grade, prev.gearTypeId, slot);
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: nextPart,
+        },
+      };
+    });
+  }
+
+  function setPartInstanceStarcharge(slot: PartSlot, index: number, starcharge: StarchargeLevel) {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      if (!current) return prev;
+      const nextPart = updatePartInstanceStarcharge(current, index, starcharge, prev.gearTypeId, slot);
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: nextPart,
+        },
+      };
+    });
+  }
+
+  function setPartInstances(slot: PartSlot, instances: PartMaterialInstance[]) {
+    setBuild((prev) => {
+      const current = prev.parts[slot];
+      if (!current) return prev;
+      const nextPart = setPartInstancesInPart(current, instances);
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [slot]: nextPart,
         },
       };
     });
@@ -449,6 +508,9 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         setPartGrade,
         setPartSubMaterials,
         setPartAlloyType,
+        setPartInstanceGrade,
+        setPartInstanceStarcharge,
+        setPartInstances,
         addSubMaterial,
         removeSubMaterial,
         reorderSubMaterials,

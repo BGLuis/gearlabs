@@ -158,4 +158,74 @@ describe('url-state', () => {
     expect(validation.warnings.length).toBeGreaterThan(0);
     expect(validation.warnings[0]).toContain('não aceita');
   });
+
+  describe('Issue #33: part material instances serialization and legacy migration', () => {
+    it('migra build legada de URL sem "inst" povoando N instâncias repetidas com o grau da parte (Critério 2)', () => {
+      // Build legada para peitoral (8 instâncias para slot main)
+      const legacyPayload = {
+        v: 'atm11',
+        t: 'chestplate',
+        p: {
+          main: {
+            m: 'silentgear:iron',
+            g: 'MAX',
+            s: 2,
+          },
+        },
+      };
+
+      const json = JSON.stringify(legacyPayload);
+      const hash = LZString.compressToEncodedURIComponent(json);
+      const decoded = decodeBuildFromHash(hash);
+
+      expect(decoded).not.toBeNull();
+      const mainPart = decoded?.build.parts.main;
+      expect(mainPart).toBeDefined();
+      expect(mainPart?.grade).toBe('MAX');
+      expect(mainPart?.starcharge).toBe(2);
+
+      // Critério 2: 8 instâncias repetidas com o grau da parte
+      expect(mainPart?.instances).toHaveLength(8);
+      for (const inst of mainPart!.instances!) {
+        expect(inst.grade).toBe('MAX');
+        expect(inst.starcharge).toBe(2);
+      }
+    });
+
+    it('codifica e decodifica instâncias heterogêneas preservando graus e cargas individuais', () => {
+      const build: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: {
+            materialId: 'silentgear:iron',
+            grade: 'NONE',
+            instances: [
+              { grade: 'MAX', starcharge: 1 },
+              { grade: 'MAX', starcharge: 1 },
+              { grade: 'MAX', starcharge: 1 },
+              { grade: 'MAX', starcharge: 1 },
+              { grade: 'NONE', starcharge: 0 },
+              { grade: 'NONE', starcharge: 0 },
+              { grade: 'NONE', starcharge: 0 },
+              { grade: 'NONE', starcharge: 0 },
+            ],
+          },
+        },
+      };
+
+      const hash = encodeBuildToHash(build, 'atm11');
+      const decoded = decodeBuildFromHash(hash);
+
+      expect(decoded).not.toBeNull();
+      const mainPart = decoded?.build.parts.main;
+      expect(mainPart).toBeDefined();
+      expect(mainPart?.instances?.[0]).toEqual({ grade: 'MAX', starcharge: 1 });
+      expect(mainPart?.instances?.[3]).toEqual({ grade: 'MAX', starcharge: 1 });
+      expect(mainPart?.instances?.[4].grade).toBe('NONE');
+      expect(mainPart?.instances?.[4].starcharge).toBeUndefined();
+      expect(mainPart?.instances?.[7].grade).toBe('NONE');
+      expect(mainPart?.instances?.[7].starcharge).toBeUndefined();
+    });
+  });
 });
+
