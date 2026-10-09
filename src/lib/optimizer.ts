@@ -72,7 +72,7 @@ function generateHighlights(
 
 export const MAX_SECONDARY_CANDIDATES = 12;
 // Cada slot opcional pode ficar vazio, então o espaço cresce multiplicativamente a cada slot opcional
-export const MAX_OPTIONAL_CANDIDATES = 2;
+export const MAX_OPTIONAL_CANDIDATES = 1;
 
 function materialFitsSlot(m: Material, slot: PartSlot): boolean {
   if (slot === 'main') return !!m.stats.main;
