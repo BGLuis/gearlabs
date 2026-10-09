@@ -15,7 +15,13 @@ import {
   TraitInfo,
   VersionCatalog,
   AlloyType,
+  Grade,
+  StarchargeLevel,
+  SubMaterialSelection,
+  GearPartSelection,
+  PartMaterialInstance,
 } from '@/types/silentgear';
+import { getPartInstanceCount, syncPartInstancesWithCount } from './parts';
 
 /**
  * Propriedades do Silent Gear afetadas pelo multiplicador de sinergia
@@ -586,6 +592,245 @@ export function applyEnhancementsToModifiers(
   });
 }
 
+export interface ResolvedSlotInstance {
+  materialId: string;
+  grade: Grade;
+  starcharge: StarchargeLevel;
+  materials?: SubMaterialSelection[];
+  alloyType?: AlloyType;
+}
+
+/**
+ * Resolve as instâncias que compõem uma parte (Issue #33).
+ * Se instances tiver sido configurado com mais de 1 item, herda os campos ausentes da parte.
+ * Caso contrário, gera uma lista de N instâncias repetindo a configuração de topo da parte.
+ */
+export function resolveSlotInstances(
+  selection: GearPartSelection | undefined,
+  gearTypeId: string,
+  slot: PartSlot
+): ResolvedSlotInstance[] {
+  if (!selection) return [];
+  const count = getPartInstanceCount(gearTypeId, slot);
+  const syncedInstances = syncPartInstancesWithCount(selection, count);
+  const defaultGrade = selection.grade || 'NONE';
+  const defaultStarcharge = selection.starcharge || 0;
+  const defaultMaterialId = selection.materialId || selection.materials?.[0]?.materialId || '';
+
+  return syncedInstances.map((inst) => ({
+    materialId: inst.materialId || defaultMaterialId,
+    grade: inst.grade ?? defaultGrade,
+    starcharge: inst.starcharge ?? defaultStarcharge,
+    materials: inst.materials ?? selection.materials,
+    alloyType: inst.alloyType ?? selection.alloyType,
+  }));
+}
+
+/**
+ * Determina se as instâncias da parte têm graus, starcharge ou composições diferentes entre si.
+ */
+export function areInstancesHeterogeneous(instances: ResolvedSlotInstance[]): boolean {
+  if (instances.length <= 1) return false;
+  const first = instances[0];
+  const firstMatsKey = first.materials ? JSON.stringify(first.materials) : '';
+  for (let i = 1; i < instances.length; i++) {
+    const curr = instances[i];
+    const currMatsKey = curr.materials ? JSON.stringify(curr.materials) : '';
+    if (
+      curr.grade !== first.grade ||
+      curr.starcharge !== first.starcharge ||
+      curr.materialId !== first.materialId ||
+      curr.alloyType !== first.alloyType ||
+      currMatsKey !== firstMatsKey
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export function toComputedModifiers(
+  mods: StatValueModifier[],
+  defOp: NormalizedOperation = 'AVERAGE'
+): ComputedModifier[] {
+  return mods.map((m) => ({ value: m.value, operation: normalizeOperation(m.operation, defOp) }));
+}
+
+export function extractSlotRawModifiers(
+  inst: ResolvedSlotInstance,
+  slot: PartSlot,
+  isArmor: boolean,
+  gearTypeId: string,
+  catalog: VersionCatalog
+) {
+  const instSubMaterials: Material[] = (inst.materials && inst.materials.length > 0)
+    ? inst.materials.map((m) => catalog.materials[m.materialId]).filter(Boolean)
+    : (catalog.materials[inst.materialId] ? [catalog.materials[inst.materialId]] : []);
+  const isInstCompound = instSubMaterials.length > 1;
+  const instMat = instSubMaterials[0] || null;
+
+  let composedInst: ReturnType<typeof composeCompoundSlotModifiers> | null = null;
+  if (isInstCompound) {
+    composedInst = composeCompoundSlotModifiers(
+      instSubMaterials,
+      slot,
+      isArmor,
+      gearTypeId,
+      inst.alloyType
+    );
+  }
+
+  const instGradeMul = inst.grade ? (GRADE_MULTIPLIERS[inst.grade] || 0) : 0;
+  const instStarchargeLevel = inst.starcharge || 0;
+  const instChargingValue = (composedInst && composedInst.chargingValueMods.length > 0)
+    ? composedInst.chargingValueMods[0].value
+    : getNumericStatValue(instMat?.stats[slot]?.charging_value ?? instMat?.stats.main?.charging_value, 0);
+
+  const armor: StatValueModifier[] = [];
+  const toughness: StatValueModifier[] = [];
+  const magicArmor: StatValueModifier[] = [];
+  const knockback: StatValueModifier[] = [];
+  const armorDur: StatValueModifier[] = [];
+  const toolDur: StatValueModifier[] = [];
+  const melee: StatValueModifier[] = [];
+  const speed: StatValueModifier[] = [];
+  const harvest: StatValueModifier[] = [];
+  const rarity: StatValueModifier[] = [];
+  let flatDurAdd = 0;
+  let harvestTier = composedInst?.harvestTier || instMat?.stats[slot]?.harvest_tier;
+
+  if (composedInst) {
+    if (composedInst.armorMods.length > 0) {
+      armor.push(...applyEnhancementsToModifiers(composedInst.armorMods, 'armor', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+    }
+    if (composedInst.toughnessMods.length > 0) {
+      toughness.push(...applyEnhancementsToModifiers(composedInst.toughnessMods, 'armor_toughness', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+    }
+    if (composedInst.magicArmorMods.length > 0) {
+      magicArmor.push(...applyEnhancementsToModifiers(composedInst.magicArmorMods, 'magic_armor', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+    }
+    if (composedInst.knockbackMods.length > 0) {
+      knockback.push(...applyEnhancementsToModifiers(composedInst.knockbackMods, 'knockback_resistance', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+    }
+    if (composedInst.durabilityMods.length > 0) {
+      if (isArmor) {
+        armorDur.push(...applyEnhancementsToModifiers(composedInst.durabilityMods, 'armor_durability', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+      } else {
+        toolDur.push(...applyEnhancementsToModifiers(composedInst.durabilityMods, 'durability', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+      }
+    }
+    if (composedInst.meleeDamageMods.length > 0) {
+      melee.push(...applyEnhancementsToModifiers(composedInst.meleeDamageMods, 'melee_damage', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+    }
+    if (composedInst.attackSpeedMods.length > 0) {
+      speed.push(...applyEnhancementsToModifiers(composedInst.attackSpeedMods, 'attack_speed', instGradeMul, false, instStarchargeLevel, instChargingValue, 'ADD'));
+    }
+    if (composedInst.harvestSpeedMods.length > 0) {
+      harvest.push(...applyEnhancementsToModifiers(composedInst.harvestSpeedMods, 'harvest_speed', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+    }
+    if (composedInst.rarityMods.length > 0) {
+      rarity.push(...applyEnhancementsToModifiers(composedInst.rarityMods, 'rarity', instGradeMul, false, instStarchargeLevel, instChargingValue, 'ADD'));
+    }
+  } else if (instMat) {
+    const slotStats = instMat.stats[slot];
+    const slotMods = instMat.statModifiers?.[slot];
+
+    if (slotStats) {
+      const slotArmorRaw = (isArmor && slotStats.armor_by_piece?.[gearTypeId as ArmorPiece] !== undefined)
+        ? slotStats.armor_by_piece[gearTypeId as ArmorPiece]
+        : slotStats.armor;
+      if (slotArmorRaw !== undefined) {
+        armor.push(...applyEnhancementsToModifiers(extractModifiers(slotArmorRaw, 'ADD'), 'armor', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+      }
+      if (slotStats.armor_toughness !== undefined) {
+        toughness.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.armor_toughness, 'ADD'), 'armor_toughness', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+      }
+      if (slotStats.magic_armor !== undefined) {
+        magicArmor.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.magic_armor, 'ADD'), 'magic_armor', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+      }
+      if (slotStats.knockback_resistance !== undefined) {
+        knockback.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.knockback_resistance, 'ADD'), 'knockback_resistance', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+      }
+      if (isArmor) {
+        if (slotStats.armor_durability !== undefined) {
+          armorDur.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.armor_durability, 'ADD'), 'armor_durability', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+        } else if (slotStats.durability !== undefined) {
+          const durMods = extractModifiers(slotStats.durability, 'ADD');
+          for (const dm of durMods) {
+            const op = normalizeOperation(dm.operation, 'ADD');
+            if (op === 'MULTIPLY_TOTAL' || op === 'MULTIPLY_BASE') {
+              armorDur.push(...applyEnhancementsToModifiers([dm], 'durability', instGradeMul, true, instStarchargeLevel, instChargingValue, op));
+            } else {
+              let val = applyGradeBonus(dm.value, instGradeMul);
+              val = applyStarcharge(val, 'durability', instStarchargeLevel, instChargingValue, op);
+              flatDurAdd += val;
+            }
+          }
+        }
+      } else {
+        if (slotStats.durability !== undefined) {
+          toolDur.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.durability, 'ADD'), 'durability', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+        }
+      }
+      if (slotStats.melee_damage !== undefined) {
+        melee.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.melee_damage, 'ADD'), 'melee_damage', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+      }
+      if (slotStats.attack_speed !== undefined) {
+        speed.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.attack_speed, 'ADD'), 'attack_speed', instGradeMul, false, instStarchargeLevel, instChargingValue, 'ADD'));
+      }
+      if (slotStats.harvest_speed !== undefined) {
+        harvest.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.harvest_speed, 'ADD'), 'harvest_speed', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+      }
+      if (slotStats.rarity !== undefined) {
+        rarity.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.rarity, 'ADD'), 'rarity', instGradeMul, false, instStarchargeLevel, instChargingValue, 'ADD'));
+      }
+    }
+
+    if (slotMods) {
+      if (slotMods.durability) {
+        const legacyMods = extractLegacyStatModifiers(slotMods.durability);
+        if (isArmor) {
+          for (const lm of legacyMods) {
+            const op = normalizeOperation(lm.operation, 'ADD');
+            if (op === 'MULTIPLY_TOTAL' || op === 'MULTIPLY_BASE') {
+              armorDur.push(...applyEnhancementsToModifiers([lm], 'durability', instGradeMul, true, instStarchargeLevel, instChargingValue, op));
+            } else {
+              let val = applyGradeBonus(lm.value, instGradeMul);
+              val = applyStarcharge(val, 'durability', instStarchargeLevel, instChargingValue, op);
+              flatDurAdd += val;
+            }
+          }
+        } else {
+          toolDur.push(...applyEnhancementsToModifiers(legacyMods, 'durability', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+        }
+      }
+      if (slotMods.harvest_speed) {
+        const legacyMods = extractLegacyStatModifiers(slotMods.harvest_speed);
+        harvest.push(...applyEnhancementsToModifiers(legacyMods, 'harvest_speed', instGradeMul, true, instStarchargeLevel, instChargingValue, 'ADD'));
+      }
+      if (slotMods.attack_speed) {
+        const legacyMods = extractLegacyStatModifiers(slotMods.attack_speed);
+        speed.push(...applyEnhancementsToModifiers(legacyMods, 'attack_speed', instGradeMul, false, instStarchargeLevel, instChargingValue, 'ADD'));
+      }
+    }
+  }
+
+  return {
+    armor,
+    toughness,
+    magicArmor,
+    knockback,
+    armorDur,
+    toolDur,
+    melee,
+    speed,
+    harvest,
+    rarity,
+    flatDurAdd,
+    harvestTier,
+  };
+}
+
 export function calculateGearStats(
   build: GearBuild,
   catalog: VersionCatalog
@@ -598,9 +843,31 @@ export function calculateGearStats(
   const isArmor = gearType.category === 'armor';
   const mainSelection = build.parts.main;
 
-  const mainSubMaterials: Material[] = (mainSelection?.materials && mainSelection.materials.length > 0)
-    ? mainSelection.materials.map((m) => catalog.materials[m.materialId]).filter(Boolean)
-    : (mainSelection && catalog.materials[mainSelection.materialId] ? [catalog.materials[mainSelection.materialId]] : []);
+  const resolvedMainInstances = resolveSlotInstances(mainSelection, gearType.id, 'main');
+  const isMainHeterogeneous = areInstancesHeterogeneous(resolvedMainInstances);
+
+  let heterogeneousInitialDamage: number | null = null;
+  let heterogeneousInitialAttackSpeed: number | null = null;
+  let heterogeneousInitialHarvestSpeed: number | null = null;
+
+  const armorMods: ComputedModifier[] = [];
+  const toughnessMods: ComputedModifier[] = [];
+  const magicArmorMods: ComputedModifier[] = [];
+  const knockbackMods: ComputedModifier[] = [];
+  const armorDurMods: ComputedModifier[] = [];
+  let flatDurabilityAdditions = 0;
+  const toolDurMods: ComputedModifier[] = [];
+
+  const effectiveMainGrade = resolvedMainInstances[0]?.grade ?? mainSelection?.grade ?? 'NONE';
+  const effectiveMainStarcharge = resolvedMainInstances[0]?.starcharge ?? mainSelection?.starcharge ?? 0;
+  const effectiveMainMaterials = (resolvedMainInstances[0]?.materials && resolvedMainInstances[0].materials.length > 0)
+    ? resolvedMainInstances[0].materials
+    : mainSelection?.materials;
+  const effectiveMainAlloyType = resolvedMainInstances[0]?.alloyType ?? mainSelection?.alloyType;
+
+  const mainSubMaterials: Material[] = (effectiveMainMaterials && effectiveMainMaterials.length > 0)
+    ? effectiveMainMaterials.map((m) => catalog.materials[m.materialId]).filter(Boolean)
+    : (mainSelection && catalog.materials[resolvedMainInstances[0]?.materialId || mainSelection.materialId] ? [catalog.materials[resolvedMainInstances[0]?.materialId || mainSelection.materialId]] : []);
 
   const isMainCompound = mainSubMaterials.length > 1;
   const mainMaterial = mainSubMaterials[0] || null;
@@ -613,79 +880,208 @@ export function calculateGearStats(
       'main',
       isArmor,
       gearType.id,
-      mainSelection?.alloyType
+      effectiveMainAlloyType
     );
     mainSynergy = composedMain.synergy;
   }
 
-  const mainGradeMul = mainSelection?.grade ? (GRADE_MULTIPLIERS[mainSelection.grade] || 0) : 0;
-  const mainStarchargeLevel = mainSelection?.starcharge || 0;
+  const mainGradeMul = GRADE_MULTIPLIERS[effectiveMainGrade] || 0;
+  const mainStarchargeLevel = effectiveMainStarcharge;
   const mainChargingValue = (composedMain && composedMain.chargingValueMods.length > 0)
     ? composedMain.chargingValueMods[0].value
     : getNumericStatValue(mainMaterial?.stats.main?.charging_value, 0);
 
-  // 1. ARMOR
-  const armorMods: ComputedModifier[] = [];
-  if (composedMain) {
-    armorMods.push(...applyEnhancementsToModifiers(composedMain.armorMods, 'armor', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
-  } else if (mainMaterial?.stats.main) {
-    const mainArmorRaw = (isArmor && mainMaterial.stats.main.armor_by_piece?.[gearType.id as ArmorPiece] !== undefined)
-      ? mainMaterial.stats.main.armor_by_piece[gearType.id as ArmorPiece]
-      : mainMaterial.stats.main.armor;
-    const rawMods = extractModifiers(mainArmorRaw, 'AVERAGE');
-    armorMods.push(...applyEnhancementsToModifiers(rawMods, 'armor', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
-  }
+  if (isMainHeterogeneous) {
+    // Cálculo multinstância conforme CoreGearPart.java:125-144
+    const instRawArmorMods: StatValueModifier[] = [];
+    const instRawToughnessMods: StatValueModifier[] = [];
+    const instRawMagicArmorMods: StatValueModifier[] = [];
+    const instRawKnockbackMods: StatValueModifier[] = [];
+    const instRawArmorDurMods: StatValueModifier[] = [];
+    const instRawToolDurMods: StatValueModifier[] = [];
+    const instRawMeleeMods: StatValueModifier[] = [];
+    const instRawAttackSpeedMods: StatValueModifier[] = [];
+    const instRawHarvestSpeedMods: StatValueModifier[] = [];
 
-  // 2. ARMOR TOUGHNESS
-  const toughnessMods: ComputedModifier[] = [];
-  if (composedMain) {
-    toughnessMods.push(...applyEnhancementsToModifiers(composedMain.toughnessMods, 'armor_toughness', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
-  } else if (mainMaterial?.stats.main?.armor_toughness !== undefined) {
-    const rawMods = extractModifiers(mainMaterial.stats.main.armor_toughness, 'AVERAGE');
-    toughnessMods.push(...applyEnhancementsToModifiers(rawMods, 'armor_toughness', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
-  }
+    for (const inst of resolvedMainInstances) {
+      const instSubMaterials: Material[] = (inst.materials && inst.materials.length > 0)
+        ? inst.materials.map((m) => catalog.materials[m.materialId]).filter(Boolean)
+        : (catalog.materials[inst.materialId] ? [catalog.materials[inst.materialId]] : []);
+      const isInstCompound = instSubMaterials.length > 1;
+      const instMat = instSubMaterials[0] || null;
 
-  // 3. MAGIC ARMOR
-  const magicArmorMods: ComputedModifier[] = [];
-  if (composedMain) {
-    magicArmorMods.push(...applyEnhancementsToModifiers(composedMain.magicArmorMods, 'magic_armor', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
-  } else if (mainMaterial?.stats.main?.magic_armor !== undefined) {
-    const rawMods = extractModifiers(mainMaterial.stats.main.magic_armor, 'AVERAGE');
-    magicArmorMods.push(...applyEnhancementsToModifiers(rawMods, 'magic_armor', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
-  }
+      let composedInst: ReturnType<typeof composeCompoundSlotModifiers> | null = null;
+      if (isInstCompound) {
+        composedInst = composeCompoundSlotModifiers(
+          instSubMaterials,
+          'main',
+          isArmor,
+          gearType.id,
+          inst.alloyType
+        );
+      }
 
-  // 4. KNOCKBACK RESISTANCE
-  const knockbackMods: ComputedModifier[] = [];
-  if (composedMain) {
-    knockbackMods.push(...applyEnhancementsToModifiers(composedMain.knockbackMods, 'knockback_resistance', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
-  } else if (mainMaterial?.stats.main?.knockback_resistance !== undefined) {
-    const rawMods = extractModifiers(mainMaterial.stats.main.knockback_resistance, 'AVERAGE');
-    knockbackMods.push(...applyEnhancementsToModifiers(rawMods, 'knockback_resistance', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
-  }
+      const instGradeMul = inst.grade ? (GRADE_MULTIPLIERS[inst.grade] || 0) : 0;
+      const instStarchargeLevel = inst.starcharge || 0;
+      const instChargingValue = (composedInst && composedInst.chargingValueMods.length > 0)
+        ? composedInst.chargingValueMods[0].value
+        : getNumericStatValue(instMat?.stats.main?.charging_value, 0);
 
-  // 5. DURABILITY
-  const armorDurMods: ComputedModifier[] = [];
-  let flatDurabilityAdditions = 0;
-  const toolDurMods: ComputedModifier[] = [];
+      // Armor
+      if (composedInst) {
+        instRawArmorMods.push(...applyEnhancementsToModifiers(composedInst.armorMods, 'armor', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      } else if (instMat?.stats.main) {
+        const mainArmorRaw = (isArmor && instMat.stats.main.armor_by_piece?.[gearType.id as ArmorPiece] !== undefined)
+          ? instMat.stats.main.armor_by_piece[gearType.id as ArmorPiece]
+          : instMat.stats.main.armor;
+        const rawMods = extractModifiers(mainArmorRaw, 'AVERAGE');
+        instRawArmorMods.push(...applyEnhancementsToModifiers(rawMods, 'armor', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      }
 
-  if (composedMain) {
+      // Toughness
+      if (composedInst) {
+        instRawToughnessMods.push(...applyEnhancementsToModifiers(composedInst.toughnessMods, 'armor_toughness', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      } else if (instMat?.stats.main?.armor_toughness !== undefined) {
+        const rawMods = extractModifiers(instMat.stats.main.armor_toughness, 'AVERAGE');
+        instRawToughnessMods.push(...applyEnhancementsToModifiers(rawMods, 'armor_toughness', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      }
+
+      // Magic armor
+      if (composedInst) {
+        instRawMagicArmorMods.push(...applyEnhancementsToModifiers(composedInst.magicArmorMods, 'magic_armor', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      } else if (instMat?.stats.main?.magic_armor !== undefined) {
+        const rawMods = extractModifiers(instMat.stats.main.magic_armor, 'AVERAGE');
+        instRawMagicArmorMods.push(...applyEnhancementsToModifiers(rawMods, 'magic_armor', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      }
+
+      // Knockback
+      if (composedInst) {
+        instRawKnockbackMods.push(...applyEnhancementsToModifiers(composedInst.knockbackMods, 'knockback_resistance', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      } else if (instMat?.stats.main?.knockback_resistance !== undefined) {
+        const rawMods = extractModifiers(instMat.stats.main.knockback_resistance, 'AVERAGE');
+        instRawKnockbackMods.push(...applyEnhancementsToModifiers(rawMods, 'knockback_resistance', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      }
+
+      // Durability
+      if (composedInst) {
+        if (isArmor) {
+          instRawArmorDurMods.push(...applyEnhancementsToModifiers(composedInst.durabilityMods, 'armor_durability', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+        } else {
+          const scaledMainMods = composedInst.durabilityMods.map((m) => ({
+            ...m,
+            value: m.value * gearType.durabilityMultiplier,
+          }));
+          instRawToolDurMods.push(...applyEnhancementsToModifiers(scaledMainMods, 'durability', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+        }
+      } else if (isArmor) {
+        const mainArmorDurRaw = instMat?.stats.main?.armor_durability ?? instMat?.stats.main?.durability ?? 100;
+        const rawMods = extractModifiers(mainArmorDurRaw, 'AVERAGE');
+        instRawArmorDurMods.push(...applyEnhancementsToModifiers(rawMods, 'armor_durability', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      } else {
+        const rawMainMods = extractModifiers(instMat?.stats.main?.durability ?? 100, 'AVERAGE');
+        const scaledMainMods = rawMainMods.map((m) => ({ ...m, value: m.value * gearType.durabilityMultiplier }));
+        instRawToolDurMods.push(...applyEnhancementsToModifiers(scaledMainMods, 'durability', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      }
+
+      // Melee Damage
+      const rawMelee = composedInst
+        ? composedInst.meleeDamageMods
+        : extractModifiers(instMat?.stats.main?.melee_damage, 'AVERAGE');
+      if (rawMelee.length > 0) {
+        instRawMeleeMods.push(...applyEnhancementsToModifiers(rawMelee, 'melee_damage', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      }
+
+      // Attack speed
+      const rawSpeed = composedInst
+        ? composedInst.attackSpeedMods
+        : extractModifiers(instMat?.stats.main?.attack_speed, 'AVERAGE');
+      if (rawSpeed.length > 0) {
+        instRawAttackSpeedMods.push(...applyEnhancementsToModifiers(rawSpeed, 'attack_speed', instGradeMul, false, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      }
+
+      // Harvest speed
+      const rawHarvest = composedInst
+        ? composedInst.harvestSpeedMods
+        : extractModifiers(instMat?.stats.main?.harvest_speed ?? 1.0, 'AVERAGE');
+      if (rawHarvest.length > 0) {
+        instRawHarvestSpeedMods.push(...applyEnhancementsToModifiers(rawHarvest, 'harvest_speed', instGradeMul, true, instStarchargeLevel, instChargingValue, 'AVERAGE'));
+      }
+    }
+
+    armorMods.push(...toComputedModifiers(compressModifiersForProperty(instRawArmorMods, 'AVERAGE'), 'AVERAGE'));
+    toughnessMods.push(...toComputedModifiers(compressModifiersForProperty(instRawToughnessMods, 'AVERAGE'), 'AVERAGE'));
+    magicArmorMods.push(...toComputedModifiers(compressModifiersForProperty(instRawMagicArmorMods, 'AVERAGE'), 'AVERAGE'));
+    knockbackMods.push(...toComputedModifiers(compressModifiersForProperty(instRawKnockbackMods, 'AVERAGE'), 'AVERAGE'));
     if (isArmor) {
-      armorDurMods.push(...applyEnhancementsToModifiers(composedMain.durabilityMods, 'armor_durability', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+      armorDurMods.push(...toComputedModifiers(compressModifiersForProperty(instRawArmorDurMods, 'AVERAGE'), 'AVERAGE'));
     } else {
-      const scaledMainMods = composedMain.durabilityMods.map((m) => ({
-        ...m,
-        value: m.value * gearType.durabilityMultiplier,
-      }));
+      toolDurMods.push(...toComputedModifiers(compressModifiersForProperty(instRawToolDurMods, 'AVERAGE'), 'AVERAGE'));
+    }
+
+    const compMelee = compressModifiersForProperty(instRawMeleeMods, 'AVERAGE');
+    heterogeneousInitialDamage = compMelee.length > 0 ? compMelee[0].value : 0;
+
+    const compSpeed = compressModifiersForProperty(instRawAttackSpeedMods, 'AVERAGE');
+    heterogeneousInitialAttackSpeed = gearType.baseAttackSpeed + (compSpeed.length > 0 ? compSpeed[0].value : 0);
+
+    const compHarvest = compressModifiersForProperty(instRawHarvestSpeedMods, 'AVERAGE');
+    heterogeneousInitialHarvestSpeed = compHarvest.length > 0 ? compHarvest[0].value : 1.0;
+  } else {
+    // 1. ARMOR
+    if (composedMain) {
+      armorMods.push(...applyEnhancementsToModifiers(composedMain.armorMods, 'armor', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+    } else if (mainMaterial?.stats.main) {
+      const mainArmorRaw = (isArmor && mainMaterial.stats.main.armor_by_piece?.[gearType.id as ArmorPiece] !== undefined)
+        ? mainMaterial.stats.main.armor_by_piece[gearType.id as ArmorPiece]
+        : mainMaterial.stats.main.armor;
+      const rawMods = extractModifiers(mainArmorRaw, 'AVERAGE');
+      armorMods.push(...applyEnhancementsToModifiers(rawMods, 'armor', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+    }
+
+    // 2. ARMOR TOUGHNESS
+    if (composedMain) {
+      toughnessMods.push(...applyEnhancementsToModifiers(composedMain.toughnessMods, 'armor_toughness', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+    } else if (mainMaterial?.stats.main?.armor_toughness !== undefined) {
+      const rawMods = extractModifiers(mainMaterial.stats.main.armor_toughness, 'AVERAGE');
+      toughnessMods.push(...applyEnhancementsToModifiers(rawMods, 'armor_toughness', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+    }
+
+    // 3. MAGIC ARMOR
+    if (composedMain) {
+      magicArmorMods.push(...applyEnhancementsToModifiers(composedMain.magicArmorMods, 'magic_armor', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+    } else if (mainMaterial?.stats.main?.magic_armor !== undefined) {
+      const rawMods = extractModifiers(mainMaterial.stats.main.magic_armor, 'AVERAGE');
+      magicArmorMods.push(...applyEnhancementsToModifiers(rawMods, 'magic_armor', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+    }
+
+    // 4. KNOCKBACK RESISTANCE
+    if (composedMain) {
+      knockbackMods.push(...applyEnhancementsToModifiers(composedMain.knockbackMods, 'knockback_resistance', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+    } else if (mainMaterial?.stats.main?.knockback_resistance !== undefined) {
+      const rawMods = extractModifiers(mainMaterial.stats.main.knockback_resistance, 'AVERAGE');
+      knockbackMods.push(...applyEnhancementsToModifiers(rawMods, 'knockback_resistance', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+    }
+
+    // 5. DURABILITY
+    if (composedMain) {
+      if (isArmor) {
+        armorDurMods.push(...applyEnhancementsToModifiers(composedMain.durabilityMods, 'armor_durability', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+      } else {
+        const scaledMainMods = composedMain.durabilityMods.map((m) => ({
+          ...m,
+          value: m.value * gearType.durabilityMultiplier,
+        }));
+        toolDurMods.push(...applyEnhancementsToModifiers(scaledMainMods, 'durability', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+      }
+    } else if (isArmor) {
+      const mainArmorDurRaw = mainMaterial?.stats.main?.armor_durability ?? mainMaterial?.stats.main?.durability ?? 100;
+      const rawMods = extractModifiers(mainArmorDurRaw, 'AVERAGE');
+      armorDurMods.push(...applyEnhancementsToModifiers(rawMods, 'armor_durability', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
+    } else {
+      const rawMainMods = extractModifiers(mainMaterial?.stats.main?.durability ?? 100, 'AVERAGE');
+      const scaledMainMods = rawMainMods.map((m) => ({ ...m, value: m.value * gearType.durabilityMultiplier }));
       toolDurMods.push(...applyEnhancementsToModifiers(scaledMainMods, 'durability', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
     }
-  } else if (isArmor) {
-    const mainArmorDurRaw = mainMaterial?.stats.main?.armor_durability ?? mainMaterial?.stats.main?.durability ?? 100;
-    const rawMods = extractModifiers(mainArmorDurRaw, 'AVERAGE');
-    armorDurMods.push(...applyEnhancementsToModifiers(rawMods, 'armor_durability', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
-  } else {
-    const rawMainMods = extractModifiers(mainMaterial?.stats.main?.durability ?? 100, 'AVERAGE');
-    const scaledMainMods = rawMainMods.map((m) => ({ ...m, value: m.value * gearType.durabilityMultiplier }));
-    toolDurMods.push(...applyEnhancementsToModifiers(scaledMainMods, 'durability', mainGradeMul, true, mainStarchargeLevel, mainChargingValue, 'AVERAGE'));
   }
 
   // 6. DAMAGE, ATTACK SPEED, HARVEST SPEED, RARITY
@@ -702,180 +1098,91 @@ export function calculateGearStats(
     const sel = build.parts[slot];
     if (!sel) continue;
 
-    const slotSubMaterials: Material[] = (sel.materials && sel.materials.length > 0)
-      ? sel.materials.map((m) => catalog.materials[m.materialId]).filter(Boolean)
-      : (catalog.materials[sel.materialId] ? [catalog.materials[sel.materialId]] : []);
+    const resolvedSlotInstances = resolveSlotInstances(sel, gearType.id, slot);
+    const isSlotHeterogeneous = areInstancesHeterogeneous(resolvedSlotInstances);
 
-    if (slotSubMaterials.length === 0) continue;
+    if (isSlotHeterogeneous) {
+      const allArmor: StatValueModifier[] = [];
+      const allToughness: StatValueModifier[] = [];
+      const allMagicArmor: StatValueModifier[] = [];
+      const allKnockback: StatValueModifier[] = [];
+      const allArmorDur: StatValueModifier[] = [];
+      const allToolDur: StatValueModifier[] = [];
+      const allMelee: StatValueModifier[] = [];
+      const allSpeed: StatValueModifier[] = [];
+      const allHarvest: StatValueModifier[] = [];
+      const allRarity: StatValueModifier[] = [];
+      let totalFlatDurAdd = 0;
 
-    const isSlotCompound = slotSubMaterials.length > 1;
-    const slotGradeMul = sel.grade ? (GRADE_MULTIPLIERS[sel.grade] || 0) : 0;
-    const slotStarchargeLevel = sel.starcharge || 0;
-    const mat = slotSubMaterials[0];
-    let slotChargingValue = getNumericStatValue(mat?.stats[slot]?.charging_value ?? mat?.stats.main?.charging_value, 0);
-
-    if (isSlotCompound) {
-      const composedSlot = composeCompoundSlotModifiers(
-        slotSubMaterials,
-        slot,
-        isArmor,
-        gearType.id,
-        sel.alloyType
-      );
-      if (composedSlot.chargingValueMods.length > 0) {
-        slotChargingValue = composedSlot.chargingValueMods[0].value;
+      for (const inst of resolvedSlotInstances) {
+        const mods = extractSlotRawModifiers(inst, slot, isArmor, gearType.id, catalog);
+        allArmor.push(...mods.armor);
+        allToughness.push(...mods.toughness);
+        allMagicArmor.push(...mods.magicArmor);
+        allKnockback.push(...mods.knockback);
+        allArmorDur.push(...mods.armorDur);
+        allToolDur.push(...mods.toolDur);
+        allMelee.push(...mods.melee);
+        allSpeed.push(...mods.speed);
+        allHarvest.push(...mods.harvest);
+        allRarity.push(...mods.rarity);
+        totalFlatDurAdd += mods.flatDurAdd;
+        if (mods.harvestTier) harvestTier = mods.harvestTier;
       }
 
-      if (composedSlot.armorMods.length > 0) {
-        armorMods.push(...applyEnhancementsToModifiers(composedSlot.armorMods, 'armor', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
+      if (allArmor.length > 0) {
+        armorMods.push(...toComputedModifiers(compressModifiersForProperty(allArmor, 'ADD'), 'ADD'));
       }
-      if (composedSlot.toughnessMods.length > 0) {
-        toughnessMods.push(...applyEnhancementsToModifiers(composedSlot.toughnessMods, 'armor_toughness', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
+      if (allToughness.length > 0) {
+        toughnessMods.push(...toComputedModifiers(compressModifiersForProperty(allToughness, 'ADD'), 'ADD'));
       }
-      if (composedSlot.magicArmorMods.length > 0) {
-        magicArmorMods.push(...applyEnhancementsToModifiers(composedSlot.magicArmorMods, 'magic_armor', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
+      if (allMagicArmor.length > 0) {
+        magicArmorMods.push(...toComputedModifiers(compressModifiersForProperty(allMagicArmor, 'ADD'), 'ADD'));
       }
-      if (composedSlot.knockbackMods.length > 0) {
-        knockbackMods.push(...applyEnhancementsToModifiers(composedSlot.knockbackMods, 'knockback_resistance', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
+      if (allKnockback.length > 0) {
+        knockbackMods.push(...toComputedModifiers(compressModifiersForProperty(allKnockback, 'ADD'), 'ADD'));
       }
-      if (composedSlot.durabilityMods.length > 0) {
-        if (isArmor) {
-          armorDurMods.push(
-            ...applyEnhancementsToModifiers(
-              composedSlot.durabilityMods,
-              'armor_durability',
-              slotGradeMul,
-              true,
-              slotStarchargeLevel,
-              slotChargingValue,
-              'ADD'
-            )
-          );
-        } else {
-          toolDurMods.push(...applyEnhancementsToModifiers(composedSlot.durabilityMods, 'durability', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
+      if (isArmor) {
+        if (allArmorDur.length > 0) {
+          armorDurMods.push(...toComputedModifiers(compressModifiersForProperty(allArmorDur, 'ADD'), 'ADD'));
+        }
+        flatDurabilityAdditions += totalFlatDurAdd / resolvedSlotInstances.length;
+      } else {
+        if (allToolDur.length > 0) {
+          toolDurMods.push(...toComputedModifiers(compressModifiersForProperty(allToolDur, 'ADD'), 'ADD'));
         }
       }
-      if (composedSlot.meleeDamageMods.length > 0) {
-        secondaryDamageMods.push(...applyEnhancementsToModifiers(composedSlot.meleeDamageMods, 'melee_damage', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
+      if (allMelee.length > 0) {
+        secondaryDamageMods.push(...toComputedModifiers(compressModifiersForProperty(allMelee, 'ADD'), 'ADD'));
       }
-      if (composedSlot.attackSpeedMods.length > 0) {
-        secondaryAttackSpeedMods.push(...applyEnhancementsToModifiers(composedSlot.attackSpeedMods, 'attack_speed', slotGradeMul, false, slotStarchargeLevel, slotChargingValue, 'ADD'));
+      if (allSpeed.length > 0) {
+        secondaryAttackSpeedMods.push(...toComputedModifiers(compressModifiersForProperty(allSpeed, 'ADD'), 'ADD'));
       }
-      if (composedSlot.harvestSpeedMods.length > 0) {
-        secondaryHarvestSpeedMods.push(...applyEnhancementsToModifiers(composedSlot.harvestSpeedMods, 'harvest_speed', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
+      if (allHarvest.length > 0) {
+        secondaryHarvestSpeedMods.push(...toComputedModifiers(compressModifiersForProperty(allHarvest, 'ADD'), 'ADD'));
       }
-      if (composedSlot.rarityMods.length > 0) {
-        secondaryRarityMods.push(...applyEnhancementsToModifiers(composedSlot.rarityMods, 'rarity', slotGradeMul, false, slotStarchargeLevel, slotChargingValue, 'ADD'));
-      }
-      if (composedSlot.harvestTier) {
-        harvestTier = composedSlot.harvestTier;
+      if (allRarity.length > 0) {
+        secondaryRarityMods.push(...toComputedModifiers(compressModifiersForProperty(allRarity, 'ADD'), 'ADD'));
       }
     } else {
-      const slotStats = mat.stats[slot];
-      const slotMods = mat.statModifiers?.[slot];
-
-      if (slotStats) {
-        // Armor
-        const slotArmorRaw = (isArmor && slotStats.armor_by_piece?.[gearType.id as ArmorPiece] !== undefined)
-          ? slotStats.armor_by_piece[gearType.id as ArmorPiece]
-          : slotStats.armor;
-        if (slotArmorRaw !== undefined) {
-          armorMods.push(...applyEnhancementsToModifiers(extractModifiers(slotArmorRaw, 'ADD'), 'armor', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
-        }
-
-        // Toughness
-        if (slotStats.armor_toughness !== undefined) {
-          toughnessMods.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.armor_toughness, 'ADD'), 'armor_toughness', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
-        }
-
-        // Magic armor
-        if (slotStats.magic_armor !== undefined) {
-          magicArmorMods.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.magic_armor, 'ADD'), 'magic_armor', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
-        }
-
-        // Knockback resistance
-        if (slotStats.knockback_resistance !== undefined) {
-          knockbackMods.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.knockback_resistance, 'ADD'), 'knockback_resistance', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
-        }
-
-        // Durability
-        if (isArmor) {
-          if (slotStats.armor_durability !== undefined) {
-            armorDurMods.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.armor_durability, 'ADD'), 'armor_durability', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
-          } else if (slotStats.durability !== undefined) {
-            const durMods = extractModifiers(slotStats.durability, 'ADD');
-            for (const dm of durMods) {
-              const op = normalizeOperation(dm.operation, 'ADD');
-              if (op === 'MULTIPLY_TOTAL' || op === 'MULTIPLY_BASE') {
-                armorDurMods.push(...applyEnhancementsToModifiers([dm], 'durability', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, op));
-              } else {
-                let val = applyGradeBonus(dm.value, slotGradeMul);
-                val = applyStarcharge(val, 'durability', slotStarchargeLevel, slotChargingValue, op);
-                flatDurabilityAdditions += val;
-              }
-            }
-          }
-        } else {
-          if (slotStats.durability !== undefined) {
-            toolDurMods.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.durability, 'ADD'), 'durability', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
-          }
-        }
-
-        // Melee damage
-        if (slotStats.melee_damage !== undefined) {
-          secondaryDamageMods.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.melee_damage, 'ADD'), 'melee_damage', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
-        }
-
-        // Attack speed (not affected by grades)
-        if (slotStats.attack_speed !== undefined) {
-          secondaryAttackSpeedMods.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.attack_speed, 'ADD'), 'attack_speed', slotGradeMul, false, slotStarchargeLevel, slotChargingValue, 'ADD'));
-        }
-
-        // Harvest speed
-        if (slotStats.harvest_speed !== undefined) {
-          secondaryHarvestSpeedMods.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.harvest_speed, 'ADD'), 'harvest_speed', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
-        }
-
-        // Rarity
-        if (slotStats.rarity !== undefined) {
-          secondaryRarityMods.push(...applyEnhancementsToModifiers(extractModifiers(slotStats.rarity, 'ADD'), 'rarity', slotGradeMul, false, slotStarchargeLevel, slotChargingValue, 'ADD'));
-        }
-
-        if (slotStats.harvest_tier) {
-          harvestTier = slotStats.harvest_tier;
-        }
+      const singleInst = resolvedSlotInstances[0];
+      if (!singleInst) continue;
+      const mods = extractSlotRawModifiers(singleInst, slot, isArmor, gearType.id, catalog);
+      if (mods.armor.length > 0) armorMods.push(...toComputedModifiers(mods.armor, 'ADD'));
+      if (mods.toughness.length > 0) toughnessMods.push(...toComputedModifiers(mods.toughness, 'ADD'));
+      if (mods.magicArmor.length > 0) magicArmorMods.push(...toComputedModifiers(mods.magicArmor, 'ADD'));
+      if (mods.knockback.length > 0) knockbackMods.push(...toComputedModifiers(mods.knockback, 'ADD'));
+      if (isArmor) {
+        if (mods.armorDur.length > 0) armorDurMods.push(...toComputedModifiers(mods.armorDur, 'ADD'));
+        flatDurabilityAdditions += mods.flatDurAdd;
+      } else {
+        if (mods.toolDur.length > 0) toolDurMods.push(...toComputedModifiers(mods.toolDur, 'ADD'));
       }
-
-      // statModifiers legados (rod multipliers, etc.)
-      if (slotMods) {
-        if (slotMods.durability) {
-          const legacyMods = extractLegacyStatModifiers(slotMods.durability);
-          if (isArmor) {
-            for (const lm of legacyMods) {
-              const op = normalizeOperation(lm.operation, 'ADD');
-              if (op === 'MULTIPLY_TOTAL' || op === 'MULTIPLY_BASE') {
-                armorDurMods.push(...applyEnhancementsToModifiers([lm], 'durability', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, op));
-              } else {
-                let val = applyGradeBonus(lm.value, slotGradeMul);
-                val = applyStarcharge(val, 'durability', slotStarchargeLevel, slotChargingValue, op);
-                flatDurabilityAdditions += val;
-              }
-            }
-          } else {
-            toolDurMods.push(...applyEnhancementsToModifiers(legacyMods, 'durability', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
-          }
-        }
-
-        if (slotMods.harvest_speed) {
-          const legacyMods = extractLegacyStatModifiers(slotMods.harvest_speed);
-          secondaryHarvestSpeedMods.push(...applyEnhancementsToModifiers(legacyMods, 'harvest_speed', slotGradeMul, true, slotStarchargeLevel, slotChargingValue, 'ADD'));
-        }
-
-        if (slotMods.attack_speed) {
-          const legacyMods = extractLegacyStatModifiers(slotMods.attack_speed);
-          secondaryAttackSpeedMods.push(...applyEnhancementsToModifiers(legacyMods, 'attack_speed', slotGradeMul, false, slotStarchargeLevel, slotChargingValue, 'ADD'));
-        }
-      }
+      if (mods.melee.length > 0) secondaryDamageMods.push(...toComputedModifiers(mods.melee, 'ADD'));
+      if (mods.speed.length > 0) secondaryAttackSpeedMods.push(...toComputedModifiers(mods.speed, 'ADD'));
+      if (mods.harvest.length > 0) secondaryHarvestSpeedMods.push(...toComputedModifiers(mods.harvest, 'ADD'));
+      if (mods.rarity.length > 0) secondaryRarityMods.push(...toComputedModifiers(mods.rarity, 'ADD'));
+      if (mods.harvestTier) harvestTier = mods.harvestTier;
     }
   }
 
@@ -899,11 +1206,10 @@ export function calculateGearStats(
   const mainMeleeDamage = composedMain
     ? computeNumberProperty(0, applyEnhancementsToModifiers(composedMain.meleeDamageMods, 'melee_damage', 0, false, 0, 0, 'AVERAGE'))
     : getNumericStatValue(mainMaterial?.stats.main?.melee_damage, 0);
-  let initialDamage = applyGradeBonus(
-    mainMeleeDamage,
-    mainGradeMul
-  );
-  if (mainStarchargeLevel > 0) {
+  let initialDamage = heterogeneousInitialDamage !== null
+    ? heterogeneousInitialDamage
+    : applyGradeBonus(mainMeleeDamage, mainGradeMul);
+  if (heterogeneousInitialDamage === null && mainStarchargeLevel > 0) {
     initialDamage = applyStarcharge(initialDamage, 'melee_damage', mainStarchargeLevel, mainChargingValue, 'ADD');
   }
   const damageMods: ComputedModifier[] = [...secondaryDamageMods];
@@ -915,17 +1221,18 @@ export function calculateGearStats(
   const mainAttackSpeed = composedMain
     ? computeNumberProperty(0, applyEnhancementsToModifiers(composedMain.attackSpeedMods, 'attack_speed', 0, false, 0, 0, 'AVERAGE'))
     : getNumericStatValue(mainMaterial?.stats.main?.attack_speed, 0);
-  const initialAttackSpeed = gearType.baseAttackSpeed + mainAttackSpeed;
+  const initialAttackSpeed = heterogeneousInitialAttackSpeed !== null
+    ? heterogeneousInitialAttackSpeed
+    : gearType.baseAttackSpeed + mainAttackSpeed;
   const baseAttackSpeed = computeNumberProperty(initialAttackSpeed, secondaryAttackSpeedMods);
 
   const mainHarvestSpeed = composedMain
     ? computeNumberProperty(0, applyEnhancementsToModifiers(composedMain.harvestSpeedMods, 'harvest_speed', 0, false, 0, 0, 'AVERAGE'))
     : getNumericStatValue(mainMaterial?.stats.main?.harvest_speed, 1.0);
-  let initialHarvestSpeed = applyGradeBonus(
-    mainHarvestSpeed,
-    mainGradeMul
-  );
-  if (mainStarchargeLevel > 0) {
+  let initialHarvestSpeed = heterogeneousInitialHarvestSpeed !== null
+    ? heterogeneousInitialHarvestSpeed
+    : applyGradeBonus(mainHarvestSpeed, mainGradeMul);
+  if (heterogeneousInitialHarvestSpeed === null && mainStarchargeLevel > 0) {
     initialHarvestSpeed = applyStarcharge(initialHarvestSpeed, 'harvest_speed', mainStarchargeLevel, mainChargingValue, 'AVERAGE');
   }
   const baseHarvestSpeed = computeNumberProperty(initialHarvestSpeed, secondaryHarvestSpeedMods);

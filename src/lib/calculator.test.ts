@@ -11,6 +11,7 @@ import {
   applyEnhancementsToModifiers,
   calculateCompoundChargingValue,
   composeCompoundSlotModifiers,
+  resolveSlotInstances,
 } from './calculator';
 import {
   OFFICIAL_MATERIALS_1_20,
@@ -1376,6 +1377,210 @@ describe('calculateGearStats', () => {
 
       expect(ATM11_CATALOG.traits['silentgear:crude']).toBeDefined();
       expect(ATM11_CATALOG.traits['silentgear:crude'].maxLevel).toBe(5);
+    });
+  });
+
+  describe('Issue #33: Ligas e partes com N instâncias, cada uma com grau próprio', () => {
+    it('Critério 1: parte com 4 instâncias MAX e 4 NONE do mesmo material tem valor igual à média ponderada calculada à mão a partir de CoreGearPart.java:125-144', () => {
+      // Peitoral de ferro (silentgear:iron): armadura base = 15
+      // 4 instâncias com grau MAX (+30%): 15 * 1.30 = 19.5
+      // 4 instâncias com grau NONE (+0%): 15.0
+      // primaryMod = 19.5 (primeira instância)
+      // peso MAX: 1 + 19.5 / (1 + 19.5) = 1 + 19.5 / 20.5 = 1.951219512195122
+      // peso NONE: 1 + 15.0 / (1 + 19.5) = 1 + 15.0 / 20.5 = 1.7317073170731707
+      // totalPeso = 4 * 1.951219512195122 + 4 * 1.7317073170731707 = 14.731707317073171
+      // somaPonderada = 4 * (1.951219512195122 * 19.5) + 4 * (1.7317073170731707 * 15.0) = 256.09756097560975
+      // mediaEsperada = 256.09756097560975 / 14.731707317073171 = 17.3841059602649
+      const expectedManualWeightedArmor = 256.09756097560975 / 14.731707317073171; // ~17.3841
+
+      const build4Max4None: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: {
+            materialId: 'silentgear:iron',
+            instances: [
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+              { grade: 'NONE' },
+              { grade: 'NONE' },
+              { grade: 'NONE' },
+              { grade: 'NONE' },
+            ],
+          },
+        },
+      };
+
+      const stats = calculateGearStats(build4Max4None, ATM11_CATALOG);
+
+      // 1. Armadura calculada coincide estritamente com a média ponderada canônica
+      expect(stats.armor).toBe(Number(expectedManualWeightedArmor.toFixed(1))); // 17.4
+
+      // 2. Compara diretamente com a compressão de modificadores
+      const compressedMods = compressModifiersForProperty([
+        { value: 19.5, operation: 'AVERAGE' },
+        { value: 19.5, operation: 'AVERAGE' },
+        { value: 19.5, operation: 'AVERAGE' },
+        { value: 19.5, operation: 'AVERAGE' },
+        { value: 15.0, operation: 'AVERAGE' },
+        { value: 15.0, operation: 'AVERAGE' },
+        { value: 15.0, operation: 'AVERAGE' },
+        { value: 15.0, operation: 'AVERAGE' },
+      ]);
+      expect(compressedMods[0].value).toBeCloseTo(expectedManualWeightedArmor, 5);
+      expect(Number(compressedMods[0].value.toFixed(1))).toBe(stats.armor);
+
+      // 3. Valor é estritamente intermediário entre o peitoral todo MAX (19.5) e todo NONE (15.0)
+      const buildAllMax: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: { main: { materialId: 'silentgear:iron', grade: 'MAX' } },
+      };
+      const buildAllNone: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: { main: { materialId: 'silentgear:iron', grade: 'NONE' } },
+      };
+      const statsMax = calculateGearStats(buildAllMax, ATM11_CATALOG);
+      const statsNone = calculateGearStats(buildAllNone, ATM11_CATALOG);
+
+      expect(statsMax.armor).toBe(19.5);
+      expect(statsNone.armor).toBe(15.0);
+      expect(stats.armor).toBeGreaterThan(statsNone.armor);
+      expect(stats.armor).toBeLessThan(statsMax.armor);
+    });
+
+    it('8 instâncias idênticas produzem valor matematicamente igual a 1 instância isolada', () => {
+      const buildSingle: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: { main: { materialId: 'silentgear:iron', grade: 'MAX' } },
+      };
+      const build8Instances: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: {
+            materialId: 'silentgear:iron',
+            instances: Array(8).fill({ grade: 'MAX' }),
+          },
+        },
+      };
+
+      const statsSingle = calculateGearStats(buildSingle, ATM11_CATALOG);
+      const stats8 = calculateGearStats(build8Instances, ATM11_CATALOG);
+
+      expect(stats8.armor).toBe(statsSingle.armor);
+      expect(stats8.durability).toBe(statsSingle.durability);
+      expect(stats8.armorToughness).toBe(statsSingle.armorToughness);
+      expect(stats8.magicArmor).toBe(statsSingle.magicArmor);
+    });
+
+    it('inverter a ordem (4 NONE primeiro e depois 4 MAX) usa NONE como primaryMod', () => {
+      // primaryMod = 15.0 (NONE primeiro)
+      // peso NONE: 1 + 15 / 16 = 1.9375
+      // peso MAX: 1 + 19.5 / 16 = 2.21875
+      // totalPeso = 4 * 1.9375 + 4 * 2.21875 = 16.625
+      // somaPonderada = 4 * (1.9375 * 15) + 4 * (2.21875 * 19.5) = 289.3125
+      // media = 289.3125 / 16.625 = 17.4022556
+      const expectedInverted = 289.3125 / 16.625;
+
+      const build4None4Max: GearBuild = {
+        gearTypeId: 'chestplate',
+        parts: {
+          main: {
+            materialId: 'silentgear:iron',
+            instances: [
+              { grade: 'NONE' },
+              { grade: 'NONE' },
+              { grade: 'NONE' },
+              { grade: 'NONE' },
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+            ],
+          },
+        },
+      };
+
+      const stats = calculateGearStats(build4None4Max, ATM11_CATALOG);
+      expect(stats.armor).toBe(Number(expectedInverted.toFixed(1)));
+    });
+
+    it('slot secundário rod com 1 MAX e 1 NONE calcula durabilidade via média ponderada', () => {
+      // Espada de diamante (durabilidade 1561) + haste de madeira (base durability: 15)
+      // 1 MAX (+30%): 19.5
+      // 1 NONE (+0%): 15.0
+      // primaryMod = 19.5
+      // peso MAX: 1 + 19.5 / 20.5 = 1.9512195
+      // peso NONE: 1 + 15.0 / 20.5 = 1.7317073
+      // media = (1.9512195 * 19.5 + 1.7317073 * 15.0) / (1.9512195 + 1.7317073) = 17.3841
+      // Durabilidade final esperada: 1561 + 17.3841 = 1578.38 -> 1578
+      const buildSwordMixedRod: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:diamond', grade: 'NONE' },
+          rod: {
+            materialId: 'silentgear:wood',
+            instances: [
+              { grade: 'MAX' },
+              { grade: 'NONE' },
+            ],
+          },
+        },
+      };
+
+      const buildSwordAllMaxRod: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:diamond', grade: 'NONE' },
+          rod: { materialId: 'silentgear:wood', grade: 'MAX' },
+        },
+      };
+
+      const buildSwordAllNoneRod: GearBuild = {
+        gearTypeId: 'sword',
+        parts: {
+          main: { materialId: 'silentgear:diamond', grade: 'NONE' },
+          rod: { materialId: 'silentgear:wood', grade: 'NONE' },
+        },
+      };
+
+      const statsMixed = calculateGearStats(buildSwordMixedRod, ATM11_CATALOG);
+      const statsMax = calculateGearStats(buildSwordAllMaxRod, ATM11_CATALOG);
+      const statsNone = calculateGearStats(buildSwordAllNoneRod, ATM11_CATALOG);
+
+      expect(statsNone.durability).toBe(1576);
+      expect(statsMax.durability).toBe(1581);
+      expect(statsMixed.durability).toBe(1578);
+    });
+
+    it('resolveSlotInstances poda adequadamente instâncias quando gearTypeId exige menos instâncias', () => {
+      // 8 instâncias configuradas para peitoral, mas calculadas para botas (4 instâncias)
+      const buildBootsWith8Instances: GearBuild = {
+        gearTypeId: 'boots',
+        parts: {
+          main: {
+            materialId: 'silentgear:iron',
+            instances: [
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+              { grade: 'NONE' },
+              { grade: 'NONE' },
+              // Excedentes (não devem afetar botas)
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+              { grade: 'MAX' },
+            ],
+          },
+        },
+      };
+
+      const resolved = resolveSlotInstances(buildBootsWith8Instances.parts.main, 'boots', 'main');
+      expect(resolved).toHaveLength(4);
+      expect(resolved[0].grade).toBe('MAX');
+      expect(resolved[1].grade).toBe('MAX');
+      expect(resolved[2].grade).toBe('NONE');
+      expect(resolved[3].grade).toBe('NONE');
     });
   });
 

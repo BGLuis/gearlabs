@@ -1,4 +1,14 @@
-import { GearPartSelection, SubMaterialSelection, AlloyType, Material, GearCategory } from '@/types/silentgear';
+import {
+  GearPartSelection,
+  SubMaterialSelection,
+  AlloyType,
+  Material,
+  PartSlot,
+  Grade,
+  StarchargeLevel,
+  PartMaterialInstance,
+  GearCategory,
+} from '@/types/silentgear';
 
 export const MAX_SUB_MATERIALS = 6;
 
@@ -311,6 +321,148 @@ export function setPartAlloyTypeInPart(
   };
 }
 
+/**
+ * Contagem padrão de instâncias de materiais por peça e slot no Silent Gear 4.2.3 (Issue #33).
+ * Baseado nas receitas canônicas do mod (ex: 8 placas no peitoral, 5 no capacete, etc.).
+ */
+export const DEFAULT_PART_MATERIAL_COUNTS: Record<string, Partial<Record<PartSlot, number>>> = {
+  helmet: { main: 5, tip: 1, lining: 1, coating: 1, binding: 1 },
+  chestplate: { main: 8, tip: 1, lining: 1, coating: 1, binding: 1 },
+  leggings: { main: 7, tip: 1, lining: 1, coating: 1, binding: 1 },
+  boots: { main: 4, tip: 1, lining: 1, coating: 1, binding: 1 },
+  sword: { main: 2, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  katana: { main: 3, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  machete: { main: 3, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  knife: { main: 1, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  dagger: { main: 1, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  spear: { main: 2, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  pickaxe: { main: 3, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  axe: { main: 3, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  shovel: { main: 1, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  hoe: { main: 2, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  hammer: { main: 8, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  excavator: { main: 6, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  saw: { main: 3, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  paxel: { main: 5, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  mattock: { main: 3, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  sickle: { main: 3, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  shears: { main: 2, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  bow: { main: 3, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  crossbow: { main: 3, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  slingshot: { main: 2, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  shield: { main: 6, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+  elytra: { main: 2, rod: 2, tip: 1, grip: 1, coating: 1, binding: 1 },
+};
+
+/**
+ * Retorna o número canônico de instâncias de material que compõem uma parte no mod.
+ */
+export function getPartInstanceCount(gearTypeId: string, slot: PartSlot): number {
+  return DEFAULT_PART_MATERIAL_COUNTS[gearTypeId]?.[slot] ?? (slot === 'rod' ? 2 : 1);
+}
+
+/**
+ * Cria uma lista padrão de instâncias com contagem N repetindo o grau e starcharge padrão.
+ */
+export function createDefaultPartInstances(
+  count: number,
+  defaultGrade: Grade = 'NONE',
+  defaultStarcharge: StarchargeLevel = 0
+): PartMaterialInstance[] {
+  const instances: PartMaterialInstance[] = [];
+  for (let i = 0; i < count; i++) {
+    instances.push({
+      grade: defaultGrade,
+      starcharge: defaultStarcharge,
+    });
+  }
+  return instances;
+}
+
+/**
+ * Sincroniza a lista de instâncias com o número alvo exigido pela parte.
+ */
+export function syncPartInstancesWithCount(
+  current: GearPartSelection | undefined,
+  targetCount: number
+): PartMaterialInstance[] {
+  const defaultGrade = current?.grade || 'NONE';
+  const defaultStarcharge = current?.starcharge || 0;
+  const existing = current?.instances || [];
+
+  if (existing.length === targetCount) {
+    return existing;
+  }
+
+  const result: PartMaterialInstance[] = [];
+  for (let i = 0; i < targetCount; i++) {
+    if (i < existing.length) {
+      result.push({ ...existing[i] });
+    } else {
+      result.push({
+        grade: defaultGrade,
+        starcharge: defaultStarcharge,
+      });
+    }
+  }
+  return result;
+}
+
+/**
+ * Atualiza o grau de uma instância individual da parte.
+ */
+export function updatePartInstanceGrade(
+  current: GearPartSelection | undefined,
+  index: number,
+  grade: Grade,
+  gearTypeId: string,
+  slot: PartSlot
+): GearPartSelection {
+  const count = getPartInstanceCount(gearTypeId, slot);
+  const instances = syncPartInstancesWithCount(current, count);
+  if (index >= 0 && index < instances.length) {
+    instances[index] = { ...instances[index], grade };
+  }
+  return {
+    ...(current || { materialId: '' }),
+    instances,
+  };
+}
+
+/**
+ * Atualiza a carga estelar de uma instância individual da parte.
+ */
+export function updatePartInstanceStarcharge(
+  current: GearPartSelection | undefined,
+  index: number,
+  starcharge: StarchargeLevel,
+  gearTypeId: string,
+  slot: PartSlot
+): GearPartSelection {
+  const count = getPartInstanceCount(gearTypeId, slot);
+  const instances = syncPartInstancesWithCount(current, count);
+  if (index >= 0 && index < instances.length) {
+    instances[index] = { ...instances[index], starcharge };
+  }
+  return {
+    ...(current || { materialId: '' }),
+    instances,
+  };
+}
+
+/**
+ * Define a lista completa de instâncias de uma parte.
+ */
+export function setPartInstancesInPart(
+  current: GearPartSelection | undefined,
+  instances: PartMaterialInstance[]
+): GearPartSelection {
+  return {
+    ...(current || { materialId: '' }),
+    instances,
+  };
+}
+
 type MainPartKind = 'blade' | 'head' | 'plates';
 
 const MAIN_PART_NAMES: Record<MainPartKind, { pt: string; en: string }> = {
@@ -357,4 +509,5 @@ export {
   updatePartSubMaterial as updateSubMaterial,
   setPartSubMaterialsInPart as setPartSubMaterials,
   setPartAlloyTypeInPart as setPartAlloyType,
+  setPartInstancesInPart as setPartInstances,
 };

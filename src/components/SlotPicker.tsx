@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useGear } from '@/context/GearContext';
 import { Grade, PartSlot, SubMaterialSelection, StarchargeLevel, AlloyType } from '@/types/silentgear';
-import { X, ArrowUp, ArrowDown, Plus, Layers, Sparkles, AlertTriangle } from 'lucide-react';
+import { X, ArrowUp, ArrowDown, Plus, Layers, Sparkles, AlertTriangle, ChevronDown, ChevronUp, Split } from 'lucide-react';
 import { calculateSynergy, calculateCompoundChargingValue } from '@/lib/calculator';
 import { MaterialCombobox } from '@/components/MaterialCombobox';
 import {
@@ -12,6 +12,8 @@ import {
   isMaterialAllowedInAlloy,
   validateAlloy,
   detectAlloyType,
+  getPartInstanceCount,
+  syncPartInstancesWithCount,
   getMainPartLabel,
 } from '@/lib/parts';
 
@@ -36,6 +38,9 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
     setPartGrade,
     setPartSubMaterials,
     setPartAlloyType,
+    setPartInstanceGrade,
+    setPartInstanceStarcharge,
+    setPartInstances,
     addSubMaterial,
     removeSubMaterial,
     reorderSubMaterials,
@@ -45,6 +50,8 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
     inventory,
     lang,
   } = useGear();
+
+  const [showInstances, setShowInstances] = useState(false);
 
   const currentSelection = build.parts[slot];
   const isCompound = !!(currentSelection?.materials && currentSelection.materials.length > 0);
@@ -96,6 +103,34 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
   const compoundChargingValue = isCompound && subMaterials.length > 0
     ? calculateCompoundChargingValue(subMaterials, slot)
     : undefined;
+
+  const instanceCount = getPartInstanceCount(build.gearTypeId, slot);
+  const currentInstances = currentSelection
+    ? syncPartInstancesWithCount(currentSelection, instanceCount)
+    : [];
+  const isHeterogeneous = currentInstances.some(
+    (i) => (i.grade || 'NONE') !== currentGrade || (i.starcharge || 0) !== currentStarcharge
+  );
+
+  function handleSplitHalf() {
+    if (!currentSelection) return;
+    const half = Math.floor(instanceCount / 2);
+    const newInst = currentInstances.map((inst, idx) => ({
+      ...inst,
+      grade: idx < half ? ('MAX' as Grade) : ('NONE' as Grade),
+    }));
+    setPartInstances(slot, newInst);
+  }
+
+  function handleResetUniform() {
+    if (!currentSelection) return;
+    const newInst = currentInstances.map((inst) => ({
+      ...inst,
+      grade: currentGrade,
+      starcharge: currentStarcharge,
+    }));
+    setPartInstances(slot, newInst);
+  }
 
   // Validação das regras da máquina ativa
   const alloyValidation = isCompound
@@ -455,6 +490,91 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                 <Layers className="w-3 h-3 text-mc-primary" />
                 {lang === 'pt' ? 'Compor Liga/Tecido...' : 'Compose Alloy...'}
               </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Seção de N Instâncias por Parte (Issue #33) */}
+      {currentSelection && instanceCount > 1 && (
+        <div className="mt-2 pt-2 border-t border-mc-border/60">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setShowInstances(!showInstances)}
+              className="flex items-center gap-1.5 text-[11px] font-mono text-mc-muted hover:text-mc-gold transition-colors"
+            >
+              {showInstances ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              <span>
+                {lang === 'pt' ? 'Instâncias da Parte' : 'Part Instances'} ({instanceCount}x)
+              </span>
+              {isHeterogeneous ? (
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                  {lang === 'pt' ? 'Mistas (Média Ponderada)' : 'Mixed (Weighted)'}
+                </span>
+              ) : (
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-mc-border/60 text-mc-muted">
+                  {lang === 'pt' ? 'Uniforme' : 'Uniform'}
+                </span>
+              )}
+            </button>
+
+            {showInstances && (
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={handleSplitHalf}
+                  className="flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-mc-bg hover:bg-mc-card border border-mc-border text-mc-muted hover:text-mc-text transition-colors"
+                  title={lang === 'pt' ? 'Divide metade MAX e metade NONE' : 'Split half MAX and half NONE'}
+                >
+                  <Split className="w-2.5 h-2.5" />
+                  {lang === 'pt' ? '50/50 (MAX/NONE)' : '50/50 (MAX/NONE)'}
+                </button>
+                <button
+                  onClick={handleResetUniform}
+                  className="text-[10px] px-1.5 py-0.5 rounded bg-mc-bg hover:bg-mc-card border border-mc-border text-mc-muted hover:text-mc-text transition-colors"
+                  title={lang === 'pt' ? 'Aplica o grau e carga principais a todas as instâncias' : 'Apply main grade and charge to all instances'}
+                >
+                  {lang === 'pt' ? 'Uniformizar' : 'Reset'}
+                </button>
+              </div>
+            )}
+          </div>
+
+          {showInstances && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 mt-2 p-2 bg-mc-bg/50 border border-mc-border/50 rounded">
+              {currentInstances.map((inst, idx) => (
+                <div
+                  key={idx}
+                  className="p-1.5 rounded bg-mc-surface/60 border border-mc-border/60 flex flex-col gap-1 text-[10px] font-mono"
+                >
+                  <span className="text-mc-muted font-bold">
+                    #{idx + 1} {lang === 'pt' ? 'Instância' : 'Instance'}
+                  </span>
+                  <div className="flex items-center justify-between gap-1">
+                    <select
+                      value={inst.grade || 'NONE'}
+                      onChange={(e) => setPartInstanceGrade(slot, idx, e.target.value as Grade)}
+                      className="bg-mc-bg border border-mc-border rounded px-1 py-0.5 text-mc-gold font-bold focus:outline-none cursor-pointer text-[10px]"
+                    >
+                      {GRADES.map((g) => (
+                        <option key={g} value={g} className="bg-mc-surface text-mc-text">
+                          {g}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      value={inst.starcharge ?? 0}
+                      onChange={(e) => setPartInstanceStarcharge(slot, idx, Number(e.target.value) as StarchargeLevel)}
+                      className="bg-mc-bg border border-mc-border rounded px-1 py-0.5 text-cyan-400 font-bold focus:outline-none cursor-pointer text-[10px]"
+                    >
+                      {STARCHARD_LEVELS.map(({ level, label }) => (
+                        <option key={level} value={level} className="bg-mc-surface text-mc-text">
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>

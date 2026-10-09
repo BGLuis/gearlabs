@@ -127,12 +127,25 @@ export type StarchargeLevel = 0 | 1 | 2 | 3;
 
 export type AlloyType = 'metal' | 'gem' | 'fabric' | 'crude' | 'super';
 
+export interface PartMaterialInstance {
+  grade?: Grade;
+  starcharge?: StarchargeLevel;
+  materialId?: string;
+  materials?: SubMaterialSelection[];
+  alloyType?: AlloyType;
+}
+
 export interface GearPartSelection {
   materialId: string;
   grade?: Grade;
   materials?: SubMaterialSelection[];
   starcharge?: StarchargeLevel;
   alloyType?: AlloyType;
+  /**
+   * Instâncias individuais de materiais que formam esta parte (Issue #33).
+   * Se preenchido com mais de 1 item, calcula via média ponderada de CoreGearPart.
+   */
+  instances?: PartMaterialInstance[];
 }
 
 export interface GearBuild {

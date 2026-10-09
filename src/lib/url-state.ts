@@ -7,7 +7,17 @@ import {
   SubMaterialSelection,
   StarchargeLevel,
   AlloyType,
+  PartMaterialInstance,
 } from '@/types/silentgear';
+import { getPartInstanceCount, syncPartInstancesWithCount } from './parts';
+
+interface SerializedInstance {
+  g?: Grade;
+  s?: StarchargeLevel;
+  m?: string;
+  a?: AlloyType;
+  mats?: { m: string }[];
+}
 
 interface SerializedPartState {
   m?: string;
@@ -15,6 +25,7 @@ interface SerializedPartState {
   s?: StarchargeLevel;
   a?: AlloyType;
   mats?: { m: string; g?: Grade }[];
+  inst?: SerializedInstance[];
 }
 
 interface SerializedBuildState {
@@ -38,6 +49,29 @@ export function encodeBuildToHash(build: GearBuild, version: string): string {
           m: sub.materialId,
         }));
       }
+
+      // Se houver instâncias heterogêneas, serializa instâncias (Issue #33)
+      if (sel.instances && sel.instances.length > 1) {
+        const defaultMatsKey = sel.materials ? JSON.stringify(sel.materials) : '';
+        const hasHeterogeneous = sel.instances.some(
+          (inst) =>
+            (inst.grade && inst.grade !== (sel.grade || 'NONE')) ||
+            (inst.starcharge !== undefined && inst.starcharge !== (sel.starcharge || 0)) ||
+            (inst.materialId && inst.materialId !== sel.materialId) ||
+            (inst.alloyType && inst.alloyType !== sel.alloyType) ||
+            (inst.materials && JSON.stringify(inst.materials) !== defaultMatsKey)
+        );
+        if (hasHeterogeneous) {
+          partData.inst = sel.instances.map((i) => ({
+            ...(i.grade && i.grade !== 'NONE' ? { g: i.grade } : {}),
+            ...(i.starcharge && i.starcharge > 0 ? { s: i.starcharge } : {}),
+            ...(i.materialId && i.materialId !== sel.materialId ? { m: i.materialId } : {}),
+            ...(i.alloyType ? { a: i.alloyType } : {}),
+            ...(i.materials ? { mats: i.materials.map((sm) => ({ m: sm.materialId })) } : {}),
+          }));
+        }
+      }
+
       parts[slot] = partData;
     }
   }
@@ -77,6 +111,31 @@ export function decodeBuildFromHash(
             : undefined;
 
         if (primaryId) {
+          let instances: PartMaterialInstance[] | undefined;
+          const count = getPartInstanceCount(parsed.t, slot as PartSlot);
+          if (data.inst && data.inst.length > 0) {
+            const decodedInst: PartMaterialInstance[] = data.inst.map((i) => ({
+              grade: i.g || 'NONE',
+              ...(i.s && i.s > 0 ? { starcharge: i.s } : {}),
+              ...(i.m ? { materialId: i.m } : {}),
+              ...(i.a ? { alloyType: i.a } : {}),
+              ...(i.mats ? { materials: i.mats.map((sm) => ({ materialId: sm.m })) } : {}),
+            }));
+            instances = syncPartInstancesWithCount(
+              { materialId: primaryId, grade: primaryGrade, starcharge: data.s || 0, instances: decodedInst },
+              count
+            );
+          } else {
+            // Critério 2 (Issue #33): Builds de URL antigas carregam como lista de uma instância repetida
+            instances = [];
+            for (let i = 0; i < count; i++) {
+              instances.push({
+                grade: primaryGrade,
+                ...(data.s && data.s > 0 ? { starcharge: data.s } : {}),
+              });
+            }
+          }
+
           parts[slot as PartSlot] = {
             materialId: primaryId,
             grade: primaryGrade,
@@ -87,6 +146,7 @@ export function decodeBuildFromHash(
               : materials && materials.length > 0
               ? { alloyType: 'metal' }
               : {}),
+            ...(instances ? { instances } : {}),
           };
         }
       }

@@ -12,6 +12,12 @@ import {
   getMaxSubMaterials,
   getMainPartLabel,
   ALLOY_CONFIGS,
+  getPartInstanceCount,
+  createDefaultPartInstances,
+  syncPartInstancesWithCount,
+  updatePartInstanceGrade,
+  updatePartInstanceStarcharge,
+  setPartInstancesInPart,
 } from './parts';
 import { GearPartSelection, Material } from '@/types/silentgear';
 import { ATM11_CATALOG, OFFICIAL_GEAR_TYPES } from '@/data/defaultCatalog';
@@ -268,6 +274,96 @@ describe('alloy rules, machine limits and validation (Issue #30)', () => {
     expect(updated.grade).toBe('A');
     expect(updated.starcharge).toBe(2);
     expect(updated.materials).toHaveLength(2);
+  });
+
+  describe('part material instances transformations (Issue #33)', () => {
+    it('getPartInstanceCount retorna a contagem canônica correta por gearType e slot', () => {
+      expect(getPartInstanceCount('chestplate', 'main')).toBe(8);
+      expect(getPartInstanceCount('helmet', 'main')).toBe(5);
+      expect(getPartInstanceCount('leggings', 'main')).toBe(7);
+      expect(getPartInstanceCount('boots', 'main')).toBe(4);
+      expect(getPartInstanceCount('sword', 'main')).toBe(2);
+      expect(getPartInstanceCount('sword', 'rod')).toBe(2);
+      expect(getPartInstanceCount('pickaxe', 'main')).toBe(3);
+      expect(getPartInstanceCount('pickaxe', 'rod')).toBe(2);
+      expect(getPartInstanceCount('chestplate', 'lining')).toBe(1);
+    });
+
+    it('createDefaultPartInstances gera N instâncias com o grau e starcharge padrão', () => {
+      const instances = createDefaultPartInstances(4, 'S', 2);
+      expect(instances).toHaveLength(4);
+      for (const inst of instances) {
+        expect(inst.grade).toBe('S');
+        expect(inst.starcharge).toBe(2);
+      }
+    });
+
+    it('syncPartInstancesWithCount sincroniza de undefined para N instâncias padrão', () => {
+      const part: GearPartSelection = { materialId: 'silentgear:iron', grade: 'MAX', starcharge: 1 };
+      const synced = syncPartInstancesWithCount(part, 8);
+      expect(synced).toHaveLength(8);
+      expect(synced[0].grade).toBe('MAX');
+      expect(synced[0].starcharge).toBe(1);
+      expect(synced[7].grade).toBe('MAX');
+    });
+
+    it('syncPartInstancesWithCount poda instâncias excedentes na troca de tipo de gear (8 -> 4)', () => {
+      const partWith8: GearPartSelection = {
+        materialId: 'silentgear:iron',
+        instances: [
+          { grade: 'MAX', starcharge: 3 },
+          { grade: 'S', starcharge: 2 },
+          { grade: 'A', starcharge: 1 },
+          { grade: 'B', starcharge: 0 },
+          { grade: 'NONE' },
+          { grade: 'NONE' },
+          { grade: 'NONE' },
+          { grade: 'NONE' },
+        ],
+      };
+      const synced4 = syncPartInstancesWithCount(partWith8, 4);
+      expect(synced4).toHaveLength(4);
+      expect(synced4[0]).toEqual({ grade: 'MAX', starcharge: 3 });
+      expect(synced4[1]).toEqual({ grade: 'S', starcharge: 2 });
+      expect(synced4[2]).toEqual({ grade: 'A', starcharge: 1 });
+      expect(synced4[3]).toEqual({ grade: 'B', starcharge: 0 });
+    });
+
+    it('syncPartInstancesWithCount preenche instâncias faltantes com padrão (2 -> 4)', () => {
+      const partWith2: GearPartSelection = {
+        materialId: 'silentgear:iron',
+        grade: 'SS',
+        starcharge: 1,
+        instances: [
+          { grade: 'MAX', starcharge: 3 },
+          { grade: 'NONE', starcharge: 0 },
+        ],
+      };
+      const synced4 = syncPartInstancesWithCount(partWith2, 4);
+      expect(synced4).toHaveLength(4);
+      expect(synced4[0]).toEqual({ grade: 'MAX', starcharge: 3 });
+      expect(synced4[1]).toEqual({ grade: 'NONE', starcharge: 0 });
+      expect(synced4[2]).toEqual({ grade: 'SS', starcharge: 1 });
+      expect(synced4[3]).toEqual({ grade: 'SS', starcharge: 1 });
+    });
+
+    it('updatePartInstanceGrade e updatePartInstanceStarcharge alteram instância individual', () => {
+      const part: GearPartSelection = { materialId: 'silentgear:iron', grade: 'NONE' };
+      const updatedGrade = updatePartInstanceGrade(part, 1, 'MAX', 'sword', 'main');
+      expect(updatedGrade.instances).toHaveLength(2);
+      expect(updatedGrade.instances?.[0].grade).toBe('NONE');
+      expect(updatedGrade.instances?.[1].grade).toBe('MAX');
+
+      const updatedCharge = updatePartInstanceStarcharge(updatedGrade, 1, 3, 'sword', 'main');
+      expect(updatedCharge.instances?.[1].starcharge).toBe(3);
+    });
+
+    it('setPartInstancesInPart substitui o array de instâncias', () => {
+      const part: GearPartSelection = { materialId: 'silentgear:iron' };
+      const newInst = [{ grade: 'MAX' as const }, { grade: 'NONE' as const }];
+      const result = setPartInstancesInPart(part, newInst);
+      expect(result.instances).toEqual(newInst);
+    });
   });
 });
 
