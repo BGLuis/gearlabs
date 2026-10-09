@@ -805,13 +805,17 @@ export function calculateGearStats(
     ? computeNumberProperty(0, applyEnhancementsToModifiers(composedMain.meleeDamageMods, 'melee_damage', 0, false, 0, 0, 'AVERAGE'))
     : getNumericStatValue(mainMaterial?.stats.main?.melee_damage, 0);
   let initialDamage = applyGradeBonus(
-    gearType.baseDamage + mainMeleeDamage,
+    mainMeleeDamage,
     mainGradeMul
   );
   if (mainStarchargeLevel > 0) {
     initialDamage = applyStarcharge(initialDamage, 'melee_damage', mainStarchargeLevel, mainChargingValue, 'ADD');
   }
-  const baseDamage = computeNumberProperty(initialDamage, secondaryDamageMods);
+  const damageMods: ComputedModifier[] = [...secondaryDamageMods];
+  if (gearType.baseDamage) {
+    damageMods.push({ value: gearType.baseDamage, operation: 'ADD' });
+  }
+  const baseDamage = computeNumberProperty(initialDamage, damageMods);
 
   const mainAttackSpeed = composedMain
     ? computeNumberProperty(0, applyEnhancementsToModifiers(composedMain.attackSpeedMods, 'attack_speed', 0, false, 0, 0, 'AVERAGE'))

@@ -131,7 +131,7 @@ describe('calculateGearStats', () => {
     expect(statsWithCoating.armor).toBe(statsAlone.armor);
   });
 
-  it('aplica multiplicador de graduação de qualidade (Grade MAX dá +30%)', () => {
+  it('aplica multiplicador de graduação de qualidade (Grade MAX dá +30% no material, não no dano base da arma)', () => {
     const buildUngraded: GearBuild = {
       gearTypeId: 'sword',
       parts: {
@@ -150,10 +150,35 @@ describe('calculateGearStats', () => {
     const statsUngraded = calculateGearStats(buildUngraded, catalog);
     const statsGraded = calculateGearStats(buildGraded, catalog);
 
+    expect(statsUngraded.meleeDamage).toBe(5.0);
     expect(statsGraded.meleeDamage).toBeGreaterThan(statsUngraded.meleeDamage);
     expect(statsGraded.durability).toBeGreaterThan(statsUngraded.durability);
-    // Dano base espada (3.0) + Ferro (2.0) = 5.0. Com Grade MAX (+30%): 5.0 * 1.30 = 6.5
-    expect(statsGraded.meleeDamage).toBe(6.5);
+    // Dano base espada (3.0) + Ferro com Grade MAX (2.0 * 1.30 = 2.6) = 5.6
+    expect(statsGraded.meleeDamage).toBe(5.6);
+  });
+
+  it('não multiplica o dano base da espada quando o material principal tem 0 de dano melee (bambu)', () => {
+    const buildBambooUngraded: GearBuild = {
+      gearTypeId: 'sword',
+      parts: {
+        main: { materialId: 'silentgear:bamboo', grade: 'NONE' },
+        rod: { materialId: 'silentgear:wood' },
+      },
+    };
+    const buildBambooGraded: GearBuild = {
+      gearTypeId: 'sword',
+      parts: {
+        main: { materialId: 'silentgear:bamboo', grade: 'MAX' },
+        rod: { materialId: 'silentgear:wood' },
+      },
+    };
+
+    const statsUngraded = calculateGearStats(buildBambooUngraded, atm11Catalog);
+    const statsGraded = calculateGearStats(buildBambooGraded, atm11Catalog);
+
+    // Bambu tem dano 0. Dano base da espada é 3.0. Tanto sem grau quanto com MAX o dano é 3.0.
+    expect(statsUngraded.meleeDamage).toBe(3.0);
+    expect(statsGraded.meleeDamage).toBe(3.0);
   });
 
   it('afirma que MAX multiplica o armor de um main de valor 10 para 13,0 e E para 10,1', () => {
