@@ -103,6 +103,7 @@ export interface Material {
   type?: string;
   gear_type_blacklist?: string[];
   isCompound?: boolean;
+  additive?: boolean;
 }
 
 export interface GearType {

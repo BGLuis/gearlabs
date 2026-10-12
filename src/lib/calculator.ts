@@ -1317,3 +1317,17 @@ export function calculateGearStats(
     traits: calculatedTraits,
   };
 }
+
+export interface SafeGearStatsResult {
+  stats: CalculatedGearStats | null;
+  error: string | null;
+}
+
+/** Para a interface: uma build inválida vira erro explícito, nunca estatísticas inventadas. */
+export function calculateGearStatsSafe(build: GearBuild, catalog: VersionCatalog): SafeGearStatsResult {
+  try {
+    return { stats: calculateGearStats(build, catalog), error: null };
+  } catch (e) {
+    return { stats: null, error: e instanceof Error ? e.message : String(e) };
+  }
+}

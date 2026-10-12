@@ -21,7 +21,8 @@ import {
   OFFICIAL_GEAR_TYPES,
   OFFICIAL_TRAITS,
 } from '@/data/defaultCatalog';
-import { calculateGearStats } from '@/lib/calculator';
+import { calculateGearStatsSafe } from '@/lib/calculator';
+import { getDefaultInventory, loadVersionCatalog } from '@/lib/catalog-loader';
 import { resolveCatalogWithAddons } from '@/lib/layer-resolver';
 import { decodeBuildFromHash, encodeBuildToHash } from '@/lib/url-state';
 import {
@@ -49,7 +50,9 @@ interface GearContextType {
   toggleAddon: (addonId: string) => void;
   setAddonEnabled: (addonId: string, enabled: boolean) => void;
   build: GearBuild;
-  stats: CalculatedGearStats;
+  stats: CalculatedGearStats | null;
+  statsError: string | null;
+  catalogError: string | null;
   setGearType: (typeId: string) => void;
   setPartMaterial: (slot: PartSlot, materialId: string, grade?: Grade, starcharge?: StarchargeLevel) => void;
   setPartGrade: (slot: PartSlot, grade: Grade) => void;
@@ -95,9 +98,8 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
   const [catalog, setCatalog] = useState<VersionCatalog>(ATM11_CATALOG);
   const [customCatalogs, setCustomCatalogs] = useState<Record<string, VersionCatalog>>({});
   const [build, setBuild] = useState<GearBuild>(initialBuild);
-  const [inventory, setInventory] = useState<Set<string>>(
-    new Set(Object.keys(ATM11_CATALOG.materials))
-  );
+  const [catalogError, setCatalogError] = useState<string | null>(null);
+  const [inventory, setInventory] = useState<Set<string>>(() => getDefaultInventory(ATM11_CATALOG));
   const [lang, setLangState] = useState<'pt' | 'en'>('pt');
   const [shareUrl, setShareUrl] = useState<string>('');
 
@@ -176,25 +178,23 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (customCatalogs[version]) {
+      setCatalogError(null);
       setupCatalog(customCatalogs[version]);
       return;
     }
 
     // Buscar do endpoint estático
+    let cancelled = false;
     async function loadCatalog() {
-      try {
-        const res = await fetch(`/data/versions/${version}/catalog.json`);
-        if (res.ok) {
-          const data = await res.json();
-          setupCatalog(data);
-          return;
-        }
-      } catch (err) {
-        console.warn('Fallback to ATM11 catalog for version', version);
-      }
-      setupCatalog(ATM11_CATALOG);
+      const { catalog: loaded, error } = await loadVersionCatalog(version);
+      if (cancelled) return;
+      setCatalogError(error);
+      setupCatalog(loaded);
     }
     loadCatalog();
+    return () => {
+      cancelled = true;
+    };
   }, [version, customCatalogs]);
 
   // Resolver o catálogo efetivo aplicando camadas de addons ativos
@@ -224,6 +224,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // 1. Filtrar inventário para remover materiais que deixaram de existir
     setInventory((prev) => {
+      if (localStorage.getItem('gearlabs_inventory') === null) return getDefaultInventory(catalog);
       const available = new Set(Object.keys(catalog.materials));
       if (prev.size === 0) return prev;
       const next = new Set<string>();
@@ -298,26 +299,10 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     }
   }, [build, version]);
 
-  const stats = React.useMemo(() => {
-    try {
-      return calculateGearStats(build, catalog);
-    } catch (e) {
-      return {
-        durability: 100,
-        armor: 0,
-        armorToughness: 0,
-        magicArmor: 0,
-        meleeDamage: 1,
-        attackSpeed: 1,
-        dps: 1,
-        harvestSpeed: 1,
-        harvestTier: 'minecraft:wood',
-        synergy: 100,
-        rarity: 0,
-        traits: [],
-      };
-    }
-  }, [build, catalog]);
+  const { stats, error: statsError } = React.useMemo(
+    () => calculateGearStatsSafe(build, catalog),
+    [build, catalog]
+  );
 
   function setVersion(newV: string) {
     setVersionState(newV);
@@ -674,6 +659,8 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         setAddonEnabled,
         build,
         stats,
+        statsError,
+        catalogError,
         setGearType,
         setPartMaterial,
         setPartGrade,

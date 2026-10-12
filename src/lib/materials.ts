@@ -1,5 +1,5 @@
-import { Material, MaterialCategory, PartSlot } from '@/types/silentgear';
-import { getNumericStatValue } from '@/lib/calculator';
+import { Material, MaterialCategory, PartSlot, VersionCatalog } from '@/types/silentgear';
+import { getNumericStatValue, resolveTypedStat } from '@/lib/calculator';
 
 export interface FilterMaterialsOptions {
   query?: string;
@@ -212,4 +212,28 @@ export function isCraftableMaterial(material: Material, gearTypeId?: string): bo
   }
 
   return true;
+}
+
+/**
+ * Verifica se o material pode ocupar o slot do tipo de item.
+ * Parte principal de armadura exige armor_durability da peça (resolveTypedStat);
+ * nos demais tipos exige durabilidade positiva e que o material não seja aditivo,
+ * como GearHelper/isCraftingAllowed do Silent Gear.
+ */
+export function materialFitsSlot(material: Material, slot: PartSlot, gearTypeId: string, isArmor: boolean): boolean {
+  if (!isCraftableMaterial(material, gearTypeId)) return false;
+  if (slot === 'main') {
+    const main = material.stats.main;
+    if (!main) return false;
+    if (isArmor) return resolveTypedStat(main, 'armor_durability', gearTypeId) !== undefined;
+    return !material.additive && getNumericStatValue(main.durability) > 0;
+  }
+  if (slot === 'rod') return !!material.stats.rod || !!material.statModifiers?.rod;
+  return !!material.stats[slot];
+}
+
+/** Materiais que a interface e o otimizador oferecem para o slot; é a única fonte dessa regra. */
+export function getSelectableMaterials(catalog: VersionCatalog, gearTypeId: string, slot: PartSlot): Material[] {
+  const isArmor = catalog.gearTypes[gearTypeId]?.category === 'armor';
+  return Object.values(catalog.materials).filter((m) => materialFitsSlot(m, slot, gearTypeId, isArmor));
 }

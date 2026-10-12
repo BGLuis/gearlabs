@@ -21,7 +21,7 @@ export function GearCanvas({ size = 128 }: { size?: number }) {
     <div className="relative flex flex-col items-center justify-center p-6 bg-mc-card/80 border border-mc-border rounded-lg shadow-mc-inset group">
       {/* Badge de Sinergia */}
       <div className="absolute top-3 right-3 px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-mc-bg/90 border border-mc-border text-mc-primary">
-        {stats.synergy}% Sinergia
+        {stats ? `${stats.synergy}% Sinergia` : '—'}
       </div>
 
       {/* Canvas com Pixel Art */}

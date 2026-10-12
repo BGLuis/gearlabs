@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 
 export default function HomePage() {
-  const { catalog, build, stats, setGearType, lang } = useGear();
+  const { catalog, build, stats, statsError, catalogError, setGearType, lang } = useGear();
   const [selectedCategory, setSelectedCategory] = useState<GearCategory | 'all'>('all');
 
   const gearTypes = Object.values(catalog.gearTypes);
@@ -38,6 +38,13 @@ export default function HomePage() {
 
   return (
     <div className="space-y-6">
+      {catalogError && (
+        <div role="alert" className="p-3 rounded-lg border border-mc-crimson/60 bg-mc-crimson/10 text-xs font-mono text-mc-crimson">
+          {lang === 'pt'
+            ? `Não foi possível carregar o catálogo: ${catalogError}. Exibindo o catálogo embutido, que está incompleto.`
+            : `Could not load the catalog: ${catalogError}. Showing the built-in catalog, which is incomplete.`}
+        </div>
+      )}
       {/* Barra de Seleção de Tipo de Item */}
       <div className="p-4 bg-mc-surface border border-mc-border rounded-xl shadow-sm space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -100,10 +107,12 @@ export default function HomePage() {
                 {lang === 'pt' ? 'Atributos Calculados' : 'Calculated Stats'}
               </h4>
               <span className="text-[11px] font-mono text-mc-primary font-bold">
-                {stats.synergy}% Sinergia
+                {stats ? `${stats.synergy}% Sinergia` : '—'}
               </span>
             </div>
 
+            {stats ? (
+            <>
             <div className="grid grid-cols-2 gap-3 font-mono text-xs">
               {/* Durabilidade */}
               <div className="p-2.5 rounded bg-mc-bg/70 border border-mc-border">
@@ -199,6 +208,13 @@ export default function HomePage() {
                 </div>
               )}
             </div>
+            </>
+            ) : (
+              <p role="alert" className="text-xs text-mc-crimson font-mono">
+                {lang === 'pt' ? 'Montagem inválida: ' : 'Invalid build: '}
+                {statsError}
+              </p>
+            )}
           </div>
         </div>
 

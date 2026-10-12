@@ -12,7 +12,7 @@ import {
   VersionCatalog,
 } from '@/types/silentgear';
 import { calculateGearStats } from './calculator';
-import { isCraftableMaterial } from './materials';
+import { isCraftableMaterial, materialFitsSlot } from './materials';
 
 function computeScore(
   stats: ReturnType<typeof calculateGearStats>,
@@ -74,19 +74,6 @@ function generateHighlights(
 export const MAX_SECONDARY_CANDIDATES = 12;
 // Cada slot opcional pode ficar vazio, então o espaço cresce multiplicativamente a cada slot opcional
 export const MAX_OPTIONAL_CANDIDATES = 1;
-
-function materialFitsSlot(
-  m: Material,
-  slot: PartSlot,
-  isArmor: boolean = false,
-  gearTypeId?: string
-): boolean {
-  if (!isCraftableMaterial(m, gearTypeId)) return false;
-  if (slot === 'main') return !!m.stats.main && (!isArmor || m.stats.main.armor_durability !== undefined);
-  if (slot === 'rod') return !!m.stats.rod || !!m.statModifiers?.rod;
-  if (slot === 'tip') return !!m.stats.tip;
-  return !!m.stats[slot];
-}
 
 function beamSearchAlloys(
   mainCandidates: Material[],
@@ -248,7 +235,7 @@ export function findBestBuilds(
   const slotsToFill: PartSlot[] = [...gearType.requiredSlots];
   for (const slot of gearType.optionalSlots) {
     if (slotsToFill.includes(slot)) continue;
-    if (eligibleMaterials.some((m) => materialFitsSlot(m, slot, isArmor, request.gearTypeId)))
+    if (eligibleMaterials.some((m) => materialFitsSlot(m, slot, request.gearTypeId, isArmor)))
       slotsToFill.push(slot);
   }
 
@@ -259,16 +246,16 @@ export function findBestBuilds(
     // Se o usuário fixou o slot, usa apenas a escolha dele com grade e starcharge aplicados
     if (request.fixedSlots?.[slot]) {
       const fixedPart = makePart(request.fixedSlots[slot]!);
-      const isInvalidArmorMain =
+      const fixedMaterial = catalog.materials[fixedPart.materialId];
+      const isInvalidMain =
         slot === 'main' &&
-        isArmor &&
-        catalog.materials[fixedPart.materialId]?.stats.main?.armor_durability === undefined;
-      candidatePartsBySlot[slot] = isInvalidArmorMain ? [] : [fixedPart];
+        (!fixedMaterial || !materialFitsSlot(fixedMaterial, slot, request.gearTypeId, isArmor));
+      candidatePartsBySlot[slot] = isInvalidMain ? [] : [fixedPart];
       continue;
     }
 
     const valid = eligibleMaterials.filter((m) =>
-      materialFitsSlot(m, slot, isArmor, request.gearTypeId)
+      materialFitsSlot(m, slot, request.gearTypeId, isArmor)
     );
 
     if (slot === 'main') {

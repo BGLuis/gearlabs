@@ -16,7 +16,7 @@ import {
   syncPartInstancesWithCount,
   getMainPartLabel,
 } from '@/lib/parts';
-import { isCraftableMaterial } from '@/lib/materials';
+import { getSelectableMaterials } from '@/lib/materials';
 
 interface SlotPickerProps {
   slot: PartSlot;
@@ -60,14 +60,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
   const alloyConfig = ALLOY_CONFIGS[currentAlloyType] || ALLOY_CONFIGS.metal;
   const maxSubMaterials = getMaxSubMaterials(currentAlloyType);
 
-  // Filtrar materiais que suportam este slot e são craftáveis
-  const validMaterials = Object.values(catalog.materials).filter((m) => {
-    if (!isCraftableMaterial(m, build.gearTypeId)) return false;
-    if (slot === 'main') return !!m.stats.main;
-    if (slot === 'rod') return !!m.stats.rod || !!m.statModifiers?.rod;
-    if (slot === 'tip') return !!m.stats.tip;
-    return !!m.stats[slot];
-  });
+  const validMaterials = getSelectableMaterials(catalog, build.gearTypeId, slot);
 
   // Materiais permitidos pela máquina ativa no modo composto
   const compoundEligibleMaterials = validMaterials.filter((m) =>
