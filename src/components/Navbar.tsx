@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useGear } from '@/context/GearContext';
 import { ImportModpackModal } from '@/components/ImportModpackModal';
+import { AddonSelector } from '@/components/AddonSelector';
 import { Hammer, BookOpen, History, Share2, Check, Globe } from 'lucide-react';
 
 export function Navbar() {
@@ -135,6 +136,9 @@ export function Navbar() {
               )}
             </select>
           </div>
+
+          {/* Seletor de Addons e Camadas */}
+          <AddonSelector />
 
           {/* Modal de Importação de Modpacks */}
           <ImportModpackModal />

@@ -393,5 +393,48 @@ describe('Resolução Oficial de Harvest Tier com level_hint (Issue #38)', () =>
     const unobtainium = catalog.materials['silentgear:unobtainium'];
     expect(unobtainium?.stats.main?.harvest_tier).toEqual({ name: 'unobtainium', level: 7 });
   });
+
+  describe('Estrutura de Camadas de Addons (Issue #47)', () => {
+    it('Catálogo ATM11 lista seus addons com versões em AddonConfig', () => {
+      expect(catalog.addons).toBeDefined();
+      expect(catalog.addons?.length).toBe(3);
+
+      const addonIds = catalog.addons?.map((a) => a.id);
+      expect(addonIds).toEqual(['silentgems', 'sgearmetalworks', 'kubejs']);
+
+      for (const addon of catalog.addons!) {
+        expect(addon.version).toBeDefined();
+        expect(addon.name).toBeDefined();
+        expect(addon.enabled).toBe(true);
+      }
+
+      // Presets também contêm addons
+      const atm11Preset = ATM11_CATALOG.addons;
+      expect(atm11Preset).toBeDefined();
+      expect(atm11Preset?.length).toBe(3);
+    });
+
+    it('Catálogo ATM11 possui baseMaterials e layers isoladas', () => {
+      expect(catalog.baseMaterials).toBeDefined();
+      expect(Object.keys(catalog.baseMaterials!).length).toBe(131);
+
+      expect(catalog.layers).toBeDefined();
+      expect(Object.keys(catalog.layers!)).toEqual(['silentgems', 'sgearmetalworks', 'kubejs']);
+    });
+
+    it('Materiais reinforced_gold e reinforced_silver do Silent Gems existem no catálogo ATM11', () => {
+      expect(catalog.materials['silentgems:reinforced_gold']).toBeDefined();
+      expect(catalog.materials['silentgems:reinforced_silver']).toBeDefined();
+      expect(catalog.materials['silentgems:reinforced_gold'].source).toBe('silentgems');
+      expect(catalog.materials['silentgems:reinforced_silver'].source).toBe('silentgems');
+    });
+
+    it('Todos os materiais do catálogo gerado possuem o campo source', () => {
+      for (const [id, mat] of Object.entries(catalog.materials)) {
+        expect(mat.source, `Material ${id} deve possuir source`).toBeDefined();
+        expect(['silentgear', 'silentgems', 'sgearmetalworks', 'kubejs']).toContain(mat.source);
+      }
+    });
+  });
 });
 

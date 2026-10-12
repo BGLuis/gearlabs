@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {
+  AddonConfig,
+  CatalogLayer,
   GearType,
   Material,
   MaterialCategory,
@@ -26,6 +28,31 @@ import {
   parseHarvestTier,
 } from '../src/lib/datapack-parser';
 import { getGearTypeAncestors } from '../src/lib/gear-type-hierarchy';
+import { resolveCatalogWithAddons } from '../src/lib/layer-resolver';
+
+export const ATM_ADDONS: AddonConfig[] = [
+  {
+    id: 'silentgems',
+    name: "Silent's Gems",
+    version: '5.1.4',
+    enabled: true,
+    description: 'Adiciona 21 gemas modulares, ouro reforçado e prata reforçada.',
+  },
+  {
+    id: 'sgearmetalworks',
+    name: 'Silent Gear Metalworks',
+    version: '1.6.0',
+    enabled: true,
+    description: 'Adiciona fundição (categoria casting), Uru Metal e Carne.',
+  },
+  {
+    id: 'kubejs',
+    name: 'KubeJS (ATM)',
+    version: '220614e',
+    enabled: true,
+    description: 'Dados dinâmicos do All The Mods com Allthemodium, Vibranium e Unobtainium.',
+  },
+];
 
 // Issue #38: extração oficial de harvest_tier respeitando level_hint
 export { formatMaterialName, normalizeColor, parseStatEntry, parseHarvestTier };
@@ -55,47 +82,160 @@ function findJsonFiles(dir: string): string[] {
   return results;
 }
 
-export function extractAllMaterials(projectRoot: string): Record<string, Material> {
-  const materials: Record<string, Material> = {};
+export interface ExtractedCatalogData {
+  baseMaterials: Record<string, Material>;
+  layers: Record<string, CatalogLayer>;
+  resolvedMaterials: Record<string, Material>;
+}
 
-  // Camada 1: Datagen Silent Gear 4.2.3
+export function extractOfficialCatalogData(projectRoot: string): ExtractedCatalogData {
+  // 1. Camada 1: Silent Gear Base (4.2.3)
+  const baseRaw: Record<string, Material> = {};
   const sgDir = path.join(projectRoot, 'data/silentgear/silentgear_materials');
   const sgFiles = findJsonFiles(sgDir);
   for (const file of sgFiles) {
     try {
       const mat = parseMaterialFile(file);
-      materials[mat.id] = mat;
+      mat.source = 'silentgear';
+      baseRaw[mat.id] = mat;
     } catch (e) {
       console.warn(`[extract-official-data] Erro ao ler ${file}:`, e);
     }
   }
+  const baseMaterials = resolveMaterialParents(baseRaw);
 
-  // Camada 2: Silent Gear Metalworks
-  const smwDir = path.join(projectRoot, 'data/sgearmetalworks');
-  const smwFiles = findJsonFiles(smwDir).filter((f) => f.includes('/silentgear_materials/'));
-  for (const file of smwFiles) {
-    try {
-      const mat = parseMaterialFile(file);
-      // Mescla ou sobrescreve sobre base
-      materials[mat.id] = mat;
-    } catch (e) {
-      console.warn(`[extract-official-data] Erro ao ler ${file}:`, e);
+  const layers: Record<string, CatalogLayer> = {};
+
+  // 2. Camada 2: Silent's Gems (5.1.4)
+  const gemsDir = path.join(projectRoot, 'data/silentgems/silentgear_materials');
+  const gemsMaterials: Record<string, Material> = {};
+  if (fs.existsSync(gemsDir)) {
+    for (const file of findJsonFiles(gemsDir)) {
+      try {
+        const mat = parseMaterialFile(file);
+        mat.source = 'silentgems';
+        gemsMaterials[mat.id] = mat;
+      } catch (e) {
+        console.warn(`[extract-official-data] Erro ao ler ${file}:`, e);
+      }
+    }
+  }
+  layers['silentgems'] = {
+    id: 'silentgems',
+    name: "Silent's Gems",
+    version: '5.1.4',
+    materials: gemsMaterials,
+  };
+
+  // 3. Camada 3: Silent Gear Metalworks (1.6.0)
+  const smwNewMaterials: Record<string, Material> = {};
+  const smwOverrides: Record<string, Partial<Material>> = {};
+
+  // a) Materiais novos de sgearmetalworks (ex: uru_metal, meat)
+  const smwNewDir = path.join(projectRoot, 'data/sgearmetalworks/sgearmetalworks/silentgear_materials');
+  if (fs.existsSync(smwNewDir)) {
+    for (const file of findJsonFiles(smwNewDir)) {
+      try {
+        const mat = parseMaterialFile(file);
+        mat.source = 'sgearmetalworks';
+        smwNewMaterials[mat.id] = mat;
+      } catch (e) {
+        console.warn(`[extract-official-data] Erro ao ler ${file}:`, e);
+      }
     }
   }
 
-  // Camada 3: KubeJS do ATM-11
+  // b) Overrides de silentgear (adiciona casting a 38 metais, flint, etc.)
+  const smwSgDir = path.join(projectRoot, 'data/sgearmetalworks/silentgear/silentgear_materials');
+  if (fs.existsSync(smwSgDir)) {
+    for (const file of findJsonFiles(smwSgDir)) {
+      try {
+        const mat = parseMaterialFile(file);
+        smwOverrides[mat.id] = {
+          categories: mat.categories,
+          stats: mat.stats,
+          traits: mat.traits,
+          statModifiers: mat.statModifiers,
+        };
+      } catch (e) {
+        console.warn(`[extract-official-data] Erro ao ler ${file}:`, e);
+      }
+    }
+  }
+
+  // c) Overrides de silentgems (adiciona casting às 21 gemas)
+  const smwGemsDir = path.join(projectRoot, 'data/sgearmetalworks/silentgems/silentgear_materials');
+  if (fs.existsSync(smwGemsDir)) {
+    for (const file of findJsonFiles(smwGemsDir)) {
+      try {
+        const mat = parseMaterialFile(file);
+        smwOverrides[mat.id] = {
+          categories: mat.categories,
+        };
+      } catch (e) {
+        console.warn(`[extract-official-data] Erro ao ler ${file}:`, e);
+      }
+    }
+  }
+
+  layers['sgearmetalworks'] = {
+    id: 'sgearmetalworks',
+    name: 'Silent Gear Metalworks',
+    version: '1.6.0',
+    materials: smwNewMaterials,
+    overrides: smwOverrides,
+  };
+
+  // 4. Camada 4: KubeJS do ATM-11
   const kubejsDir = path.join(projectRoot, 'kubejs/dynamic_data');
-  const kubejsFiles = findJsonFiles(kubejsDir).filter((f) => f.includes('/silentgear_materials/'));
-  for (const file of kubejsFiles) {
-    try {
-      const mat = parseMaterialFile(file);
-      materials[mat.id] = mat;
-    } catch (e) {
-      console.warn(`[extract-official-data] Erro ao ler ${file}:`, e);
+  const kubejsMaterials: Record<string, Material> = {};
+  const kubejsOverrides: Record<string, Partial<Material>> = {};
+  if (fs.existsSync(kubejsDir)) {
+    const kubejsFiles = findJsonFiles(kubejsDir).filter((f) => f.includes('/silentgear_materials/'));
+    for (const file of kubejsFiles) {
+      try {
+        const mat = parseMaterialFile(file);
+        if (mat.id.startsWith('sgearmetalworks:')) {
+          kubejsOverrides[mat.id] = {
+            stats: mat.stats,
+            traits: mat.traits,
+            statModifiers: mat.statModifiers,
+            harvest_tier: mat.harvest_tier,
+          };
+        } else {
+          mat.source = 'kubejs';
+          kubejsMaterials[mat.id] = mat;
+        }
+      } catch (e) {
+        console.warn(`[extract-official-data] Erro ao ler ${file}:`, e);
+      }
     }
   }
+  layers['kubejs'] = {
+    id: 'kubejs',
+    name: 'KubeJS (ATM)',
+    version: '220614e',
+    materials: kubejsMaterials,
+    overrides: kubejsOverrides,
+  };
 
-  return resolveMaterialParents(materials);
+  // 5. Resolver catálogo completo padrão (com todos os addons ativos)
+  const resolvedMaterials = resolveCatalogWithAddons(
+    baseMaterials,
+    layers,
+    ['silentgems', 'sgearmetalworks', 'kubejs']
+  );
+
+  return {
+    baseMaterials,
+    layers,
+    resolvedMaterials,
+  };
+}
+
+export function extractAllMaterials(projectRoot: string): Record<string, Material> {
+  const { resolvedMaterials } = extractOfficialCatalogData(projectRoot);
+  return resolvedMaterials;
 }
 
 export function generateTsvDump(materials: Record<string, Material>, outTsvPath: string) {
@@ -222,12 +362,18 @@ export function exportCatalog(
   materials: Record<string, Material>,
   targetDir: string,
   sourceCommit?: string,
-  gearTypes: Record<string, GearType> = OFFICIAL_GEAR_TYPES
+  gearTypes: Record<string, GearType> = OFFICIAL_GEAR_TYPES,
+  baseMaterials?: Record<string, Material>,
+  layers?: Record<string, CatalogLayer>,
+  addons?: AddonConfig[]
 ) {
   const catalog: VersionCatalog = {
     version,
     ...(sourceCommit && { sourceCommit }),
     materials,
+    ...(baseMaterials && { baseMaterials }),
+    ...(layers && { layers }),
+    ...(addons && { addons }),
     gearTypes,
     traits: OFFICIAL_TRAITS,
   };
@@ -245,21 +391,26 @@ async function main() {
   const outDir = path.resolve(projectRoot, 'public/data/versions');
   console.log(`[extract-official-data] Extraindo dados oficiais para: ${outDir}`);
 
-  // 1. Extração completa a partir das 3 camadas
-  const materials = extractAllMaterials(projectRoot);
-  console.log(`[extract-official-data] Extraídos ${Object.keys(materials).length} materiais das fontes oficiais.`);
+  // 1. Extração estruturada a partir da base e camadas
+  const { baseMaterials, layers, resolvedMaterials } = extractOfficialCatalogData(projectRoot);
+  console.log(
+    `[extract-official-data] Extraídos ${Object.keys(baseMaterials).length} materiais base e ${Object.keys(resolvedMaterials).length} materiais resolvidos.`
+  );
 
   // 2. Derivar slots oficiais a partir das partes e hierarquia
   const derivedGearTypes = deriveGearTypes(OFFICIAL_GEAR_TYPES, projectRoot);
 
-  // 3. Exportar modpacks (com commit oficial e tipos derivados)
-  exportCatalog('atm11', materials, outDir, ATM11_COMMIT, derivedGearTypes);
-  exportCatalog('atm10', materials, outDir, ATM11_COMMIT, derivedGearTypes);
-  exportCatalog('atm9', materials, outDir, ATM11_COMMIT, derivedGearTypes);
+  // 3. Exportar modpacks (com addons, camadas e commit oficial)
+  exportCatalog('atm11', resolvedMaterials, outDir, ATM11_COMMIT, derivedGearTypes, baseMaterials, layers, ATM_ADDONS);
+  exportCatalog('atm10', resolvedMaterials, outDir, ATM11_COMMIT, derivedGearTypes, baseMaterials, layers, ATM_ADDONS);
+  exportCatalog('atm9', resolvedMaterials, outDir, ATM11_COMMIT, derivedGearTypes, baseMaterials, layers, ATM_ADDONS);
 
-  // 4. Exportar TSV dump em output/silentgear/material_export.tsv
+  // 4. Exportar versão oficial 1.21.1 (apenas base Silent Gear, sem addons)
+  exportCatalog('1.21.1', baseMaterials, outDir, SILENT_GEAR_COMMIT, derivedGearTypes, baseMaterials, {}, []);
+
+  // 5. Exportar TSV dump em output/silentgear/material_export.tsv
   const tsvPath = path.join(projectRoot, 'output/silentgear/material_export.tsv');
-  generateTsvDump(materials, tsvPath);
+  generateTsvDump(resolvedMaterials, tsvPath);
 
   console.log('[extract-official-data] Todos os catálogos oficiais gerados com sucesso!');
 }

@@ -98,6 +98,8 @@ export interface Material {
   traits: Partial<Record<PartSlot, MaterialTraitRef[]>>;
   texture?: string;
   parent?: string;
+  source?: string;
+  overriddenBy?: string[];
 }
 
 export interface GearType {
@@ -195,10 +197,29 @@ export interface CalculatedGearStats {
   traits: CalculatedTrait[];
 }
 
+export interface AddonConfig {
+  id: string;
+  name: string;
+  version: string;
+  enabled: boolean;
+  description?: string;
+}
+
+export interface CatalogLayer {
+  id: string;
+  name: string;
+  version: string;
+  materials?: Record<string, Material>;
+  overrides?: Record<string, Partial<Material>>;
+}
+
 export interface VersionCatalog {
   version: string;
   sourceCommit?: string;
   materials: Record<string, Material>;
+  baseMaterials?: Record<string, Material>;
+  layers?: Record<string, CatalogLayer>;
+  addons?: AddonConfig[];
   gearTypes: Record<string, GearType>;
   traits: Record<string, TraitInfo>;
 }
@@ -210,6 +231,7 @@ export interface VersionPreset {
   type: 'official' | 'modpack' | 'custom';
   minecraftVersion: string;
   description: string;
+  addons?: AddonConfig[];
 }
 
 export type OptimizationGoal =

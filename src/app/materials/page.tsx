@@ -13,6 +13,7 @@ import {
   ArrowUpDown,
   ExternalLink,
   Sparkles,
+  Layers,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -29,6 +30,7 @@ export default function MaterialsPage() {
     useGear();
   const [search, setSearch] = useState('');
   const [selectedCat, setSelectedCat] = useState<MaterialCategory | 'all'>('all');
+  const [selectedSource, setSelectedSource] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'name' | 'tier' | 'durability' | 'damage' | 'armor'>('tier');
   const [sortAsc, setSortAsc] = useState(false);
 
@@ -39,6 +41,9 @@ export default function MaterialsPage() {
     query: search,
     category: selectedCat,
     lang,
+  }).filter((m) => {
+    if (selectedSource === 'all') return true;
+    return (m.source || 'silentgear') === selectedSource;
   });
 
   // Ordenação
@@ -136,6 +141,24 @@ export default function MaterialsPage() {
             </select>
           </div>
 
+          {/* Seletor de Origem / Addon */}
+          <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1.5 rounded border border-mc-border text-xs font-mono">
+            <Layers className="w-3.5 h-3.5 text-mc-muted" />
+            <select
+              value={selectedSource}
+              onChange={(e) => setSelectedSource(e.target.value)}
+              className="bg-transparent text-mc-text font-semibold focus:outline-none cursor-pointer"
+            >
+              <option value="all" className="bg-mc-surface">
+                {lang === 'pt' ? 'Origem: Todas' : 'Source: All'}
+              </option>
+              <option value="silentgear" className="bg-mc-surface">Silent Gear</option>
+              <option value="silentgems" className="bg-mc-surface">Silent&apos;s Gems</option>
+              <option value="sgearmetalworks" className="bg-mc-surface">Metalworks</option>
+              <option value="kubejs" className="bg-mc-surface">KubeJS</option>
+            </select>
+          </div>
+
           {/* Ordenação */}
           <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1.5 rounded border border-mc-border text-xs font-mono">
             <ArrowUpDown className="w-3.5 h-3.5 text-mc-muted" />
@@ -204,7 +227,7 @@ export default function MaterialsPage() {
                       </button>
                     </td>
 
-                    {/* Nome e Cor */}
+                    {/* Nome, Cor e Addon Source */}
                     <td className="p-3">
                       <div className="flex items-center gap-2.5">
                         <span
@@ -212,10 +235,41 @@ export default function MaterialsPage() {
                           style={{ backgroundColor: mat.color }}
                         />
                         <div>
-                          <div className="font-bold text-mc-text text-sm font-sans">
-                            {mat.name[lang] || mat.name.en}
+                          <div className="font-bold text-mc-text text-sm font-sans flex items-center gap-2">
+                            <span>{mat.name[lang] || mat.name.en}</span>
+                            {mat.source && mat.source !== 'silentgear' && (
+                              <span
+                                className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase ${
+                                  mat.source === 'silentgems'
+                                    ? 'bg-purple-900/40 text-purple-300 border border-purple-700/50'
+                                    : mat.source === 'sgearmetalworks'
+                                    ? 'bg-amber-900/40 text-amber-300 border border-amber-700/50'
+                                    : mat.source === 'kubejs'
+                                    ? 'bg-pink-900/40 text-pink-300 border border-pink-700/50'
+                                    : 'bg-mc-card text-mc-muted border border-mc-border'
+                                }`}
+                              >
+                                {mat.source === 'silentgems'
+                                  ? "Silent's Gems"
+                                  : mat.source === 'sgearmetalworks'
+                                  ? 'Metalworks'
+                                  : mat.source === 'kubejs'
+                                  ? 'KubeJS'
+                                  : mat.source}
+                              </span>
+                            )}
                           </div>
-                          <div className="text-[10px] text-mc-muted">{mat.id}</div>
+                          <div className="text-[10px] text-mc-muted flex items-center gap-1.5">
+                            <span>{mat.id}</span>
+                            {mat.overriddenBy && mat.overriddenBy.length > 0 && (
+                              <span
+                                className="text-[9px] text-mc-gold font-mono"
+                                title={`Modificado pelas camadas: ${mat.overriddenBy.join(', ')}`}
+                              >
+                                (+{mat.overriddenBy.join(', ')})
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </td>

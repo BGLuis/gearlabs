@@ -1,0 +1,59 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "gem",
+      "intermediate"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:gems/carnelian"
+    },
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFE04D1D",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "gem.silentgems.carnelian"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "armor": 16,
+      "armor/boots": 2,
+      "armor/chestplate": 6,
+      "armor/helmet": 3,
+      "armor/leggings": 5,
+      "armor_durability": 37,
+      "armor_toughness": 4,
+      "attack_damage": 3,
+      "attack_speed": 0,
+      "charging_value": 1.2,
+      "draw_speed": 0,
+      "durability": 1280,
+      "enchantment_value": 10,
+      "harvest_speed": 7,
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgems:incorrect_for_carnelian_tools",
+        "level_hint": "2",
+        "name": "carnelian"
+      },
+      "magic_armor": 8,
+      "ranged_damage": 2,
+      "rarity": 45,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:gold_digger"
+        }
+      ]
+    },
+    "silentgear:rod": {},
+    "silentgear:setting": {}
+  }
+}

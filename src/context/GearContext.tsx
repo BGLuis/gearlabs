@@ -13,6 +13,7 @@ import {
   AlloyType,
   PartMaterialInstance,
   GearPartSelection,
+  AddonConfig,
 } from '@/types/silentgear';
 import {
   ATM11_CATALOG,
@@ -21,6 +22,7 @@ import {
   OFFICIAL_TRAITS,
 } from '@/data/defaultCatalog';
 import { calculateGearStats } from '@/lib/calculator';
+import { resolveCatalogWithAddons } from '@/lib/layer-resolver';
 import { decodeBuildFromHash, encodeBuildToHash } from '@/lib/url-state';
 import {
   addPartSubMaterial,
@@ -42,6 +44,10 @@ interface GearContextType {
   setVersion: (v: string) => void;
   presets: VersionPreset[];
   catalog: VersionCatalog;
+  addons: AddonConfig[];
+  activeAddons: string[];
+  toggleAddon: (addonId: string) => void;
+  setAddonEnabled: (addonId: string, enabled: boolean) => void;
   build: GearBuild;
   stats: CalculatedGearStats;
   setGearType: (typeId: string) => void;
@@ -82,6 +88,10 @@ const GearContext = createContext<GearContextType | null>(null);
 export function GearProvider({ children }: { children: React.ReactNode }) {
   const [version, setVersionState] = useState<string>('atm11');
   const [presets, setPresets] = useState<VersionPreset[]>(VERSION_PRESETS);
+  const [rawCatalog, setRawCatalog] = useState<VersionCatalog>(ATM11_CATALOG);
+  const [activeAddons, setActiveAddons] = useState<string[]>(() => {
+    return (ATM11_CATALOG.addons || []).filter((a) => a.enabled !== false).map((a) => a.id);
+  });
   const [catalog, setCatalog] = useState<VersionCatalog>(ATM11_CATALOG);
   const [customCatalogs, setCustomCatalogs] = useState<Record<string, VersionCatalog>>({});
   const [build, setBuild] = useState<GearBuild>(initialBuild);
@@ -144,10 +154,29 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
 
   // Carregar catálogo da versão selecionada
   useEffect(() => {
-    // Se for customizado
+    function setupCatalog(data: VersionCatalog) {
+      setRawCatalog(data);
+
+      // Ler addons salvos no localStorage para esta versão ou usar defaults
+      let initialActive: string[] = [];
+      const savedAddons = typeof window !== 'undefined' ? localStorage.getItem(`gearlabs_addons_${version}`) : null;
+      if (savedAddons) {
+        try {
+          const parsed = JSON.parse(savedAddons);
+          if (Array.isArray(parsed)) {
+            initialActive = parsed;
+          }
+        } catch (e) {
+          console.error('Failed to parse saved addons', e);
+        }
+      } else if (data.addons) {
+        initialActive = data.addons.filter((a) => a.enabled !== false).map((a) => a.id);
+      }
+      setActiveAddons(initialActive);
+    }
+
     if (customCatalogs[version]) {
-      setCatalog(customCatalogs[version]);
-      setInventory(new Set(Object.keys(customCatalogs[version].materials)));
+      setupCatalog(customCatalogs[version]);
       return;
     }
 
@@ -157,17 +186,107 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         const res = await fetch(`/data/versions/${version}/catalog.json`);
         if (res.ok) {
           const data = await res.json();
-          setCatalog(data);
-          setInventory(new Set(Object.keys(data.materials)));
+          setupCatalog(data);
           return;
         }
       } catch (err) {
         console.warn('Fallback to ATM11 catalog for version', version);
       }
-      setCatalog(ATM11_CATALOG);
+      setupCatalog(ATM11_CATALOG);
     }
     loadCatalog();
   }, [version, customCatalogs]);
+
+  // Resolver o catálogo efetivo aplicando camadas de addons ativos
+  useEffect(() => {
+    let resolvedMaterials = rawCatalog.materials;
+    if (rawCatalog.baseMaterials && rawCatalog.layers) {
+      resolvedMaterials = resolveCatalogWithAddons(
+        rawCatalog.baseMaterials,
+        rawCatalog.layers,
+        activeAddons
+      );
+    }
+
+    const effectiveAddons = (rawCatalog.addons || []).map((a) => ({
+      ...a,
+      enabled: activeAddons.includes(a.id),
+    }));
+
+    setCatalog({
+      ...rawCatalog,
+      materials: resolvedMaterials,
+      addons: effectiveAddons,
+    });
+  }, [rawCatalog, activeAddons]);
+
+  // Atualizar inventário e validar integridade da build quando o catálogo resolvido muda
+  useEffect(() => {
+    // 1. Filtrar inventário para remover materiais que deixaram de existir
+    setInventory((prev) => {
+      const available = new Set(Object.keys(catalog.materials));
+      if (prev.size === 0) return prev;
+      const next = new Set<string>();
+      for (const id of prev) {
+        if (available.has(id)) {
+          next.add(id);
+        }
+      }
+      return next;
+    });
+
+    // 2. Garantir que slots da build não apontem para materiais inexistentes
+    setBuild((prevBuild) => {
+      let changed = false;
+      const nextParts = { ...prevBuild.parts };
+      const availableIds = Object.keys(catalog.materials);
+      if (availableIds.length === 0) return prevBuild;
+      const fallbackId = availableIds.includes('silentgear:iron') ? 'silentgear:iron' : availableIds[0];
+
+      for (const [slotKey, part] of Object.entries(nextParts)) {
+        const slot = slotKey as PartSlot;
+        if (!part) continue;
+        let partChanged = false;
+        let newMatId = part.materialId;
+        if (!catalog.materials[part.materialId]) {
+          newMatId = fallbackId;
+          partChanged = true;
+        }
+
+        let newMaterials = part.materials;
+        if (newMaterials) {
+          const filteredSubs = newMaterials.filter((sub: SubMaterialSelection) => Boolean(catalog.materials[sub.materialId]));
+          if (filteredSubs.length !== newMaterials.length) {
+            newMaterials = filteredSubs.length > 0 ? filteredSubs : [{ materialId: newMatId, grade: 'NONE' }];
+            partChanged = true;
+          }
+        }
+
+        let newInstances = part.instances;
+        if (newInstances) {
+          const filteredInst = newInstances.map((inst) => {
+            if (inst.materialId && !catalog.materials[inst.materialId]) {
+              partChanged = true;
+              return { ...inst, materialId: newMatId };
+            }
+            return inst;
+          });
+          newInstances = filteredInst;
+        }
+
+        if (partChanged) {
+          changed = true;
+          nextParts[slot] = {
+            ...part,
+            materialId: newMatId,
+            ...(newMaterials && { materials: newMaterials }),
+            ...(newInstances && { instances: newInstances }),
+          };
+        }
+      }
+      return changed ? { ...prevBuild, parts: nextParts } : prevBuild;
+    });
+  }, [catalog]);
 
   // Atualizar URL de compartilhamento sempre que a build muda
   useEffect(() => {
@@ -518,6 +637,30 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     return false;
   }
 
+  function toggleAddon(addonId: string) {
+    setActiveAddons((prev) => {
+      const next = prev.includes(addonId)
+        ? prev.filter((id) => id !== addonId)
+        : [...prev, addonId];
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(`gearlabs_addons_${version}`, JSON.stringify(next));
+      }
+      return next;
+    });
+  }
+
+  function setAddonEnabled(addonId: string, enabled: boolean) {
+    setActiveAddons((prev) => {
+      const next = enabled
+        ? Array.from(new Set([...prev, addonId]))
+        : prev.filter((id) => id !== addonId);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(`gearlabs_addons_${version}`, JSON.stringify(next));
+      }
+      return next;
+    });
+  }
+
   return (
     <GearContext.Provider
       value={{
@@ -525,6 +668,10 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         setVersion,
         presets,
         catalog,
+        addons: catalog.addons || [],
+        activeAddons,
+        toggleAddon,
+        setAddonEnabled,
         build,
         stats,
         setGearType,
