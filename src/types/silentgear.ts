@@ -36,6 +36,8 @@ export type StatOperation =
 export interface StatValueModifier {
   value: number;
   operation?: StatOperation;
+  /** Multiplicador aplicado depois de grau e starcharge (CrudeMaterialModifier, último modificador do item). */
+  postMultiplier?: number;
 }
 
 export type StatModifierEntry = number | StatValueModifier | StatValueModifier[];

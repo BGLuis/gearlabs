@@ -429,7 +429,8 @@ export const CRUDE_PROPERTY_MULTIPLIER = 0.8;
 
 /**
  * Compõe as propriedades de um slot feito de múltiplos sub-materiais (liga ou tecido misto),
- * aplicando média ponderada, sinergia de SynergyUtils e penalidade de liga crua antes do fluxo canônico.
+ * aplicando média ponderada e sinergia de SynergyUtils; a penalidade da liga crua vai em postMultiplier
+ * porque o jogo a aplica depois de grau e starcharge.
  */
 export function composeCompoundSlotModifiers(
   subMaterials: Material[],
@@ -471,12 +472,10 @@ export function composeCompoundSlotModifiers(
       if (Math.abs(synergy - 1.0) >= 1e-6) {
         val = applySynergyBonus(val, synergy);
       }
-      if (isCrude) {
-        val = val * crudeMultiplier;
-      }
       return {
         ...m,
         value: val,
+        ...(isCrude ? { postMultiplier: crudeMultiplier } : {}),
       };
     });
   }
@@ -608,6 +607,7 @@ export function applyEnhancementsToModifiers(
       ? applyGradeBonus(mod.value, gradeMul)
       : mod.value;
     value = applyStarcharge(value, statKey, starchargeLevel, chargingValue, op);
+    if (mod.postMultiplier !== undefined) value *= mod.postMultiplier;
     return { value, operation: op };
   });
 }

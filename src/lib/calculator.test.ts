@@ -1199,44 +1199,26 @@ describe('calculateGearStats', () => {
   });
 
   describe('Issue #30: Multiplicador da Liga Crua e Tipos de Liga', () => {
-    it('liga crua multiplica por 0,8 as propriedades afetadas por sinergia e preserva propriedades não afetadas (Critério 2)', () => {
+    it('liga crua marca com 0,8 (aplicado depois de grau e starcharge) só as propriedades afetadas por sinergia (Critério 2)', () => {
       const iron = ATM11_CATALOG.materials['silentgear:iron']!;
       const gold = ATM11_CATALOG.materials['silentgear:gold']!;
-
       const subMaterials = [iron, gold];
 
-      // Compor como metal (padrão / 1.0x)
       const metalComposed = composeCompoundSlotModifiers(subMaterials, 'main', false, 'sword', 'metal');
-
-      // Compor como crude (0.8x)
       const crudeComposed = composeCompoundSlotModifiers(subMaterials, 'main', false, 'sword', 'crude');
 
       expect(metalComposed.synergy).toBeCloseTo(crudeComposed.synergy, 5);
 
-      // Durabilidade (afetada por sinergia): deve ter exatamente x0.8
-      const metalDur = metalComposed.durabilityMods[0].value;
-      const crudeDur = crudeComposed.durabilityMods[0].value;
-      expect(crudeDur).toBeCloseTo(metalDur * 0.8, 4);
+      for (const key of ['durabilityMods', 'meleeDamageMods', 'harvestSpeedMods'] as const) {
+        expect(crudeComposed[key][0].value, key).toBeCloseTo(metalComposed[key][0].value, 4);
+        expect(crudeComposed[key][0].postMultiplier, key).toBe(0.8);
+        expect(metalComposed[key][0].postMultiplier, key).toBeUndefined();
+      }
 
-      // Dano corpo a corpo (afetado por sinergia): deve ter exatamente x0.8
-      const metalDamage = metalComposed.meleeDamageMods[0].value;
-      const crudeDamage = crudeComposed.meleeDamageMods[0].value;
-      expect(crudeDamage).toBeCloseTo(metalDamage * 0.8, 4);
-
-      // Velocidade de colheita (afetada por sinergia): deve ter exatamente x0.8
-      const metalHarvest = metalComposed.harvestSpeedMods[0].value;
-      const crudeHarvest = crudeComposed.harvestSpeedMods[0].value;
-      expect(crudeHarvest).toBeCloseTo(metalHarvest * 0.8, 4);
-
-      // Velocidade de ataque (NÃO afetada por sinergia): NÃO deve ser multiplicada por 0.8
-      const metalAtkSpd = metalComposed.attackSpeedMods[0].value;
-      const crudeAtkSpd = crudeComposed.attackSpeedMods[0].value;
-      expect(crudeAtkSpd).toBeCloseTo(metalAtkSpd, 4);
-
-      // Rarity (NÃO afetada por sinergia): NÃO deve ser multiplicada por 0.8
-      const metalRarity = metalComposed.rarityMods[0].value;
-      const crudeRarity = crudeComposed.rarityMods[0].value;
-      expect(crudeRarity).toBeCloseTo(metalRarity, 4);
+      for (const key of ['attackSpeedMods', 'rarityMods'] as const) {
+        expect(crudeComposed[key][0].value, key).toBeCloseTo(metalComposed[key][0].value, 4);
+        expect(crudeComposed[key][0].postMultiplier, key).toBeUndefined();
+      }
     });
 
     it('calculateGearStats aplica penalidade da liga crua no resultado final da arma', () => {
