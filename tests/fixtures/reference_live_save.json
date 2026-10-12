@@ -1,0 +1,332 @@
+{
+  "description": "Itens Silent Gear lidos do save local ATM11 (players/data, componentes silentgear:construction e silentgear:properties). Gerado por leitura do NBT, sem escrever no save.",
+  "capturedFrom": "ATM11 26.1.2, Silent Gear 4.2.3, Metalworks 1.6.0",
+  "items": {
+    "helmet": {
+      "gearTypeId": "helmet",
+      "parts": {
+        "main": {
+          "materialId": "silentgear:tyrian_steel",
+          "grade": "MAX",
+          "starcharge": 3,
+          "materials": [
+            {
+              "materialId": "silentgear:tyrian_steel"
+            },
+            {
+              "materialId": "silentgear:unobtainium"
+            },
+            {
+              "materialId": "sgearmetalworks:uru_metal"
+            },
+            {
+              "materialId": "silentgear:vibranium"
+            },
+            {
+              "materialId": "silentgear:allthemodium"
+            }
+          ],
+          "instances": [
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            }
+          ]
+        },
+        "lining": {
+          "materialId": "silentgear:leather",
+          "grade": "MAX",
+          "starcharge": 3,
+          "materials": [
+            {
+              "materialId": "silentgear:leather"
+            },
+            {
+              "materialId": "silentgear:fine_silk_cloth"
+            },
+            {
+              "materialId": "silentgear:slime"
+            },
+            {
+              "materialId": "silentgear:wool/white"
+            },
+            {
+              "materialId": "silentgear:phantom_membrane"
+            }
+          ]
+        },
+        "tip": {
+          "materialId": "silentgear:tyrian_steel",
+          "grade": "MAX",
+          "materials": [
+            {
+              "materialId": "silentgear:tyrian_steel"
+            },
+            {
+              "materialId": "silentgear:unobtainium"
+            },
+            {
+              "materialId": "sgearmetalworks:uru_metal"
+            },
+            {
+              "materialId": "silentgear:vibranium"
+            },
+            {
+              "materialId": "silentgear:allthemodium"
+            }
+          ]
+        },
+        "coating": {
+          "materialId": "silentgear:netherite",
+          "grade": "MAX",
+          "starcharge": 3
+        }
+      },
+      "expectedInGameProperties": {
+        "charging_value": 0.0,
+        "armor": 34.32215881347656,
+        "enchantment_value": 3229.20068359375,
+        "armor_durability": 155227.375,
+        "magic_armor": 955.7791137695312,
+        "armor_toughness": 164.90550231933594,
+        "durability": 59631.5234375,
+        "knockback_resistance": 1.5064178705215454,
+        "repair_value": 0.5,
+        "rarity": 7655.560546875,
+        "repair_efficiency": 1.0
+      },
+      "expectedHarvestTier": null,
+      "expectedTraits": [
+        "silentgear:advanced_aquatic:1",
+        "silentgear:advanced_flame_ward:1",
+        "silentgear:aquatic:1",
+        "silentgear:bounce:1",
+        "silentgear:brilliant:1",
+        "silentgear:crushing:5",
+        "silentgear:cure_levitation:1",
+        "silentgear:cure_nausea:1",
+        "silentgear:cure_poison:1",
+        "silentgear:cure_wither:1",
+        "silentgear:fireproof:1",
+        "silentgear:flame_ward:1",
+        "silentgear:flexible:3",
+        "silentgear:indestructible:1",
+        "silentgear:light:2",
+        "silentgear:malleable:5",
+        "silentgear:sting_resist:1"
+      ]
+    },
+    "chestplate": {
+      "gearTypeId": "chestplate",
+      "parts": {
+        "main": {
+          "materialId": "silentgear:tyrian_steel",
+          "grade": "MAX",
+          "starcharge": 3,
+          "materials": [
+            {
+              "materialId": "silentgear:tyrian_steel"
+            },
+            {
+              "materialId": "silentgear:unobtainium"
+            },
+            {
+              "materialId": "sgearmetalworks:uru_metal"
+            },
+            {
+              "materialId": "silentgear:vibranium"
+            },
+            {
+              "materialId": "silentgear:allthemodium"
+            }
+          ],
+          "instances": [
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            }
+          ]
+        },
+        "coating": {
+          "materialId": "silentgear:netherite",
+          "grade": "MAX",
+          "starcharge": 3
+        }
+      },
+      "expectedInGameProperties": {
+        "charging_value": 0.0,
+        "armor": 40.9727668762207,
+        "enchantment_value": 3229.200439453125,
+        "armor_durability": 155211.0625,
+        "magic_armor": 946.9847412109375,
+        "armor_toughness": 159.20741271972656,
+        "durability": 59457.77734375,
+        "knockback_resistance": 1.2999998331069946,
+        "repair_value": 0.5,
+        "rarity": 164.05905151367188,
+        "repair_efficiency": 1.0
+      },
+      "expectedHarvestTier": null,
+      "expectedTraits": [
+        "silentgear:advanced_aquatic:1",
+        "silentgear:advanced_flame_ward:1",
+        "silentgear:aquatic:1",
+        "silentgear:brilliant:1",
+        "silentgear:crushing:5",
+        "silentgear:cure_levitation:1",
+        "silentgear:cure_nausea:1",
+        "silentgear:cure_poison:1",
+        "silentgear:cure_wither:1",
+        "silentgear:fireproof:1",
+        "silentgear:flame_ward:1",
+        "silentgear:indestructible:1",
+        "silentgear:malleable:5",
+        "silentgear:sting_resist:1"
+      ]
+    },
+    "katana": {
+      "gearTypeId": "katana",
+      "parts": {
+        "rod": {
+          "materialId": "silentgear:bone",
+          "grade": "NONE"
+        },
+        "main": {
+          "materialId": "silentgear:azure_electrum",
+          "grade": "MAX",
+          "starcharge": 3,
+          "materials": [
+            {
+              "materialId": "silentgear:azure_electrum"
+            },
+            {
+              "materialId": "silentgear:unobtainium"
+            },
+            {
+              "materialId": "sgearmetalworks:uru_metal"
+            },
+            {
+              "materialId": "silentgear:vibranium"
+            }
+          ],
+          "instances": [
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            }
+          ]
+        },
+        "coating": {
+          "materialId": "silentgear:netherite",
+          "grade": "MAX",
+          "starcharge": 3
+        },
+        "tip": {
+          "materialId": "silentgear:quartz",
+          "grade": "MAX",
+          "instances": [
+            {
+              "grade": "MAX"
+            },
+            {
+              "grade": "MAX",
+              "starcharge": 3
+            }
+          ]
+        },
+        "grip": {
+          "materialId": "silentgear:phantom_membrane",
+          "grade": "MAX",
+          "starcharge": 3
+        }
+      },
+      "expectedInGameProperties": {
+        "enchantment_value": 2956.908203125,
+        "harvest_speed": 94.76776123046875,
+        "armor_durability": 156744.171875,
+        "block_reach": 0.0,
+        "attack_reach": 0.0,
+        "repair_value": 0.5,
+        "rarity": 192.79531860351562,
+        "attack_speed": 4.0,
+        "repair_efficiency": 1.149999976158142,
+        "charging_value": 0.0,
+        "durability": 82456.8203125,
+        "attack_damage": 110.36351776123047,
+        "magic_damage": 34.50861740112305
+      },
+      "expectedHarvestTier": "unobtainium",
+      "expectedTraits": [
+        "silentgear:advanced_aquatic:1",
+        "silentgear:advanced_flame_ward:1",
+        "silentgear:ancient:2",
+        "silentgear:aquatic:1",
+        "silentgear:brilliant:1",
+        "silentgear:chipping:1",
+        "silentgear:crushing:5",
+        "silentgear:cure_levitation:1",
+        "silentgear:cure_nausea:1",
+        "silentgear:cure_poison:1",
+        "silentgear:cure_wither:1",
+        "silentgear:fireproof:1",
+        "silentgear:flame_ward:1",
+        "silentgear:flexible:2",
+        "silentgear:indestructible:1",
+        "silentgear:jagged:3",
+        "silentgear:malleable:5"
+      ]
+    }
+  }
+}
