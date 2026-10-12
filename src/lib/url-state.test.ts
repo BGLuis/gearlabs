@@ -226,6 +226,26 @@ describe('url-state', () => {
       expect(mainPart?.instances?.[7].grade).toBe('NONE');
       expect(mainPart?.instances?.[7].starcharge).toBeUndefined();
     });
+    it('peças de reforço mantêm todas as instâncias do item (katana com 2 pontas de quartzo)', () => {
+      const build: GearBuild = {
+        gearTypeId: 'katana',
+        parts: {
+          main: { materialId: 'silentgear:iron' },
+          tip: {
+            materialId: 'silentgear:quartz',
+            grade: 'MAX',
+            instances: [{ grade: 'MAX' }, { grade: 'MAX', starcharge: 3 }],
+          },
+        },
+      };
+
+      const decoded = decodeBuildFromHash(encodeBuildToHash(build, 'atm11'));
+
+      expect(decoded?.build.parts.tip?.instances).toEqual([
+        { grade: 'MAX' },
+        { grade: 'MAX', starcharge: 3 },
+      ]);
+    });
   });
 });
 

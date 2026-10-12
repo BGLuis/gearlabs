@@ -9,7 +9,7 @@ import {
   AlloyType,
   PartMaterialInstance,
 } from '@/types/silentgear';
-import { getPartInstanceCount, syncPartInstancesWithCount } from './parts';
+import { getEffectivePartInstanceCount, getPartInstanceCount, syncPartInstancesWithCount } from './parts';
 
 interface SerializedInstance {
   g?: Grade;
@@ -126,7 +126,7 @@ export function decodeBuildFromHash(
             }));
             instances = syncPartInstancesWithCount(
               { materialId: primaryId, grade: primaryGrade, starcharge: data.s || 0, instances: decodedInst },
-              count
+              getEffectivePartInstanceCount(parsed.t, slot as PartSlot, { instances: decodedInst })
             );
           } else {
             // Critério 2 (Issue #33): Builds de URL antigas carregam como lista de uma instância repetida

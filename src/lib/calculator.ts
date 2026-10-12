@@ -24,7 +24,7 @@ import {
   PartMaterialInstance,
 } from '@/types/silentgear';
 import { parseHarvestTier } from './datapack-parser';
-import { getPartInstanceCount, syncPartInstancesWithCount } from './parts';
+import { getEffectivePartInstanceCount, getPartInstanceCount, syncPartInstancesWithCount } from './parts';
 import { getGearTypeAncestors } from './gear-type-hierarchy';
 import { collectActiveTraits } from './trait-conditions';
 
@@ -632,7 +632,7 @@ export function resolveSlotInstances(
   slot: PartSlot
 ): ResolvedSlotInstance[] {
   if (!selection) return [];
-  const count = getPartInstanceCount(gearTypeId, slot);
+  const count = getEffectivePartInstanceCount(gearTypeId, slot, selection);
   const syncedInstances = syncPartInstancesWithCount(selection, count);
   const defaultGrade = selection.grade || 'NONE';
   const defaultStarcharge = selection.starcharge || 0;

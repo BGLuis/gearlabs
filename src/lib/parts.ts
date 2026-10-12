@@ -368,6 +368,22 @@ export function getPartInstanceCount(gearTypeId: string, slot: PartSlot): number
   return DEFAULT_PART_MATERIAL_COUNTS[gearTypeId]?.[slot] ?? (slot === 'rod' ? 2 : 1);
 }
 
+const UPGRADE_SLOTS: PartSlot[] = ['tip', 'grip', 'coating', 'lining', 'binding'];
+
+/**
+ * Peças de reforço (tip, grip, coating...) guardam quantas instâncias o item tiver:
+ * a katana do save tem 2 pontas de quartzo. Nas demais peças a contagem é a canônica.
+ */
+export function getEffectivePartInstanceCount(
+  gearTypeId: string,
+  slot: PartSlot,
+  selection?: Pick<GearPartSelection, 'instances'>
+): number {
+  const canonical = getPartInstanceCount(gearTypeId, slot);
+  if (!UPGRADE_SLOTS.includes(slot)) return canonical;
+  return Math.max(canonical, selection?.instances?.length ?? 0);
+}
+
 /**
  * Cria uma lista padrão de instâncias com contagem N repetindo o grau e starcharge padrão.
  */
