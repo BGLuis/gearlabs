@@ -64,7 +64,10 @@ export function encodeBuildToHash(build: GearBuild, version: string): string {
         if (hasHeterogeneous) {
           partData.inst = sel.instances.map((i) => ({
             ...(i.grade && i.grade !== 'NONE' ? { g: i.grade } : {}),
-            ...(i.starcharge && i.starcharge > 0 ? { s: i.starcharge } : {}),
+            // 0 só é gravado quando a parte tem starcharge: sem isso o decode herdaria o valor da parte
+            ...(i.starcharge !== undefined && (i.starcharge > 0 || (sel.starcharge ?? 0) > 0)
+              ? { s: i.starcharge }
+              : {}),
             ...(i.materialId && i.materialId !== sel.materialId ? { m: i.materialId } : {}),
             ...(i.alloyType ? { a: i.alloyType } : {}),
             ...(i.materials ? { mats: i.materials.map((sm) => ({ m: sm.materialId })) } : {}),
@@ -116,7 +119,7 @@ export function decodeBuildFromHash(
           if (data.inst && data.inst.length > 0) {
             const decodedInst: PartMaterialInstance[] = data.inst.map((i) => ({
               grade: i.g || 'NONE',
-              ...(i.s && i.s > 0 ? { starcharge: i.s } : {}),
+              ...(i.s !== undefined ? { starcharge: i.s } : {}),
               ...(i.m ? { materialId: i.m } : {}),
               ...(i.a ? { alloyType: i.a } : {}),
               ...(i.mats ? { materials: i.mats.map((sm) => ({ materialId: sm.m })) } : {}),
