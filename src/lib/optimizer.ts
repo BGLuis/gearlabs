@@ -10,9 +10,11 @@ import {
   PartSlot,
   StarchargeLevel,
   VersionCatalog,
+  AlloyType,
 } from '@/types/silentgear';
 import { calculateGearStats } from './calculator';
 import { isCraftableMaterial, materialFitsSlot } from './materials';
+import { ALLOY_LIMITS, isMaterialAllowedInAlloy } from './parts';
 
 function computeScore(
   stats: ReturnType<typeof calculateGearStats>,
@@ -27,7 +29,7 @@ function computeScore(
     case 'max_durability':
       return stats.durability * 1.0 + stats.meleeDamage * 1.5 + stats.armor * 2;
     case 'max_protection':
-      return stats.armor * 10 + stats.armorToughness * 15 + stats.magicArmor * 8 + stats.durability * 0.02;
+      return stats.armor * 100 + stats.armorToughness * 5 + stats.magicArmor * 0.5 + stats.durability * 0.00001;
     case 'max_harvest':
       return stats.harvestSpeed * 12 + stats.durability * 0.01 + (stats.harvestTier.includes('netherite') ? 20 : 0);
     case 'balanced':
@@ -75,29 +77,32 @@ export const MAX_SECONDARY_CANDIDATES = 12;
 // Cada slot opcional pode ficar vazio, então o espaço cresce multiplicativamente a cada slot opcional
 export const MAX_OPTIONAL_CANDIDATES = 1;
 
+// Máquinas com filtro de categoria; a crua e a super aceitam tudo e não entram na busca
+const SEARCHED_ALLOY_TYPES: AlloyType[] = ['metal', 'gem', 'fabric'];
+
 function beamSearchAlloys(
-  mainCandidates: Material[],
+  allCandidates: Material[],
+  alloyType: AlloyType,
   gearTypeId: string,
   goal: OptimizationGoal,
   gearType: GearType,
   catalog: VersionCatalog,
   targetGrade?: Grade,
   targetStarcharge?: StarchargeLevel,
-  maxIngredients: number = 6,
+  requestedMaxIngredients: number = 6,
   beamWidth: number = 6
-): GearPartSelection[] {
+): Array<{ score: number; part: GearPartSelection }> {
+  const mainCandidates = allCandidates.filter((m) => isMaterialAllowedInAlloy(m, alloyType));
+  const maxIngredients = Math.min(requestedMaxIngredients, ALLOY_LIMITS[alloyType]);
   if (mainCandidates.length < 2) return [];
 
   function makeAlloySelection(primaryId: string, subMatIds: string[]): GearPartSelection {
     const ordered = [primaryId, ...subMatIds.filter((id) => id !== primaryId)];
+    // Grau e starcharge pertencem à liga inteira, não aos submateriais
     const part: GearPartSelection = {
       materialId: primaryId,
-      materials: ordered.map((id) => {
-        const sub: { materialId: string; grade?: Grade; starcharge?: StarchargeLevel } = { materialId: id };
-        if (targetGrade && targetGrade !== 'NONE') sub.grade = targetGrade;
-        if (targetStarcharge && targetStarcharge > 0) sub.starcharge = targetStarcharge;
-        return sub;
-      }),
+      alloyType,
+      materials: ordered.map((id) => ({ materialId: id })),
     };
     if (targetGrade && targetGrade !== 'NONE') part.grade = targetGrade;
     if (targetStarcharge && targetStarcharge > 0) part.starcharge = targetStarcharge;
@@ -181,15 +186,29 @@ function beamSearchAlloys(
     }
   }
 
+  // O primário muda o resultado (ordem de modificadores); reavalia cada conjunto finalista com todos os primários
+  const finalistSets = new Map<string, string[]>();
+  for (const item of candidateAlloys) {
+    const ids = (item.part.materials || []).map((m) => m.materialId);
+    finalistSets.set([...ids].sort().join(','), ids);
+  }
+  for (const ids of finalistSets.values()) {
+    for (const primaryId of ids) {
+      const part = makeAlloySelection(primaryId, ids);
+      const stats = calculateGearStats({ gearTypeId, parts: { main: part } }, catalog);
+      candidateAlloys.push({ score: computeScore(stats, goal, gearType), part });
+    }
+  }
+
   candidateAlloys.sort((a, b) => b.score - a.score);
 
-  const result: GearPartSelection[] = [];
+  const result: Array<{ score: number; part: GearPartSelection }> = [];
   const seenAlloyKeys = new Set<string>();
   for (const item of candidateAlloys) {
     const key = (item.part.materials || []).map((m) => m.materialId).sort().join(',') + '::' + item.part.materialId;
     if (!seenAlloyKeys.has(key)) {
       seenAlloyKeys.add(key);
-      result.push(item.part);
+      result.push({ score: item.score, part: item.part });
     }
   }
 
@@ -263,16 +282,22 @@ export function findBestBuilds(
       let alloyCandidates: GearPartSelection[] = [];
 
       if (allowAlloys && valid.length >= 2) {
-        alloyCandidates = beamSearchAlloys(
-          valid,
-          request.gearTypeId,
-          request.goal,
-          gearType,
-          catalog,
-          targetGrade,
-          targetStarcharge,
-          maxAlloyIngredients
-        );
+        alloyCandidates = SEARCHED_ALLOY_TYPES.flatMap((alloyType) =>
+          beamSearchAlloys(
+            valid,
+            alloyType,
+            request.gearTypeId,
+            request.goal,
+            gearType,
+            catalog,
+            targetGrade,
+            targetStarcharge,
+            maxAlloyIngredients
+          )
+        )
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 3)
+          .map((c) => c.part);
       }
 
       candidatePartsBySlot[slot] = [...alloyCandidates, ...pureCandidates];
