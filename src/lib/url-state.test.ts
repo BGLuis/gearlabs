@@ -246,6 +246,18 @@ describe('url-state', () => {
         { grade: 'MAX', starcharge: 3 },
       ]);
     });
+    it('URL com milhares de instâncias não infla o tamanho da parte', () => {
+      const payload = {
+        v: 'atm11',
+        t: 'katana',
+        p: { tip: { m: 'silentgear:quartz', inst: Array.from({ length: 5000 }, () => ({ g: 'MAX' })) } },
+      };
+      const hash = LZString.compressToEncodedURIComponent(JSON.stringify(payload));
+
+      const decoded = decodeBuildFromHash(hash);
+
+      expect(decoded?.build.parts.tip?.instances?.length).toBeLessThanOrEqual(8);
+    });
   });
 });
 

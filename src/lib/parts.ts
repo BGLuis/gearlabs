@@ -370,6 +370,9 @@ export function getPartInstanceCount(gearTypeId: string, slot: PartSlot): number
 
 const UPGRADE_SLOTS: PartSlot[] = ['tip', 'grip', 'coating', 'lining', 'binding'];
 
+/** Teto de instâncias por peça de reforço; a URL é entrada não confiável e não pode ditar o tamanho do cálculo. */
+export const MAX_UPGRADE_INSTANCES = 8;
+
 /**
  * Peças de reforço (tip, grip, coating...) guardam quantas instâncias o item tiver:
  * a katana do save tem 2 pontas de quartzo. Nas demais peças a contagem é a canônica.
@@ -381,7 +384,7 @@ export function getEffectivePartInstanceCount(
 ): number {
   const canonical = getPartInstanceCount(gearTypeId, slot);
   if (!UPGRADE_SLOTS.includes(slot)) return canonical;
-  return Math.max(canonical, selection?.instances?.length ?? 0);
+  return Math.min(MAX_UPGRADE_INSTANCES, Math.max(canonical, selection?.instances?.length ?? 0));
 }
 
 /**

@@ -9,7 +9,14 @@ import {
   AlloyType,
   PartMaterialInstance,
 } from '@/types/silentgear';
-import { getEffectivePartInstanceCount, getPartInstanceCount, syncPartInstancesWithCount } from './parts';
+import {
+  getEffectivePartInstanceCount,
+  getPartInstanceCount,
+  MAX_UPGRADE_INSTANCES,
+  syncPartInstancesWithCount,
+} from './parts';
+
+const MAX_INSTANCES_PER_PART = Math.max(MAX_UPGRADE_INSTANCES, 16);
 
 interface SerializedInstance {
   g?: Grade;
@@ -117,7 +124,7 @@ export function decodeBuildFromHash(
           let instances: PartMaterialInstance[] | undefined;
           const count = getPartInstanceCount(parsed.t, slot as PartSlot);
           if (data.inst && data.inst.length > 0) {
-            const decodedInst: PartMaterialInstance[] = data.inst.map((i) => ({
+            const decodedInst: PartMaterialInstance[] = data.inst.slice(0, MAX_INSTANCES_PER_PART).map((i) => ({
               grade: i.g || 'NONE',
               ...(i.s !== undefined ? { starcharge: i.s } : {}),
               ...(i.m ? { materialId: i.m } : {}),
