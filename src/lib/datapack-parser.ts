@@ -454,8 +454,28 @@ export function parseMaterialJson(filePath: string, json: any): Material | null 
     }
   }
 
-  // Nível / Tier
-  const tier = json.availability?.tier ?? json.tier ?? (stats.main?.harvest_tier ? 2 : 1);
+  // Nível / Tier (Issue #53: derivado do harvest_tier real)
+  const harvestLevel =
+    stats.main?.harvest_tier?.level ??
+    stats.coating?.harvest_tier?.level ??
+    stats.tip?.harvest_tier?.level ??
+    stats.rod?.harvest_tier?.level;
+
+  const tier =
+    typeof harvestLevel === 'number'
+      ? harvestLevel
+      : typeof json.availability?.tier === 'number'
+      ? json.availability.tier
+      : typeof json.tier === 'number'
+      ? json.tier
+      : 0;
+
+  const rawType = json.type ? String(json.type) : undefined;
+  const isCompound = rawType === 'silentgear:compound';
+  const rawBlacklist = json.crafting?.gear_type_blacklist;
+  const gear_type_blacklist = Array.isArray(rawBlacklist)
+    ? rawBlacklist.map(String)
+    : undefined;
 
   const material: Material = {
     id,
@@ -469,6 +489,9 @@ export function parseMaterialJson(filePath: string, json: any): Material | null 
     color,
     stats,
     traits,
+    ...(rawType && { type: rawType }),
+    ...(gear_type_blacklist && gear_type_blacklist.length > 0 && { gear_type_blacklist }),
+    ...(isCompound && { isCompound: true }),
   };
 
   if (json.parent && json.parent !== 'silentgear:empty') {
@@ -585,7 +608,18 @@ export function resolveMaterialParents(
     }
 
     // Tier: herda do pai se o filho não possuir harvest_tier próprio
-    const tier = raw.tier ?? parentMat.tier ?? (mergedStats.main?.harvest_tier ? 2 : 1);
+    const resolvedHarvestLevel =
+      mergedStats.main?.harvest_tier?.level ??
+      mergedStats.coating?.harvest_tier?.level ??
+      mergedStats.tip?.harvest_tier?.level ??
+      mergedStats.rod?.harvest_tier?.level;
+
+    const tier =
+      typeof resolvedHarvestLevel === 'number'
+        ? resolvedHarvestLevel
+        : typeof raw.tier === 'number' && raw.tier > 0
+        ? raw.tier
+        : parentMat.tier ?? 0;
 
     const result: Material = {
       ...raw,
@@ -594,6 +628,9 @@ export function resolveMaterialParents(
       tier,
       stats: mergedStats,
       traits: mergedTraits,
+      gear_type_blacklist: raw.gear_type_blacklist ?? parentMat.gear_type_blacklist,
+      type: raw.type ?? parentMat.type,
+      isCompound: raw.isCompound ?? parentMat.isCompound,
     };
 
     resolved[id] = result;

@@ -370,10 +370,12 @@ export function MaterialCombobox({
                         {mat.name[lang] || mat.name.en}
                       </span>
 
-                      {/* Tier */}
-                      <span className="text-[10px] text-mc-muted font-mono shrink-0">
-                        [T{mat.tier}]
-                      </span>
+                      {/* Tier: exibe nível real de coleta */}
+                      {mat.tier > 0 && (
+                        <span className="text-[10px] text-mc-muted font-mono shrink-0">
+                          [T{mat.tier}]
+                        </span>
+                      )}
                     </div>
 
                     {/* Lado Direito: Stat Chave do Slot + Ícone de Selecionado */}

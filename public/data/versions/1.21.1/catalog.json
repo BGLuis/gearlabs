@@ -80,6 +80,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:aluminum_steel": {
@@ -88,7 +89,7 @@
         "en": "Aluminum Steel",
         "pt": "Aluminum Steel"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -156,6 +157,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:amethyst": {
@@ -164,7 +166,7 @@
         "en": "Amethyst",
         "pt": "Amethyst"
       },
-      "tier": 2,
+      "tier": 1.5,
       "category": "gem",
       "categories": [
         "gem",
@@ -222,6 +224,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:azure_electrum": {
@@ -230,7 +233,7 @@
         "en": "Azure Electrum",
         "pt": "Electro Lazúli"
       },
-      "tier": 2,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -321,6 +324,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:azure_silver": {
@@ -329,7 +333,7 @@
         "en": "Azure Silver",
         "pt": "Prata Lazúli"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -431,6 +435,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bamboo": {
@@ -439,7 +444,7 @@
         "en": "Bamboo",
         "pt": "Bamboo"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -497,6 +502,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:barrier": {
@@ -505,7 +511,7 @@
         "en": "Barrier",
         "pt": "Barrier"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "intangible",
       "categories": [
         "intangible"
@@ -551,6 +557,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:basalt": {
@@ -559,7 +566,7 @@
         "en": "Basalt",
         "pt": "Basalt"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -628,6 +635,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bismuth": {
@@ -700,6 +708,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bismuth_brass": {
@@ -772,6 +781,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bismuth_steel": {
@@ -780,7 +790,7 @@
         "en": "Bismuth Steel",
         "pt": "Bismuth Steel"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -844,6 +854,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:blackstone": {
@@ -852,7 +863,7 @@
         "en": "Blackstone",
         "pt": "Blackstone"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -925,6 +936,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:blaze_gold": {
@@ -1056,6 +1068,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:blaze_rod": {
@@ -1064,7 +1077,7 @@
         "en": "Blaze Rod",
         "pt": "Blaze Rod"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [
         "metal"
@@ -1098,6 +1111,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bone": {
@@ -1106,7 +1120,7 @@
         "en": "Bone",
         "pt": "Bone"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "organic",
       "categories": [
         "organic",
@@ -1160,6 +1174,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:brass": {
@@ -1232,6 +1247,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:breeze_rod": {
@@ -1240,7 +1256,7 @@
         "en": "Breeze Rod",
         "pt": "Haste de Brisa"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [
         "metal"
@@ -1274,6 +1290,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bronze": {
@@ -1373,6 +1390,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:compressed_iron": {
@@ -1381,7 +1399,7 @@
         "en": "Compressed Iron",
         "pt": "Compressed Iron"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -1441,6 +1459,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:copper": {
@@ -1449,7 +1468,7 @@
         "en": "Copper",
         "pt": "Cobre"
       },
-      "tier": 2,
+      "tier": 1.5,
       "category": "metal",
       "categories": [
         "metal",
@@ -1543,6 +1562,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:crimson_iron": {
@@ -1551,7 +1571,7 @@
         "en": "Crimson Iron",
         "pt": "Ferro Carmesim"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -1646,6 +1666,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:crimson_steel": {
@@ -1654,7 +1675,7 @@
         "en": "Crimson Steel",
         "pt": "Aço Carmesim"
       },
-      "tier": 2,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -1749,6 +1770,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:crude_alloy": {
@@ -1757,12 +1779,14 @@
         "en": "Crude Alloy",
         "pt": "Crude Alloy"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [],
       "color": "#FFFFFF",
       "stats": {},
       "traits": {},
+      "type": "silentgear:compound",
+      "isCompound": true,
       "source": "silentgear"
     },
     "silentgear:crushed_shulker_shell": {
@@ -1771,7 +1795,7 @@
         "en": "Crushed Shulker Shell",
         "pt": "Crushed Shulker Shell"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "rock",
       "categories": [
         "rock",
@@ -1796,6 +1820,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:diamond": {
@@ -1804,7 +1829,7 @@
         "en": "Diamond",
         "pt": "Diamante"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "gem",
       "categories": [
         "gem",
@@ -1910,6 +1935,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:dimerald": {
@@ -1918,7 +1944,7 @@
         "en": "Dimerald",
         "pt": "Dimerald"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "gem",
       "categories": [
         "gem",
@@ -2009,6 +2035,7 @@
           }
         ]
       },
+      "type": "silentgear:custom_compound",
       "source": "silentgear"
     },
     "silentgear:electrum": {
@@ -2076,6 +2103,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:emerald": {
@@ -2186,6 +2214,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:end_rod": {
@@ -2194,7 +2223,7 @@
         "en": "End Rod",
         "pt": "End Rod"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [
         "metal"
@@ -2232,6 +2261,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:end_stone": {
@@ -2240,7 +2270,7 @@
         "en": "End Stone",
         "pt": "End Stone"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -2303,6 +2333,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:enderium": {
@@ -2311,7 +2342,7 @@
         "en": "Enderium",
         "pt": "Enderium"
       },
-      "tier": 2,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -2371,6 +2402,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:example": {
@@ -2379,7 +2411,7 @@
         "en": "Example",
         "pt": "Example"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "intangible",
       "categories": [
         "intangible"
@@ -2420,6 +2452,10 @@
         "binding": {}
       },
       "traits": {},
+      "type": "silentgear:simple",
+      "gear_type_blacklist": [
+        "silentgear:all"
+      ],
       "source": "silentgear"
     },
     "silentgear:feather": {
@@ -2428,7 +2464,7 @@
         "en": "Feather",
         "pt": "Feather"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -2461,6 +2497,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:fine_silk": {
@@ -2469,7 +2506,7 @@
         "en": "Fine Silk",
         "pt": "Fine Silk"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -2497,6 +2534,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:fine_silk_cloth": {
@@ -2505,7 +2543,7 @@
         "en": "Fine Silk Cloth",
         "pt": "Fine Silk Cloth"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -2567,6 +2605,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:flax": {
@@ -2575,7 +2614,7 @@
         "en": "Flax",
         "pt": "Flax"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -2603,6 +2642,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:flint": {
@@ -2611,7 +2651,7 @@
         "en": "Flint",
         "pt": "Flint"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -2663,6 +2703,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:fluffy_string": {
@@ -2671,7 +2712,7 @@
         "en": "Fluffy String",
         "pt": "Fluffy String"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -2699,6 +2740,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:glowstone": {
@@ -2707,7 +2749,7 @@
         "en": "Glowstone",
         "pt": "Glowstone"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "gem",
       "categories": [
         "gem",
@@ -2760,6 +2802,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:gold": {
@@ -2768,7 +2811,7 @@
         "en": "Gold",
         "pt": "Ouro"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "metal",
       "categories": [
         "metal",
@@ -2885,6 +2928,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:high_carbon_steel": {
@@ -2936,6 +2980,7 @@
           }
         ]
       },
+      "type": "silentgear:custom_compound",
       "source": "silentgear"
     },
     "silentgear:hybrid_gem": {
@@ -2944,12 +2989,14 @@
         "en": "Hybrid Gem",
         "pt": "Hybrid Gem"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [],
       "color": "#FFFFFF",
       "stats": {},
       "traits": {},
+      "type": "silentgear:compound",
+      "isCompound": true,
       "source": "silentgear"
     },
     "silentgear:invar": {
@@ -3022,6 +3069,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:iron": {
@@ -3115,6 +3163,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:lapis_lazuli": {
@@ -3123,7 +3172,7 @@
         "en": "Lapis Lazuli",
         "pt": "Lapis Lazuli"
       },
-      "tier": 2,
+      "tier": 1.5,
       "category": "gem",
       "categories": [
         "gem",
@@ -3183,6 +3232,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:lead": {
@@ -3254,6 +3304,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:leather": {
@@ -3262,7 +3313,7 @@
         "en": "Leather",
         "pt": "Leather"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -3320,6 +3371,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:leaves": {
@@ -3328,7 +3380,7 @@
         "en": "Leaves",
         "pt": "Leaves"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -3365,6 +3417,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:lumium": {
@@ -3373,7 +3426,7 @@
         "en": "Lumium",
         "pt": "Lumium"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -3441,6 +3494,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:metal_alloy": {
@@ -3449,12 +3503,14 @@
         "en": "Metal Alloy",
         "pt": "Metal Alloy"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [],
       "color": "#FFFFFF",
       "stats": {},
       "traits": {},
+      "type": "silentgear:compound",
+      "isCompound": true,
       "source": "silentgear"
     },
     "silentgear:mixed_fabric": {
@@ -3463,12 +3519,14 @@
         "en": "Mixed Fabric",
         "pt": "Mixed Fabric"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [],
       "color": "#FFFFFF",
       "stats": {},
       "traits": {},
+      "type": "silentgear:compound",
+      "isCompound": true,
       "source": "silentgear"
     },
     "silentgear:netherite": {
@@ -3477,7 +3535,7 @@
         "en": "Netherite",
         "pt": "Netherita"
       },
-      "tier": 1,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -3542,6 +3600,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:netherrack": {
@@ -3550,7 +3609,7 @@
         "en": "Netherrack",
         "pt": "Netherrack"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -3608,6 +3667,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:netherwood": {
@@ -3616,7 +3676,7 @@
         "en": "Netherwood",
         "pt": "Netherwood"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -3682,6 +3742,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -3754,6 +3815,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:obsidian": {
@@ -3762,7 +3824,7 @@
         "en": "Obsidian",
         "pt": "Obsidian"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -3825,6 +3887,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:osmium": {
@@ -3888,6 +3951,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:paper": {
@@ -3896,7 +3960,7 @@
         "en": "Paper",
         "pt": "Paper"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -3934,6 +3998,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:phantom_membrane": {
@@ -3942,7 +4007,7 @@
         "en": "Phantom Membrane",
         "pt": "Phantom Membrane"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -4007,6 +4072,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:platinum": {
@@ -4015,7 +4081,7 @@
         "en": "Platinum",
         "pt": "Platinum"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -4079,6 +4145,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:prismarine": {
@@ -4087,7 +4154,7 @@
         "en": "Prismarine",
         "pt": "Prismarine"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "gem",
       "categories": [
         "gem",
@@ -4127,6 +4194,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:quartz": {
@@ -4237,6 +4305,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:redstone": {
@@ -4245,7 +4314,7 @@
         "en": "Redstone",
         "pt": "Redstone"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [
         "metal",
@@ -4299,6 +4368,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:redstone_alloy": {
@@ -4367,6 +4437,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:refined_glowstone": {
@@ -4454,6 +4525,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:refined_iron": {
@@ -4526,6 +4598,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:refined_obsidian": {
@@ -4534,7 +4607,7 @@
         "en": "Refined Obsidian",
         "pt": "Refined Obsidian"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -4610,6 +4683,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:sandstone/red": {
@@ -4664,6 +4738,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:sandstone",
       "source": "silentgear"
     },
@@ -4673,7 +4748,7 @@
         "en": "Sandstone",
         "pt": "Arenito"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -4719,6 +4794,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:sheet_metal": {
@@ -4727,7 +4803,7 @@
         "en": "Sheet Metal",
         "pt": "Sheet Metal"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "sheet",
       "categories": [
         "sheet"
@@ -4754,6 +4830,7 @@
         }
       },
       "traits": {},
+      "type": "silentgear:processed",
       "source": "silentgear"
     },
     "silentgear:signalum": {
@@ -4762,7 +4839,7 @@
         "en": "Signalum",
         "pt": "Signalum"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -4826,6 +4903,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:silver": {
@@ -4834,7 +4912,7 @@
         "en": "Silver",
         "pt": "Silver"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "metal",
       "categories": [
         "metal",
@@ -4897,6 +4975,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:sinew": {
@@ -4905,7 +4984,7 @@
         "en": "Sinew",
         "pt": "Sinew"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -4924,6 +5003,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:slime": {
@@ -4932,7 +5012,7 @@
         "en": "Slime",
         "pt": "Slime"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "slime",
       "categories": [
         "slime",
@@ -4956,6 +5036,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:steel": {
@@ -5020,6 +5101,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:stone/andesite": {
@@ -5089,6 +5171,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:stone",
       "source": "silentgear"
     },
@@ -5159,6 +5242,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:stone",
       "source": "silentgear"
     },
@@ -5229,6 +5313,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:stone",
       "source": "silentgear"
     },
@@ -5238,7 +5323,7 @@
         "en": "Stone",
         "pt": "Pedra"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -5299,6 +5384,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:string": {
@@ -5307,7 +5393,7 @@
         "en": "String",
         "pt": "String"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -5326,6 +5412,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:super_alloy": {
@@ -5334,12 +5421,14 @@
         "en": "Super Alloy",
         "pt": "Super Alloy"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [],
       "color": "#FFFFFF",
       "stats": {},
       "traits": {},
+      "type": "silentgear:compound",
+      "isCompound": true,
       "source": "silentgear"
     },
     "silentgear:terracotta/black": {
@@ -5414,6 +5503,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -5489,6 +5579,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -5564,6 +5655,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -5639,6 +5731,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -5714,6 +5807,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -5789,6 +5883,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -5864,6 +5959,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -5939,6 +6035,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -6014,6 +6111,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -6089,6 +6187,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -6164,6 +6263,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -6239,6 +6339,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -6314,6 +6415,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -6389,6 +6491,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -6464,6 +6567,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -6539,6 +6643,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -6548,7 +6653,7 @@
         "en": "Terracotta",
         "pt": "Terracota"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -6614,6 +6719,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:tin": {
@@ -6622,7 +6728,7 @@
         "en": "Tin",
         "pt": "Tin"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "metal",
       "categories": [
         "metal",
@@ -6685,6 +6791,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:titanium": {
@@ -6693,7 +6800,7 @@
         "en": "Titanium",
         "pt": "Titanium"
       },
-      "tier": 2,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -6767,6 +6874,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:turtle": {
@@ -6775,7 +6883,7 @@
         "en": "Turtle",
         "pt": "Turtle"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -6807,6 +6915,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:tyrian_steel": {
@@ -6815,7 +6924,7 @@
         "en": "Tyrian Steel",
         "pt": "Aço Tiriano"
       },
-      "tier": 2,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -6898,6 +7007,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:uranium": {
@@ -6906,7 +7016,7 @@
         "en": "Uranium",
         "pt": "Uranium"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -6962,6 +7072,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:vine": {
@@ -6970,7 +7081,7 @@
         "en": "Vine",
         "pt": "Vine"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -6981,6 +7092,7 @@
         "binding": {}
       },
       "traits": {},
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:wood/acacia": {
@@ -6989,7 +7101,7 @@
         "en": "Acacia Wood",
         "pt": "Madeira de Acácia"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7046,6 +7158,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -7055,7 +7168,7 @@
         "en": "Birch Wood",
         "pt": "Madeira de Bétula"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7112,6 +7225,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -7121,7 +7235,7 @@
         "en": "Crimson Wood",
         "pt": "Madeira Carmesim"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7174,6 +7288,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -7183,7 +7298,7 @@
         "en": "Dark Oak Wood",
         "pt": "Madeira de Carvalho Escuro"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7240,6 +7355,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -7249,7 +7365,7 @@
         "en": "Jungle Wood",
         "pt": "Madeira da Selva"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7306,6 +7422,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -7315,7 +7432,7 @@
         "en": "Oak Wood",
         "pt": "Madeira de Carvalho"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7372,6 +7489,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -7381,7 +7499,7 @@
         "en": "Spruce Wood",
         "pt": "Madeira de Pinheiro"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7438,6 +7556,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -7447,7 +7566,7 @@
         "en": "Warped Wood",
         "pt": "Madeira Distorcida"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7500,6 +7619,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -7509,7 +7629,7 @@
         "en": "Wood",
         "pt": "Madeira"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7566,6 +7686,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:wool/black": {
@@ -7574,7 +7695,7 @@
         "en": "Black Wool",
         "pt": "Lã Preta"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7637,6 +7758,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -7646,7 +7768,7 @@
         "en": "Blue Wool",
         "pt": "Lã Azul"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7709,6 +7831,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -7718,7 +7841,7 @@
         "en": "Brown Wool",
         "pt": "Lã Marrom"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7781,6 +7904,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -7790,7 +7914,7 @@
         "en": "Cyan Wool",
         "pt": "Lã Ciano"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7853,6 +7977,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -7862,7 +7987,7 @@
         "en": "Gray Wool",
         "pt": "Lã Cinza"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7925,6 +8050,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -7934,7 +8060,7 @@
         "en": "Green Wool",
         "pt": "Lã Verde"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -7997,6 +8123,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -8006,7 +8133,7 @@
         "en": "Light Blue Wool",
         "pt": "Lã Azul Clara"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -8069,6 +8196,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -8078,7 +8206,7 @@
         "en": "Light Gray Wool",
         "pt": "Lã Cinza Clara"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -8141,6 +8269,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -8150,7 +8279,7 @@
         "en": "Lime Wool",
         "pt": "Lã Verde Limão"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -8213,6 +8342,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -8222,7 +8352,7 @@
         "en": "Magenta Wool",
         "pt": "Lã Magenta"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -8285,6 +8415,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -8294,7 +8425,7 @@
         "en": "Orange Wool",
         "pt": "Lã Laranja"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -8357,6 +8488,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -8366,7 +8498,7 @@
         "en": "Pink Wool",
         "pt": "Lã Rosa"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -8429,6 +8561,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -8438,7 +8571,7 @@
         "en": "Purple Wool",
         "pt": "Lã Roxa"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -8501,6 +8634,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -8510,7 +8644,7 @@
         "en": "Red Wool",
         "pt": "Lã Vermelha"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -8573,6 +8707,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -8582,7 +8717,7 @@
         "en": "White Wool",
         "pt": "Lã Branca"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -8645,6 +8780,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -8654,7 +8790,7 @@
         "en": "Yellow Wool",
         "pt": "Lã Amarela"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -8717,6 +8853,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -8726,7 +8863,7 @@
         "en": "Wool",
         "pt": "Lã"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -8789,6 +8926,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:zinc": {
@@ -8797,7 +8935,7 @@
         "en": "Zinc",
         "pt": "Zinc"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "metal",
       "categories": [
         "metal",
@@ -8864,6 +9002,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     }
   },
@@ -8946,6 +9085,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:aluminum_steel": {
@@ -8954,7 +9094,7 @@
         "en": "Aluminum Steel",
         "pt": "Aluminum Steel"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -9022,6 +9162,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:amethyst": {
@@ -9030,7 +9171,7 @@
         "en": "Amethyst",
         "pt": "Amethyst"
       },
-      "tier": 2,
+      "tier": 1.5,
       "category": "gem",
       "categories": [
         "gem",
@@ -9088,6 +9229,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:azure_electrum": {
@@ -9096,7 +9238,7 @@
         "en": "Azure Electrum",
         "pt": "Electro Lazúli"
       },
-      "tier": 2,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -9187,6 +9329,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:azure_silver": {
@@ -9195,7 +9338,7 @@
         "en": "Azure Silver",
         "pt": "Prata Lazúli"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -9297,6 +9440,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bamboo": {
@@ -9305,7 +9449,7 @@
         "en": "Bamboo",
         "pt": "Bamboo"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -9363,6 +9507,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:barrier": {
@@ -9371,7 +9516,7 @@
         "en": "Barrier",
         "pt": "Barrier"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "intangible",
       "categories": [
         "intangible"
@@ -9417,6 +9562,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:basalt": {
@@ -9425,7 +9571,7 @@
         "en": "Basalt",
         "pt": "Basalt"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -9494,6 +9640,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bismuth": {
@@ -9566,6 +9713,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bismuth_brass": {
@@ -9638,6 +9786,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bismuth_steel": {
@@ -9646,7 +9795,7 @@
         "en": "Bismuth Steel",
         "pt": "Bismuth Steel"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -9710,6 +9859,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:blackstone": {
@@ -9718,7 +9868,7 @@
         "en": "Blackstone",
         "pt": "Blackstone"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -9791,6 +9941,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:blaze_gold": {
@@ -9922,6 +10073,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:blaze_rod": {
@@ -9930,7 +10082,7 @@
         "en": "Blaze Rod",
         "pt": "Blaze Rod"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [
         "metal"
@@ -9964,6 +10116,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bone": {
@@ -9972,7 +10125,7 @@
         "en": "Bone",
         "pt": "Bone"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "organic",
       "categories": [
         "organic",
@@ -10026,6 +10179,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:brass": {
@@ -10098,6 +10252,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:breeze_rod": {
@@ -10106,7 +10261,7 @@
         "en": "Breeze Rod",
         "pt": "Haste de Brisa"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [
         "metal"
@@ -10140,6 +10295,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:bronze": {
@@ -10239,6 +10395,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:compressed_iron": {
@@ -10247,7 +10404,7 @@
         "en": "Compressed Iron",
         "pt": "Compressed Iron"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -10307,6 +10464,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:copper": {
@@ -10315,7 +10473,7 @@
         "en": "Copper",
         "pt": "Cobre"
       },
-      "tier": 2,
+      "tier": 1.5,
       "category": "metal",
       "categories": [
         "metal",
@@ -10409,6 +10567,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:crimson_iron": {
@@ -10417,7 +10576,7 @@
         "en": "Crimson Iron",
         "pt": "Ferro Carmesim"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -10512,6 +10671,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:crimson_steel": {
@@ -10520,7 +10680,7 @@
         "en": "Crimson Steel",
         "pt": "Aço Carmesim"
       },
-      "tier": 2,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -10615,6 +10775,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:crude_alloy": {
@@ -10623,12 +10784,14 @@
         "en": "Crude Alloy",
         "pt": "Crude Alloy"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [],
       "color": "#FFFFFF",
       "stats": {},
       "traits": {},
+      "type": "silentgear:compound",
+      "isCompound": true,
       "source": "silentgear"
     },
     "silentgear:crushed_shulker_shell": {
@@ -10637,7 +10800,7 @@
         "en": "Crushed Shulker Shell",
         "pt": "Crushed Shulker Shell"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "rock",
       "categories": [
         "rock",
@@ -10662,6 +10825,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:diamond": {
@@ -10670,7 +10834,7 @@
         "en": "Diamond",
         "pt": "Diamante"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "gem",
       "categories": [
         "gem",
@@ -10776,6 +10940,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:dimerald": {
@@ -10784,7 +10949,7 @@
         "en": "Dimerald",
         "pt": "Dimerald"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "gem",
       "categories": [
         "gem",
@@ -10875,6 +11040,7 @@
           }
         ]
       },
+      "type": "silentgear:custom_compound",
       "source": "silentgear"
     },
     "silentgear:electrum": {
@@ -10942,6 +11108,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:emerald": {
@@ -11052,6 +11219,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:end_rod": {
@@ -11060,7 +11228,7 @@
         "en": "End Rod",
         "pt": "End Rod"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [
         "metal"
@@ -11098,6 +11266,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:end_stone": {
@@ -11106,7 +11275,7 @@
         "en": "End Stone",
         "pt": "End Stone"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -11169,6 +11338,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:enderium": {
@@ -11177,7 +11347,7 @@
         "en": "Enderium",
         "pt": "Enderium"
       },
-      "tier": 2,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -11237,6 +11407,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:example": {
@@ -11245,7 +11416,7 @@
         "en": "Example",
         "pt": "Example"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "intangible",
       "categories": [
         "intangible"
@@ -11286,6 +11457,10 @@
         "binding": {}
       },
       "traits": {},
+      "type": "silentgear:simple",
+      "gear_type_blacklist": [
+        "silentgear:all"
+      ],
       "source": "silentgear"
     },
     "silentgear:feather": {
@@ -11294,7 +11469,7 @@
         "en": "Feather",
         "pt": "Feather"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -11327,6 +11502,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:fine_silk": {
@@ -11335,7 +11511,7 @@
         "en": "Fine Silk",
         "pt": "Fine Silk"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -11363,6 +11539,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:fine_silk_cloth": {
@@ -11371,7 +11548,7 @@
         "en": "Fine Silk Cloth",
         "pt": "Fine Silk Cloth"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -11433,6 +11610,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:flax": {
@@ -11441,7 +11619,7 @@
         "en": "Flax",
         "pt": "Flax"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -11469,6 +11647,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:flint": {
@@ -11477,7 +11656,7 @@
         "en": "Flint",
         "pt": "Flint"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -11529,6 +11708,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:fluffy_string": {
@@ -11537,7 +11717,7 @@
         "en": "Fluffy String",
         "pt": "Fluffy String"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -11565,6 +11745,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:glowstone": {
@@ -11573,7 +11754,7 @@
         "en": "Glowstone",
         "pt": "Glowstone"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "gem",
       "categories": [
         "gem",
@@ -11626,6 +11807,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:gold": {
@@ -11634,7 +11816,7 @@
         "en": "Gold",
         "pt": "Ouro"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "metal",
       "categories": [
         "metal",
@@ -11751,6 +11933,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:high_carbon_steel": {
@@ -11802,6 +11985,7 @@
           }
         ]
       },
+      "type": "silentgear:custom_compound",
       "source": "silentgear"
     },
     "silentgear:hybrid_gem": {
@@ -11810,12 +11994,14 @@
         "en": "Hybrid Gem",
         "pt": "Hybrid Gem"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [],
       "color": "#FFFFFF",
       "stats": {},
       "traits": {},
+      "type": "silentgear:compound",
+      "isCompound": true,
       "source": "silentgear"
     },
     "silentgear:invar": {
@@ -11888,6 +12074,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:iron": {
@@ -11981,6 +12168,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:lapis_lazuli": {
@@ -11989,7 +12177,7 @@
         "en": "Lapis Lazuli",
         "pt": "Lapis Lazuli"
       },
-      "tier": 2,
+      "tier": 1.5,
       "category": "gem",
       "categories": [
         "gem",
@@ -12049,6 +12237,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:lead": {
@@ -12120,6 +12309,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:leather": {
@@ -12128,7 +12318,7 @@
         "en": "Leather",
         "pt": "Leather"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -12186,6 +12376,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:leaves": {
@@ -12194,7 +12385,7 @@
         "en": "Leaves",
         "pt": "Leaves"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -12231,6 +12422,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:lumium": {
@@ -12239,7 +12431,7 @@
         "en": "Lumium",
         "pt": "Lumium"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -12307,6 +12499,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:metal_alloy": {
@@ -12315,12 +12508,14 @@
         "en": "Metal Alloy",
         "pt": "Metal Alloy"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [],
       "color": "#FFFFFF",
       "stats": {},
       "traits": {},
+      "type": "silentgear:compound",
+      "isCompound": true,
       "source": "silentgear"
     },
     "silentgear:mixed_fabric": {
@@ -12329,12 +12524,14 @@
         "en": "Mixed Fabric",
         "pt": "Mixed Fabric"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [],
       "color": "#FFFFFF",
       "stats": {},
       "traits": {},
+      "type": "silentgear:compound",
+      "isCompound": true,
       "source": "silentgear"
     },
     "silentgear:netherite": {
@@ -12343,7 +12540,7 @@
         "en": "Netherite",
         "pt": "Netherita"
       },
-      "tier": 1,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -12408,6 +12605,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:netherrack": {
@@ -12416,7 +12614,7 @@
         "en": "Netherrack",
         "pt": "Netherrack"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -12474,6 +12672,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:netherwood": {
@@ -12482,7 +12681,7 @@
         "en": "Netherwood",
         "pt": "Netherwood"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -12548,6 +12747,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -12620,6 +12820,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:obsidian": {
@@ -12628,7 +12829,7 @@
         "en": "Obsidian",
         "pt": "Obsidian"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -12691,6 +12892,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:osmium": {
@@ -12754,6 +12956,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:paper": {
@@ -12762,7 +12965,7 @@
         "en": "Paper",
         "pt": "Paper"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -12800,6 +13003,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:phantom_membrane": {
@@ -12808,7 +13012,7 @@
         "en": "Phantom Membrane",
         "pt": "Phantom Membrane"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -12873,6 +13077,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:platinum": {
@@ -12881,7 +13086,7 @@
         "en": "Platinum",
         "pt": "Platinum"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -12945,6 +13150,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:prismarine": {
@@ -12953,7 +13159,7 @@
         "en": "Prismarine",
         "pt": "Prismarine"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "gem",
       "categories": [
         "gem",
@@ -12993,6 +13199,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:quartz": {
@@ -13103,6 +13310,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:redstone": {
@@ -13111,7 +13319,7 @@
         "en": "Redstone",
         "pt": "Redstone"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [
         "metal",
@@ -13165,6 +13373,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:redstone_alloy": {
@@ -13233,6 +13442,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:refined_glowstone": {
@@ -13320,6 +13530,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:refined_iron": {
@@ -13392,6 +13603,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:refined_obsidian": {
@@ -13400,7 +13612,7 @@
         "en": "Refined Obsidian",
         "pt": "Refined Obsidian"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -13476,6 +13688,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:sandstone/red": {
@@ -13530,6 +13743,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:sandstone",
       "source": "silentgear"
     },
@@ -13539,7 +13753,7 @@
         "en": "Sandstone",
         "pt": "Arenito"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -13585,6 +13799,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:sheet_metal": {
@@ -13593,7 +13808,7 @@
         "en": "Sheet Metal",
         "pt": "Sheet Metal"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "sheet",
       "categories": [
         "sheet"
@@ -13620,6 +13835,7 @@
         }
       },
       "traits": {},
+      "type": "silentgear:processed",
       "source": "silentgear"
     },
     "silentgear:signalum": {
@@ -13628,7 +13844,7 @@
         "en": "Signalum",
         "pt": "Signalum"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -13692,6 +13908,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:silver": {
@@ -13700,7 +13917,7 @@
         "en": "Silver",
         "pt": "Silver"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "metal",
       "categories": [
         "metal",
@@ -13763,6 +13980,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:sinew": {
@@ -13771,7 +13989,7 @@
         "en": "Sinew",
         "pt": "Sinew"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -13790,6 +14008,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:slime": {
@@ -13798,7 +14017,7 @@
         "en": "Slime",
         "pt": "Slime"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "slime",
       "categories": [
         "slime",
@@ -13822,6 +14041,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:steel": {
@@ -13886,6 +14106,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:stone/andesite": {
@@ -13955,6 +14176,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:stone",
       "source": "silentgear"
     },
@@ -14025,6 +14247,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:stone",
       "source": "silentgear"
     },
@@ -14095,6 +14318,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:stone",
       "source": "silentgear"
     },
@@ -14104,7 +14328,7 @@
         "en": "Stone",
         "pt": "Pedra"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -14165,6 +14389,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:string": {
@@ -14173,7 +14398,7 @@
         "en": "String",
         "pt": "String"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -14192,6 +14417,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:super_alloy": {
@@ -14200,12 +14426,14 @@
         "en": "Super Alloy",
         "pt": "Super Alloy"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "metal",
       "categories": [],
       "color": "#FFFFFF",
       "stats": {},
       "traits": {},
+      "type": "silentgear:compound",
+      "isCompound": true,
       "source": "silentgear"
     },
     "silentgear:terracotta/black": {
@@ -14280,6 +14508,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -14355,6 +14584,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -14430,6 +14660,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -14505,6 +14736,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -14580,6 +14812,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -14655,6 +14888,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -14730,6 +14964,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -14805,6 +15040,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -14880,6 +15116,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -14955,6 +15192,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -15030,6 +15268,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -15105,6 +15344,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -15180,6 +15420,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -15255,6 +15496,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -15330,6 +15572,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -15405,6 +15648,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:terracotta",
       "source": "silentgear"
     },
@@ -15414,7 +15658,7 @@
         "en": "Terracotta",
         "pt": "Terracota"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "rock",
       "categories": [
         "rock",
@@ -15480,6 +15724,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:tin": {
@@ -15488,7 +15733,7 @@
         "en": "Tin",
         "pt": "Tin"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "metal",
       "categories": [
         "metal",
@@ -15551,6 +15796,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:titanium": {
@@ -15559,7 +15805,7 @@
         "en": "Titanium",
         "pt": "Titanium"
       },
-      "tier": 2,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -15633,6 +15879,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:turtle": {
@@ -15641,7 +15888,7 @@
         "en": "Turtle",
         "pt": "Turtle"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -15673,6 +15920,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:tyrian_steel": {
@@ -15681,7 +15929,7 @@
         "en": "Tyrian Steel",
         "pt": "Aço Tiriano"
       },
-      "tier": 2,
+      "tier": 4,
       "category": "metal",
       "categories": [
         "metal",
@@ -15764,6 +16012,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:uranium": {
@@ -15772,7 +16021,7 @@
         "en": "Uranium",
         "pt": "Uranium"
       },
-      "tier": 2,
+      "tier": 3,
       "category": "metal",
       "categories": [
         "metal",
@@ -15828,6 +16077,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:vine": {
@@ -15836,7 +16086,7 @@
         "en": "Vine",
         "pt": "Vine"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -15847,6 +16097,7 @@
         "binding": {}
       },
       "traits": {},
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:wood/acacia": {
@@ -15855,7 +16106,7 @@
         "en": "Acacia Wood",
         "pt": "Madeira de Acácia"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -15912,6 +16163,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -15921,7 +16173,7 @@
         "en": "Birch Wood",
         "pt": "Madeira de Bétula"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -15978,6 +16230,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -15987,7 +16240,7 @@
         "en": "Crimson Wood",
         "pt": "Madeira Carmesim"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16040,6 +16293,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -16049,7 +16303,7 @@
         "en": "Dark Oak Wood",
         "pt": "Madeira de Carvalho Escuro"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16106,6 +16360,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -16115,7 +16370,7 @@
         "en": "Jungle Wood",
         "pt": "Madeira da Selva"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16172,6 +16427,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -16181,7 +16437,7 @@
         "en": "Oak Wood",
         "pt": "Madeira de Carvalho"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16238,6 +16494,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -16247,7 +16504,7 @@
         "en": "Spruce Wood",
         "pt": "Madeira de Pinheiro"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16304,6 +16561,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -16313,7 +16571,7 @@
         "en": "Warped Wood",
         "pt": "Madeira Distorcida"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16366,6 +16624,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wood",
       "source": "silentgear"
     },
@@ -16375,7 +16634,7 @@
         "en": "Wood",
         "pt": "Madeira"
       },
-      "tier": 2,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16432,6 +16691,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:wool/black": {
@@ -16440,7 +16700,7 @@
         "en": "Black Wool",
         "pt": "Lã Preta"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16503,6 +16763,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -16512,7 +16773,7 @@
         "en": "Blue Wool",
         "pt": "Lã Azul"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16575,6 +16836,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -16584,7 +16846,7 @@
         "en": "Brown Wool",
         "pt": "Lã Marrom"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16647,6 +16909,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -16656,7 +16919,7 @@
         "en": "Cyan Wool",
         "pt": "Lã Ciano"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16719,6 +16982,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -16728,7 +16992,7 @@
         "en": "Gray Wool",
         "pt": "Lã Cinza"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16791,6 +17055,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -16800,7 +17065,7 @@
         "en": "Green Wool",
         "pt": "Lã Verde"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16863,6 +17128,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -16872,7 +17138,7 @@
         "en": "Light Blue Wool",
         "pt": "Lã Azul Clara"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -16935,6 +17201,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -16944,7 +17211,7 @@
         "en": "Light Gray Wool",
         "pt": "Lã Cinza Clara"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -17007,6 +17274,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -17016,7 +17284,7 @@
         "en": "Lime Wool",
         "pt": "Lã Verde Limão"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -17079,6 +17347,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -17088,7 +17357,7 @@
         "en": "Magenta Wool",
         "pt": "Lã Magenta"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -17151,6 +17420,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -17160,7 +17430,7 @@
         "en": "Orange Wool",
         "pt": "Lã Laranja"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -17223,6 +17493,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -17232,7 +17503,7 @@
         "en": "Pink Wool",
         "pt": "Lã Rosa"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -17295,6 +17566,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -17304,7 +17576,7 @@
         "en": "Purple Wool",
         "pt": "Lã Roxa"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -17367,6 +17639,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -17376,7 +17649,7 @@
         "en": "Red Wool",
         "pt": "Lã Vermelha"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -17439,6 +17712,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -17448,7 +17722,7 @@
         "en": "White Wool",
         "pt": "Lã Branca"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -17511,6 +17785,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -17520,7 +17795,7 @@
         "en": "Yellow Wool",
         "pt": "Lã Amarela"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -17583,6 +17858,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "parent": "silentgear:wool",
       "source": "silentgear"
     },
@@ -17592,7 +17868,7 @@
         "en": "Wool",
         "pt": "Lã"
       },
-      "tier": 1,
+      "tier": 0,
       "category": "organic",
       "categories": [
         "organic",
@@ -17655,6 +17931,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     },
     "silentgear:zinc": {
@@ -17663,7 +17940,7 @@
         "en": "Zinc",
         "pt": "Zinc"
       },
-      "tier": 2,
+      "tier": 1,
       "category": "metal",
       "categories": [
         "metal",
@@ -17730,6 +18007,7 @@
           }
         ]
       },
+      "type": "silentgear:simple",
       "source": "silentgear"
     }
   },
@@ -17910,184 +18188,28 @@
     }
   },
   "traits": {
-    "silentgear:brittle": {
-      "id": "silentgear:brittle",
+    "silentgear:accelerate": {
+      "id": "silentgear:accelerate",
       "maxLevel": 5,
       "name": {
-        "en": "Brittle",
-        "pt": "Frágil"
+        "en": "Accelerate",
+        "pt": "Aceleração"
       },
       "description": {
-        "en": "Increases durability loss on high-impact attacks.",
-        "pt": "Aumenta a perda de durabilidade em impactos intensos."
+        "en": "Gains harvest speed, attack speed, and ranged speed as damaged.",
+        "pt": "Ganha velocidade de mineração, ataque e disparo à medida que sofre dano."
       }
     },
-    "silentgear:lustrous": {
-      "id": "silentgear:lustrous",
+    "silentgear:adamant": {
+      "id": "silentgear:adamant",
       "maxLevel": 5,
       "name": {
-        "en": "Lustrous",
-        "pt": "Lustroso"
+        "en": "Adamant",
+        "pt": "Inflexível"
       },
       "description": {
-        "en": "Gives small chance to drop extra experience or double drops.",
-        "pt": "Dá pequena chance de coletar experiência extra ou dobrar itens."
-      }
-    },
-    "silentgear:fireproof": {
-      "id": "silentgear:fireproof",
-      "maxLevel": 1,
-      "name": {
-        "en": "Fireproof",
-        "pt": "À Prova de Fogo"
-      },
-      "description": {
-        "en": "Item will float on lava and cannot burn in fire.",
-        "pt": "O item flutua na lava e não queima no fogo."
-      }
-    },
-    "silentgear:malleable": {
-      "id": "silentgear:malleable",
-      "maxLevel": 5,
-      "name": {
-        "en": "Malleable",
-        "pt": "Maleável"
-      },
-      "description": {
-        "en": "Cheaper to repair in the crafting station and anvil.",
-        "pt": "Mais barato para reparar na estação de criação e bigorna."
-      }
-    },
-    "silentgear:flexible": {
-      "id": "silentgear:flexible",
-      "maxLevel": 5,
-      "name": {
-        "en": "Flexible",
-        "pt": "Flexível"
-      },
-      "description": {
-        "en": "Reduces damage taken by the tool or armor from explosions.",
-        "pt": "Reduz o dano sofrido pelo equipamento contra explosões."
-      }
-    },
-    "silentgear:jagged": {
-      "id": "silentgear:jagged",
-      "maxLevel": 5,
-      "name": {
-        "en": "Jagged",
-        "pt": "Serrilhado"
-      },
-      "description": {
-        "en": "Causes extra bleeding damage over time on hit.",
-        "pt": "Causa dano adicional de sangramento contínuo ao golpear."
-      }
-    },
-    "silentgear:swift": {
-      "id": "silentgear:swift",
-      "maxLevel": 5,
-      "name": {
-        "en": "Swift",
-        "pt": "Veloz"
-      },
-      "description": {
-        "en": "Increases attack speed and movement speed.",
-        "pt": "Aumenta a velocidade de ataque e a agilidade de movimento."
-      }
-    },
-    "silentgear:holy": {
-      "id": "silentgear:holy",
-      "maxLevel": 5,
-      "name": {
-        "en": "Holy",
-        "pt": "Sagrado"
-      },
-      "description": {
-        "en": "Deals massive bonus damage against undead monsters.",
-        "pt": "Causa dano bônus maciço contra monstros mortos-vivos."
-      }
-    },
-    "silentgear:magnetic": {
-      "id": "silentgear:magnetic",
-      "maxLevel": 3,
-      "name": {
-        "en": "Magnetic",
-        "pt": "Magnético"
-      },
-      "description": {
-        "en": "Pulls nearby dropped items toward the player.",
-        "pt": "Atrai itens caídos no chão diretamente para o jogador."
-      }
-    },
-    "silentgear:indestructible": {
-      "id": "silentgear:indestructible",
-      "maxLevel": 1,
-      "name": {
-        "en": "Indestructible",
-        "pt": "Indestrutível"
-      },
-      "description": {
-        "en": "Item does not take durability damage and is immune to void damage.",
-        "pt": "O item não sofre dano de durabilidade e é imune ao dano do vazio."
-      }
-    },
-    "silentgear:crushing": {
-      "id": "silentgear:crushing",
-      "maxLevel": 5,
-      "name": {
-        "en": "Crushing",
-        "pt": "Esmagador"
-      },
-      "description": {
-        "en": "Increases armor bypass or impact damage.",
-        "pt": "Aumenta a perfuração de armadura ou o impacto do golpe."
-      }
-    },
-    "silentgear:brilliant": {
-      "id": "silentgear:brilliant",
-      "maxLevel": 1,
-      "name": {
-        "en": "Brilliant",
-        "pt": "Brilhante"
-      },
-      "description": {
-        "en": "Increases experience gained.",
-        "pt": "Aumenta a experiência obtida ao usar a ferramenta ou arma."
-      }
-    },
-    "silentgear:sturdy": {
-      "id": "silentgear:sturdy",
-      "maxLevel": 5,
-      "name": {
-        "en": "Sturdy",
-        "pt": "Robusto"
-      },
-      "description": {
-        "en": "Increases durability and armor toughness.",
-        "pt": "Aumenta a durabilidade e a tenacidade da armadura."
-      }
-    },
-    "silentgear:void_ward": {
-      "id": "silentgear:void_ward",
-      "maxLevel": 1,
-      "name": {
-        "en": "Void Ward",
-        "pt": "Proteção do Vazio"
-      },
-      "description": {
-        "en": "Protects the holder from falling into the void.",
-        "pt": "Protege o portador de quedas no vazio."
-      }
-    },
-    "silentgear:aquatic": {
-      "id": "silentgear:aquatic",
-      "maxLevel": 1,
-      "name": {
-        "en": "Aquatic",
-        "pt": "Aquático"
-      },
-      "description": {
-        "en": "Improves underwater efficiency and mobility.",
-        "pt": "Melhora a eficiência e mobilidade debaixo d’água."
+        "en": "Armor increases damage resistance; tools deal more damage to mobs with high health.",
+        "pt": "A armadura aumenta resistência a dano; ferramentas causam mais dano a criaturas com vida alta."
       }
     },
     "silentgear:advanced_aquatic": {
@@ -18102,18 +18224,6 @@
         "pt": "Concede respiração aquática superior e extrema mobilidade na água."
       }
     },
-    "silentgear:flame_ward": {
-      "id": "silentgear:flame_ward",
-      "maxLevel": 1,
-      "name": {
-        "en": "Flame Ward",
-        "pt": "Proteção de Chamas"
-      },
-      "description": {
-        "en": "Protects against burning and fire damage.",
-        "pt": "Protege contra queimaduras e dano por fogo."
-      }
-    },
     "silentgear:advanced_flame_ward": {
       "id": "silentgear:advanced_flame_ward",
       "maxLevel": 1,
@@ -18126,16 +18236,148 @@
         "pt": "Imunidade completa a fogo, lava e queimaduras."
       }
     },
-    "silentgear:cure_wither": {
-      "id": "silentgear:cure_wither",
-      "maxLevel": 1,
+    "silentgear:ancient": {
+      "id": "silentgear:ancient",
+      "maxLevel": 5,
       "name": {
-        "en": "Cure Wither",
-        "pt": "Cura Decomposição"
+        "en": "Ancient",
+        "pt": "Ancestral"
       },
       "description": {
-        "en": "Neutralizes the wither effect.",
-        "pt": "Neutraliza o efeito de decomposição (wither)."
+        "en": "Increases XP dropped by blocks and mobs.",
+        "pt": "Aumenta a experiência dropada por blocos e criaturas."
+      }
+    },
+    "silentgear:aquatic": {
+      "id": "silentgear:aquatic",
+      "maxLevel": 5,
+      "name": {
+        "en": "Aquatic",
+        "pt": "Aquático"
+      },
+      "description": {
+        "en": "Full set of armor gives water breathing, deals more damage to aquatic mobs.",
+        "pt": "Conjunto completo de armadura concede respiração aquática e causa mais dano a criaturas marinhas."
+      }
+    },
+    "silentgear:bending": {
+      "id": "silentgear:bending",
+      "maxLevel": 5,
+      "name": {
+        "en": "Bending",
+        "pt": "Flexão"
+      },
+      "description": {
+        "en": "Gear sometimes takes extra damage.",
+        "pt": "O equipamento ocasionalmente sofre dano adicional."
+      }
+    },
+    "silentgear:bounce": {
+      "id": "silentgear:bounce",
+      "maxLevel": 1,
+      "name": {
+        "en": "Bounce",
+        "pt": "Salto"
+      },
+      "description": {
+        "en": "Boots negate fall damage; armor knocks back attackers.",
+        "pt": "Botas anulam dano de queda; armadura repele atacantes."
+      }
+    },
+    "silentgear:brilliant": {
+      "id": "silentgear:brilliant",
+      "maxLevel": 1,
+      "name": {
+        "en": "Brilliant",
+        "pt": "Brilhante"
+      },
+      "description": {
+        "en": "Shiny! Increases experience gained.",
+        "pt": "Brilhante! Aumenta a experiência obtida ao usar o equipamento."
+      }
+    },
+    "silentgear:brittle": {
+      "id": "silentgear:brittle",
+      "maxLevel": 5,
+      "name": {
+        "en": "Brittle",
+        "pt": "Frágil"
+      },
+      "description": {
+        "en": "Increases durability loss on high-impact attacks.",
+        "pt": "Aumenta a perda de durabilidade em impactos intensos."
+      }
+    },
+    "silentgear:bulky": {
+      "id": "silentgear:bulky",
+      "maxLevel": 1,
+      "name": {
+        "en": "Bulky",
+        "pt": "Volumoso"
+      },
+      "description": {
+        "en": "Heavier material that reduces mobility slightly.",
+        "pt": "Material pesado que reduz levemente a mobilidade."
+      }
+    },
+    "silentgear:chilled": {
+      "id": "silentgear:chilled",
+      "maxLevel": 5,
+      "name": {
+        "en": "Chilled",
+        "pt": "Gélido"
+      },
+      "description": {
+        "en": "Deals more damage to Nether and fire-immune mobs.",
+        "pt": "Causa mais dano a criaturas do Nether e imunes ao fogo."
+      }
+    },
+    "silentgear:chipping": {
+      "id": "silentgear:chipping",
+      "maxLevel": 5,
+      "name": {
+        "en": "Chipping",
+        "pt": "Lascando"
+      },
+      "description": {
+        "en": "Reduces armor or increases harvest speed as gear is damaged.",
+        "pt": "Reduz armadura ou aumenta velocidade de mineração conforme sofre dano."
+      }
+    },
+    "silentgear:crude": {
+      "id": "silentgear:crude",
+      "maxLevel": 5,
+      "name": {
+        "en": "Crude",
+        "pt": "Bruto"
+      },
+      "description": {
+        "en": "Reduces synergy.",
+        "pt": "Reduz a sinergia."
+      }
+    },
+    "silentgear:crushing": {
+      "id": "silentgear:crushing",
+      "maxLevel": 5,
+      "name": {
+        "en": "Crushing",
+        "pt": "Esmagador"
+      },
+      "description": {
+        "en": "Increases armor bypass or impact damage.",
+        "pt": "Aumenta a perfuração de armadura ou o impacto do golpe."
+      }
+    },
+    "silentgear:cure_levitation": {
+      "id": "silentgear:cure_levitation",
+      "maxLevel": 1,
+      "name": {
+        "en": "Cure Levitation",
+        "pt": "Cura Levitação"
+      },
+      "description": {
+        "en": "Neutralizes levitation effect.",
+        "pt": "Neutraliza o efeito de levitação."
       }
     },
     "silentgear:cure_nausea": {
@@ -18162,64 +18404,124 @@
         "pt": "Neutraliza efeitos de veneno."
       }
     },
-    "silentgear:cure_levitation": {
-      "id": "silentgear:cure_levitation",
+    "silentgear:cure_wither": {
+      "id": "silentgear:cure_wither",
       "maxLevel": 1,
       "name": {
-        "en": "Cure Levitation",
-        "pt": "Cura Levitação"
+        "en": "Cure Wither",
+        "pt": "Cura Decomposição"
       },
       "description": {
-        "en": "Neutralizes levitation effect.",
-        "pt": "Neutraliza o efeito de levitação."
+        "en": "Neutralizes wither effect.",
+        "pt": "Neutraliza o efeito de decomposição (wither)."
       }
     },
-    "silentgear:sting_resist": {
-      "id": "silentgear:sting_resist",
+    "silentgear:dulling": {
+      "id": "silentgear:dulling",
       "maxLevel": 1,
       "name": {
-        "en": "Sting Resist",
-        "pt": "Resistência a Ferroadas"
+        "en": "Dulling",
+        "pt": "Embotamento"
       },
       "description": {
-        "en": "Reduces damage and sting effects from arthropods.",
-        "pt": "Reduz o dano e ferrões de artrópodes."
+        "en": "Reduces effectiveness when neglected.",
+        "pt": "Reduz a eficácia com o desuso."
       }
     },
-    "silentgear:hard": {
-      "id": "silentgear:hard",
-      "maxLevel": 10,
-      "name": {
-        "en": "Hard",
-        "pt": "Duro"
-      },
-      "description": {
-        "en": "Increases durability and armor.",
-        "pt": "Aumenta a durabilidade e o valor de armadura."
-      }
-    },
-    "silentgear:soft": {
-      "id": "silentgear:soft",
+    "silentgear:eroded": {
+      "id": "silentgear:eroded",
       "maxLevel": 5,
       "name": {
-        "en": "Soft",
-        "pt": "Macio"
+        "en": "Eroded",
+        "pt": "Erodismo"
       },
       "description": {
-        "en": "Decreases durability slightly but increases flexibility.",
-        "pt": "Reduz levemente a durabilidade mas aumenta a flexibilidade."
+        "en": "Increases harvest speed and reduces attack damage as gear is damaged.",
+        "pt": "Aumenta velocidade de mineração e reduz dano de ataque conforme sofre dano."
       }
     },
-    "silentgear:imperial": {
-      "id": "silentgear:imperial",
+    "silentgear:fiery": {
+      "id": "silentgear:fiery",
       "maxLevel": 5,
       "name": {
-        "en": "Imperial",
-        "pt": "Imperial"
+        "en": "Fiery",
+        "pt": "Ígneo"
       },
       "description": {
-        "en": "Increases luck and treasure yield.",
-        "pt": "Aumenta a sorte e a obtenção de tesouros."
+        "en": "Adds Fire Aspect or Flame to weapons.",
+        "pt": "Adiciona Aspecto Flamejante ou Chamas às armas."
+      }
+    },
+    "silentgear:fireproof": {
+      "id": "silentgear:fireproof",
+      "maxLevel": 1,
+      "name": {
+        "en": "Fireproof",
+        "pt": "À Prova de Fogo"
+      },
+      "description": {
+        "en": "Item will float on lava and cannot burn in fire.",
+        "pt": "O item flutua na lava e não queima no fogo."
+      }
+    },
+    "silentgear:flame_ward": {
+      "id": "silentgear:flame_ward",
+      "maxLevel": 1,
+      "name": {
+        "en": "Flame Ward",
+        "pt": "Proteção de Chamas"
+      },
+      "description": {
+        "en": "Protects against burning and fire damage.",
+        "pt": "Protege contra queimaduras e dano por fogo."
+      }
+    },
+    "silentgear:flammable": {
+      "id": "silentgear:flammable",
+      "maxLevel": 1,
+      "name": {
+        "en": "Flammable",
+        "pt": "Inflamável"
+      },
+      "description": {
+        "en": "Takes damage when on fire and can be used as fuel.",
+        "pt": "Sofre dano quando exposto ao fogo e pode ser usado como combustível."
+      }
+    },
+    "silentgear:flexible": {
+      "id": "silentgear:flexible",
+      "maxLevel": 5,
+      "name": {
+        "en": "Flexible",
+        "pt": "Flexível"
+      },
+      "description": {
+        "en": "Reduces damage taken by the tool or armor from explosions.",
+        "pt": "Reduz o dano sofrido pelo equipamento contra explosões."
+      }
+    },
+    "silentgear:flutter": {
+      "id": "silentgear:flutter",
+      "maxLevel": 1,
+      "name": {
+        "en": "Flutter",
+        "pt": "Flutuante"
+      },
+      "description": {
+        "en": "Provides slow falling or reduced fall impact.",
+        "pt": "Proporciona queda lenta ou reduz o impacto da queda."
+      }
+    },
+    "silentgear:fortunate": {
+      "id": "silentgear:fortunate",
+      "maxLevel": 3,
+      "name": {
+        "en": "Fortunate",
+        "pt": "Afortunado"
+      },
+      "description": {
+        "en": "Adds Fortune to tools.",
+        "pt": "Adiciona Fortuna a ferramentas."
       }
     },
     "silentgear:gold_digger": {
@@ -18230,20 +18532,224 @@
         "pt": "Garimpeiro"
       },
       "description": {
-        "en": "Increases gold drops from mining.",
-        "pt": "Aumenta a chance de extrair ouro ao minerar."
+        "en": "Sometimes increases nugget drops when mining.",
+        "pt": "Ocasionalmente aumenta pepitas obtidas ao minerar."
       }
     },
-    "silentgear:synergistic": {
-      "id": "silentgear:synergistic",
+    "silentgear:greedy": {
+      "id": "silentgear:greedy",
       "maxLevel": 5,
       "name": {
-        "en": "Synergistic",
-        "pt": "Sinergético"
+        "en": "Greedy",
+        "pt": "Ganancioso"
       },
       "description": {
-        "en": "Gear gets a synergy bonus (if base value is more than 100%).",
-        "pt": "Concede bônus de sinergia caso o valor base seja superior a 100%."
+        "en": "Increases the mining speed for ores.",
+        "pt": "Aumenta a velocidade de mineração de minérios."
+      }
+    },
+    "silentgear:hard": {
+      "id": "silentgear:hard",
+      "maxLevel": 5,
+      "name": {
+        "en": "Hard",
+        "pt": "Duro"
+      },
+      "description": {
+        "en": "Increases harvest speed or decreases ranged damage as item is damaged.",
+        "pt": "Aumenta velocidade de mineração ou diminui dano de longo alcance conforme o item sofre dano."
+      }
+    },
+    "silentgear:heat_resistant": {
+      "id": "silentgear:heat_resistant",
+      "maxLevel": 5,
+      "name": {
+        "en": "Heat-Resistant",
+        "pt": "Resistente ao Calor"
+      },
+      "description": {
+        "en": "Reduces fire damage taken.",
+        "pt": "Reduz o dano de fogo recebido."
+      }
+    },
+    "silentgear:holy": {
+      "id": "silentgear:holy",
+      "maxLevel": 5,
+      "name": {
+        "en": "Holy",
+        "pt": "Sagrado"
+      },
+      "description": {
+        "en": "Deals massive bonus damage against undead monsters.",
+        "pt": "Causa dano bônus maciço contra monstros mortos-vivos."
+      }
+    },
+    "silentgear:imperial": {
+      "id": "silentgear:imperial",
+      "maxLevel": 5,
+      "name": {
+        "en": "Imperial",
+        "pt": "Imperial"
+      },
+      "description": {
+        "en": "Sometimes increases gem drops when mining.",
+        "pt": "Ocasionalmente aumenta gemas obtidas ao minerar."
+      }
+    },
+    "silentgear:indestructible": {
+      "id": "silentgear:indestructible",
+      "maxLevel": 1,
+      "name": {
+        "en": "Indestructible",
+        "pt": "Indestrutível"
+      },
+      "description": {
+        "en": "Prevents durability loss.",
+        "pt": "Impede perda de durabilidade."
+      }
+    },
+    "silentgear:jagged": {
+      "id": "silentgear:jagged",
+      "maxLevel": 5,
+      "name": {
+        "en": "Jagged",
+        "pt": "Serrilhado"
+      },
+      "description": {
+        "en": "Increases attack damage or decreases ranged damage as item is damaged.",
+        "pt": "Aumenta dano de ataque ou reduz dano de longo alcance conforme sofre dano."
+      }
+    },
+    "silentgear:light": {
+      "id": "silentgear:light",
+      "maxLevel": 5,
+      "name": {
+        "en": "Light",
+        "pt": "Leve"
+      },
+      "description": {
+        "en": "Armor increases movement speed.",
+        "pt": "A armadura aumenta a velocidade de movimento."
+      }
+    },
+    "silentgear:lucky": {
+      "id": "silentgear:lucky",
+      "maxLevel": 5,
+      "name": {
+        "en": "Lucky",
+        "pt": "Sortudo"
+      },
+      "description": {
+        "en": "Adds luck when held.",
+        "pt": "Concede bônus de sorte quando empunhado."
+      }
+    },
+    "silentgear:lustrous": {
+      "id": "silentgear:lustrous",
+      "maxLevel": 5,
+      "name": {
+        "en": "Lustrous",
+        "pt": "Lustroso"
+      },
+      "description": {
+        "en": "Tools gain a large harvest speed boost when in light.",
+        "pt": "Ferramentas ganham grande bônus de velocidade de mineração sob a luz."
+      }
+    },
+    "silentgear:magmatic": {
+      "id": "silentgear:magmatic",
+      "maxLevel": 1,
+      "name": {
+        "en": "Magmatic",
+        "pt": "Magmático"
+      },
+      "description": {
+        "en": "Auto-smelting mined blocks.",
+        "pt": "Funde automaticamente blocos minerados."
+      }
+    },
+    "silentgear:magnetic": {
+      "id": "silentgear:magnetic",
+      "maxLevel": 5,
+      "name": {
+        "en": "Magnetic",
+        "pt": "Magnético"
+      },
+      "description": {
+        "en": "Pulls nearby dropped items toward the player.",
+        "pt": "Atrai itens caídos no chão diretamente para o jogador."
+      }
+    },
+    "silentgear:malleable": {
+      "id": "silentgear:malleable",
+      "maxLevel": 6,
+      "name": {
+        "en": "Malleable",
+        "pt": "Maleável"
+      },
+      "description": {
+        "en": "Gear sometimes takes less damage.",
+        "pt": "Equipamento ocasionalmente sofre menos dano."
+      }
+    },
+    "silentgear:moonwalker": {
+      "id": "silentgear:moonwalker",
+      "maxLevel": 5,
+      "name": {
+        "en": "Moonwalker",
+        "pt": "Passo Lunar"
+      },
+      "description": {
+        "en": "Increases jump height and reduces gravity.",
+        "pt": "Aumenta altura do pulo e reduz gravidade."
+      }
+    },
+    "silentgear:organic": {
+      "id": "silentgear:organic",
+      "maxLevel": 5,
+      "name": {
+        "en": "Organic",
+        "pt": "Orgânico"
+      },
+      "description": {
+        "en": "Gains enchantability, but loses magic damage as the item is damaged.",
+        "pt": "Ganha capacidade de encantamento, mas perde dano mágico ao sofrer dano."
+      }
+    },
+    "silentgear:reach": {
+      "id": "silentgear:reach",
+      "maxLevel": 5,
+      "name": {
+        "en": "Reach",
+        "pt": "Alcance"
+      },
+      "description": {
+        "en": "Increases block reach distance.",
+        "pt": "Aumenta a distância de alcance de blocos."
+      }
+    },
+    "silentgear:refractive": {
+      "id": "silentgear:refractive",
+      "maxLevel": 1,
+      "name": {
+        "en": "Refractive",
+        "pt": "Refrativo"
+      },
+      "description": {
+        "en": "Places phantom lights when used.",
+        "pt": "Posiciona luzes fantasmagóricas quando utilizado."
+      }
+    },
+    "silentgear:renew": {
+      "id": "silentgear:renew",
+      "maxLevel": 5,
+      "name": {
+        "en": "Renew",
+        "pt": "Renovação"
+      },
+      "description": {
+        "en": "Slowly repairs the item over time.",
+        "pt": "Repara lentamente o item com o passar do tempo."
       }
     },
     "silentgear:rustic": {
@@ -18258,16 +18764,256 @@
         "pt": "Aumenta a sinergia caso o valor base seja de 100% ou menos."
       }
     },
-    "silentgear:crude": {
-      "id": "silentgear:crude",
+    "silentgear:sharp": {
+      "id": "silentgear:sharp",
       "maxLevel": 5,
       "name": {
-        "en": "Crude",
-        "pt": "Bruto"
+        "en": "Sharp",
+        "pt": "Afiado"
       },
       "description": {
-        "en": "Reduces synergy.",
-        "pt": "Reduz a sinergia."
+        "en": "Gain harvest speed and attack damage as durability is lost.",
+        "pt": "Ganha velocidade de mineração e dano de ataque conforme perde durabilidade."
+      }
+    },
+    "silentgear:silky": {
+      "id": "silentgear:silky",
+      "maxLevel": 1,
+      "name": {
+        "en": "Silky",
+        "pt": "Sedoso"
+      },
+      "description": {
+        "en": "Adds Silk Touch to tools.",
+        "pt": "Adiciona Toque Suave (Silk Touch) às ferramentas."
+      }
+    },
+    "silentgear:snow_walker": {
+      "id": "silentgear:snow_walker",
+      "maxLevel": 1,
+      "name": {
+        "en": "Snow Walker",
+        "pt": "Caminhante da Neve"
+      },
+      "description": {
+        "en": "Walk on powder snow without sinking.",
+        "pt": "Permite caminhar sobre neve fofa sem afundar."
+      }
+    },
+    "silentgear:soft": {
+      "id": "silentgear:soft",
+      "maxLevel": 5,
+      "name": {
+        "en": "Soft",
+        "pt": "Macio"
+      },
+      "description": {
+        "en": "Reduces harvest speed as tool is damaged.",
+        "pt": "Reduz a velocidade de mineração conforme a ferramenta sofre dano."
+      }
+    },
+    "silentgear:stellar": {
+      "id": "silentgear:stellar",
+      "maxLevel": 5,
+      "name": {
+        "en": "Stellar",
+        "pt": "Estelar"
+      },
+      "description": {
+        "en": "Armor gives speed and jump boost, items slowly repair themselves.",
+        "pt": "Armadura concede velocidade e pulo, itens se reparam lentamente."
+      }
+    },
+    "silentgear:sting_resist": {
+      "id": "silentgear:sting_resist",
+      "maxLevel": 4,
+      "name": {
+        "en": "Sting Resist",
+        "pt": "Resistência a Ferroadas"
+      },
+      "description": {
+        "en": "Reduces damage and sting effects from arthropods.",
+        "pt": "Reduz o dano e ferrões de artrópodes."
+      }
+    },
+    "silentgear:sturdy": {
+      "id": "silentgear:sturdy",
+      "maxLevel": 5,
+      "name": {
+        "en": "Sturdy",
+        "pt": "Robusto"
+      },
+      "description": {
+        "en": "Gear frequently takes less damage.",
+        "pt": "Equipamento frequentemente sofre menos dano."
+      }
+    },
+    "silentgear:swift_swim": {
+      "id": "silentgear:swift_swim",
+      "maxLevel": 5,
+      "name": {
+        "en": "Swift Swim",
+        "pt": "Nado Rápido"
+      },
+      "description": {
+        "en": "Increases swim speed.",
+        "pt": "Aumenta a velocidade de nado."
+      }
+    },
+    "silentgear:synergistic": {
+      "id": "silentgear:synergistic",
+      "maxLevel": 5,
+      "name": {
+        "en": "Synergistic",
+        "pt": "Sinergético"
+      },
+      "description": {
+        "en": "Gear gets a synergy bonus (if base value is more than 100%).",
+        "pt": "Concede bônus de sinergia caso o valor base seja superior a 100%."
+      }
+    },
+    "silentgear:turtle": {
+      "id": "silentgear:turtle",
+      "maxLevel": 1,
+      "name": {
+        "en": "Turtle",
+        "pt": "Tartaruga"
+      },
+      "description": {
+        "en": "Hold your breath for longer underwater.",
+        "pt": "Permite prender a respiração por mais tempo debaixo d’água."
+      }
+    },
+    "silentgear:void_ward": {
+      "id": "silentgear:void_ward",
+      "maxLevel": 1,
+      "name": {
+        "en": "Void Ward",
+        "pt": "Proteção do Vazio"
+      },
+      "description": {
+        "en": "Saves the wearer from falling out of the world.",
+        "pt": "Salva o portador de quedas no vazio."
+      }
+    },
+    "silentgear:vulcan": {
+      "id": "silentgear:vulcan",
+      "maxLevel": 1,
+      "name": {
+        "en": "Vulcan",
+        "pt": "Vulcânico"
+      },
+      "description": {
+        "en": "Places obsidian at a high durability cost.",
+        "pt": "Posiciona obsidiana a um custo alto de durabilidade."
+      }
+    },
+    "silentgear:wind_blast": {
+      "id": "silentgear:wind_blast",
+      "maxLevel": 1,
+      "name": {
+        "en": "Wind Blast",
+        "pt": "Rajada de Vento"
+      },
+      "description": {
+        "en": "Creates a blast of wind when attacking.",
+        "pt": "Gera uma rajada de vento ao atacar."
+      }
+    },
+    "silentgear:yummy": {
+      "id": "silentgear:yummy",
+      "maxLevel": 5,
+      "name": {
+        "en": "Yummy",
+        "pt": "Delicioso"
+      },
+      "description": {
+        "en": "Makes the item edible, but at durability cost.",
+        "pt": "Torna o item comestível, mas consome durabilidade."
+      }
+    },
+    "silentgear:polished": {
+      "id": "silentgear:polished",
+      "maxLevel": 1,
+      "name": {
+        "en": "Polished",
+        "pt": "Polido"
+      },
+      "description": {
+        "en": "Becomes oxidized if not used for some time.",
+        "pt": "Torna-se oxidado se não for usado por algum tempo."
+      }
+    },
+    "silentgems:barrier_jacket": {
+      "id": "silentgems:barrier_jacket",
+      "maxLevel": 5,
+      "name": {
+        "en": "Barrier Jacket",
+        "pt": "Traje de Barreira"
+      },
+      "description": {
+        "en": "Absorbs incoming damage with magical shielding.",
+        "pt": "Absorve dano recebido com um escudo mágico protetor."
+      }
+    },
+    "silentgems:critical_strike": {
+      "id": "silentgems:critical_strike",
+      "maxLevel": 5,
+      "name": {
+        "en": "Critical Strike",
+        "pt": "Golpe Crítico"
+      },
+      "description": {
+        "en": "Chance to deal massive critical damage on attack.",
+        "pt": "Chance de desferir dano crítico devastador ao atacar."
+      }
+    },
+    "silentgems:enderbane": {
+      "id": "silentgems:enderbane",
+      "maxLevel": 5,
+      "name": {
+        "en": "Enderbane",
+        "pt": "Ruína dos Enders"
+      },
+      "description": {
+        "en": "Deals extra damage to Endermen and Ender dragons.",
+        "pt": "Causa dano extra contra Endermen e dragões."
+      }
+    },
+    "silentgems:fractal": {
+      "id": "silentgems:fractal",
+      "maxLevel": 5,
+      "name": {
+        "en": "Fractal",
+        "pt": "Fractal"
+      },
+      "description": {
+        "en": "Splits projectile and attack impact dynamically.",
+        "pt": "Divide dinamicamente o impacto de projéteis e ataques."
+      }
+    },
+    "silentgems:freeze_resistant": {
+      "id": "silentgems:freeze_resistant",
+      "maxLevel": 5,
+      "name": {
+        "en": "Freeze-Resistant",
+        "pt": "Resistente ao Congelamento"
+      },
+      "description": {
+        "en": "Provides immunity to freezing and cold weather.",
+        "pt": "Concede imunidade a congelamento e frio extremo."
+      }
+    },
+    "silentgems:neptunes_blessing": {
+      "id": "silentgems:neptunes_blessing",
+      "maxLevel": 5,
+      "name": {
+        "en": "Neptune's Blessing",
+        "pt": "Bênção de Netuno"
+      },
+      "description": {
+        "en": "Grants enhanced underwater buffs and attack power.",
+        "pt": "Concede bônus aprimorados e poder de ataque subaquático."
       }
     }
   }

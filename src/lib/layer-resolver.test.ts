@@ -56,8 +56,8 @@ describe('LayerResolver & Addon Management (Issue #47)', () => {
     expect(withGems['silentgems:reinforced_silver']).toBeDefined();
     expect(withGems['silentgems:reinforced_gold']?.source).toBe('silentgems');
     expect(withGems['silentgems:reinforced_silver']?.source).toBe('silentgems');
-    expect(withGems['silentgems:reinforced_gold']?.tier).toBe(1);
-    expect(withGems['silentgems:reinforced_silver']?.tier).toBe(1);
+    expect(withGems['silentgems:reinforced_gold']?.tier).toBe(0);
+    expect(withGems['silentgems:reinforced_silver']?.tier).toBe(0);
 
     // Sem Silent Gems
     const withoutGems = resolveCatalogWithAddons(baseMaterials, layers, ['sgearmetalworks']);

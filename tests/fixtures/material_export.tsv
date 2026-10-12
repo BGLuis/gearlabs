@@ -16,7 +16,7 @@ silentgear	Bone	Main	silentgear:bone		Organic, Basic, Crude	108	4	5	0	1
 mod/sgearmetalworks	Brass	Main	silentgear:brass		Metal, Intermediate, Casting	240	8	14	1	6
 mod/sgearmetalworks	Bronze	Main	silentgear:bronze		Metal, Intermediate, Casting	300	13	15	1	6
 silentgear	Compressed Iron	Main	silentgear:compressed_iron		Metal, Advanced	1024	24	20	2	4
-mod/sgearmetalworks	Copper	Main	silentgear:copper		Metal, Basic, Casting	151	12	10	0	8
+mod/sgearmetalworks	Copper	Main	silentgear:copper		Metal, Basic, Casting	190	11	10	0	8
 mod/sgearmetalworks	Crimson Iron	Main	silentgear:crimson_iron		Metal, Advanced, Casting	420	27	18	2	6
 mod/sgearmetalworks	Crimson Steel	Main	silentgear:crimson_steel		Metal, Endgame, Casting	2400	42	22	10	10
 silentgear	Crushed Shulker Shell	Main	silentgear:crushed_shulker_shell		Rock, Dust, Endgame	2500	50	0	0	0

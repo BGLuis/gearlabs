@@ -173,3 +173,43 @@ export function getKeyStatForSlot(
 
   return '';
 }
+
+/**
+ * Verifica se um material é craftável para seleção de partes de equipamento.
+ * Exclui:
+ * - Materiais com categoria 'intangible' (ex: silentgear:barrier)
+ * - Materiais com gear_type_blacklist contendo 'silentgear:all' ou o gearTypeId (ex: silentgear:example)
+ * - Materiais do tipo 'silentgear:compound' (templates de liga)
+ */
+export function isCraftableMaterial(material: Material, gearTypeId?: string): boolean {
+  if (!material) return false;
+
+  // Categoria intangible (não craftável)
+  if (material.category === 'intangible' || material.categories?.includes('intangible')) {
+    return false;
+  }
+
+  // Templates de compostos (usados apenas na mecânica de ligas)
+  if (material.isCompound || material.type === 'silentgear:compound') {
+    return false;
+  }
+
+  // Blacklist de gear_type
+  const blacklist = material.gear_type_blacklist || [];
+  if (blacklist.includes('silentgear:all') || blacklist.includes('all')) {
+    return false;
+  }
+
+  if (gearTypeId) {
+    const rawId = gearTypeId.replace(/^.*:/, '');
+    if (
+      blacklist.includes(gearTypeId) ||
+      blacklist.includes(`silentgear:${rawId}`) ||
+      blacklist.includes(rawId)
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+}

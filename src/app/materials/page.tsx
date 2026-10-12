@@ -276,9 +276,13 @@ export default function MaterialsPage() {
 
                     {/* Tier */}
                     <td className="p-3">
-                      <span className="px-1.5 py-0.5 rounded bg-mc-card border border-mc-border text-mc-gold font-bold">
-                        T{mat.tier}
-                      </span>
+                      {mat.tier > 0 ? (
+                        <span className="px-1.5 py-0.5 rounded bg-mc-card border border-mc-border text-mc-gold font-bold">
+                          T{mat.tier}
+                        </span>
+                      ) : (
+                        <span className="text-mc-muted text-xs">—</span>
+                      )}
                     </td>
 
                     {/* Durabilidade */}
