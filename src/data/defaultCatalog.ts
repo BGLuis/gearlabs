@@ -17,7 +17,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         melee_damage: 2.0,
         attack_speed: 0.0,
         harvest_speed: 6.0,
-        harvest_tier: 'minecraft:iron',
+        harvest_tier: { name: 'iron', level: 2 },
         rarity: 20,
       },
       rod: { durability: 50 },
@@ -48,7 +48,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         melee_damage: 3.0,
         attack_speed: 0.0,
         harvest_speed: 8.0,
-        harvest_tier: 'minecraft:diamond',
+        harvest_tier: { name: 'diamond', level: 3 },
         rarity: 70,
       },
       rod: {},
@@ -80,7 +80,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         melee_damage: 4.0,
         attack_speed: 0.0,
         harvest_speed: 9.0,
-        harvest_tier: 'minecraft:netherite',
+        harvest_tier: { name: 'netherite', level: 4 },
         rarity: 100,
       },
       coating: {
@@ -118,7 +118,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         melee_damage: 2.5,
         attack_speed: 0.0,
         harvest_speed: 6.5,
-        harvest_tier: 'minecraft:diamond',
+        harvest_tier: { name: 'diamond', level: 3 },
         rarity: 40,
       },
       rod: { durability: 80 },
@@ -147,7 +147,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         melee_damage: 4.5,
         attack_speed: 0.0,
         harvest_speed: 8.5,
-        harvest_tier: 'minecraft:netherite',
+        harvest_tier: { name: 'netherite', level: 4 },
         rarity: 80,
       },
       tip: { durability: 300, melee_damage: 2.5, harvest_speed: 2.0 },
@@ -184,7 +184,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         melee_damage: 3.5,
         attack_speed: 0.2,
         harvest_speed: 11.0,
-        harvest_tier: 'minecraft:diamond',
+        harvest_tier: { name: 'diamond', level: 3 },
         rarity: 75,
       },
       rod: { durability: 100 },
@@ -215,7 +215,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         melee_damage: 4.0,
         attack_speed: 0.3,
         harvest_speed: 13.0,
-        harvest_tier: 'minecraft:netherite',
+        harvest_tier: { name: 'netherite', level: 4 },
         rarity: 95,
       },
     },
@@ -244,7 +244,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         melee_damage: 1.0,
         attack_speed: 0.4,
         harvest_speed: 12.0,
-        harvest_tier: 'minecraft:wood',
+        harvest_tier: { name: 'wood', level: 0 },
         rarity: 30,
       },
       tip: { harvest_speed: 4.0 },
@@ -274,7 +274,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         melee_damage: 1.5,
         attack_speed: 0.0,
         harvest_speed: 5.0,
-        harvest_tier: 'minecraft:stone',
+        harvest_tier: { name: 'stone', level: 1 },
         rarity: 15,
       },
       rod: { durability: 30 },
@@ -302,7 +302,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
         melee_damage: 1.0,
         attack_speed: 0.0,
         harvest_speed: 2.0,
-        harvest_tier: 'minecraft:wood',
+        harvest_tier: { name: 'wood', level: 0 },
         rarity: 5,
       },
       rod: { durability: 15 },
@@ -392,7 +392,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         ranged_damage: 0,
         rarity: 90,
         enchantment_value: 85,
-        harvest_tier: 'allthemodium',
+        harvest_tier: { name: 'allthemodium', level: 5 },
         by_type: {
           armor: {
             helmet: 15,
@@ -412,7 +412,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         armor_durability: { value: 10, operation: 'ADD' },
         harvest_speed: { value: 6, operation: 'ADD' },
         rarity: { value: 30, operation: 'ADD' },
-        harvest_tier: 'allthemodium',
+        harvest_tier: { name: 'allthemodium', level: 5 },
       },
     },
     traits: {
@@ -450,7 +450,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         ranged_damage: 0,
         rarity: 90,
         enchantment_value: 105,
-        harvest_tier: 'vibranium',
+        harvest_tier: { name: 'vibranium', level: 6 },
         by_type: {
           armor: {
             helmet: 15,
@@ -470,7 +470,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         armor_durability: { value: 10, operation: 'ADD' },
         harvest_speed: { value: 6, operation: 'ADD' },
         rarity: { value: 60, operation: 'ADD' },
-        harvest_tier: 'vibranium',
+        harvest_tier: { name: 'vibranium', level: 6 },
       },
     },
     traits: {
@@ -510,7 +510,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         ranged_damage: 0,
         rarity: 99,
         enchantment_value: 175,
-        harvest_tier: 'unobtainium',
+        harvest_tier: { name: 'unobtainium', level: 7 },
         by_type: {
           armor: {
             helmet: 20,
@@ -530,7 +530,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         armor_durability: { value: 10, operation: 'ADD' },
         harvest_speed: { value: 6, operation: 'ADD' },
         rarity: { value: 60, operation: 'ADD' },
-        harvest_tier: 'unobtainium',
+        harvest_tier: { name: 'unobtainium', level: 7 },
       },
     },
     traits: {
@@ -572,7 +572,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         rarity: 200,
         enchantment_value: 1500,
         charging_value: 1.5,
-        harvest_tier: 'unobtainium',
+        harvest_tier: { name: 'unobtainium', level: 7 },
         by_type: {
           armor: {
             helmet: 8,
@@ -633,7 +633,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
         rarity: 100,
         enchantment_value: 16,
         charging_value: 1.1,
-        harvest_tier: 'tyrian_steel',
+        harvest_tier: { name: 'tyrian_steel', level: 4 },
         by_type: {
           armor: {
             helmet: 5,
@@ -649,7 +649,7 @@ export const ALLTHEMODIUM_MATERIALS: Record<string, Material> = {
       tip: {
         durability: { value: 251, operation: 'ADD' },
         rarity: { value: 30, operation: 'ADD' },
-        harvest_tier: 'tyrian_steel',
+        harvest_tier: { name: 'tyrian_steel', level: 4 },
       },
     },
     traits: {

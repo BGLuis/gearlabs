@@ -165,7 +165,7 @@ describe('datapack-parser (Issue #7)', () => {
         boots: 15.0,
       });
       expect(mat?.color).toBe('#FFEF0E');
-      expect(mat?.stats.main?.harvest_tier).toBe('allthemodium');
+      expect(mat?.stats.main?.harvest_tier).toEqual({ name: 'allthemodium', level: 5 });
     });
 
     it('critério 2: um material com armor_toughness: 0 importa toughness 0, não um padrão', () => {
@@ -363,7 +363,7 @@ describe('datapack-parser (Issue #7)', () => {
       expect(oak.categories).toEqual(['wood', 'organic']);
       expect(oak.stats.main?.durability).toBe(59);
       expect(oak.stats.main?.armor).toBe(7);
-      expect(oak.stats.main?.harvest_tier).toBe('wood');
+      expect(oak.stats.main?.harvest_tier).toEqual({ name: 'wood', level: 0 });
       expect(oak.traits.main).toEqual([
         { name: 'silentgear:flammable', level: 1 },
         { name: 'silentgear:jagged', level: 1 },

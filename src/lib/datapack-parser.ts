@@ -1,5 +1,6 @@
 import JSZip from 'jszip';
 import {
+  HarvestTier,
   Material,
   MaterialCategory,
   MaterialStats,
@@ -167,6 +168,125 @@ export function parseStatValueEntry(val: any): StatModifierEntry | undefined {
   return undefined;
 }
 
+export const DEFAULT_HARVEST_LEVELS: Record<string, number> = {
+  zero: 0,
+  wood: 0,
+  bamboo: 0,
+  netherwood: 0,
+  gold: 0,
+  stone: 1,
+  terracotta: 1,
+  flint: 1,
+  bone: 1,
+  basalt: 1,
+  blackstone: 1,
+  netherrack: 1,
+  sandstone: 1,
+  end_stone: 1,
+  tin: 1,
+  zinc: 1,
+  copper: 1.5,
+  amethyst: 1.5,
+  lapis_lazuli: 1.5,
+  iron: 2,
+  bronze: 2,
+  high_carbon_steel: 2,
+  quartz: 2,
+  emerald: 2,
+  blaze_gold: 2,
+  aquamarine: 2,
+  carnelian: 2,
+  citrine: 2,
+  iolite: 2,
+  moldavite: 2,
+  peridot: 2,
+  ruby: 2,
+  sapphire: 2,
+  tanzanite: 2,
+  topaz: 2,
+  diamond: 3,
+  crimson_iron: 3,
+  azure_silver: 3,
+  dimerald: 3,
+  opal: 3,
+  pearl: 3,
+  heliodor: 3,
+  turquoise: 3,
+  alexandrite: 3,
+  ammolite: 3,
+  netherite: 4,
+  crimson_steel: 4,
+  tyrian_steel: 4,
+  azure_electrum: 4,
+  titanium: 4,
+  black_diamond: 4,
+  kyanite: 4,
+  rose_quartz: 4,
+  white_diamond: 4,
+  allthemodium: 5,
+  vibranium: 6,
+  unobtainium: 7,
+  uru_metal: 7,
+};
+
+/**
+ * Converte qualquer formato de harvest_tier (JSON do mod com level_hint, TSV ou legado)
+ * para a estrutura oficial { name, level } do Silent Gear (HarvestTierProperty.java / Issue #38).
+ */
+export function parseHarvestTier(raw: unknown): HarvestTier | undefined {
+  if (raw === undefined || raw === null) return undefined;
+
+  if (typeof raw === 'object') {
+    const obj = raw as Record<string, unknown>;
+    const rawName = obj.name ?? obj.id ?? obj.incorrect_blocks_for_tool;
+    if (rawName === undefined || rawName === null) return undefined;
+
+    let name = String(rawName);
+    if (obj.name) {
+      name = String(obj.name).replace(/^.*:/, '');
+    } else if (obj.id) {
+      name = String(obj.id).replace(/^.*:/, '');
+    } else if (obj.incorrect_blocks_for_tool) {
+      name = String(obj.incorrect_blocks_for_tool)
+        .replace(/^.*:/, '')
+        .replace(/^incorrect_for_/, '')
+        .replace(/_tools?$/, '');
+    }
+
+    let level: number | undefined;
+    if (obj.level_hint !== undefined && obj.level_hint !== null) {
+      const parsed = Number(obj.level_hint);
+      if (!Number.isNaN(parsed)) {
+        level = parsed;
+      }
+    }
+    if (level === undefined && typeof obj.level === 'number' && !Number.isNaN(obj.level)) {
+      level = obj.level;
+    }
+    if (level === undefined) {
+      const cleanKey = name.toLowerCase().replace(/^.*:/, '');
+      level = DEFAULT_HARVEST_LEVELS[cleanKey] ?? 0;
+    }
+
+    return { name, level };
+  }
+
+  if (typeof raw === 'string') {
+    const clean = raw.trim();
+    if (!clean) return undefined;
+    const name = clean.replace(/^.*:/, '');
+    const cleanKey = name.toLowerCase();
+    const level = DEFAULT_HARVEST_LEVELS[cleanKey] ?? 0;
+    return { name, level };
+  }
+
+  if (typeof raw === 'number' && !Number.isNaN(raw)) {
+    return { name: String(raw), level: raw };
+  }
+
+  return undefined;
+}
+
 /**
  * Processa as propriedades brutas de um slot (main, rod, coating, etc.)
  * mapeando todas as estatísticas sem criar valores artificiais.
@@ -219,16 +339,10 @@ function parseSlotStats(slotData: any): MaterialStats {
   const chargingValue = parseStatValueEntry(slotData.charging_value);
   if (chargingValue !== undefined) stats.charging_value = chargingValue;
 
-  // Harvest Tier (suporta objeto com .name, .id ou .incorrect_blocks_for_tool, ou string/número)
-  if (typeof slotData.harvest_tier === 'object' && slotData.harvest_tier !== null) {
-    stats.harvest_tier =
-      slotData.harvest_tier.name ??
-      slotData.harvest_tier.id ??
-      slotData.harvest_tier.incorrect_blocks_for_tool;
-  } else if (typeof slotData.harvest_tier === 'string') {
-    stats.harvest_tier = slotData.harvest_tier;
-  } else if (typeof slotData.harvest_tier === 'number') {
-    stats.harvest_tier = String(slotData.harvest_tier);
+  // Harvest Tier (Silent Gear 4.2.3: extrai name e level_hint com fallback para DEFAULT_HARVEST_LEVELS)
+  const harvestTier = parseHarvestTier(slotData.harvest_tier);
+  if (harvestTier !== undefined) {
+    stats.harvest_tier = harvestTier;
   }
 
   const byType = parseByTypeStats(slotData);
@@ -703,7 +817,10 @@ export function parseDumpTsv(tsvText: string): VersionCatalog {
           const cell = cols[colIdx]?.trim();
           if (cell) {
             if (statKey === 'harvest_tier') {
-              slotStats.harvest_tier = cell;
+              const parsedTier = parseHarvestTier(cell);
+              if (parsedTier) {
+                slotStats.harvest_tier = parsedTier;
+              }
             } else {
               const parsedVal = parseTsvCellValue(cell);
               if (parsedVal !== undefined) {

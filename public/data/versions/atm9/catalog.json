@@ -30,7 +30,10 @@
           "rarity": 25,
           "enchantment_value": 14,
           "charging_value": 0.9,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -106,7 +109,10 @@
           "rarity": 45,
           "enchantment_value": 11,
           "charging_value": 1,
-          "harvest_tier": "diamond",
+          "harvest_tier": {
+            "name": "diamond",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -178,7 +184,10 @@
           "rarity": 35,
           "enchantment_value": 16,
           "charging_value": 1.3,
-          "harvest_tier": "amethyst",
+          "harvest_tier": {
+            "name": "amethyst",
+            "level": 1.5
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -193,7 +202,10 @@
             "value": -0.25,
             "operation": "MULTIPLY_TOTAL"
           },
-          "harvest_tier": "amethyst"
+          "harvest_tier": {
+            "name": "amethyst",
+            "level": 1.5
+          }
         }
       },
       "traits": {
@@ -239,7 +251,10 @@
           "rarity": 109,
           "enchantment_value": 37,
           "charging_value": 1.5,
-          "harvest_tier": "azure_electrum",
+          "harvest_tier": {
+            "name": "azure_electrum",
+            "level": 4
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -268,7 +283,10 @@
             "value": 5,
             "operation": "ADD"
           },
-          "harvest_tier": "azure_electrum"
+          "harvest_tier": {
+            "name": "azure_electrum",
+            "level": 4
+          }
         }
       },
       "traits": {
@@ -331,7 +349,10 @@
           "rarity": 83,
           "enchantment_value": 29,
           "charging_value": 1.4,
-          "harvest_tier": "azure_silver",
+          "harvest_tier": {
+            "name": "azure_silver",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -372,7 +393,10 @@
             "value": 31,
             "operation": "ADD"
           },
-          "harvest_tier": "azure_silver"
+          "harvest_tier": {
+            "name": "azure_silver",
+            "level": 3
+          }
         }
       },
       "traits": {
@@ -435,7 +459,10 @@
           "rarity": 4,
           "enchantment_value": 15,
           "charging_value": 0.7,
-          "harvest_tier": "bamboo",
+          "harvest_tier": {
+            "name": "bamboo",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -496,7 +523,10 @@
           "rarity": 111,
           "enchantment_value": 5,
           "charging_value": 0.5,
-          "harvest_tier": "wood",
+          "harvest_tier": {
+            "name": "wood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -545,7 +575,10 @@
           "rarity": 7,
           "enchantment_value": 6,
           "charging_value": 0.7,
-          "harvest_tier": "basalt",
+          "harvest_tier": {
+            "name": "basalt",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -620,7 +653,10 @@
           "rarity": 35,
           "enchantment_value": 12,
           "charging_value": 0.9,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -688,7 +724,10 @@
           "rarity": 50,
           "enchantment_value": 14,
           "charging_value": 1.1,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -756,7 +795,10 @@
           "rarity": 60,
           "enchantment_value": 14,
           "charging_value": 1,
-          "harvest_tier": "diamond",
+          "harvest_tier": {
+            "name": "diamond",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -822,7 +864,10 @@
           "rarity": 9,
           "enchantment_value": 4,
           "charging_value": 0.6,
-          "harvest_tier": "blackstone",
+          "harvest_tier": {
+            "name": "blackstone",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -902,7 +947,10 @@
           "rarity": 45,
           "enchantment_value": 24,
           "charging_value": 1.2,
-          "harvest_tier": "blaze_gold",
+          "harvest_tier": {
+            "name": "blaze_gold",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -939,7 +987,10 @@
             "value": 14,
             "operation": "ADD"
           },
-          "harvest_tier": "blaze_gold"
+          "harvest_tier": {
+            "name": "blaze_gold",
+            "level": 2
+          }
         },
         "coating": {
           "durability": {
@@ -1067,7 +1118,10 @@
           "rarity": 8,
           "enchantment_value": 5,
           "charging_value": 0.9,
-          "harvest_tier": "bone",
+          "harvest_tier": {
+            "name": "bone",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -1127,7 +1181,10 @@
           "rarity": 25,
           "enchantment_value": 13,
           "charging_value": 1.2,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -1237,7 +1294,10 @@
           "rarity": 15,
           "enchantment_value": 12,
           "charging_value": 1.1,
-          "harvest_tier": "bronze",
+          "harvest_tier": {
+            "name": "bronze",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -1278,7 +1338,10 @@
             "value": 6,
             "operation": "ADD"
           },
-          "harvest_tier": "bronze"
+          "harvest_tier": {
+            "name": "bronze",
+            "level": 2
+          }
         }
       },
       "traits": {
@@ -1329,7 +1392,10 @@
           "rarity": 40,
           "enchantment_value": 12,
           "charging_value": 0.8,
-          "harvest_tier": "diamond",
+          "harvest_tier": {
+            "name": "diamond",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -1393,7 +1459,10 @@
           "rarity": 12,
           "enchantment_value": 15,
           "charging_value": 1.3,
-          "harvest_tier": "copper",
+          "harvest_tier": {
+            "name": "copper",
+            "level": 1.5
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -1430,7 +1499,10 @@
             "value": 4,
             "operation": "ADD"
           },
-          "harvest_tier": "copper"
+          "harvest_tier": {
+            "name": "copper",
+            "level": 1.5
+          }
         }
       },
       "traits": {
@@ -1490,7 +1562,10 @@
           "rarity": 31,
           "enchantment_value": 14,
           "charging_value": 0.7,
-          "harvest_tier": "crimson_iron",
+          "harvest_tier": {
+            "name": "crimson_iron",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -1527,7 +1602,10 @@
             "value": 10,
             "operation": "ADD"
           },
-          "harvest_tier": "crimson_iron"
+          "harvest_tier": {
+            "name": "crimson_iron",
+            "level": 3
+          }
         }
       },
       "traits": {
@@ -1587,7 +1665,10 @@
           "rarity": 83,
           "enchantment_value": 19,
           "charging_value": 0.9,
-          "harvest_tier": "crimson_steel",
+          "harvest_tier": {
+            "name": "crimson_steel",
+            "level": 4
+          },
           "by_type": {
             "armor": {
               "boots": 4,
@@ -1620,7 +1701,10 @@
             "value": 20,
             "operation": "ADD"
           },
-          "harvest_tier": "crimson_steel"
+          "harvest_tier": {
+            "name": "crimson_steel",
+            "level": 4
+          }
         }
       },
       "traits": {
@@ -1729,7 +1813,10 @@
           "rarity": 70,
           "enchantment_value": 10,
           "charging_value": 0.8,
-          "harvest_tier": "diamond",
+          "harvest_tier": {
+            "name": "diamond",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -1773,7 +1860,10 @@
             "value": 20,
             "operation": "ADD"
           },
-          "harvest_tier": "diamond"
+          "harvest_tier": {
+            "name": "diamond",
+            "level": 3
+          }
         }
       },
       "traits": {
@@ -1836,7 +1926,10 @@
           "rarity": 80,
           "enchantment_value": 12,
           "charging_value": 0.7,
-          "harvest_tier": "dimerald",
+          "harvest_tier": {
+            "name": "dimerald",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -1931,7 +2024,10 @@
           "rarity": 40,
           "enchantment_value": 25,
           "charging_value": 1.5,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -1996,7 +2092,10 @@
           "rarity": 40,
           "enchantment_value": 16,
           "charging_value": 1,
-          "harvest_tier": "emerald",
+          "harvest_tier": {
+            "name": "emerald",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -2040,7 +2139,10 @@
             "value": 20,
             "operation": "ADD"
           },
-          "harvest_tier": "emerald"
+          "harvest_tier": {
+            "name": "emerald",
+            "level": 2
+          }
         }
       },
       "traits": {
@@ -2144,7 +2246,10 @@
           "rarity": 32,
           "enchantment_value": 10,
           "charging_value": 0.9,
-          "harvest_tier": "end_stone",
+          "harvest_tier": {
+            "name": "end_stone",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -2212,7 +2317,10 @@
           "rarity": 80,
           "enchantment_value": 13,
           "charging_value": 1.2,
-          "harvest_tier": "netherite",
+          "harvest_tier": {
+            "name": "netherite",
+            "level": 4
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -2275,7 +2383,10 @@
           "rarity": 0,
           "enchantment_value": 1,
           "charging_value": 1,
-          "harvest_tier": "wood",
+          "harvest_tier": {
+            "name": "wood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -2498,7 +2609,10 @@
           "rarity": 6,
           "enchantment_value": 3,
           "charging_value": 0.8,
-          "harvest_tier": "flint",
+          "harvest_tier": {
+            "name": "flint",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 0.5,
@@ -2658,7 +2772,10 @@
           "rarity": 50,
           "enchantment_value": 22,
           "charging_value": 1.2,
-          "harvest_tier": "gold",
+          "harvest_tier": {
+            "name": "gold",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -2780,7 +2897,10 @@
           "rarity": 40,
           "enchantment_value": 11,
           "charging_value": 0.8,
-          "harvest_tier": "high_carbon_steel",
+          "harvest_tier": {
+            "name": "high_carbon_steel",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -2841,7 +2961,10 @@
           "rarity": 50,
           "enchantment_value": 13,
           "charging_value": 1.2,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -2909,7 +3032,10 @@
           "rarity": 20,
           "enchantment_value": 14,
           "charging_value": 0.7,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -2945,7 +3071,10 @@
             "value": 8,
             "operation": "ADD"
           },
-          "harvest_tier": "iron"
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          }
         }
       },
       "traits": {
@@ -2996,7 +3125,10 @@
           "rarity": 30,
           "enchantment_value": 17,
           "charging_value": 1.3,
-          "harvest_tier": "lapis_lazuli",
+          "harvest_tier": {
+            "name": "lapis_lazuli",
+            "level": 1.5
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -3015,7 +3147,10 @@
             "value": -0.1,
             "operation": "MULTIPLY_TOTAL"
           },
-          "harvest_tier": "lapis_lazuli"
+          "harvest_tier": {
+            "name": "lapis_lazuli",
+            "level": 1.5
+          }
         }
       },
       "traits": {
@@ -3058,7 +3193,10 @@
           "rarity": 40,
           "enchantment_value": 15,
           "charging_value": 0.8,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -3236,7 +3374,10 @@
           "rarity": 75,
           "enchantment_value": 14,
           "charging_value": 1.3,
-          "harvest_tier": "diamond",
+          "harvest_tier": {
+            "name": "diamond",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -3361,7 +3502,10 @@
             "value": 5,
             "operation": "ADD"
           },
-          "harvest_tier": "netherite"
+          "harvest_tier": {
+            "name": "netherite",
+            "level": 4
+          }
         }
       },
       "traits": {
@@ -3400,7 +3544,10 @@
           "rarity": 11,
           "enchantment_value": 8,
           "charging_value": 0.8,
-          "harvest_tier": "netherrack",
+          "harvest_tier": {
+            "name": "netherrack",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -3461,7 +3608,10 @@
           "rarity": 4,
           "enchantment_value": 13,
           "charging_value": 0.7,
-          "harvest_tier": "netherwood",
+          "harvest_tier": {
+            "name": "netherwood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -3533,7 +3683,10 @@
           "rarity": 40,
           "enchantment_value": 12,
           "charging_value": 1,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -3602,7 +3755,10 @@
           "rarity": 10,
           "enchantment_value": 7,
           "charging_value": 0.6,
-          "harvest_tier": "obsidian",
+          "harvest_tier": {
+            "name": "obsidian",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -3669,7 +3825,10 @@
           "rarity": 35,
           "enchantment_value": 12,
           "charging_value": 1.1,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -3847,7 +4006,10 @@
           "rarity": 80,
           "enchantment_value": 14,
           "charging_value": 1.2,
-          "harvest_tier": "diamond",
+          "harvest_tier": {
+            "name": "diamond",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -3962,7 +4124,10 @@
           "rarity": 40,
           "enchantment_value": 10,
           "charging_value": 1.2,
-          "harvest_tier": "quartz",
+          "harvest_tier": {
+            "name": "quartz",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -4007,7 +4172,10 @@
             "value": 20,
             "operation": "ADD"
           },
-          "harvest_tier": "quartz"
+          "harvest_tier": {
+            "name": "quartz",
+            "level": 2
+          }
         }
       },
       "traits": {
@@ -4128,7 +4296,10 @@
           "rarity": 45,
           "enchantment_value": 18,
           "charging_value": 0.9,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -4192,7 +4363,10 @@
           "rarity": 45,
           "enchantment_value": 18,
           "charging_value": 0.8,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -4276,7 +4450,10 @@
           "rarity": 25,
           "enchantment_value": 15,
           "charging_value": 0.8,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -4345,7 +4522,10 @@
           "rarity": 70,
           "enchantment_value": 40,
           "charging_value": 0.8,
-          "harvest_tier": "diamond",
+          "harvest_tier": {
+            "name": "diamond",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 5,
@@ -4423,7 +4603,10 @@
           "rarity": 7,
           "enchantment_value": 7,
           "charging_value": 0.7,
-          "harvest_tier": "sandstone",
+          "harvest_tier": {
+            "name": "sandstone",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -4474,7 +4657,10 @@
           "rarity": 7,
           "enchantment_value": 7,
           "charging_value": 0.7,
-          "harvest_tier": "sandstone",
+          "harvest_tier": {
+            "name": "sandstone",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -4561,7 +4747,10 @@
           "rarity": 50,
           "enchantment_value": 16,
           "charging_value": 1.2,
-          "harvest_tier": "diamond",
+          "harvest_tier": {
+            "name": "diamond",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -4629,7 +4818,10 @@
           "rarity": 40,
           "enchantment_value": 20,
           "charging_value": 1.1,
-          "harvest_tier": "gold",
+          "harvest_tier": {
+            "name": "gold",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -4755,7 +4947,10 @@
           "rarity": 40,
           "enchantment_value": 11,
           "charging_value": 0.8,
-          "harvest_tier": "iron",
+          "harvest_tier": {
+            "name": "iron",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -4813,7 +5008,10 @@
           "rarity": 4,
           "enchantment_value": 5,
           "charging_value": 0.5,
-          "harvest_tier": "stone",
+          "harvest_tier": {
+            "name": "stone",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -4879,7 +5077,10 @@
           "rarity": 4,
           "enchantment_value": 5,
           "charging_value": 0.5,
-          "harvest_tier": "stone",
+          "harvest_tier": {
+            "name": "stone",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -4945,7 +5146,10 @@
           "rarity": 4,
           "enchantment_value": 5,
           "charging_value": 0.5,
-          "harvest_tier": "stone",
+          "harvest_tier": {
+            "name": "stone",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5011,7 +5215,10 @@
           "rarity": 4,
           "enchantment_value": 5,
           "charging_value": 0.5,
-          "harvest_tier": "stone",
+          "harvest_tier": {
+            "name": "stone",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5116,7 +5323,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5187,7 +5397,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5258,7 +5471,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5329,7 +5545,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5400,7 +5619,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5471,7 +5693,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5542,7 +5767,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5613,7 +5841,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5684,7 +5915,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5755,7 +5989,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5826,7 +6063,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5897,7 +6137,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -5968,7 +6211,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -6039,7 +6285,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -6110,7 +6359,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -6181,7 +6433,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -6252,7 +6507,10 @@
           "rarity": 7,
           "enchantment_value": 9,
           "charging_value": 0.8,
-          "harvest_tier": "terracotta",
+          "harvest_tier": {
+            "name": "terracotta",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -6323,7 +6581,10 @@
           "rarity": 15,
           "enchantment_value": 12,
           "charging_value": 1.1,
-          "harvest_tier": "stone",
+          "harvest_tier": {
+            "name": "stone",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -6391,7 +6652,10 @@
           "rarity": 80,
           "enchantment_value": 12,
           "charging_value": 1,
-          "harvest_tier": "netherite",
+          "harvest_tier": {
+            "name": "netherite",
+            "level": 4
+          },
           "by_type": {
             "armor": {
               "boots": 4,
@@ -6509,7 +6773,10 @@
           "rarity": 100,
           "enchantment_value": 16,
           "charging_value": 1.1,
-          "harvest_tier": "tyrian_steel",
+          "harvest_tier": {
+            "name": "tyrian_steel",
+            "level": 4
+          },
           "by_type": {
             "armor": {
               "boots": 4,
@@ -6534,7 +6801,10 @@
             "value": 30,
             "operation": "ADD"
           },
-          "harvest_tier": "tyrian_steel"
+          "harvest_tier": {
+            "name": "tyrian_steel",
+            "level": 4
+          }
         }
       },
       "traits": {
@@ -6594,7 +6864,10 @@
           "rarity": 50,
           "enchantment_value": 17,
           "charging_value": 1.5,
-          "harvest_tier": "diamond",
+          "harvest_tier": {
+            "name": "diamond",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -6671,7 +6944,10 @@
           "rarity": 1,
           "enchantment_value": 15,
           "charging_value": 0.6,
-          "harvest_tier": "wood",
+          "harvest_tier": {
+            "name": "wood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -6733,7 +7009,10 @@
           "rarity": 1,
           "enchantment_value": 15,
           "charging_value": 0.6,
-          "harvest_tier": "wood",
+          "harvest_tier": {
+            "name": "wood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -6795,7 +7074,10 @@
           "rarity": 1,
           "enchantment_value": 15,
           "charging_value": 0.6,
-          "harvest_tier": "wood",
+          "harvest_tier": {
+            "name": "wood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -6853,7 +7135,10 @@
           "rarity": 1,
           "enchantment_value": 15,
           "charging_value": 0.6,
-          "harvest_tier": "wood",
+          "harvest_tier": {
+            "name": "wood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -6915,7 +7200,10 @@
           "rarity": 1,
           "enchantment_value": 15,
           "charging_value": 0.6,
-          "harvest_tier": "wood",
+          "harvest_tier": {
+            "name": "wood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -6977,7 +7265,10 @@
           "rarity": 1,
           "enchantment_value": 15,
           "charging_value": 0.6,
-          "harvest_tier": "wood",
+          "harvest_tier": {
+            "name": "wood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -7039,7 +7330,10 @@
           "rarity": 1,
           "enchantment_value": 15,
           "charging_value": 0.6,
-          "harvest_tier": "wood",
+          "harvest_tier": {
+            "name": "wood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -7101,7 +7395,10 @@
           "rarity": 1,
           "enchantment_value": 15,
           "charging_value": 0.6,
-          "harvest_tier": "wood",
+          "harvest_tier": {
+            "name": "wood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -7159,7 +7456,10 @@
           "rarity": 1,
           "enchantment_value": 15,
           "charging_value": 0.6,
-          "harvest_tier": "wood",
+          "harvest_tier": {
+            "name": "wood",
+            "level": 0
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -8427,7 +8727,10 @@
           "rarity": 10,
           "enchantment_value": 15,
           "charging_value": 1.1,
-          "harvest_tier": "stone",
+          "harvest_tier": {
+            "name": "stone",
+            "level": 1
+          },
           "by_type": {
             "armor": {
               "boots": 1,
@@ -8598,7 +8901,10 @@
           "rarity": 200,
           "enchantment_value": 1500,
           "charging_value": 1.5,
-          "harvest_tier": "unobtainium",
+          "harvest_tier": {
+            "name": "unobtainium",
+            "level": 7
+          },
           "by_type": {
             "armor": {
               "boots": 8,
@@ -8722,7 +9028,10 @@
           "rarity": 45,
           "enchantment_value": 15,
           "charging_value": 1.3,
-          "harvest_tier": "alexandrite",
+          "harvest_tier": {
+            "name": "alexandrite",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -8775,7 +9084,10 @@
           "rarity": 60,
           "enchantment_value": 12,
           "charging_value": 1.2,
-          "harvest_tier": "ammolite",
+          "harvest_tier": {
+            "name": "ammolite",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -8828,7 +9140,10 @@
           "rarity": 40,
           "enchantment_value": 12,
           "charging_value": 1.3,
-          "harvest_tier": "aquamarine",
+          "harvest_tier": {
+            "name": "aquamarine",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -8887,7 +9202,10 @@
           "rarity": 55,
           "enchantment_value": 12,
           "charging_value": 1,
-          "harvest_tier": "black_diamond",
+          "harvest_tier": {
+            "name": "black_diamond",
+            "level": 4
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -8940,7 +9258,10 @@
           "rarity": 45,
           "enchantment_value": 10,
           "charging_value": 1.2,
-          "harvest_tier": "carnelian",
+          "harvest_tier": {
+            "name": "carnelian",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -8989,7 +9310,10 @@
           "rarity": 45,
           "enchantment_value": 10,
           "charging_value": 1.2,
-          "harvest_tier": "citrine",
+          "harvest_tier": {
+            "name": "citrine",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9042,7 +9366,10 @@
           "rarity": 40,
           "enchantment_value": 12,
           "charging_value": 1.3,
-          "harvest_tier": "peridot",
+          "harvest_tier": {
+            "name": "peridot",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9101,7 +9428,10 @@
           "rarity": 60,
           "enchantment_value": 10,
           "charging_value": 1.2,
-          "harvest_tier": "heliodor",
+          "harvest_tier": {
+            "name": "heliodor",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9154,7 +9484,10 @@
           "rarity": 45,
           "enchantment_value": 10,
           "charging_value": 1.2,
-          "harvest_tier": "iolite",
+          "harvest_tier": {
+            "name": "iolite",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -9207,7 +9540,10 @@
           "rarity": 60,
           "enchantment_value": 17,
           "charging_value": 1.4,
-          "harvest_tier": "kyanite",
+          "harvest_tier": {
+            "name": "kyanite",
+            "level": 4
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -9260,7 +9596,10 @@
           "rarity": 45,
           "enchantment_value": 10,
           "charging_value": 1.2,
-          "harvest_tier": "moldavite",
+          "harvest_tier": {
+            "name": "moldavite",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9313,7 +9652,10 @@
           "rarity": 60,
           "enchantment_value": 10,
           "charging_value": 1.3,
-          "harvest_tier": "opal",
+          "harvest_tier": {
+            "name": "opal",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9376,7 +9718,10 @@
           "rarity": 65,
           "enchantment_value": 12,
           "charging_value": 1.3,
-          "harvest_tier": "pearl",
+          "harvest_tier": {
+            "name": "pearl",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 3,
@@ -9435,7 +9780,10 @@
           "rarity": 30,
           "enchantment_value": 12,
           "charging_value": 1.3,
-          "harvest_tier": "peridot",
+          "harvest_tier": {
+            "name": "peridot",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9488,7 +9836,10 @@
           "rarity": 60,
           "enchantment_value": 12,
           "charging_value": 1.2,
-          "harvest_tier": "rose_quartz",
+          "harvest_tier": {
+            "name": "rose_quartz",
+            "level": 4
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9541,7 +9892,10 @@
           "rarity": 30,
           "enchantment_value": 12,
           "charging_value": 1.3,
-          "harvest_tier": "ruby",
+          "harvest_tier": {
+            "name": "ruby",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9590,7 +9944,10 @@
           "rarity": 30,
           "enchantment_value": 12,
           "charging_value": 1.3,
-          "harvest_tier": "sapphire",
+          "harvest_tier": {
+            "name": "sapphire",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9643,7 +10000,10 @@
           "rarity": 50,
           "enchantment_value": 15,
           "charging_value": 1.2,
-          "harvest_tier": "tanzanite",
+          "harvest_tier": {
+            "name": "tanzanite",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9702,7 +10062,10 @@
           "rarity": 30,
           "enchantment_value": 12,
           "charging_value": 1.3,
-          "harvest_tier": "topaz",
+          "harvest_tier": {
+            "name": "topaz",
+            "level": 2
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9755,7 +10118,10 @@
           "rarity": 45,
           "enchantment_value": 15,
           "charging_value": 1.3,
-          "harvest_tier": "turquoise",
+          "harvest_tier": {
+            "name": "turquoise",
+            "level": 3
+          },
           "by_type": {
             "armor": {
               "boots": 2,
@@ -9808,7 +10174,10 @@
           "rarity": 70,
           "enchantment_value": 14,
           "charging_value": 1,
-          "harvest_tier": "white_diamond",
+          "harvest_tier": {
+            "name": "white_diamond",
+            "level": 4
+          },
           "by_type": {
             "armor": {
               "boots": 4,
@@ -9859,7 +10228,10 @@
           "ranged_damage": 0,
           "rarity": 90,
           "enchantment_value": 85,
-          "harvest_tier": "allthemodium",
+          "harvest_tier": {
+            "name": "allthemodium",
+            "level": 5
+          },
           "by_type": {
             "armor": {
               "helmet": 15,
@@ -9897,7 +10269,10 @@
             "value": 30,
             "operation": "ADD"
           },
-          "harvest_tier": "allthemodium"
+          "harvest_tier": {
+            "name": "allthemodium",
+            "level": 5
+          }
         }
       },
       "traits": {
@@ -9967,7 +10342,10 @@
           "ranged_damage": 0,
           "rarity": 99,
           "enchantment_value": 175,
-          "harvest_tier": "unobtainium",
+          "harvest_tier": {
+            "name": "unobtainium",
+            "level": 7
+          },
           "by_type": {
             "armor": {
               "helmet": 20,
@@ -10005,7 +10383,10 @@
             "value": 60,
             "operation": "ADD"
           },
-          "harvest_tier": "unobtainium"
+          "harvest_tier": {
+            "name": "unobtainium",
+            "level": 7
+          }
         }
       },
       "traits": {
@@ -10087,7 +10468,10 @@
           "ranged_damage": 0,
           "rarity": 90,
           "enchantment_value": 105,
-          "harvest_tier": "vibranium",
+          "harvest_tier": {
+            "name": "vibranium",
+            "level": 6
+          },
           "by_type": {
             "armor": {
               "helmet": 15,
@@ -10125,7 +10509,10 @@
             "value": 60,
             "operation": "ADD"
           },
-          "harvest_tier": "vibranium"
+          "harvest_tier": {
+            "name": "vibranium",
+            "level": 6
+          }
         }
       },
       "traits": {

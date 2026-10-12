@@ -23,10 +23,12 @@ import {
   formatMaterialName,
   normalizeColor,
   parseStatValueEntry as parseStatEntry,
+  parseHarvestTier,
 } from '../src/lib/datapack-parser';
 import { getGearTypeAncestors } from '../src/lib/gear-type-hierarchy';
 
-export { formatMaterialName, normalizeColor, parseStatEntry };
+// Issue #38: extração oficial de harvest_tier respeitando level_hint
+export { formatMaterialName, normalizeColor, parseStatEntry, parseHarvestTier };
 
 export function parseMaterialFile(filePath: string): Material {
   const content = fs.readFileSync(filePath, 'utf-8');

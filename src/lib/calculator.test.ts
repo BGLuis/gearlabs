@@ -1819,4 +1819,79 @@ describe('calculateGearStats', () => {
       expect(levels['silentgear:crushing']).toBe(5);
     });
   });
+
+  describe('Resolução Oficial de Harvest Tier (Issue #38)', () => {
+    it('Critério de aceite 1: picareta Allthemodium + haste Wood + ponta de ferro tem harvestTier allthemodium', () => {
+      const build: GearBuild = {
+        gearTypeId: 'pickaxe',
+        parts: {
+          main: { materialId: 'silentgear:allthemodium' },
+          rod: { materialId: 'silentgear:wood' },
+          tip: { materialId: 'silentgear:iron' },
+        },
+      };
+
+      const stats = calculateGearStats(build, atm11Catalog);
+      expect(stats.harvestTier).toBe('allthemodium');
+      expect(stats.harvestTierLevel).toBe(5);
+    });
+
+    it('sem ponta, picareta Allthemodium + haste Wood continua com harvestTier allthemodium', () => {
+      const buildWithoutTip: GearBuild = {
+        gearTypeId: 'pickaxe',
+        parts: {
+          main: { materialId: 'silentgear:allthemodium' },
+          rod: { materialId: 'silentgear:wood' },
+        },
+      };
+
+      const stats = calculateGearStats(buildWithoutTip, atm11Catalog);
+      expect(stats.harvestTier).toBe('allthemodium');
+      expect(stats.harvestTierLevel).toBe(5);
+    });
+
+    it('ponta superior eleva o tier da ferramenta (Iron + Wood + ponta Allthemodium vira allthemodium)', () => {
+      const buildUpgradedTip: GearBuild = {
+        gearTypeId: 'pickaxe',
+        parts: {
+          main: { materialId: 'silentgear:iron' },
+          rod: { materialId: 'silentgear:wood' },
+          tip: { materialId: 'silentgear:allthemodium' },
+        },
+      };
+
+      const stats = calculateGearStats(buildUpgradedTip, atm11Catalog);
+      expect(stats.harvestTier).toBe('allthemodium');
+      expect(stats.harvestTierLevel).toBe(5);
+    });
+
+    it('Allthemodium com ponta Unobtainium eleva o tier para unobtainium', () => {
+      const buildUnobtainiumTip: GearBuild = {
+        gearTypeId: 'pickaxe',
+        parts: {
+          main: { materialId: 'silentgear:allthemodium' },
+          rod: { materialId: 'silentgear:wood' },
+          tip: { materialId: 'silentgear:unobtainium' },
+        },
+      };
+
+      const stats = calculateGearStats(buildUnobtainiumTip, atm11Catalog);
+      expect(stats.harvestTier).toBe('unobtainium');
+      expect(stats.harvestTierLevel).toBe(7);
+    });
+
+    it('liga/composto seleciona o maior tier entre todos os sub-materiais', () => {
+      const compoundMods = composeCompoundSlotModifiers(
+        [
+          atm11Catalog.materials['silentgear:iron'],
+          atm11Catalog.materials['silentgear:allthemodium'],
+        ],
+        'main',
+        false,
+        'pickaxe'
+      );
+
+      expect(compoundMods.harvestTier).toEqual({ name: 'allthemodium', level: 5 });
+    });
+  });
 });
