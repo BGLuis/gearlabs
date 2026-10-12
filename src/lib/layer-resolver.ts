@@ -1,4 +1,4 @@
-import { CatalogLayer, Material, PartSlot } from '@/types/silentgear';
+import { CatalogLayer, Material } from '@/types/silentgear';
 import { resolveMaterialParents } from '@/lib/datapack-parser';
 
 export const CANONICAL_LAYER_ORDER = ['silentgems', 'sgearmetalworks', 'kubejs'];
@@ -59,49 +59,13 @@ export function resolveCatalogWithAddons(
         // Só aplica override se o material alvo existir no catálogo resolvido
         if (!target) continue;
 
-        // Categorias: união das categorias existentes com as novas
+        // O jogo carrega o arquivo da camada superior no lugar do anterior: nada é mesclado
         if (override.categories && override.categories.length > 0) {
-          const baseCats = target.categories || (target.category ? [target.category] : []);
-          target.categories = Array.from(new Set([...baseCats, ...override.categories]));
+          target.categories = [...override.categories];
         }
-
-        // Stats por slot
-        if (override.stats) {
-          target.stats = { ...target.stats };
-          for (const [slotKey, slotStats] of Object.entries(override.stats)) {
-            const slot = slotKey as PartSlot;
-            if (!slotStats) continue;
-            const existingSlot = target.stats[slot] || {};
-            target.stats[slot] = {
-              ...existingSlot,
-              ...slotStats,
-              ...(slotStats.by_type
-                ? {
-                    by_type: {
-                      ...(existingSlot.by_type || {}),
-                      ...slotStats.by_type,
-                    },
-                  }
-                : {}),
-            };
-          }
-        }
-
-        // StatModifiers
-        if (override.statModifiers) {
-          target.statModifiers = {
-            ...(target.statModifiers || {}),
-            ...override.statModifiers,
-          };
-        }
-
-        // Traits
-        if (override.traits) {
-          target.traits = {
-            ...(target.traits || {}),
-            ...override.traits,
-          };
-        }
+        if (override.stats) target.stats = { ...override.stats };
+        if (override.statModifiers) target.statModifiers = { ...override.statModifiers };
+        if (override.traits) target.traits = { ...override.traits };
 
         // Propriedades escalares
         if (override.tier !== undefined) target.tier = override.tier;
