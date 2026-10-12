@@ -68,7 +68,7 @@ npm run extract-data
 
 ## 📄 Licença
 
-Distribuído sob licença MIT. Feito para a comunidade de Silent Gear & Minecraft modded.
+Distribuído sob a licença **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**, texto completo em [LICENSE](LICENSE). Uso comercial não é permitido. Feito para a comunidade de Silent Gear & Minecraft modded.
 
 ### Dependências de Terceiros e Mistura de Cores (Mixbox)
-O algoritmo de renderização e mistura de pigmentos de ligas metálicas e compostas utiliza a biblioteca **Mixbox** (via pacote npm `mixbox`), reproduzindo com fidelidade física o comportamento do Silent Gear e SilentLib (`ColorUtils.blendMixbox`). O Mixbox é disponibilizado sob a licença **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** © Secret Weapons para uso não comercial. O GearLabs é estritamente não comercial; quaisquer usos comerciais de trabalhos derivados requerem licenciamento comercial próprio junto à [Secret Weapons](https://scrtwpns.com/mixbox).
+O algoritmo de renderização e mistura de pigmentos de ligas metálicas e compostas utiliza a biblioteca **Mixbox** (via pacote npm `mixbox`), reproduzindo com fidelidade física o comportamento do Silent Gear e SilentLib (`ColorUtils.blendMixbox`). O Mixbox é disponibilizado sob a licença **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** © Secret Weapons para uso não comercial. Por isso o GearLabs adota a mesma licença não comercial; quaisquer usos comerciais de trabalhos derivados requerem licenciamento comercial próprio junto à [Secret Weapons](https://scrtwpns.com/mixbox).
