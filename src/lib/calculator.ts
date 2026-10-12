@@ -4,6 +4,7 @@ import {
   GearBuild,
   GearType,
   GRADE_MULTIPLIERS,
+  HarvestTier,
   Material,
   MaterialStats,
   MaterialTraitRef,
@@ -22,6 +23,7 @@ import {
   GearPartSelection,
   PartMaterialInstance,
 } from '@/types/silentgear';
+import { parseHarvestTier } from './datapack-parser';
 import { getPartInstanceCount, syncPartInstancesWithCount } from './parts';
 import { getGearTypeAncestors } from './gear-type-hierarchy';
 
@@ -510,16 +512,20 @@ export function composeCompoundSlotModifiers(
   // Rarity (não afetado por sinergia)
   const rarityMods = processStat((mat) => mat.stats[slot]?.rarity, false);
 
-  // Harvest Tier (o primeiro material com tier define)
-  let harvestTier: string | undefined;
+  // Harvest Tier (Silent Gear 4.2.3: HarvestTierProperty.compute escolhe o melhor tier por level)
+  let harvestTier: HarvestTier | undefined;
   for (const mat of subMaterials) {
-    if (mat.stats[slot]?.harvest_tier) {
-      harvestTier = mat.stats[slot]?.harvest_tier;
-      break;
+    const rawTier = mat.stats[slot]?.harvest_tier ?? (isMain ? mat.harvest_tier : undefined);
+    const parsed = parseHarvestTier(rawTier);
+    if (parsed) {
+      if (!harvestTier || parsed.level > harvestTier.level) {
+        harvestTier = parsed;
+      }
     }
   }
   if (!harvestTier && isMain) {
-    harvestTier = subMaterials[0]?.harvest_tier || 'minecraft:wood';
+    const fallbackRaw = subMaterials[0]?.harvest_tier;
+    harvestTier = parseHarvestTier(fallbackRaw) || { name: 'minecraft:wood', level: 0 };
   }
 
   // Charging Value (não afetado por sinergia na extração, compõe por média ponderada)
@@ -710,7 +716,8 @@ export function extractSlotRawModifiers(
   const speed: StatValueModifier[] = [];
   const harvest: StatValueModifier[] = [];
   const rarity: StatValueModifier[] = [];
-  let harvestTier = composedInst?.harvestTier || instMat?.stats[slot]?.harvest_tier;
+  const rawHarvestTier = composedInst?.harvestTier || instMat?.stats[slot]?.harvest_tier;
+  const harvestTier: HarvestTier | undefined = parseHarvestTier(rawHarvestTier);
 
   if (composedInst) {
     if (composedInst.armorMods.length > 0) {
@@ -1114,7 +1121,8 @@ export function calculateGearStats(
   const secondaryHarvestSpeedMods: ComputedModifier[] = [];
   const secondaryRarityMods: ComputedModifier[] = [];
 
-  let harvestTier = (composedMain?.harvestTier) || mainMaterial?.stats.main?.harvest_tier || mainMaterial?.harvest_tier || 'minecraft:wood';
+  const rawMainTier = (composedMain?.harvestTier) || mainMaterial?.stats.main?.harvest_tier || mainMaterial?.harvest_tier;
+  let bestHarvestTier: HarvestTier = parseHarvestTier(rawMainTier) || { name: 'minecraft:wood', level: 0 };
 
   // Processar slots secundários
   for (const slot of Object.keys(build.parts) as PartSlot[]) {
@@ -1149,7 +1157,9 @@ export function calculateGearStats(
         allSpeed.push(...mods.speed);
         allHarvest.push(...mods.harvest);
         allRarity.push(...mods.rarity);
-        if (mods.harvestTier) harvestTier = mods.harvestTier;
+        if (mods.harvestTier && mods.harvestTier.level > bestHarvestTier.level) {
+          bestHarvestTier = mods.harvestTier;
+        }
       }
 
       if (allArmor.length > 0) {
@@ -1202,7 +1212,9 @@ export function calculateGearStats(
       if (mods.speed.length > 0) secondaryAttackSpeedMods.push(...toComputedModifiers(mods.speed, 'ADD'));
       if (mods.harvest.length > 0) secondaryHarvestSpeedMods.push(...toComputedModifiers(mods.harvest, 'ADD'));
       if (mods.rarity.length > 0) secondaryRarityMods.push(...toComputedModifiers(mods.rarity, 'ADD'));
-      if (mods.harvestTier) harvestTier = mods.harvestTier;
+      if (mods.harvestTier && mods.harvestTier.level > bestHarvestTier.level) {
+        bestHarvestTier = mods.harvestTier;
+      }
     }
   }
 
@@ -1298,7 +1310,8 @@ export function calculateGearStats(
     attackSpeed: finalAttackSpeed,
     dps: finalDps,
     harvestSpeed: finalHarvestSpeed,
-    harvestTier,
+    harvestTier: bestHarvestTier.name,
+    harvestTierLevel: bestHarvestTier.level,
     synergy: Number((mainSynergy * 100).toFixed(0)),
     rarity: Math.round(rarity),
     traits: calculatedTraits,

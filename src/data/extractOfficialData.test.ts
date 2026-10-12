@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
+import { execSync } from 'child_process';
 import { ATM11_CATALOG, OFFICIAL_GEAR_TYPES } from './defaultCatalog';
 import { VersionCatalog } from '@/types/silentgear';
 import { deriveGearTypes } from '../../scripts/extract-official-data';
@@ -256,7 +257,7 @@ describe('Resolução de IDs aninhados e Herança de Parent (Issue #46)', () => 
     expect(oak.name.pt).toBe('Madeira de Carvalho');
     expect(oak.stats.main?.durability).toBe(59);
     expect(oak.stats.main?.armor).toBe(7);
-    expect(oak.stats.main?.harvest_tier).toBe('wood');
+    expect(oak.stats.main?.harvest_tier).toEqual({ name: 'wood', level: 0 });
     expect(oak.stats.rod).toBeDefined();
 
     // 2. Lãs
@@ -334,6 +335,63 @@ describe('Resolução de IDs aninhados e Herança de Parent (Issue #46)', () => 
     ];
 
     expect(missingMainAndRod.sort()).toEqual(expectedWithoutMainOrRod.sort());
+  });
+});
+
+describe('Resolução Oficial de Harvest Tier com level_hint (Issue #38)', () => {
+  const projectRoot = path.resolve(__dirname, '../..');
+  const catalogPath = path.join(projectRoot, 'public/data/versions/atm11/catalog.json');
+  const rawCatalog = fs.readFileSync(catalogPath, 'utf-8');
+  const catalog: VersionCatalog = JSON.parse(rawCatalog);
+
+  it('Critério 2: todo harvest_tier do catálogo gerado tem level numérico', () => {
+    let count = 0;
+    for (const [id, mat] of Object.entries(catalog.materials)) {
+      for (const [slot, slotStats] of Object.entries(mat.stats)) {
+        if (slotStats?.harvest_tier) {
+          expect(
+            typeof slotStats.harvest_tier.name,
+            `Material ${id} no slot ${slot} deve ter harvest_tier.name do tipo string`
+          ).toBe('string');
+          expect(
+            typeof slotStats.harvest_tier.level,
+            `Material ${id} no slot ${slot} deve ter harvest_tier.level do tipo number`
+          ).toBe('number');
+          expect(
+            Number.isNaN(slotStats.harvest_tier.level),
+            `Material ${id} no slot ${slot} não deve ter harvest_tier.level NaN`
+          ).toBe(false);
+          count++;
+        }
+      }
+    }
+    expect(count, 'Deve haver ao menos um material com harvest_tier no catálogo').toBeGreaterThan(0);
+  });
+
+  it('Critério 3: grep -n "level_hint" scripts/extract-official-data.ts src/lib/datapack-parser.ts passa a ter resultados', () => {
+    const cmd = 'grep -n "level_hint" scripts/extract-official-data.ts src/lib/datapack-parser.ts';
+    const output = execSync(cmd, { cwd: projectRoot, encoding: 'utf-8' });
+    expect(output.trim().length).toBeGreaterThan(0);
+    expect(output).toContain('level_hint');
+  });
+
+  it('Tiers específicos possuem o nível oficial extraído do datapack', () => {
+    const allthemodium = catalog.materials['silentgear:allthemodium'];
+    expect(allthemodium?.stats.main?.harvest_tier).toEqual({ name: 'allthemodium', level: 5 });
+    expect(allthemodium?.stats.tip?.harvest_tier).toEqual({ name: 'allthemodium', level: 5 });
+
+    const iron = catalog.materials['silentgear:iron'];
+    expect(iron?.stats.main?.harvest_tier).toEqual({ name: 'iron', level: 2 });
+    expect(iron?.stats.tip?.harvest_tier).toEqual({ name: 'iron', level: 2 });
+
+    const diamond = catalog.materials['silentgear:diamond'];
+    expect(diamond?.stats.main?.harvest_tier).toEqual({ name: 'diamond', level: 3 });
+
+    const netherite = catalog.materials['silentgear:netherite'];
+    expect(netherite?.stats.coating?.harvest_tier).toEqual({ name: 'netherite', level: 4 });
+
+    const unobtainium = catalog.materials['silentgear:unobtainium'];
+    expect(unobtainium?.stats.main?.harvest_tier).toEqual({ name: 'unobtainium', level: 7 });
   });
 });
 

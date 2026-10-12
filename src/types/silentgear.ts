@@ -43,6 +43,11 @@ export type StatModifierEntry = number | StatValueModifier | StatValueModifier[]
 /** Propriedades que o mod resolve por tipo de item (`<propriedade>/<tipo>` no datapack). */
 export type TypedStatProperty = 'armor' | 'armor_durability' | 'attack_speed';
 
+export interface HarvestTier {
+  name: string;
+  level: number;
+}
+
 export interface MaterialStats {
   durability?: StatModifierEntry;
   armor?: StatModifierEntry;
@@ -57,7 +62,7 @@ export interface MaterialStats {
   melee_damage?: StatModifierEntry;
   attack_speed?: StatModifierEntry;
   harvest_speed?: StatModifierEntry;
-  harvest_tier?: string;
+  harvest_tier?: HarvestTier;
   ranged_damage?: StatModifierEntry;
   ranged_speed?: StatModifierEntry;
   rarity?: StatModifierEntry;
@@ -87,7 +92,7 @@ export interface Material {
   category: MaterialCategory;
   categories?: string[];
   color: string; // Hex color for layer tinting (e.g. "#33EBCB")
-  harvest_tier?: string;
+  harvest_tier?: HarvestTier;
   stats: Partial<Record<PartSlot, MaterialStats>>;
   statModifiers?: Partial<Record<PartSlot, Record<string, StatModifier>>>;
   traits: Partial<Record<PartSlot, MaterialTraitRef[]>>;
@@ -184,6 +189,7 @@ export interface CalculatedGearStats {
   dps: number;
   harvestSpeed: number;
   harvestTier: string;
+  harvestTierLevel?: number;
   synergy: number;
   rarity: number;
   traits: CalculatedTrait[];
