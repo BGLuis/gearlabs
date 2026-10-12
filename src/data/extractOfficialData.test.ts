@@ -11,6 +11,11 @@ describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issu
   const catalogPath = path.join(projectRoot, 'public/data/versions/atm11/catalog.json');
   const tsvPath = path.join(projectRoot, 'tests/fixtures/material_export.tsv');
 
+  // O dump do jogo formata valores (ex.: "9x" para multiplicadores, "" para ausente)
+  // Células "x0.5" ou "+2" são operações (multiplicador/soma), que o catálogo guarda como objeto: não comparáveis aqui
+  const isOperationCell = (cell: string | undefined) => !!cell && /^[x+]/.test(cell);
+  const dumpNumber = (cell: string | undefined) => (cell ? parseFloat(cell) : 0);
+
   const rawCatalog = fs.readFileSync(catalogPath, 'utf-8');
   const catalog: VersionCatalog = JSON.parse(rawCatalog);
 
@@ -87,11 +92,11 @@ describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issu
 
       mainCount++;
       const id = parts[idIdx];
-      const dumpDur = Number(parts[durIdx]);
-      const dumpArmorDur = Number(parts[armorDurIdx]);
-      const dumpArmor = Number(parts[armorIdx]);
-      const dumpToughness = Number(parts[toughnessIdx]);
-      const dumpMagicArmor = Number(parts[magicArmorIdx]);
+      const dumpDur = dumpNumber(parts[durIdx]);
+      const dumpArmorDur = dumpNumber(parts[armorDurIdx]);
+      const dumpArmor = dumpNumber(parts[armorIdx]);
+      const dumpToughness = dumpNumber(parts[toughnessIdx]);
+      const dumpMagicArmor = dumpNumber(parts[magicArmorIdx]);
 
       const material = catalog.materials[id];
       expect(material, `Material ${id} deve existir no catálogo gerado`).toBeDefined();
@@ -104,14 +109,28 @@ describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issu
       const matToughness = typeof matMain.armor_toughness === 'number' ? matMain.armor_toughness : 0;
       const matMagicArmor = typeof matMain.magic_armor === 'number' ? matMain.magic_armor : 0;
 
-      expect(matDur, `Durabilidade divergente para ${id}`).toBe(dumpDur);
-      expect(matArmorDur, `Armor Durability divergente para ${id}`).toBe(dumpArmorDur);
-      expect(matArmor, `Armor divergente para ${id}`).toBe(dumpArmor);
-      expect(matToughness, `Armor Toughness divergente para ${id}`).toBe(dumpToughness);
-      expect(matMagicArmor, `Magic Armor divergente para ${id}`).toBe(dumpMagicArmor);
+      if (!isOperationCell(parts[durIdx])) expect(matDur, `Durabilidade divergente para ${id}`).toBe(dumpDur);
+      if (!isOperationCell(parts[armorDurIdx])) expect(matArmorDur, `Armor Durability divergente para ${id}`).toBe(dumpArmorDur);
+      if (!isOperationCell(parts[armorIdx])) expect(matArmor, `Armor divergente para ${id}`).toBe(dumpArmor);
+      if (!isOperationCell(parts[toughnessIdx])) expect(matToughness, `Armor Toughness divergente para ${id}`).toBe(dumpToughness);
+      if (!isOperationCell(parts[magicArmorIdx])) expect(matMagicArmor, `Magic Armor divergente para ${id}`).toBe(dumpMagicArmor);
     }
 
     expect(mainCount).toBeGreaterThan(90);
+  });
+
+  it('Critério 3b: a coluna Additive do dump do jogo coincide com o flag additive do catálogo', () => {
+    const [header, ...rows] = fs.readFileSync(tsvPath, 'utf-8').trim().split('\n').map((l) => l.split('\t'));
+    const idIdx = header.indexOf('ID');
+    const typeIdx = header.indexOf('Type');
+    const additiveIdx = header.indexOf('Additive');
+
+    const mismatches = rows
+      .filter((r) => r[typeIdx] === 'Main')
+      .filter((r) => (r[additiveIdx] === 'Yes') !== !!catalog.materials[r[idIdx]]?.additive)
+      .map((r) => r[idIdx]);
+
+    expect(mismatches).toEqual([]);
   });
 
   it('Critério 4: ausência total do trait inventado proibido em src/ e public/', () => {

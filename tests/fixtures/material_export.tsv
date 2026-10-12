@@ -1,141 +1,362 @@
-Pack	Name	Type	ID	Parent	Categories	Durability	Armor Durability	Armor	Armor Toughness	Magic Armor
-mod/sgearmetalworks	Aluminum	Main	silentgear:aluminum		Metal, Intermediate, Casting	365	15	14	0.5	3
-silentgear	Aluminum Steel	Main	silentgear:aluminum_steel		Metal, Advanced	660	18	18	2	6
-mod/sgearmetalworks	Amethyst	Main	silentgear:amethyst		Gem, Intermediate, Casting	210	10	15	0	10
-mod/sgearmetalworks	Azure Electrum	Main	silentgear:azure_electrum		Metal, Endgame, Casting	1259	61	19	8	19
-mod/sgearmetalworks	Azure Silver	Main	silentgear:azure_silver		Metal, Advanced, Casting	197	17	13	0	13
-silentgear	Bamboo	Main	silentgear:bamboo		Organic, Wood, Basic	65	9	7	0	2
-silentgear	Barrier	Main	silentgear:barrier		Intangible	1337	84	20	10	10
-silentgear	Basalt	Main	silentgear:basalt		Rock, Basic	137	4	6	0	0
-silentgear	Bismuth	Main	silentgear:bismuth		Metal, Intermediate	330	10	16	2	6
-silentgear	Bismuth Brass	Main	silentgear:bismuth_brass		Metal, Intermediate	580	15	18	2	8
-silentgear	Bismuth Steel	Main	silentgear:bismuth_steel		Metal, Advanced	1050	25	20	4	8
-silentgear	Blackstone	Main	silentgear:blackstone		Rock, Basic	151	5	5	0	0
-mod/sgearmetalworks	Blaze Gold	Main	silentgear:blaze_gold		Metal, Advanced, Casting	69	9	13	1	10
-silentgear	Bone	Main	silentgear:bone		Organic, Basic, Crude	108	4	5	0	1
-mod/sgearmetalworks	Brass	Main	silentgear:brass		Metal, Intermediate, Casting	240	8	14	1	6
-mod/sgearmetalworks	Bronze	Main	silentgear:bronze		Metal, Intermediate, Casting	300	13	15	1	6
-silentgear	Compressed Iron	Main	silentgear:compressed_iron		Metal, Advanced	1024	24	20	2	4
-mod/sgearmetalworks	Copper	Main	silentgear:copper		Metal, Basic, Casting	190	11	10	0	8
-mod/sgearmetalworks	Crimson Iron	Main	silentgear:crimson_iron		Metal, Advanced, Casting	420	27	18	2	6
-mod/sgearmetalworks	Crimson Steel	Main	silentgear:crimson_steel		Metal, Endgame, Casting	2400	42	22	10	10
-silentgear	Crushed Shulker Shell	Main	silentgear:crushed_shulker_shell		Rock, Dust, Endgame	2500	50	0	0	0
-mod/sgearmetalworks	Diamond	Main	silentgear:diamond		Gem, Advanced, Casting	1561	33	20	8	4
-silentgear	Dimerald	Main	silentgear:dimerald		Gem, Advanced	1776	36	22	10	10
-mod/sgearmetalworks	Electrum	Main	silentgear:electrum		Metal, Intermediate, Casting	96	10	15	0	11
-mod/sgearmetalworks	Emerald	Main	silentgear:emerald		Gem, Advanced, Casting	1080	24	16	4	6
-silentgear	End Stone	Main	silentgear:end_stone		Rock, Basic	1164	15	15	1	6
-mod/sgearmetalworks	Enderium	Main	silentgear:enderium		Metal, Endgame, Casting	1200	34	22	8	10
-silentgear	Example	Main	silentgear:example		Intangible	100	6	4	1	1
-silentgear	Feather	Main	silentgear:feather		Organic, Basic	0	2	3	0	0
-silentgear	Fine Silk Cloth	Main	silentgear:fine_silk_cloth		Organic, Cloth, Intermediate	0	14	6	0	14
-silentgear	Flint	Main	silentgear:flint		Rock, Basic	124	4	4	0	0
-mod/sgearmetalworks	Glowstone	Main	silentgear:glowstone		Gem, Dust, Intermediate, Casting	0	0	0	0	0
-mod/sgearmetalworks	Gold	Main	silentgear:gold		Metal, Intermediate, Casting	32	7	11	0	8
-silentgear	High Carbon Steel	Main	silentgear:high_carbon_steel		Metal, Advanced	420	24	20	2	6
-mod/sgearmetalworks	Invar	Main	silentgear:invar		Metal, Intermediate, Casting	640	20	18	2	6
-mod/sgearmetalworks	Iron	Main	silentgear:iron		Metal, Intermediate, Casting	250	15	15	0	6
-mod/sgearmetalworks	Lapis Lazuli	Main	silentgear:lapis_lazuli		Gem, Intermediate, Casting	200	13	15	0	10
-mod/sgearmetalworks	Lead	Main	silentgear:lead		Metal, Intermediate, Casting	260	14	13	0	4
-silentgear	Leather	Main	silentgear:leather		Organic, Cloth, Basic	0	5	7	0	8
-silentgear	Leaves	Main	silentgear:leaves		Organic, Basic	0	2	3	0	0
-mod/sgearmetalworks	Lumium	Main	silentgear:lumium		Metal, Advanced, Casting	920	20	18	4	10
-silentgear	Netherrack	Main	silentgear:netherrack		Rock, Organic, Basic	142	5	8	0	4
-silentgear	Netherwood	Main	silentgear:netherwood	silentgear:wood	Organic, Wood	72	12	8	0	6
-mod/sgearmetalworks	Nickel	Main	silentgear:nickel		Metal, Intermediate, Casting	380	17	13	0	6
-mod/sgearmetalworks	Obsidian	Main	silentgear:obsidian		Rock, Advanced, Casting	1024	13	20	4	8
-mod/sgearmetalworks	Osmium	Main	silentgear:osmium		Metal, Intermediate, Casting	500	30	17	0	4
-silentgear	Paper	Main	silentgear:paper		Organic, Sheet, Basic	0	2	4	0	0
-silentgear	Phantom Membrane	Main	silentgear:phantom_membrane		Organic, Cloth, Intermediate	0	12	6	0	8
-mod/sgearmetalworks	Platinum	Main	silentgear:platinum		Metal, Advanced, Casting	900	21	18	2	12
-mod/sgearmetalworks	Quartz	Main	silentgear:quartz		Gem, Intermediate, Casting	330	13	14	0	4
-mod/sgearmetalworks	Redstone	Main	silentgear:redstone		Metal, Dust, Intermediate, Casting	0	0	0	0	0
-silentgear	Redstone Alloy	Main	silentgear:redstone_alloy		Metal, Intermediate	840	20	17	1	8
-mod/sgearmetalworks	Refined Glowstone	Main	silentgear:refined_glowstone		Metal, Advanced, Casting	300	18	19	0	8
-silentgear	Refined Iron	Main	silentgear:refined_iron		Metal, Intermediate	512	20	18	2	6
-mod/sgearmetalworks	Refined Obsidian	Main	silentgear:refined_obsidian		Metal, Endgame, Casting	2500	50	30	16	6
-silentgear	Red Sandstone	Main	silentgear:sandstone/red	silentgear:sandstone	Rock, Basic	117	6	5	0	0
-silentgear	Sandstone	Main	silentgear:sandstone		Rock, Basic	117	6	5	0	0
-silentgear	Sheet Metal	Main	silentgear:sheet_metal		Sheet	0	0	0	0	0
-mod/sgearmetalworks	Signalum	Main	silentgear:signalum		Metal, Endgame, Casting	800	25	16	2	4
-mod/sgearmetalworks	Silver	Main	silentgear:silver		Metal, Intermediate, Casting	64	9	11	0	10
-mod/sgearmetalworks	Steel	Main	silentgear:steel		Metal, Intermediate, Casting	500	20	20	2	6
-silentgear	Andesite	Main	silentgear:stone/andesite	silentgear:stone	Rock, Basic	131	5	5	0	0
-silentgear	Diorite	Main	silentgear:stone/diorite	silentgear:stone	Rock, Basic	131	5	5	0	0
-silentgear	Granite	Main	silentgear:stone/granite	silentgear:stone	Rock, Basic	131	5	5	0	0
-silentgear	Stone	Main	silentgear:stone		Rock, Basic	131	5	5	0	0
-silentgear	Black Terracotta	Main	silentgear:terracotta/black	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Blue Terracotta	Main	silentgear:terracotta/blue	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Brown Terracotta	Main	silentgear:terracotta/brown	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Cyan Terracotta	Main	silentgear:terracotta/cyan	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Gray Terracotta	Main	silentgear:terracotta/gray	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Green Terracotta	Main	silentgear:terracotta/green	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Light Blue Terracotta	Main	silentgear:terracotta/light_blue	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Light Gray Terracotta	Main	silentgear:terracotta/light_gray	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Lime Terracotta	Main	silentgear:terracotta/lime	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Magenta Terracotta	Main	silentgear:terracotta/magenta	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Orange Terracotta	Main	silentgear:terracotta/orange	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Pink Terracotta	Main	silentgear:terracotta/pink	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Purple Terracotta	Main	silentgear:terracotta/purple	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Red Terracotta	Main	silentgear:terracotta/red	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	White Terracotta	Main	silentgear:terracotta/white	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Yellow Terracotta	Main	silentgear:terracotta/yellow	silentgear:terracotta	Rock, Basic	165	11	9	0	3
-silentgear	Terracotta	Main	silentgear:terracotta		Rock, Basic	165	11	9	0	3
-mod/sgearmetalworks	Tin	Main	silentgear:tin		Metal, Basic, Casting	192	13	12	0	2
-silentgear	Titanium	Main	silentgear:titanium		Metal, Endgame	1600	37	24	8	4
-silentgear	Turtle	Main	silentgear:turtle		Organic, Intermediate	0	0	0	0	4
-mod/sgearmetalworks	Tyrian Steel	Main	silentgear:tyrian_steel		Metal, Endgame, Casting	3652	81	25	12	12
-mod/sgearmetalworks	Uranium	Main	silentgear:uranium		Metal, Advanced, Casting	800	20	13	1	3
-silentgear	Acacia Wood	Main	silentgear:wood/acacia	silentgear:wood	Organic, Wood	59	8	7	0	2
-silentgear	Birch Wood	Main	silentgear:wood/birch	silentgear:wood	Organic, Wood	59	8	7	0	2
-silentgear	Crimson Wood	Main	silentgear:wood/crimson	silentgear:wood	Organic, Wood	59	8	7	0	2
-silentgear	Dark Oak Wood	Main	silentgear:wood/dark_oak	silentgear:wood	Organic, Wood	59	8	7	0	2
-silentgear	Jungle Wood	Main	silentgear:wood/jungle	silentgear:wood	Organic, Wood	59	8	7	0	2
-silentgear	Oak Wood	Main	silentgear:wood/oak	silentgear:wood	Organic, Wood	59	8	7	0	2
-silentgear	Spruce Wood	Main	silentgear:wood/spruce	silentgear:wood	Organic, Wood	59	8	7	0	2
-silentgear	Warped Wood	Main	silentgear:wood/warped	silentgear:wood	Organic, Wood	59	8	7	0	2
-silentgear	Wood	Main	silentgear:wood		Organic, Wood	59	8	7	0	2
-silentgear	Black Wool	Main	silentgear:wool/black	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Blue Wool	Main	silentgear:wool/blue	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Brown Wool	Main	silentgear:wool/brown	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Cyan Wool	Main	silentgear:wool/cyan	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Gray Wool	Main	silentgear:wool/gray	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Green Wool	Main	silentgear:wool/green	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Light Blue Wool	Main	silentgear:wool/light_blue	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Light Gray Wool	Main	silentgear:wool/light_gray	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Lime Wool	Main	silentgear:wool/lime	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Magenta Wool	Main	silentgear:wool/magenta	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Orange Wool	Main	silentgear:wool/orange	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Pink Wool	Main	silentgear:wool/pink	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Purple Wool	Main	silentgear:wool/purple	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Red Wool	Main	silentgear:wool/red	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	White Wool	Main	silentgear:wool/white	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Yellow Wool	Main	silentgear:wool/yellow	silentgear:wool	Organic, Cloth, Basic	0	4	4	0	4
-silentgear	Wool	Main	silentgear:wool		Organic, Cloth, Basic	0	4	4	0	4
-mod/sgearmetalworks	Zinc	Main	silentgear:zinc		Metal, Basic, Casting	192	10	10	0	2
-mod/sgearmetalworks	Alexandrite	Main	silentgems:alexandrite		Gem, Intermediate, Casting	1024	29	18	5	10
-mod/sgearmetalworks	Ammolite	Main	silentgems:ammolite		Gem, Advanced, Casting	1024	40	22	12	16
-mod/sgearmetalworks	Aquamarine	Main	silentgems:aquamarine		Gem, Intermediate, Casting	1024	34	15	4	6
-mod/sgearmetalworks	Black Diamond	Main	silentgems:black_diamond		Gem, Advanced, Casting	1792	39	20	8	10
-mod/sgearmetalworks	Carnelian	Main	silentgems:carnelian		Gem, Intermediate, Casting	1280	37	16	4	8
-mod/sgearmetalworks	Citrine	Main	silentgems:citrine		Gem, Intermediate, Casting	768	26	16	4	8
-mod/sgearmetalworks	Garnet	Main	silentgems:garnet		Gem, Intermediate, Casting	512	21	15	4	6
-mod/sgearmetalworks	Heliodor	Main	silentgems:heliodor		Gem, Advanced, Casting	1024	34	16	4	8
-mod/sgearmetalworks	Iolite	Main	silentgems:iolite		Gem, Intermediate, Casting	768	32	20	6	14
-mod/sgearmetalworks	Kyanite	Main	silentgems:kyanite		Gem, Advanced, Casting	1280	38	20	8	14
-mod/sgearmetalworks	Moldavite	Main	silentgems:moldavite		Gem, Intermediate, Casting	512	26	16	4	8
-mod/sgearmetalworks	Opal	Main	silentgems:opal		Gem, Advanced, Casting	1024	36	18	4	8
-mod/sgearmetalworks	Pearl	Main	silentgems:pearl		Gem, Advanced, Casting	1024	44	20	12	16
-mod/sgearmetalworks	Peridot	Main	silentgems:peridot		Gem, Intermediate, Casting	512	21	15	4	6
-mod/sgearmetalworks	Rose Quartz	Main	silentgems:rose_quartz		Gem, Advanced, Casting	1024	34	16	4	8
-mod/sgearmetalworks	Ruby	Main	silentgems:ruby		Gem, Intermediate, Casting	1024	34	15	4	6
-mod/sgearmetalworks	Sapphire	Main	silentgems:sapphire		Gem, Intermediate, Casting	512	28	18	6	10
-mod/sgearmetalworks	Tanzanite	Main	silentgems:tanzanite		Gem, Intermediate, Casting	768	28	18	5	10
-mod/sgearmetalworks	Topaz	Main	silentgems:topaz		Gem, Intermediate, Casting	512	21	15	4	6
-mod/sgearmetalworks	Turquoise	Main	silentgems:turquoise		Gem, Advanced, Casting	1536	40	15	6	20
-mod/sgearmetalworks	White Diamond	Main	silentgems:white_diamond		Gem, Advanced, Casting	2048	44	24	16	20
-kubejs	Meat	Main	sgearmetalworks:meat		Casting	1024	13	20	4	8
-kubejs	Uru Metal	Main	sgearmetalworks:uru_metal		Metal, Endgame, Casting, Infusing	15000	50000	42	100	600
-kubejs	Allthemodium	Main	silentgear:allthemodium		Metal, Endgame	5500	60	60	60	200
-kubejs	Unobtainium	Main	silentgear:unobtainium		Metal, Endgame	9500	120	90	90	600
-kubejs	Vibranium	Main	silentgear:vibranium		Metal, Endgame	7500	90	70	70	400
+Pack	Name	Type	ID	Parent	Categories	Additive	Traits	Durability	Armor Durability	Repair Efficiency	Repair Bonus	Enchantment Value	Charging Value	Rarity	Harvest Tier	Harvest Speed	Block Reach	Attack Damage	Attack Speed	Attack Reach	Swing Animation	Kinetic Weapon	Magic Damage	Ranged Damage	Draw Speed	Projectile Speed	Projectile Accuracy	Armor	Armor Toughness	Knockback Resistance	Magic Armor	
+mod/silentgear	String	Binding	silentgear:string		Fiber, Organic, Basic		Flexible I			+5%																						
+mod/silentgear	Fluffy String	Binding	silentgear:fluffy_string		Fiber, Organic, Basic		Flexible III		+5%							-5%																
+mod/silentgear	Vine	Binding	silentgear:vine		Organic, Basic					+3%																						
+mod/silentgear	Fine Silk	Binding	silentgear:fine_silk		Fiber, Organic, Basic		Lucky I, Flexible IV																								+2	
+mod/silentgear	Sinew	Binding	silentgear:sinew		Fiber, Organic, Basic		Flexible IV			-5%																						
+mod/silentgear	Flax	Binding	silentgear:flax		Fiber, Organic, Basic		Flexible III		+5%							+5%																
+mod/sgearmetalworks	Golden (Gold)	Coating	silentgear:gold		Metal, Casting, Intermediate		Brilliant, Soft III*	x0.9	x0.9					+10																		
+mod/sgearmetalworks	Netherite	Coating	silentgear:netherite		Metal, Endgame, Casting		Fireproof	+2, x1.3	x1.12			+5		+40	netherite (4)	x1.13		x1.33					x1.33	x1.33					+4	+1		
+mod/silentgear	Prismarine	Coating	silentgear:prismarine		Advanced, Gem, Organic		Aquatic V*, Aquatic III*	x1.08	x1.13																				+1	+0.25		
+mod/sgearmetalworks	Blaze Gold	Coating	silentgear:blaze_gold		Advanced, Metal, Casting		Brilliant, Soft II*	x0.95	x0.95					+20																		
+mod/silentgear	String	Cord	silentgear:string		Fiber, Organic, Basic																				+10%							
+mod/silentgear	Fluffy String	Cord	silentgear:fluffy_string		Fiber, Organic, Basic																			+5%	-5%							
+mod/silentgear	Vine	Cord	silentgear:vine		Organic, Basic																			-10%								
+mod/silentgear	Fine Silk	Cord	silentgear:fine_silk		Fiber, Organic, Basic		Flexible II																	+7%								
+mod/silentgear	Sinew	Cord	silentgear:sinew		Fiber, Organic, Basic		Flexible II																	+20%								
+mod/silentgear	Flax	Cord	silentgear:flax		Fiber, Organic, Basic																			-10%	+20%							
+mod/silentgear	Paper	Fletching	silentgear:paper		Sheet, Organic, Basic																					1.1x	90%					
+mod/silentgear	Feather	Fletching	silentgear:feather		Organic, Basic																					0.9x	110%					
+mod/silentgear	Leaf (Leaves)	Fletching	silentgear:leaves		Organic, Basic																					1.1x	90%					
+mod/silentgear	Pink Wool	Grip	silentgear:wool/pink	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Magenta Wool	Grip	silentgear:wool/magenta	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Leather	Grip	silentgear:leather		Cloth, Organic, Basic		Flexible III			+10%						+15%			+0.15													
+mod/silentgear	Light Gray Wool	Grip	silentgear:wool/light_gray	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Light Blue Wool	Grip	silentgear:wool/light_blue	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Blue Wool	Grip	silentgear:wool/blue	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Gray Wool	Grip	silentgear:wool/gray	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Wool	Grip	silentgear:wool		Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Purple Wool	Grip	silentgear:wool/purple	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Red Wool	Grip	silentgear:wool/red	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Fine Silk Cloth	Grip	silentgear:fine_silk_cloth		Intermediate, Cloth, Organic		Accelerate I*			+10%						+15%																
+mod/silentgear	Orange Wool	Grip	silentgear:wool/orange	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Lime Wool	Grip	silentgear:wool/lime	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Yellow Wool	Grip	silentgear:wool/yellow	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Green Wool	Grip	silentgear:wool/green	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	White Wool	Grip	silentgear:wool/white	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Brown Wool	Grip	silentgear:wool/brown	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Phantom Membrane	Grip	silentgear:phantom_membrane		Intermediate, Cloth, Organic		Ancient II*			+15%						+10%			+0.2													
+mod/silentgear	Black Wool	Grip	silentgear:wool/black	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/silentgear	Cyan Wool	Grip	silentgear:wool/cyan	Wool	Cloth, Organic, Basic		Flexible II			+20%						+10%			+0.2													
+mod/sgearmetalworks	Lapis Lazuli	Jewelry Setting	silentgear:lapis_lazuli		Casting, Intermediate, Gem		Lucky III*																									
+mod/sgearmetalworks	Quartz	Jewelry Setting	silentgear:quartz		Casting, Intermediate, Gem		Mighty II*																									
+mod/silentgear	Dimerald	Jewelry Setting	silentgear:dimerald		Advanced, Gem		Kitty Vision*																									
+mod/sgearmetalworks	Heliodor	Jewelry Setting	silentgems:heliodor		Advanced, Casting, Gem		Mighty IV*																									
+mod/sgearmetalworks	Black Diamond	Jewelry Setting	silentgems:black_diamond		Advanced, Casting, Gem		Cure Wither																									
+mod/sgearmetalworks	Sapphire	Jewelry Setting	silentgems:sapphire		Casting, Intermediate, Gem																											
+mod/sgearmetalworks	Pearl	Jewelry Setting	silentgems:pearl		Advanced, Casting, Gem		Neptune's Blessing IV																									
+mod/sgearmetalworks	White Diamond	Jewelry Setting	silentgems:white_diamond		Advanced, Casting, Gem		Moonwalker II*																									
+mod/sgearmetalworks	Ammolite	Jewelry Setting	silentgems:ammolite		Advanced, Casting, Gem																											
+mod/sgearmetalworks	Amethyst	Jewelry Setting	silentgear:amethyst		Casting, Intermediate, Gem		Cursed IV																									
+mod/sgearmetalworks	Moldavite	Jewelry Setting	silentgems:moldavite		Casting, Intermediate, Gem																											
+mod/sgearmetalworks	Citrine	Jewelry Setting	silentgems:citrine		Casting, Intermediate, Gem		Booster I																									
+mod/sgearmetalworks	Turquoise	Jewelry Setting	silentgems:turquoise		Advanced, Casting, Gem		Leaping III																									
+mod/sgearmetalworks	Kyanite	Jewelry Setting	silentgems:kyanite		Advanced, Casting, Gem																											
+mod/sgearmetalworks	Topaz	Jewelry Setting	silentgems:topaz		Casting, Intermediate, Gem																											
+mod/sgearmetalworks	Tanzanite	Jewelry Setting	silentgems:tanzanite		Casting, Intermediate, Gem		Twinkletoes IV																									
+mod/sgearmetalworks	Diamond	Jewelry Setting	silentgear:diamond		Advanced, Casting, Gem		Bastion I*																									
+mod/sgearmetalworks	Alexandrite	Jewelry Setting	silentgems:alexandrite		Casting, Intermediate, Gem		Cloaking																									
+mod/sgearmetalworks	Opal	Jewelry Setting	silentgems:opal		Advanced, Casting, Gem		Hasty III																									
+mod/sgearmetalworks	Garnet	Jewelry Setting	silentgems:garnet		Casting, Intermediate, Gem		Power II																									
+mod/sgearmetalworks	Flint	Jewelry Setting	silentgear:flint		Rock, Basic																											
+mod/sgearmetalworks	Rose Quartz	Jewelry Setting	silentgems:rose_quartz		Advanced, Casting, Gem																											
+mod/sgearmetalworks	Ruby	Jewelry Setting	silentgems:ruby		Casting, Intermediate, Gem																											
+mod/sgearmetalworks	Emerald	Jewelry Setting	silentgear:emerald		Advanced, Casting, Gem		Reach II																									
+mod/sgearmetalworks	Carnelian	Jewelry Setting	silentgems:carnelian		Casting, Intermediate, Gem																											
+mod/silentgear	Prismarine	Jewelry Setting	silentgear:prismarine		Advanced, Gem, Organic		Swift Swim III*																									
+mod/sgearmetalworks	Aquamarine	Jewelry Setting	silentgems:aquamarine		Casting, Intermediate, Gem		Step Up																									
+mod/sgearmetalworks	Iolite	Jewelry Setting	silentgems:iolite		Casting, Intermediate, Gem		Cure Poison																									
+mod/sgearmetalworks	Peridot	Jewelry Setting	silentgems:peridot		Casting, Intermediate, Gem		Hearty II																									
+mod/silentgear	Pink Wool	Lining	silentgear:wool/pink	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Magenta Wool	Lining	silentgear:wool/magenta	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Leather	Lining	silentgear:leather		Cloth, Organic, Basic		Flexible IV																									
+mod/silentgear	Light Gray Wool	Lining	silentgear:wool/light_gray	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Light Blue Wool	Lining	silentgear:wool/light_blue	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Blue Wool	Lining	silentgear:wool/blue	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Slime	Lining	silentgear:slime		Intermediate, Slime, Organic		Bounce*																						+0.5			
+mod/silentgear	Gray Wool	Lining	silentgear:wool/gray	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Wool	Lining	silentgear:wool		Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Purple Wool	Lining	silentgear:wool/purple	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Red Wool	Lining	silentgear:wool/red	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Fine Silk Cloth	Lining	silentgear:fine_silk_cloth		Intermediate, Cloth, Organic		Flexible IV																								+2	
+mod/silentgear	Orange Wool	Lining	silentgear:wool/orange	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Lime Wool	Lining	silentgear:wool/lime	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Yellow Wool	Lining	silentgear:wool/yellow	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Green Wool	Lining	silentgear:wool/green	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	White Wool	Lining	silentgear:wool/white	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Brown Wool	Lining	silentgear:wool/brown	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Phantom Membrane	Lining	silentgear:phantom_membrane		Intermediate, Cloth, Organic		Light II*, Flexible III																									
+mod/silentgear	Black Wool	Lining	silentgear:wool/black	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Cyan Wool	Lining	silentgear:wool/cyan	Wool	Cloth, Organic, Basic		Flexible II																							+0.1		
+mod/silentgear	Bamboo	Main	silentgear:bamboo		Wood, Organic, Basic		Flammable, Flexible II	65	9x		25%	15	0.7	4	bamboo (0)	2		0	0					0x	0x	1x	90%	7			2	
+mod/sgearmetalworks	Golden (Gold)	Main	silentgear:gold		Metal, Casting, Intermediate		Brilliant*, Malleable I, Soft III*	32	7x			22	1.2	50	gold (1)	12		0	0				4	0x	0.3x	1.1x	100%	11			8	
+mod/silentgear	Sandstone	Main	silentgear:sandstone		Rock, Basic			117	6x		-10%	7	0.7	7	sandstone (1)	4		1	0.1					0x	-0.1x	1x	80%	5				
+mod/sgearmetalworks	Lead	Main	silentgear:lead		Metal, Casting, Intermediate		Malleable II, Aquatic II*	260	14x			15	0.8	40	iron (2)	4		2	-0.4				2	1x	-0.3x			13			4	
+mod/sgearmetalworks	Redstone	Main	silentgear:redstone		Metal, Dust, Casting, Intermediate	Yes	Imperial III*					-10%	+10%	30		12		4						2x								
+mod/sgearmetalworks	Lapis Lazuli	Main	silentgear:lapis_lazuli		Casting, Intermediate, Gem			200	13x			17	1.3	30	lapis_lazuli (1.5)	5		2	0				3	0x	-0.1x	1x	80%	15			10	
+mod/sgearmetalworks	Osmium	Main	silentgear:osmium		Metal, Casting, Intermediate		Malleable II	500	30x			12	1.1	35	iron (2)	10		4	0.1				2	1x	0x			17			4	
+mod/sgearmetalworks	Quartz	Main	silentgear:quartz		Casting, Intermediate, Gem		Crushing III, Jagged II*	330	13x			10	1.2	40	quartz (2)	7		2	0.1					0x	0.1x	1x	100%	14			4	
+mod/silentgear	Shulker Shell (Crushed Shulker Shell)	Main	silentgear:crushed_shulker_shell		Dust, Endgame, Rock	Yes	Eroded IV*	2500	50x			10	-0.15	91																		
+mod/silentgear	Paper	Main	silentgear:paper		Sheet, Organic, Basic		Flammable, Rustic III	0	2x			11	1	3														4				
+mod/silentgear	Pink Wool	Main	silentgear:wool/pink	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/silentgear	 (Sheet Metal)	Main	silentgear:sheet_metal		Sheet			x0	x0.6																			x0.5	x0.5			
+KubeJS Virtual Resource Pack [After Mods, data]	Uru Metal	Main	sgearmetalworks:uru_metal		Infusing, Metal, Endgame, Casting		Malleable VI, Indestructible, Aquatic I, Brilliant, Flame Ward, Cure Wither, Cure Poison, Sting resist I*	15000	50000x		50%	1500	1.5	200	unobtainium (7)	29		35	18				11	8x	0.5x	2x	250%	42	100		600	
+mod/silentgear	Refined Iron	Main	silentgear:refined_iron		Metal, Intermediate		Malleable IV, Stellar I	512	20x		-15%	15	0.8	25	iron (2)	7		3	0				2	2x	0x			18	2		6	
+mod/silentgear	Yellow Terracotta	Main	silentgear:terracotta/yellow	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/silentgear	Warped Wood	Main	silentgear:wood/warped	Wooden	Wood, Organic		Jagged I*	59	8x		25%	15	0.6	1	wood (0)	2		0	0					0x	0x	1x	90%	7			2	
+mod/silentgear	Dimerald	Main	silentgear:dimerald		Advanced, Gem		Brittle I, Gold Digger II*	1776	36x			12	0.7	80	dimerald (3)	9		3	0.1				3	3x	0.1x	1x	120%	22	10		10	
+mod/silentgear	Magenta Wool	Main	silentgear:wool/magenta	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/silentgear	Leather	Main	silentgear:leather		Cloth, Organic, Basic		Snow Walker*	0	5x			15	0.8	11														7			8	
+mod/silentgear	Crimson Wood	Main	silentgear:wood/crimson	Wooden	Wood, Organic		Jagged I*	59	8x		25%	15	0.6	1	wood (0)	2		0	0					0x	0x	1x	90%	7			2	
+mod/silentgear	Acacia Wood	Main	silentgear:wood/acacia	Wooden	Wood, Organic		Flammable, Jagged I*	59	8x		25%	15	0.6	1	wood (0)	2		0	0					0x	0x	1x	90%	7			2	
+mod/sgearmetalworks	Heliodor	Main	silentgems:heliodor		Advanced, Casting, Gem		Chipping IV, Brittle II	1024	34x			10	1.2	60	heliodor (3)	14		2	0					1x	0x			16	4		8	
+mod/silentgear	Light Gray Wool	Main	silentgear:wool/light_gray	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/sgearmetalworks	Black Diamond	Main	silentgems:black_diamond		Advanced, Casting, Gem		Flame Ward*, Sturdy II	1792	39x			12	1	55	black_diamond (4)	9		4	0					3x	0x			20	8		10	
+mod/sgearmetalworks	Sapphire	Main	silentgems:sapphire		Casting, Intermediate, Gem		Aquatic II, Brittle II	512	28x			12	1.3	30	sapphire (2)	6		2	0					1x	0x			18	6		10	
+mod/silentgear	Basalt	Main	silentgear:basalt		Rock, Basic		Brittle II, Chipping III	137	4x			6	0.7	7	basalt (1)	4		1	0					0x	-0.1x	1x	80%	6				
+mod/silentgear	Cyan Terracotta	Main	silentgear:terracotta/cyan	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/silentgear	Light Blue Wool	Main	silentgear:wool/light_blue	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/silentgear	Blackstone	Main	silentgear:blackstone		Rock, Basic		Brittle I, Jagged II*, Hard II*	151	5x			4	0.6	9	blackstone (1)	4		1	0					0x	-0.2x	1x	80%	5				
+mod/sgearmetalworks	Pearl	Main	silentgems:pearl		Advanced, Casting, Gem		Neptune's Blessing III	1024	44x			12	1.3	65	pearl (3)	8		2	0					2x	0x			20	12		16	
+mod/sgearmetalworks	White Diamond	Main	silentgems:white_diamond		Advanced, Casting, Gem		Void Ward*, Sturdy II	2048	44x			14	1	70	white_diamond (4)	12		5	0					3x	0x			24	16		20	
+mod/sgearmetalworks	Steel	Main	silentgear:steel		Metal, Casting, Intermediate		Malleable V	500	20x		15%	11	0.8	40	iron (2)	6		4	-0.2				1	2x	-0.2x			20	2		6	
+mod/silentgear	Blue Wool	Main	silentgear:wool/blue	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/sgearmetalworks	Obsidian	Main	silentgear:obsidian		Advanced, Casting, Rock		Jagged III*, Crushing II	1024	13x		-25%	7	0.6	10	obsidian (1)	6		3	-0.4				2	0x	-0.4x	0.7x	70%	20	4		8	
+mod/silentgear	Purple Terracotta	Main	silentgear:terracotta/purple	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/sgearmetalworks	Ammolite	Main	silentgems:ammolite		Advanced, Casting, Gem		Fractal IV, Brittle III	1024	40x			12	1.2	60	ammolite (3)	8		2	0					1x	0x			22	12		16	
+mod/silentgear	Gray Wool	Main	silentgear:wool/gray	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/sgearmetalworks	Amethyst	Main	silentgear:amethyst		Casting, Intermediate, Gem		Renew I*	210	10x			16	1.3	35	amethyst (1.5)	6		1	0				3	1x	0x	1x	100%	15			10	
+mod/silentgear	Orange Terracotta	Main	silentgear:terracotta/orange	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/sgearmetalworks	Azure Electrum	Main	silentgear:azure_electrum		Metal, Endgame, Casting		Malleable III, Accelerate III*, Light IV*	1259	61x		50%	37	1.5	109	azure_electrum (4)	29		7	0				11	3x	0x	2x	150%	19	8		19	
+mod/sgearmetalworks	Platinum	Main	silentgear:platinum		Advanced, Metal, Casting		Malleable III, Soft II*	900	21x			14	1.2	80	diamond (3)	12		4	0				4	1x	0x			18	2		12	
+KubeJS Virtual Resource Pack [After Mods, data]	material.silentgear.vibranium	Main	silentgear:vibranium		Metal, Endgame		Malleable V, Crushing V, Advanced Aquatic I*, Brilliant*, Advanced Flame Ward*, Cure Wither*, Cure Nausea*	7500	90x			105		90	vibranium (6)	9		27	12.2					0x				70	70		400	
+mod/silentgear	Wooden (Wood)	Main	silentgear:wood		Wood, Organic		Flammable, Jagged I*	59	8x		25%	15	0.6	1	wood (0)	2		0	0					0x	0x	1x	90%	7			2	
+mod/silentgear	Feather	Main	silentgear:feather		Organic, Basic		trait.silentgear.flutter I	0	2x			9	1.1	1														3				
+mod/silentgear	Wool	Main	silentgear:wool		Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/silentgear	Purple Wool	Main	silentgear:wool/purple	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/sgearmetalworks	Glowstone	Main	silentgear:glowstone		Dust, Casting, Intermediate, Gem	Yes	Renew III						+15%	40		15		3	0.4					3x								
+mod/sgearmetalworks	Moldavite	Main	silentgems:moldavite		Casting, Intermediate, Gem		Sharp III*, Brittle III	512	26x			10	1.2	45	moldavite (2)	6		4	0					3x	0x			16	4		8	
+mod/silentgear	Stone	Main	silentgear:stone		Rock, Basic		Ancient I*	131	5x			5	0.5	4	stone (1)	4		1	0					0x	-0.2x	1x	80%	5				
+mod/sgearmetalworks	Citrine	Main	silentgems:citrine		Casting, Intermediate, Gem		Ancient IV*, Brittle III	768	26x			10	1.2	45	citrine (2)	10		3	0					2x	0x			16	4		8	
+mod/sgearmetalworks	Turquoise	Main	silentgems:turquoise		Advanced, Casting, Gem		Turtle*, Barrier Jacket V	1536	40x			15	1.3	45	turquoise (3)	8		3	0					2x	0x			15	6		20	
+mod/sgearmetalworks	Tyrian Steel	Main	silentgear:tyrian_steel		Metal, Endgame, Casting		Sturdy III*, Void Ward*	3652	81x			16	1.1	100	tyrian_steel (4)	18		8	0				6	4x	0x	1.1x	110%	25	12		12	
+mod/silentgear	Oak Wood	Main	silentgear:wood/oak	Wooden	Wood, Organic		Flammable, Jagged I*	59	8x		25%	15	0.6	1	wood (0)	2		0	0					0x	0x	1x	90%	7			2	
+mod/sgearmetalworks	Lumium	Main	silentgear:lumium		Advanced, Metal, Casting		Malleable III, Refractive*	920	20x		15%	14	1.3	75	diamond (3)	15		4	0.2				3	2x	0x			18	4		10	
+mod/silentgear	Netherwood	Main	silentgear:netherwood	Wooden	Wood, Organic		Flexible III, Jagged II*	72	12x	50%	10%	13	0.7	4	netherwood (0)	2		0	0.2					0x	0x	1x	80%	8			6	
+KubeJS Virtual Resource Pack [After Mods, data]	material.silentgear.allthemodium	Main	silentgear:allthemodium		Metal, Endgame		Malleable IV, Crushing IV, Brilliant*, Advanced Aquatic I*, Advanced Flame Ward*	5500	60x			85		90	allthemodium (5)	8		22	8.2					0x				60	60		200	
+mod/silentgear	Gray Terracotta	Main	silentgear:terracotta/gray	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/silentgear	Bismuth	Main	silentgear:bismuth		Metal, Intermediate		Malleable II, Lustrous II*	330	10x			12	0.9	35	iron (2)	5		2.5	0.1				3.5	1x	0x			16	2		6	
+mod/silentgear	Brown Terracotta	Main	silentgear:terracotta/brown	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/sgearmetalworks	Enderium	Main	silentgear:enderium		Metal, Casting, Endgame		Malleable III	1200	34x		15%	13	1.2	80	netherite (4)	18		6	0				4	3x	0x			22	8		10	
+mod/sgearmetalworks	Kyanite	Main	silentgems:kyanite		Advanced, Casting, Gem		Chilled IV*, Stellar II	1280	38x			17	1.4	60	kyanite (4)	12		4	0					2x	0x			20	8		14	
+mod/silentgear	Blue Terracotta	Main	silentgear:terracotta/blue	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/silentgear	Red Wool	Main	silentgear:wool/red	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/silentgear	Pink Terracotta	Main	silentgear:terracotta/pink	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/silentgear	Titanium	Main	silentgear:titanium		Metal, Endgame		Malleable II, Hard IV*	1600	37x			12	1	80	netherite (4)	8		6	0				1	1x	-0.2x			24	8		4	
+mod/sgearmetalworks	Crimson Iron	Main	silentgear:crimson_iron		Advanced, Metal, Casting		Malleable III, Hard II*, Heat-Resistant IV*	420	27x		50%	14	0.7	31	crimson_iron (3)	10		3	-0.1				3	2x	-0.1x	1x	110%	18	2		6	
+mod/silentgear	Green Terracotta	Main	silentgear:terracotta/green	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/silentgear	Netherrack	Main	silentgear:netherrack		Rock, Organic, Basic		Eroded III*, Flexible II	142	5x		-20%	8	0.8	11	netherrack (1)	5		0.5	0				0.5	0.5x	0.1x	0.8x	100%	8			4	
+mod/silentgear	Spruce Wood	Main	silentgear:wood/spruce	Wooden	Wood, Organic		Flammable, Jagged I*	59	8x		25%	15	0.6	1	wood (0)	2		0	0					0x	0x	1x	90%	7			2	
+mod/sgearmetalworks	Topaz	Main	silentgems:topaz		Casting, Intermediate, Gem		Lustrous I*, Brittle II	512	21x			12	1.3	30	topaz (2)	8		2	0					1x	0x			15	4		6	
+mod/silentgear	White Terracotta	Main	silentgear:terracotta/white	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/sgearmetalworks	Tanzanite	Main	silentgems:tanzanite		Casting, Intermediate, Gem		Light II*	768	28x			15	1.2	50	tanzanite (2)	9		2	0					2x	0x			18	5		10	
+mod/sgearmetalworks	Diamond	Main	silentgear:diamond		Advanced, Casting, Gem		Brittle II, Lustrous I*	1561	33x			10	0.8	70	diamond (3)	8		3	0				1	2x	-0.2x	0.9x	110%	20	8		4	
+mod/sgearmetalworks	Uranium	Main	silentgear:uranium		Advanced, Metal, Casting		Malleable II	800	20x		-15%	17	1.5	50	diamond (3)	6		2	0.1				2	0.5x	0.1x			13	1		3	
+mod/silentgear	High-Carbon Steel	Main	silentgear:high_carbon_steel		Advanced, Metal		Malleable III	420	24x		5%	11	0.8	40	high_carbon_steel (2)	6		4	-0.2				1	2x	-0.2x			20	2		6	
+mod/sgearmetalworks	Aluminum	Main	silentgear:aluminum		Metal, Casting, Intermediate		Malleable III, Soft II*, Synergistic I	365	15x			14	0.9	25	iron (2)	8		2	0.2				2	2x	0.2x			14	0.5		3	
+mod/sgearmetalworks	Alexandrite	Main	silentgems:alexandrite		Casting, Intermediate, Gem		Imperial V*, Brittle I	1024	29x			15	1.3	45	alexandrite (3)	9		3	0					2x	0x			18	5		10	
+mod/silentgear	Compressed Iron	Main	silentgear:compressed_iron		Advanced, Metal		Malleable II, Hard III*	1024	24x		-15%	12	0.8	40	diamond (3)	9		4	-0.2				1	3x	0x			20	2		4	
+KubeJS Virtual Resource Pack [After Mods, data]	material.silentgear.unobtainium	Main	silentgear:unobtainium		Metal, Endgame		Malleable V, Crushing V, Advanced Aquatic I*, Brilliant*, Advanced Flame Ward*, Cure Wither*, Cure Nausea*, Cure Levitation*	9500	120x			175		99	unobtainium (7)	18		35	18.2					0x				90	90		600	
+mod/silentgear	Fine Silk Cloth	Main	silentgear:fine_silk_cloth		Intermediate, Cloth, Organic		Snow Walker*	0	14x			14	0.9	40														6			14	
+mod/silentgear	Terracotta	Main	silentgear:terracotta		Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/silentgear	Light Blue Terracotta	Main	silentgear:terracotta/light_blue	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/sgearmetalworks	Nickel	Main	silentgear:nickel		Metal, Casting, Intermediate		Malleable III, Adamant I*	380	17x			12	1	40	iron (2)	7		2.5	0.1				1	0.5x	0.1x			13			6	
+mod/sgearmetalworks	Opal	Main	silentgems:opal		Advanced, Casting, Gem		Freeze-Resistant IV*, Enderbane II	1024	36x			10	1.3	60	opal (3)	13		2	0					1x	0x			18	4		8	
+mod/silentgear	Red Terracotta	Main	silentgear:terracotta/red	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/sgearmetalworks	Refined Obsidian	Main	silentgear:refined_obsidian		Metal, Casting, Endgame		Malleable III, Hard IV*	2500	50x		-30%	40	0.8	70	diamond (3)	20		10	0.3				4	4x	0.2x			30	16		6	
+mod/silentgear	Bismuth Brass	Main	silentgear:bismuth_brass		Metal, Intermediate		Malleable II, Lustrous II*	580	15x		15%	14	1.1	50	iron (2)	9		3	0.1				2	2x	0.2x			18	2		8	
+mod/sgearmetalworks	Garnet	Main	silentgems:garnet		Casting, Intermediate, Gem		Critical Strike I	512	21x			12	1.3	40	peridot (2)	6		3	0					2x	0x			15	4		6	
+mod/silentgear	Light Gray Terracotta	Main	silentgear:terracotta/light_gray	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/sgearmetalworks	Bone	Main	silentgear:bone		Organic, Basic, Crude		Chipping II	108	4x			5	0.9	8	bone (1)	4		2	0.1				1	1x	0x	0.9x	100%	5			1	
+mod/sgearmetalworks	Iron	Main	silentgear:iron		Metal, Casting, Intermediate		Malleable III	250	15x			14	0.7	20	iron (2)	6		2	0				1	1x	0.1x	1x	110%	15			6	
+mod/sgearmetalworks	Crimson Steel	Main	silentgear:crimson_steel		Metal, Endgame, Casting		Malleable V, Hard III*, Flame Ward*	2400	42x		50%	19	0.9	83	crimson_steel (4)	15		6	-0.1				6	3x	-0.1x	1x	130%	22	10		10	
+mod/silentgear	Birch Wood	Main	silentgear:wood/birch	Wooden	Wood, Organic		Flammable, Jagged I*	59	8x		25%	15	0.6	1	wood (0)	2		0	0					0x	0x	1x	90%	7			2	
+mod/sgearmetalworks	Flint	Main	silentgear:flint		Rock, Basic		Jagged III*	124	4x			3	0.8	6	flint (1)	5		2	-0.1					1x	-0.3x	1x	100%	4				
+mod/silentgear	Red Sandstone	Main	silentgear:sandstone/red	Sandstone	Rock, Basic			117	6x		-10%	7	0.7	7	sandstone (1)	4		1	0.1					0x	-0.1x	1x	80%	5				
+mod/sgearmetalworks	Rose Quartz	Main	silentgems:rose_quartz		Advanced, Casting, Gem		Critical Strike III, Brittle III	1024	34x			12	1.2	60	rose_quartz (4)	14		6	0					3x	0x			16	4		8	
+mod/sgearmetalworks	Ruby	Main	silentgems:ruby		Casting, Intermediate, Gem		Imperial II*	1024	34x			12	1.3	30	ruby (2)	6		2	0					1x	0x			15	4		6	
+mod/silentgear	Dark Oak Wood	Main	silentgear:wood/dark_oak	Wooden	Wood, Organic		Flammable, Jagged I*	59	8x		25%	15	0.6	1	wood (0)	2		0	0					0x	0x	1x	90%	7			2	
+mod/silentgear	Aluminum Steel	Main	silentgear:aluminum_steel		Advanced, Metal		Malleable IV, Synergistic II*	660	18x		-15%	11	1	45	diamond (3)	8		4	0.1				1.5	2x	0x			18	2		6	
+mod/silentgear	Barrier	Main	silentgear:barrier		Intangible		Adamant V, Holy V*	1337	84x		-100%	5	0.5	111	wood (0)	5		1	0				1	1x	0x			20	10		10	
+mod/silentgear	Jungle Wood	Main	silentgear:wood/jungle	Wooden	Wood, Organic		Flammable, Jagged I*	59	8x		25%	15	0.6	1	wood (0)	2		0	0					0x	0x	1x	90%	7			2	
+mod/silentgear	Orange Wool	Main	silentgear:wool/orange	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/sgearmetalworks	Emerald	Main	silentgear:emerald		Advanced, Casting, Gem		Brittle I, Synergistic II	1080	24x		25%	16	1	40	emerald (2)	10		2	0				2	1x	-0.1x	1.1x	90%	16	4		6	
+mod/sgearmetalworks	Brass	Main	silentgear:brass		Metal, Casting, Intermediate		Malleable II, Silky*	240	8x		15%	13	1.2	25	iron (2)	7		1.5	0.1				1.5	2x	0.2x			14	1		6	
+mod/sgearmetalworks	Silver	Main	silentgear:silver		Metal, Casting, Intermediate		Malleable II, Soft I*	64	9x			20	1.1	40	gold (0)	11		0	0.2				4	0x	0.3x			11			10	
+mod/sgearmetalworks	Carnelian	Main	silentgems:carnelian		Casting, Intermediate, Gem		Gold Digger II*	1280	37x			10	1.2	45	carnelian (2)	7		3	0					2x	0x			16	4		8	
+mod/silentgear	Lime Wool	Main	silentgear:wool/lime	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/silentgear	Yellow Wool	Main	silentgear:wool/yellow	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/silentgear	Green Wool	Main	silentgear:wool/green	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/sgearmetalworks	Bronze	Main	silentgear:bronze		Metal, Casting, Intermediate		Sharp I*	300	13x		15%	12	1.1	15	bronze (2)	6		2.5	0.2				1	2x	-0.2x			15	1		6	
+mod/sgearmetalworks	Copper	Main	silentgear:copper		Metal, Casting, Basic		Polished*	190	11x			13	1.3	12	copper (1.5)	5		1	0				1	0.1x	0x			10			8	
+mod/sgearmetalworks	Invar	Main	silentgear:invar		Metal, Casting, Intermediate		Malleable III, Adamant II*	640	20x		15%	13	1.2	50	iron (2)	7		3.5	0				3	2x	0x			18	2		6	
+mod/silentgear	White Wool	Main	silentgear:wool/white	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/sgearmetalworks	Signalum	Main	silentgear:signalum		Metal, Casting, Endgame		Flexible II, Lustrous IV*	800	25x		15%	16	1.2	50	diamond (3)	13		3	0				4	2x	0.2x			16	2		4	
+mod/silentgear	Turtle	Main	silentgear:turtle		Intermediate, Organic		Turtle*	0				9	0.5	20																	4	
+mod/sgearmetalworks	Refined Glowstone	Main	silentgear:refined_glowstone		Advanced, Metal, Casting		Malleable II, Lustrous IV*	300	18x		15%	18	0.8	45	iron (2)	14		5	0				3	3x	0x			19			8	
+mod/silentgear	End Stone	Main	silentgear:end_stone		Rock, Basic		Jagged III*, Ancient II*	1164	15x		-20%	10	0.9	32	end_stone (1)	7		2	0.1				3	0x	0x	1x	80%	15	1		6	
+mod/silentgear	Bismuth Steel	Main	silentgear:bismuth_steel		Advanced, Metal		Malleable III, Lustrous II*	1050	25x		-15%	14	1	60	diamond (3)	10		4	-0.1				5	3x	0.1x			20	4		8	
+mod/sgearmetalworks	Aquamarine	Main	silentgems:aquamarine		Casting, Intermediate, Gem		Fortunate I*	1024	34x			12	1.3	40	aquamarine (2)	6		2	0					1x	0x			15	4		6	
+mod/sgearmetalworks	Zinc	Main	silentgear:zinc		Metal, Casting, Basic		Malleable I, Soft II*	192	10x			15	1.1	10	stone (1)	3		1.5	0				1	0x	0x			10			2	
+mod/silentgear	Diorite	Main	silentgear:stone/diorite	Stone	Rock, Basic		Ancient I*	131	5x			5	0.5	4	stone (1)	4		1	0					0x	-0.2x	1x	80%	5				
+mod/silentgear	Lime Terracotta	Main	silentgear:terracotta/lime	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/silentgear	Black Terracotta	Main	silentgear:terracotta/black	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/silentgear	Redstone Alloy	Main	silentgear:redstone_alloy		Metal, Intermediate		Malleable III, Eroded III*	840	20x		-15%	18	0.9	45	iron (2)	11		2	0.2				4	1x	0.2x			17	1		8	
+mod/sgearmetalworks	Blaze Gold	Main	silentgear:blaze_gold		Advanced, Metal, Casting		Brilliant*, Greedy III, Malleable III	69	9x			24	1.2	45	blaze_gold (2)	15		2	0.1				5	1x	0.2x	1.2x	90%	13	1		10	
+mod/silentgear	Brown Wool	Main	silentgear:wool/brown	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/silentgear	Phantom Membrane	Main	silentgear:phantom_membrane		Intermediate, Cloth, Organic		Renew II*	0	12x			10	0.7	35														6			8	
+mod/sgearmetalworks	Iolite	Main	silentgems:iolite		Casting, Intermediate, Gem		Crushing III, Brittle II	768	32x			10	1.2	45	iolite (2)	7		3	0					2x	0x			20	6		14	
+mod/silentgear	Granite	Main	silentgear:stone/granite	Stone	Rock, Basic		Ancient I*	131	5x			5	0.5	4	stone (1)	4		1	0					0x	-0.2x	1x	80%	5				
+mod/silentgear	Black Wool	Main	silentgear:wool/black	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/silentgear	Leaf (Leaves)	Main	silentgear:leaves		Organic, Basic		Flammable, Light I*	0	2x			12	1.1	1														3				
+mod/sgearmetalworks	Electrum	Main	silentgear:electrum		Metal, Casting, Intermediate		Malleable II, Soft II*	96	10x			25	1.5	40	iron (2)	14		2	0.3				5	1x	0.4x			15			11	
+mod/silentgear	Andesite	Main	silentgear:stone/andesite	Stone	Rock, Basic		Ancient I*	131	5x			5	0.5	4	stone (1)	4		1	0					0x	-0.2x	1x	80%	5				
+mod/sgearmetalworks	Peridot	Main	silentgems:peridot		Casting, Intermediate, Gem		Jagged II*, Brittle III	512	21x			12	1.3	30	peridot (2)	6		3	0					2x	0x			15	4		6	
+mod/sgearmetalworks	Azure Silver	Main	silentgear:azure_silver		Advanced, Metal, Casting		Malleable III, Soft II*, Moonwalker IV*	197	17x		50%	29	1.4	83	azure_silver (3)	19		5	0				7	2x	0x	1.2x	110%	13			13	
+mod/sgearmetalworks	Tin	Main	silentgear:tin		Metal, Casting, Basic		Malleable I, Soft II*	192	13x			12	1.1	15	stone (1)	5		1.5	0				1	0.5x	0x			12			2	
+mod/silentgear	Cyan Wool	Main	silentgear:wool/cyan	Wool	Cloth, Organic, Basic		Snow Walker*	0	4x			7	0.7	7														4			4	
+mod/sgearmetalworks	Meat	Main	sgearmetalworks:meat		Casting		Organic II, Bending III, Yummy	1024	13x		-25%	7	0.6	10		6		3	-0.4				2	0x	-0.4x	0.7x	70%	20	4		8	
+mod/silentgear	Magenta Terracotta	Main	silentgear:terracotta/magenta	Terracotta	Rock, Basic		Brittle I, Chipping II, Rustic I	165	11x		-10%	9	0.8	7	terracotta (1)	4		1.5	0.2					0x	-0.2x	1x	90%	9			3	
+mod/sgearmetalworks	Golden (Gold)	Tip Upgrade	silentgear:gold		Metal, Casting, Intermediate		Malleable I, Soft III*	+16	+1					+30		+6							+2		+0.2							
+mod/sgearmetalworks	Redstone	Tip Upgrade	silentgear:redstone		Metal, Dust, Casting, Intermediate									+10		x1.2		+2	+0.3					+2								
+mod/sgearmetalworks	Lapis Lazuli	Tip Upgrade	silentgear:lapis_lazuli		Casting, Intermediate, Gem		Holy I*, Lucky IV*								lapis_lazuli (1.5)	x0.9			+0.3				+2									
+mod/sgearmetalworks	Quartz	Tip Upgrade	silentgear:quartz		Casting, Intermediate, Gem		Chipping I, Jagged III*	+64	+4					+20	quartz (2)	+2		+4						+1.5								
+KubeJS Virtual Resource Pack [After Mods, data]	Uru Metal	Tip Upgrade	sgearmetalworks:uru_metal		Infusing, Metal, Endgame, Casting		Malleable V, Hard V*	+16	+1					x61		+6										+0.7						
+mod/silentgear	Dimerald	Tip Upgrade	silentgear:dimerald		Advanced, Gem		Imperial II*	+360						+25		+2		+2					+1	+0.5								
+mod/sgearmetalworks	Amethyst	Tip Upgrade	silentgear:amethyst		Casting, Intermediate, Gem		Silky*	x0.75							amethyst (1.5)																	
+mod/sgearmetalworks	Azure Electrum	Tip Upgrade	silentgear:azure_electrum		Metal, Endgame, Casting		Malleable III	+401	+11						azure_electrum (4)	+5																
+KubeJS Virtual Resource Pack [After Mods, data]	material.silentgear.vibranium	Tip Upgrade	silentgear:vibranium		Metal, Endgame		Malleable V, Hard V*	+16	+10					+60	vibranium (6)	+6							+2									
+mod/sgearmetalworks	Glowstone	Tip Upgrade	silentgear:glowstone		Dust, Casting, Intermediate, Gem		Refractive*, Lustrous IV*							+15		x1.4		+2					+2		x1.3							
+mod/sgearmetalworks	Tyrian Steel	Tip Upgrade	silentgear:tyrian_steel		Metal, Endgame, Casting		Imperial III*, Gold Digger III*	+251						+30	tyrian_steel (4)																	
+KubeJS Virtual Resource Pack [After Mods, data]	material.silentgear.allthemodium	Tip Upgrade	silentgear:allthemodium		Metal, Endgame		Malleable IV, Soft III*	+16	+10					+30	allthemodium (5)	+6							+2									
+mod/sgearmetalworks	Crimson Iron	Tip Upgrade	silentgear:crimson_iron		Advanced, Metal, Casting		Fiery I*	+224	+8					+10	crimson_iron (3)	+2		+2														
+mod/sgearmetalworks	Diamond	Tip Upgrade	silentgear:diamond		Advanced, Casting, Gem		Brittle II, Lustrous II*	+256	+9					+20	diamond (3)	+2		+2					+1	+0.5								
+KubeJS Virtual Resource Pack [After Mods, data]	material.silentgear.unobtainium	Tip Upgrade	silentgear:unobtainium		Metal, Endgame		Malleable V, Hard V*	+16	+10					+60	unobtainium (7)	+6							+2									
+mod/sgearmetalworks	Refined Obsidian	Tip Upgrade	silentgear:refined_obsidian		Metal, Casting, Endgame		Vulcan*	+600																								
+mod/sgearmetalworks	Iron	Tip Upgrade	silentgear:iron		Metal, Casting, Intermediate		Malleable II	+128	+4					+8	iron (2)	+1		+1							+0.2							
+mod/sgearmetalworks	Crimson Steel	Tip Upgrade	silentgear:crimson_steel		Metal, Endgame, Casting		Magmatic*	+448	+16					+20	crimson_steel (4)																	
+mod/sgearmetalworks	Flint	Tip Upgrade	silentgear:flint		Rock, Basic			+31																								
+mod/sgearmetalworks	Emerald	Tip Upgrade	silentgear:emerald		Advanced, Casting, Gem		Brittle I, Synergistic II	+512	+12					+20	emerald (2)	+2		+1					+2	+1								
+mod/sgearmetalworks	Bronze	Tip Upgrade	silentgear:bronze		Metal, Casting, Intermediate		Malleable II	+96	+2					+6	bronze (2)	+0.75		+0.75	+0.1													
+mod/sgearmetalworks	Copper	Tip Upgrade	silentgear:copper		Metal, Casting, Basic		Malleable I, trait.silentgear.dulling I	+32	+1					+4	copper (1.5)	+1																
+mod/sgearmetalworks	Refined Glowstone	Tip Upgrade	silentgear:refined_glowstone		Advanced, Metal, Casting		Refractive*									+5																
+mod/sgearmetalworks	Blaze Gold	Tip Upgrade	silentgear:blaze_gold		Advanced, Metal, Casting		Soft II*, Fiery II*	+32	+3					+14	blaze_gold (2)	+4		+1					+1									
+mod/sgearmetalworks	Azure Silver	Tip Upgrade	silentgear:azure_silver		Advanced, Metal, Casting		Malleable II, Fortunate III*	+83	+3					+31	azure_silver (3)	+3			+0.2				+2									
+mod/sgearmetalworks	Meat	Tip Upgrade	sgearmetalworks:meat		Casting		Yummy, Soft III*	+68								-0.1																
+mod/silentgear	Bamboo	Tool Rod	silentgear:bamboo		Wood, Organic, Basic		Flexible III																									
+mod/sgearmetalworks	Golden (Gold)	Tool Rod	silentgear:gold		Metal, Casting, Intermediate		Bending IV									+3																
+mod/silentgear	Sandstone	Tool Rod	silentgear:sandstone		Rock, Basic		Brittle I																									
+mod/sgearmetalworks	Lead	Tool Rod	silentgear:lead		Metal, Casting, Intermediate		Soft IV*	x1.1						40		x0.9																
+mod/sgearmetalworks	Osmium	Tool Rod	silentgear:osmium		Metal, Casting, Intermediate		Malleable II	x1.1		x1.1				35																		
+mod/sgearmetalworks	Quartz	Tool Rod	silentgear:quartz		Casting, Intermediate, Gem		Brittle III									x1.2		x1.1														
+KubeJS Virtual Resource Pack [After Mods, data]	Uru Metal	Tool Rod	sgearmetalworks:uru_metal		Infusing, Metal, Endgame, Casting		Hard V*	x4.5				+23		x100																		
+mod/silentgear	Refined Iron	Tool Rod	silentgear:refined_iron		Metal, Intermediate		Malleable IV	x1.15						25										x1.1								
+mod/silentgear	Yellow Terracotta	Tool Rod	silentgear:terracotta/yellow	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/silentgear	Warped Wood	Tool Rod	silentgear:wood/warped	Wooden	Wood, Organic		Flexible II																									
+mod/silentgear	Dimerald	Tool Rod	silentgear:dimerald		Advanced, Gem		Brittle I*, Ancient III*									x1.15																
+mod/silentgear	Crimson Wood	Tool Rod	silentgear:wood/crimson	Wooden	Wood, Organic		Flexible II																									
+mod/silentgear	Acacia Wood	Tool Rod	silentgear:wood/acacia	Wooden	Wood, Organic		Flexible II																									
+mod/sgearmetalworks	Heliodor	Tool Rod	silentgems:heliodor		Advanced, Casting, Gem																											
+mod/sgearmetalworks	Black Diamond	Tool Rod	silentgems:black_diamond		Advanced, Casting, Gem																											
+mod/sgearmetalworks	Sapphire	Tool Rod	silentgems:sapphire		Casting, Intermediate, Gem																											
+mod/silentgear	Basalt	Tool Rod	silentgear:basalt		Rock, Basic		Brittle III, Chipping II									x1.1		x0.9														
+mod/silentgear	Cyan Terracotta	Tool Rod	silentgear:terracotta/cyan	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/silentgear	Blackstone	Tool Rod	silentgear:blackstone		Rock, Basic		Brittle I, Jagged II*, Hard I*									x0.9																
+mod/sgearmetalworks	Pearl	Tool Rod	silentgems:pearl		Advanced, Casting, Gem		Aquatic IV, Brittle III																									
+mod/sgearmetalworks	White Diamond	Tool Rod	silentgems:white_diamond		Advanced, Casting, Gem																											
+mod/sgearmetalworks	Steel	Tool Rod	silentgear:steel		Metal, Casting, Intermediate		Malleable V	x1.25						40																		
+mod/sgearmetalworks	Obsidian	Tool Rod	silentgear:obsidian		Advanced, Casting, Rock		Brittle II, Chipping III									x0.9																
+mod/silentgear	Purple Terracotta	Tool Rod	silentgear:terracotta/purple	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/sgearmetalworks	Ammolite	Tool Rod	silentgems:ammolite		Advanced, Casting, Gem																											
+mod/silentgear	Orange Terracotta	Tool Rod	silentgear:terracotta/orange	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/sgearmetalworks	Azure Electrum	Tool Rod	silentgear:azure_electrum		Metal, Endgame, Casting		Flexible II, Accelerate V*									+3										x2.5						
+mod/sgearmetalworks	Platinum	Tool Rod	silentgear:platinum		Advanced, Metal, Casting		Malleable II, Soft IV*	x0.9		x1.1				70																		
+KubeJS Virtual Resource Pack [After Mods, data]	material.silentgear.vibranium	Tool Rod	silentgear:vibranium		Metal, Endgame		Hard VI*	x3.5				+23		99																		
+mod/silentgear	Wooden (Wood)	Tool Rod	silentgear:wood		Wood, Organic		Flexible II																									
+mod/sgearmetalworks	Moldavite	Tool Rod	silentgems:moldavite		Casting, Intermediate, Gem																											
+mod/silentgear	Stone	Tool Rod	silentgear:stone		Rock, Basic		Brittle II, Crushing II									x1.1																
+mod/sgearmetalworks	Citrine	Tool Rod	silentgems:citrine		Casting, Intermediate, Gem																											
+mod/sgearmetalworks	Turquoise	Tool Rod	silentgems:turquoise		Advanced, Casting, Gem																											
+mod/sgearmetalworks	Tyrian Steel	Tool Rod	silentgear:tyrian_steel		Metal, Endgame, Casting		Sturdy IV*									-2																
+mod/silentgear	Oak Wood	Tool Rod	silentgear:wood/oak	Wooden	Wood, Organic		Flexible II																									
+mod/sgearmetalworks	Lumium	Tool Rod	silentgear:lumium		Advanced, Metal, Casting		Malleable III, Refractive*							75		x1.2								x1.1								
+mod/silentgear	Netherwood	Tool Rod	silentgear:netherwood	Wooden	Wood, Organic		Flexible I									+1		+0.5														
+KubeJS Virtual Resource Pack [After Mods, data]	material.silentgear.allthemodium	Tool Rod	silentgear:allthemodium		Metal, Endgame		Hard V*	x2.5				+3		70																		
+mod/silentgear	Gray Terracotta	Tool Rod	silentgear:terracotta/gray	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/silentgear	Bismuth	Tool Rod	silentgear:bismuth		Metal, Intermediate		Malleable II	x1.1						35		x1.1																
+mod/silentgear	Brown Terracotta	Tool Rod	silentgear:terracotta/brown	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/sgearmetalworks	Enderium	Tool Rod	silentgear:enderium		Metal, Casting, Endgame		Malleable II	x1.2						60		x1.2																
+mod/sgearmetalworks	Kyanite	Tool Rod	silentgems:kyanite		Advanced, Casting, Gem																											
+mod/silentgear	Blue Terracotta	Tool Rod	silentgear:terracotta/blue	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/silentgear	Pink Terracotta	Tool Rod	silentgear:terracotta/pink	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/silentgear	Titanium	Tool Rod	silentgear:titanium		Metal, Endgame		Flexible II, Hard IV*	x1.1						80				+2, x1.2														
+mod/sgearmetalworks	Crimson Iron	Tool Rod	silentgear:crimson_iron		Advanced, Metal, Casting		Flexible III											x1.1														
+mod/silentgear	Green Terracotta	Tool Rod	silentgear:terracotta/green	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/silentgear	Netherrack	Tool Rod	silentgear:netherrack		Rock, Organic, Basic		Eroded II*, Bending II																									
+mod/silentgear	Spruce Wood	Tool Rod	silentgear:wood/spruce	Wooden	Wood, Organic		Flexible II																									
+mod/sgearmetalworks	Topaz	Tool Rod	silentgems:topaz		Casting, Intermediate, Gem																											
+mod/silentgear	White Terracotta	Tool Rod	silentgear:terracotta/white	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/sgearmetalworks	Tanzanite	Tool Rod	silentgems:tanzanite		Casting, Intermediate, Gem		Sharp II*, Brittle III																									
+mod/sgearmetalworks	Diamond	Tool Rod	silentgear:diamond		Advanced, Casting, Gem		Brittle V*, Lustrous IV*									x1.2																
+mod/sgearmetalworks	Uranium	Tool Rod	silentgear:uranium		Advanced, Metal, Casting		Malleable II							40		x1.1									x1.1							
+mod/sgearmetalworks	Aluminum	Tool Rod	silentgear:aluminum		Metal, Casting, Intermediate		Malleable III, Synergistic II	x1.2						30										x1.1								
+mod/sgearmetalworks	Alexandrite	Tool Rod	silentgems:alexandrite		Casting, Intermediate, Gem																											
+mod/silentgear	Compressed Iron	Tool Rod	silentgear:compressed_iron		Advanced, Metal		Malleable II	x1.25						40																		
+KubeJS Virtual Resource Pack [After Mods, data]	material.silentgear.unobtainium	Tool Rod	silentgear:unobtainium		Metal, Endgame		Hard VII*	x2.5				+13		90																		
+mod/silentgear	Terracotta	Tool Rod	silentgear:terracotta		Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/silentgear	Light Blue Terracotta	Tool Rod	silentgear:terracotta/light_blue	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/sgearmetalworks	Nickel	Tool Rod	silentgear:nickel		Metal, Casting, Intermediate		Malleable III	x1.2						40				x1.1														
+mod/sgearmetalworks	Opal	Tool Rod	silentgems:opal		Advanced, Casting, Gem		Brittle III, Enderbane IV																									
+mod/silentgear	Red Terracotta	Tool Rod	silentgear:terracotta/red	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/sgearmetalworks	Refined Obsidian	Tool Rod	silentgear:refined_obsidian		Metal, Casting, Endgame		Malleable IV, Hard III*	x1.25						70																		
+mod/silentgear	Bismuth Brass	Tool Rod	silentgear:bismuth_brass		Metal, Intermediate		Malleable II	x0.9						50		x1.2																
+mod/sgearmetalworks	Garnet	Tool Rod	silentgems:garnet		Casting, Intermediate, Gem		Jagged III*, Brittle III																									
+mod/silentgear	Light Gray Terracotta	Tool Rod	silentgear:terracotta/light_gray	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/sgearmetalworks	Bone	Tool Rod	silentgear:bone		Organic, Basic, Crude		Flexible II											x1.2														
+mod/sgearmetalworks	Iron	Tool Rod	silentgear:iron		Metal, Casting, Intermediate		Flexible II																									
+mod/sgearmetalworks	Crimson Steel	Tool Rod	silentgear:crimson_steel		Metal, Endgame, Casting		Flexible IV, Sturdy I*									x1.2								+1								
+mod/silentgear	Birch Wood	Tool Rod	silentgear:wood/birch	Wooden	Wood, Organic		Flexible II																									
+mod/sgearmetalworks	Flint	Tool Rod	silentgear:flint		Rock, Basic		Brittle III, Jagged II*																									
+mod/silentgear	Red Sandstone	Tool Rod	silentgear:sandstone/red	Sandstone	Rock, Basic		Brittle I																									
+mod/sgearmetalworks	Rose Quartz	Tool Rod	silentgems:rose_quartz		Advanced, Casting, Gem																											
+mod/sgearmetalworks	Ruby	Tool Rod	silentgems:ruby		Casting, Intermediate, Gem																											
+mod/silentgear	Dark Oak Wood	Tool Rod	silentgear:wood/dark_oak	Wooden	Wood, Organic		Flexible II																									
+mod/silentgear	Aluminum Steel	Tool Rod	silentgear:aluminum_steel		Advanced, Metal		Malleable III, Synergistic III	x1.3						45		x1.1																
+mod/silentgear	Jungle Wood	Tool Rod	silentgear:wood/jungle	Wooden	Wood, Organic		Flexible II																									
+mod/sgearmetalworks	Emerald	Tool Rod	silentgear:emerald		Advanced, Casting, Gem		Brittle IV*									x1.3																
+mod/sgearmetalworks	Brass	Tool Rod	silentgear:brass		Metal, Casting, Intermediate		Malleable II	x1.05						25		x1.05																
+mod/sgearmetalworks	Silver	Tool Rod	silentgear:silver		Metal, Casting, Intermediate		Malleable I, Soft II*							40		x1.1							x1.1									
+mod/sgearmetalworks	Carnelian	Tool Rod	silentgems:carnelian		Casting, Intermediate, Gem																											
+mod/sgearmetalworks	Bronze	Tool Rod	silentgear:bronze		Metal, Casting, Intermediate		Flexible I											x1.05														
+mod/sgearmetalworks	Copper	Tool Rod	silentgear:copper		Metal, Casting, Basic		Bending III, Soft III*									x1.2																
+mod/sgearmetalworks	Invar	Tool Rod	silentgear:invar		Metal, Casting, Intermediate		Malleable III	x1.3						50				x1.1														
+mod/sgearmetalworks	Signalum	Tool Rod	silentgear:signalum		Metal, Casting, Endgame		Flexible IV, Lustrous II*			x0.9				50		x1.3																
+mod/sgearmetalworks	Refined Glowstone	Tool Rod	silentgear:refined_glowstone		Advanced, Metal, Casting		Malleable IV, Lustrous I*	x0.9						45		x1.2																
+mod/silentgear	End Stone	Tool Rod	silentgear:end_stone		Rock, Basic		Malleable I, Ancient IV*											+1														
+mod/silentgear	Bismuth Steel	Tool Rod	silentgear:bismuth_steel		Advanced, Metal		Malleable III	x1.25						60		x1.15																
+mod/sgearmetalworks	Aquamarine	Tool Rod	silentgems:aquamarine		Casting, Intermediate, Gem		Fortunate I*, Brittle III																									
+mod/sgearmetalworks	Zinc	Tool Rod	silentgear:zinc		Metal, Casting, Basic		Malleable II, Soft III*	x0.95						15				x1.05														
+mod/silentgear	Diorite	Tool Rod	silentgear:stone/diorite	Stone	Rock, Basic		Brittle II, Crushing II									x1.1																
+mod/silentgear	Lime Terracotta	Tool Rod	silentgear:terracotta/lime	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/silentgear	Black Terracotta	Tool Rod	silentgear:terracotta/black	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
+mod/silentgear	Redstone Alloy	Tool Rod	silentgear:redstone_alloy		Metal, Intermediate		Malleable III							45		x1.2																
+mod/sgearmetalworks	Blaze Gold	Tool Rod	silentgear:blaze_gold		Advanced, Metal, Casting		Flexible III									x1.1																
+mod/sgearmetalworks	Iolite	Tool Rod	silentgems:iolite		Casting, Intermediate, Gem																											
+mod/silentgear	Granite	Tool Rod	silentgear:stone/granite	Stone	Rock, Basic		Brittle II, Crushing II									x1.1																
+mod/sgearmetalworks	Electrum	Tool Rod	silentgear:electrum		Metal, Casting, Intermediate		Lustrous III*							40					+0.1						x1.1							
+mod/silentgear	Andesite	Tool Rod	silentgear:stone/andesite	Stone	Rock, Basic		Brittle II, Crushing II									x1.1																
+mod/sgearmetalworks	Peridot	Tool Rod	silentgems:peridot		Casting, Intermediate, Gem																											
+mod/sgearmetalworks	Azure Silver	Tool Rod	silentgear:azure_silver		Advanced, Metal, Casting		Bending II	x0.8								+3																
+mod/sgearmetalworks	Tin	Tool Rod	silentgear:tin		Metal, Casting, Basic		Malleable II, Soft I*							15					+0.2													
+mod/sgearmetalworks	Meat	Tool Rod	sgearmetalworks:meat		Casting		Organic II, Flexible V, Yummy, Bulky I*									x0.9																
+mod/silentgear	Magenta Terracotta	Tool Rod	silentgear:terracotta/magenta	Terracotta	Rock, Basic		Brittle II, Crushing I											x1.1														
