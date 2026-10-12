@@ -1,4 +1,4 @@
-import { Material, GearType, TraitInfo, VersionCatalog, VersionPreset } from '@/types/silentgear';
+import { AddonConfig, Material, GearType, TraitInfo, VersionCatalog, VersionPreset } from '@/types/silentgear';
 
 export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
   'silentgear:iron': {
@@ -1036,6 +1036,30 @@ export const OFFICIAL_TRAITS: Record<string, TraitInfo> = {
   },
 };
 
+export const DEFAULT_ATM_ADDONS: AddonConfig[] = [
+  {
+    id: 'silentgems',
+    name: "Silent's Gems",
+    version: '5.1.4',
+    enabled: true,
+    description: 'Adiciona 21 gemas modulares, ouro reforçado e prata reforçada.',
+  },
+  {
+    id: 'sgearmetalworks',
+    name: 'Silent Gear Metalworks',
+    version: '1.6.0',
+    enabled: true,
+    description: 'Adiciona fundição (categoria casting), Uru Metal e Carne.',
+  },
+  {
+    id: 'kubejs',
+    name: 'KubeJS (ATM)',
+    version: '220614e',
+    enabled: true,
+    description: 'Dados dinâmicos do All The Mods com Allthemodium, Vibranium e Unobtainium.',
+  },
+];
+
 export const VERSION_PRESETS: VersionPreset[] = [
   {
     id: 'atm11',
@@ -1044,6 +1068,7 @@ export const VERSION_PRESETS: VersionPreset[] = [
     type: 'modpack',
     minecraftVersion: '26.1.x / 1.21+',
     description: 'Modpack mais recente com Allthemodium, Vibranium, Unobtainium e Breeze Rod.',
+    addons: DEFAULT_ATM_ADDONS,
   },
   {
     id: 'atm10',
@@ -1052,6 +1077,7 @@ export const VERSION_PRESETS: VersionPreset[] = [
     type: 'modpack',
     minecraftVersion: '1.21.1',
     description: 'Modpack completo para Minecraft 1.21.1 NeoForge.',
+    addons: DEFAULT_ATM_ADDONS,
   },
   {
     id: 'atm9',
@@ -1060,6 +1086,7 @@ export const VERSION_PRESETS: VersionPreset[] = [
     type: 'modpack',
     minecraftVersion: '1.20.1',
     description: 'Versão consagrada para 1.20.1 com centenas de mods.',
+    addons: DEFAULT_ATM_ADDONS,
   },
   {
     id: '1.21.1',
@@ -1068,6 +1095,7 @@ export const VERSION_PRESETS: VersionPreset[] = [
     type: 'official',
     minecraftVersion: '1.21.1',
     description: 'Silent Gear oficial 4.2.3 com Breeze Rod e Tricky Trials.',
+    addons: [],
   },
   {
     id: '1.20.1',
@@ -1076,6 +1104,7 @@ export const VERSION_PRESETS: VersionPreset[] = [
     type: 'official',
     minecraftVersion: '1.20.1',
     description: 'Silent Gear oficial para Minecraft 1.20.1.',
+    addons: [],
   },
   {
     id: '1.19.2',
@@ -1084,6 +1113,7 @@ export const VERSION_PRESETS: VersionPreset[] = [
     type: 'official',
     minecraftVersion: '1.19.2',
     description: 'Silent Gear oficial para Minecraft 1.19.2.',
+    addons: [],
   },
 ];
 
@@ -1094,6 +1124,7 @@ export const ATM11_CATALOG: VersionCatalog = {
     'silentgear:breeze_rod': BREEZE_ROD_MATERIAL,
     ...ALLTHEMODIUM_MATERIALS,
   },
+  addons: DEFAULT_ATM_ADDONS,
   gearTypes: OFFICIAL_GEAR_TYPES,
   traits: OFFICIAL_TRAITS,
 };

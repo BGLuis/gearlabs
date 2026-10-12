@@ -89,6 +89,8 @@ export const NESTED_MATERIAL_TRANSLATIONS: Record<string, { en: string; pt: stri
   wool: { en: 'Wool', pt: 'Lã' },
   terracotta: { en: 'Terracotta', pt: 'Terracota' },
   sandstone: { en: 'Sandstone', pt: 'Arenito' },
+  reinforced_gold: { en: 'Reinforced Gold', pt: 'Ouro Reforçado' },
+  reinforced_silver: { en: 'Reinforced Silver', pt: 'Prata Reforçada' },
 };
 
 export function formatMaterialName(subPath: string): { en: string; pt: string } {

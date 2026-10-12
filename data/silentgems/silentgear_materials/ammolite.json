@@ -1,0 +1,64 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "gem",
+      "advanced"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:gems/ammolite"
+    },
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFDB2BFF",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "gem.silentgems.ammolite"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "armor": 22,
+      "armor/boots": 3,
+      "armor/chestplate": 9,
+      "armor/helmet": 4,
+      "armor/leggings": 6,
+      "armor_durability": 40,
+      "armor_toughness": 12,
+      "attack_damage": 2,
+      "attack_speed": 0,
+      "charging_value": 1.2,
+      "draw_speed": 0,
+      "durability": 1024,
+      "enchantment_value": 12,
+      "harvest_speed": 8,
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgems:incorrect_for_ammolite_tools",
+        "level_hint": "3",
+        "name": "ammolite"
+      },
+      "magic_armor": 16,
+      "ranged_damage": 1,
+      "rarity": 60,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgems:fractal"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:brittle"
+        }
+      ]
+    },
+    "silentgear:rod": {},
+    "silentgear:setting": {}
+  }
+}

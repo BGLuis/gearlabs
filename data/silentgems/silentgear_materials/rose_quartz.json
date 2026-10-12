@@ -1,0 +1,64 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "gem",
+      "advanced"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:gems/rose_quartz"
+    },
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FFFF4EAB",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "gem.silentgems.rose_quartz"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "armor": 16,
+      "armor/boots": 2,
+      "armor/chestplate": 6,
+      "armor/helmet": 3,
+      "armor/leggings": 5,
+      "armor_durability": 34,
+      "armor_toughness": 4,
+      "attack_damage": 6,
+      "attack_speed": 0,
+      "charging_value": 1.2,
+      "draw_speed": 0,
+      "durability": 1024,
+      "enchantment_value": 12,
+      "harvest_speed": 14,
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgems:incorrect_for_rose_quartz_tools",
+        "level_hint": "4",
+        "name": "rose_quartz"
+      },
+      "magic_armor": 8,
+      "ranged_damage": 3,
+      "rarity": 60,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgems:critical_strike"
+        },
+        {
+          "conditions": [],
+          "level": 3,
+          "trait": "silentgear:brittle"
+        }
+      ]
+    },
+    "silentgear:rod": {},
+    "silentgear:setting": {}
+  }
+}

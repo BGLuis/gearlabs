@@ -1,0 +1,64 @@
+{
+  "type": "silentgear:simple",
+  "parent": "silentgear:empty",
+  "crafting": {
+    "can_salvage": true,
+    "categories": [
+      "gem",
+      "advanced"
+    ],
+    "gear_type_blacklist": [],
+    "ingredient": {
+      "tag": "c:gems/kyanite"
+    },
+    "part_substitutes": {}
+  },
+  "display": {
+    "color": "#FF41C4F3",
+    "main_texture_type": "HIGH_CONTRAST",
+    "name": {
+      "translate": "gem.silentgems.kyanite"
+    },
+    "name_prefix": ""
+  },
+  "properties": {
+    "silentgear:main": {
+      "armor": 20,
+      "armor/boots": 3,
+      "armor/chestplate": 8,
+      "armor/helmet": 3,
+      "armor/leggings": 6,
+      "armor_durability": 38,
+      "armor_toughness": 8,
+      "attack_damage": 4,
+      "attack_speed": 0,
+      "charging_value": 1.4,
+      "draw_speed": 0,
+      "durability": 1280,
+      "enchantment_value": 17,
+      "harvest_speed": 12,
+      "harvest_tier": {
+        "incorrect_blocks_for_tool": "silentgems:incorrect_for_kyanite_tools",
+        "level_hint": "4",
+        "name": "kyanite"
+      },
+      "magic_armor": 14,
+      "ranged_damage": 2,
+      "rarity": 60,
+      "traits": [
+        {
+          "conditions": [],
+          "level": 4,
+          "trait": "silentgear:chilled"
+        },
+        {
+          "conditions": [],
+          "level": 2,
+          "trait": "silentgear:stellar"
+        }
+      ]
+    },
+    "silentgear:rod": {},
+    "silentgear:setting": {}
+  }
+}
