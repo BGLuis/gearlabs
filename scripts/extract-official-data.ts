@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import JSZip from 'jszip';
 import {
   AddonConfig,
   CatalogLayer,
@@ -238,37 +239,232 @@ export function extractAllMaterials(projectRoot: string): Record<string, Materia
   return resolvedMaterials;
 }
 
-export function generateTsvDump(materials: Record<string, Material>, outTsvPath: string) {
-  const lines: string[] = [];
-  lines.push('Pack\tName\tType\tID\tParent\tCategories\tDurability\tArmor Durability\tArmor\tArmor Toughness\tMagic Armor');
+export interface JarExtractionResult {
+  id: string;
+  name: string;
+  version: string;
+  jar: string;
+  materials: Record<string, Material>;
+  parts: Record<string, RawPartData>;
+  overrides: Record<string, Partial<Material>>;
+}
 
-  for (const [id, mat] of Object.entries(materials)) {
-    if (!mat.stats?.main) continue;
-    const pack = id.startsWith('sgearmetalworks:')
-      ? 'kubejs'
-      : id.startsWith('silentgear:allthemodium') || id.startsWith('silentgear:vibranium') || id.startsWith('silentgear:unobtainium')
-      ? 'kubejs'
-      : (mat.categories?.includes('casting') ? 'mod/sgearmetalworks' : 'silentgear');
+export async function extractDataFromJar(jarPath: string): Promise<JarExtractionResult> {
+  const buffer = fs.readFileSync(jarPath);
+  const zip = await JSZip.loadAsync(buffer);
+  const jarName = path.basename(jarPath);
 
-    const name = mat.name.en;
-    const type = 'Main';
-    const parent = mat.parent || '';
-    const categoriesStr = (mat.categories || [mat.category])
-      .map((c) => c.charAt(0).toUpperCase() + c.slice(1))
-      .join(', ');
+  let id = 'unknown';
+  let name = jarName;
+  let version = 'unknown';
 
-    const dur = typeof mat.stats.main.durability === 'number' ? mat.stats.main.durability : 0;
-    const armorDur = typeof mat.stats.main.armor_durability === 'number' ? mat.stats.main.armor_durability : 0;
-    const armor = typeof mat.stats.main.armor === 'number' ? mat.stats.main.armor : 0;
-    const toughness = typeof mat.stats.main.armor_toughness === 'number' ? mat.stats.main.armor_toughness : 0;
-    const magicArmor = typeof mat.stats.main.magic_armor === 'number' ? mat.stats.main.magic_armor : 0;
-
-    lines.push(`${pack}\t${name}\t${type}\t${id}\t${parent}\t${categoriesStr}\t${dur}\t${armorDur}\t${armor}\t${toughness}\t${magicArmor}`);
+  if (jarName.includes('sgearmetalworks')) {
+    id = 'sgearmetalworks';
+    name = 'Silent Gear Metalworks';
+  } else if (jarName.includes('silentgems') || jarName.includes('silent-gems')) {
+    id = 'silentgems';
+    name = "Silent's Gems";
+  } else if (jarName.includes('silent-gear') || jarName.includes('silentgear')) {
+    id = 'silentgear';
+    name = 'Silent Gear';
   }
 
-  fs.mkdirSync(path.dirname(outTsvPath), { recursive: true });
-  fs.writeFileSync(outTsvPath, lines.join('\n') + '\n', 'utf-8');
-  console.log(`[extract-official-data] TSV dump exportado para ${outTsvPath} (${lines.length - 1} materiais Main)`);
+  const tomlFile = zip.file('META-INF/neoforge.mods.toml') || zip.file('META-INF/mods.toml');
+  if (tomlFile) {
+    const tomlContent = await tomlFile.async('text');
+    const verMatch = tomlContent.match(/version\s*=\s*["']([^"']+)["']/);
+    if (verMatch) {
+      version = verMatch[1];
+    }
+    const nameMatch = tomlContent.match(/displayName\s*=\s*["']([^"']+)["']/);
+    if (nameMatch) {
+      name = nameMatch[1];
+    }
+  }
+
+  if (version === 'unknown') {
+    const m = jarName.match(/(\d+\.\d+\.\d+(?:[a-zA-Z0-9_.-]*))(?:\.jar)?$/);
+    if (m) version = m[1];
+  }
+
+  const materials: Record<string, Material> = {};
+  const overrides: Record<string, Partial<Material>> = {};
+  const parts: Record<string, RawPartData> = {};
+
+  for (const [relPath, zipEntry] of Object.entries(zip.files)) {
+    if (zipEntry.dir || !relPath.endsWith('.json')) continue;
+
+    if (relPath.includes('/silentgear_materials/')) {
+      try {
+        const text = await zipEntry.async('text');
+        const json = JSON.parse(text);
+        const mat = parseMaterialJson(relPath, json);
+        if (mat) {
+          mat.source = id;
+          if (id === 'sgearmetalworks' && !relPath.includes('/sgearmetalworks/silentgear_materials/')) {
+            overrides[mat.id] = {
+              categories: mat.categories,
+              stats: mat.stats,
+              traits: mat.traits,
+              statModifiers: mat.statModifiers,
+            };
+          } else {
+            materials[mat.id] = mat;
+          }
+        }
+      } catch (e) {
+        console.warn(`[extract-official-data] Erro ao analisar material no jar ${jarName}:${relPath}:`, e);
+      }
+    } else if (relPath.includes('/silentgear_parts/')) {
+      try {
+        const text = await zipEntry.async('text');
+        const json = JSON.parse(text);
+        const baseName = path.basename(relPath, '.json');
+        parts[baseName] = json;
+      } catch (e) {
+        console.warn(`[extract-official-data] Erro ao analisar part no jar ${jarName}:${relPath}:`, e);
+      }
+    }
+  }
+
+  return {
+    id,
+    name,
+    version,
+    jar: jarName,
+    materials,
+    parts,
+    overrides,
+  };
+}
+
+export async function extractFromInstance(
+  instancePath: string
+): Promise<ExtractedCatalogData & { addons: AddonConfig[]; jarParts?: Record<string, RawPartData> }> {
+  const modsDir = path.join(instancePath, 'mods');
+  const kubejsDir = path.join(instancePath, 'kubejs/dynamic_data');
+  const kubejsAltDir = path.join(instancePath, 'kubejs/data');
+
+  if (!fs.existsSync(modsDir)) {
+    throw new Error(`[extract-official-data] Pasta mods não encontrada na instância: ${modsDir}`);
+  }
+
+  const modFiles = fs.readdirSync(modsDir).filter((f) => f.endsWith('.jar'));
+  const sgJar = modFiles.find((f) => f.includes('silent-gear') || f.includes('silentgear'));
+  const smwJar = modFiles.find((f) => f.includes('sgearmetalworks'));
+  const gemsJar = modFiles.find((f) => f.includes('silentgems') || f.includes('silent-gems'));
+
+  let baseMaterials: Record<string, Material> = {};
+  let jarParts: Record<string, RawPartData> = {};
+  const layers: Record<string, CatalogLayer> = {};
+  const addons: AddonConfig[] = [];
+
+  if (sgJar) {
+    const sgData = await extractDataFromJar(path.join(modsDir, sgJar));
+    baseMaterials = resolveMaterialParents(sgData.materials);
+    jarParts = sgData.parts;
+    addons.push({
+      id: 'silentgear',
+      name: sgData.name,
+      version: sgData.version,
+      enabled: true,
+      description: `Silent Gear oficial extraído do jar ${sgJar}.`,
+      jar: sgJar,
+    });
+  }
+
+  if (gemsJar) {
+    const gemsData = await extractDataFromJar(path.join(modsDir, gemsJar));
+    layers['silentgems'] = {
+      id: 'silentgems',
+      name: gemsData.name,
+      version: gemsData.version,
+      materials: gemsData.materials,
+    };
+    addons.push({
+      id: 'silentgems',
+      name: gemsData.name,
+      version: gemsData.version,
+      enabled: true,
+      description: `Silent's Gems extraído do jar ${gemsJar}.`,
+      jar: gemsJar,
+    });
+  }
+
+  if (smwJar) {
+    const smwData = await extractDataFromJar(path.join(modsDir, smwJar));
+    layers['sgearmetalworks'] = {
+      id: 'sgearmetalworks',
+      name: smwData.name,
+      version: smwData.version,
+      materials: smwData.materials,
+      overrides: smwData.overrides,
+    };
+    addons.push({
+      id: 'sgearmetalworks',
+      name: smwData.name,
+      version: smwData.version,
+      enabled: true,
+      description: `Silent Gear Metalworks extraído do jar ${smwJar}.`,
+      jar: smwJar,
+    });
+  }
+
+  const activeKubeDir = fs.existsSync(kubejsDir)
+    ? kubejsDir
+    : fs.existsSync(kubejsAltDir)
+    ? kubejsAltDir
+    : undefined;
+
+  if (activeKubeDir) {
+    const kubejsMaterials: Record<string, Material> = {};
+    const kubejsOverrides: Record<string, Partial<Material>> = {};
+    const kubejsFiles = findJsonFiles(activeKubeDir).filter((f) => f.includes('/silentgear_materials/'));
+    for (const file of kubejsFiles) {
+      try {
+        const mat = parseMaterialFile(file);
+        if (mat.id.startsWith('sgearmetalworks:')) {
+          kubejsOverrides[mat.id] = {
+            stats: mat.stats,
+            traits: mat.traits,
+            statModifiers: mat.statModifiers,
+            harvest_tier: mat.harvest_tier,
+          };
+        } else {
+          mat.source = 'kubejs';
+          kubejsMaterials[mat.id] = mat;
+        }
+      } catch (e) {
+        console.warn(`[extract-official-data] Erro ao ler kubejs ${file}:`, e);
+      }
+    }
+    layers['kubejs'] = {
+      id: 'kubejs',
+      name: 'KubeJS (ATM)',
+      version: 'dynamic',
+      materials: kubejsMaterials,
+      overrides: kubejsOverrides,
+    };
+    addons.push({
+      id: 'kubejs',
+      name: 'KubeJS (ATM)',
+      version: 'dynamic',
+      enabled: true,
+      description: 'Dados dinâmicos do All The Mods com Allthemodium, Vibranium e Unobtainium.',
+      jar: 'kubejs',
+    });
+  }
+
+  const enabledAddonIds = addons.map((a) => a.id).filter((id) => id !== 'silentgear');
+  const resolvedMaterials = resolveCatalogWithAddons(baseMaterials, layers, enabledAddonIds);
+
+  return {
+    baseMaterials,
+    layers,
+    resolvedMaterials,
+    addons,
+    jarParts,
+  };
 }
 
 export interface RawPartData {
@@ -341,9 +537,13 @@ export function deriveOptionalSlots(
 
 export function deriveGearTypes(
   baseGearTypes: Record<string, GearType>,
-  projectRoot: string
+  projectRoot: string,
+  providedParts?: Record<string, RawPartData>
 ): Record<string, GearType> {
-  const parts = extractOfficialParts(projectRoot);
+  const parts =
+    providedParts && Object.keys(providedParts).length > 0
+      ? providedParts
+      : extractOfficialParts(projectRoot);
   const derived: Record<string, GearType> = {};
 
   for (const [id, gearType] of Object.entries(baseGearTypes)) {
@@ -389,28 +589,47 @@ export function exportCatalog(
 async function main() {
   const projectRoot = path.resolve(__dirname, '..');
   const outDir = path.resolve(projectRoot, 'public/data/versions');
-  console.log(`[extract-official-data] Extraindo dados oficiais para: ${outDir}`);
 
-  // 1. Extração estruturada a partir da base e camadas
-  const { baseMaterials, layers, resolvedMaterials } = extractOfficialCatalogData(projectRoot);
+  const instanceArgIdx = process.argv.indexOf('--instance');
+  const instancePath =
+    instanceArgIdx !== -1 && process.argv[instanceArgIdx + 1]
+      ? path.resolve(process.argv[instanceArgIdx + 1])
+      : undefined;
+
+  let baseMaterials: Record<string, Material>;
+  let layers: Record<string, CatalogLayer>;
+  let resolvedMaterials: Record<string, Material>;
+  let addons = ATM_ADDONS;
+  let customParts: Record<string, RawPartData> | undefined;
+
+  if (instancePath) {
+    console.log(`[extract-official-data] Extraindo dados da instância oficial: ${instancePath}`);
+    const instanceData = await extractFromInstance(instancePath);
+    baseMaterials = instanceData.baseMaterials;
+    layers = instanceData.layers;
+    resolvedMaterials = instanceData.resolvedMaterials;
+    addons = instanceData.addons;
+    customParts = instanceData.jarParts;
+  } else {
+    console.log(`[extract-official-data] Extraindo dados oficiais para: ${outDir}`);
+    const extracted = extractOfficialCatalogData(projectRoot);
+    baseMaterials = extracted.baseMaterials;
+    layers = extracted.layers;
+    resolvedMaterials = extracted.resolvedMaterials;
+  }
+
   console.log(
     `[extract-official-data] Extraídos ${Object.keys(baseMaterials).length} materiais base e ${Object.keys(resolvedMaterials).length} materiais resolvidos.`
   );
 
   // 2. Derivar slots oficiais a partir das partes e hierarquia
-  const derivedGearTypes = deriveGearTypes(OFFICIAL_GEAR_TYPES, projectRoot);
+  const derivedGearTypes = deriveGearTypes(OFFICIAL_GEAR_TYPES, projectRoot, customParts);
 
-  // 3. Exportar modpacks (com addons, camadas e commit oficial)
-  exportCatalog('atm11', resolvedMaterials, outDir, ATM11_COMMIT, derivedGearTypes, baseMaterials, layers, ATM_ADDONS);
-  exportCatalog('atm10', resolvedMaterials, outDir, ATM11_COMMIT, derivedGearTypes, baseMaterials, layers, ATM_ADDONS);
-  exportCatalog('atm9', resolvedMaterials, outDir, ATM11_COMMIT, derivedGearTypes, baseMaterials, layers, ATM_ADDONS);
+  // 3. Exportar modpack ATM11 (apenas presets com dados próprios)
+  exportCatalog('atm11', resolvedMaterials, outDir, ATM11_COMMIT, derivedGearTypes, baseMaterials, layers, addons);
 
   // 4. Exportar versão oficial 1.21.1 (apenas base Silent Gear, sem addons)
   exportCatalog('1.21.1', baseMaterials, outDir, SILENT_GEAR_COMMIT, derivedGearTypes, baseMaterials, {}, []);
-
-  // 5. Exportar TSV dump em output/silentgear/material_export.tsv
-  const tsvPath = path.join(projectRoot, 'output/silentgear/material_export.tsv');
-  generateTsvDump(resolvedMaterials, tsvPath);
 
   console.log('[extract-official-data] Todos os catálogos oficiais gerados com sucesso!');
 }

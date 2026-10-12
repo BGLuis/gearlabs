@@ -91,6 +91,13 @@ export function getMaxSubMaterials(alloyType?: AlloyType): number {
 }
 
 export function isMaterialAllowedInAlloy(material: Material, alloyType: AlloyType): boolean {
+  if (!material) return false;
+  if (material.category === 'intangible' || material.categories?.includes('intangible')) {
+    return false;
+  }
+  if (material.isCompound || material.type === 'silentgear:compound') {
+    return false;
+  }
   const config = ALLOY_CONFIGS[alloyType];
   if (!config || config.allowedCategories.length === 0) {
     return true;

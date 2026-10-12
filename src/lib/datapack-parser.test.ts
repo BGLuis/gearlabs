@@ -498,4 +498,73 @@ describe('datapack-parser (Issue #7)', () => {
       });
     });
   });
+
+  describe('Issue #52: Parsing de type, blacklist e compound', () => {
+    it('extrai gear_type_blacklist e marca materiais compostos', () => {
+      const exampleJson = {
+        type: 'silentgear:simple',
+        crafting: {
+          categories: ['intangible'],
+          gear_type_blacklist: ['silentgear:all'],
+        },
+        properties: { 'silentgear:tip': { melee_damage: 10 } },
+      };
+      const exampleMat = parseMaterialJson('data/silentgear/silentgear_materials/example.json', exampleJson);
+      expect(exampleMat).not.toBeNull();
+      expect(exampleMat?.gear_type_blacklist).toEqual(['silentgear:all']);
+      expect(exampleMat?.category).toBe('intangible');
+
+      const compoundJson = {
+        type: 'silentgear:compound',
+        crafting: { categories: ['metal'] },
+        properties: { 'silentgear:main': { durability: 100 } },
+      };
+      const compMat = parseMaterialJson('data/silentgear/silentgear_materials/crude_alloy.json', compoundJson);
+      expect(compMat).not.toBeNull();
+      expect(compMat?.type).toBe('silentgear:compound');
+      expect(compMat?.isCompound).toBe(true);
+    });
+  });
+
+  describe('Issue #53: Tier derivado do harvest_tier real', () => {
+    it('materiais com harvest_tier recebem tier correspondente ao level real e respeitam progressão', () => {
+      const ironJson = {
+        crafting: { categories: ['metal'] },
+        properties: {
+          'silentgear:main': {
+            harvest_tier: { name: 'iron', level_hint: 2 },
+          },
+        },
+      };
+      const diamondJson = {
+        crafting: { categories: ['gem'] },
+        properties: {
+          'silentgear:main': {
+            harvest_tier: { name: 'diamond', level_hint: 3 },
+          },
+        },
+      };
+      const netheriteJson = {
+        crafting: { categories: ['metal'] },
+        properties: {
+          'silentgear:coating': {
+            harvest_tier: { name: 'netherite', level_hint: 4 },
+          },
+        },
+      };
+
+      const ironMat = parseMaterialJson('data/silentgear/silentgear_materials/iron.json', ironJson);
+      const diamondMat = parseMaterialJson('data/silentgear/silentgear_materials/diamond.json', diamondJson);
+      const netheriteMat = parseMaterialJson('data/silentgear/silentgear_materials/netherite.json', netheriteJson);
+
+      expect(ironMat?.tier).toBe(2);
+      expect(diamondMat?.tier).toBe(3);
+      expect(netheriteMat?.tier).toBe(4);
+
+      // Verificação de ordenação: ferro < diamante < netherita
+      expect(ironMat!.tier).toBeLessThan(diamondMat!.tier);
+      expect(diamondMat!.tier).toBeLessThan(netheriteMat!.tier);
+    });
+  });
 });
+

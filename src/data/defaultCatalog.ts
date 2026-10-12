@@ -224,7 +224,7 @@ export const OFFICIAL_MATERIALS_1_20: Record<string, Material> = {
     },
     traits: {
       main: [
-        { name: 'silentgear:swift', level: 2 },
+        { name: 'silentgear:swift_swim', level: 2 },
         { name: 'silentgear:holy', level: 3 },
       ],
     },
@@ -366,7 +366,7 @@ export const BREEZE_ROD_MATERIAL: Material = {
     },
   },
   traits: {
-    rod: [{ name: 'silentgear:swift', level: 2 }],
+    rod: [{ name: 'silentgear:swift_swim', level: 2 }],
   },
 };
 
@@ -764,139 +764,22 @@ export const OFFICIAL_GEAR_TYPES: Record<string, GearType> = {
 };
 
 export const OFFICIAL_TRAITS: Record<string, TraitInfo> = {
-  'silentgear:brittle': {
-    id: 'silentgear:brittle',
+  'silentgear:accelerate': {
+    id: 'silentgear:accelerate',
     maxLevel: 5,
-    name: { en: 'Brittle', pt: 'Frágil' },
+    name: { en: 'Accelerate', pt: 'Aceleração' },
     description: {
-      en: 'Increases durability loss on high-impact attacks.',
-      pt: 'Aumenta a perda de durabilidade em impactos intensos.',
+      en: 'Gains harvest speed, attack speed, and ranged speed as damaged.',
+      pt: 'Ganha velocidade de mineração, ataque e disparo à medida que sofre dano.',
     },
   },
-  'silentgear:lustrous': {
-    id: 'silentgear:lustrous',
+  'silentgear:adamant': {
+    id: 'silentgear:adamant',
     maxLevel: 5,
-    name: { en: 'Lustrous', pt: 'Lustroso' },
+    name: { en: 'Adamant', pt: 'Inflexível' },
     description: {
-      en: 'Gives small chance to drop extra experience or double drops.',
-      pt: 'Dá pequena chance de coletar experiência extra ou dobrar itens.',
-    },
-  },
-  'silentgear:fireproof': {
-    id: 'silentgear:fireproof',
-    maxLevel: 1,
-    name: { en: 'Fireproof', pt: 'À Prova de Fogo' },
-    description: {
-      en: 'Item will float on lava and cannot burn in fire.',
-      pt: 'O item flutua na lava e não queima no fogo.',
-    },
-  },
-  'silentgear:malleable': {
-    id: 'silentgear:malleable',
-    maxLevel: 5,
-    name: { en: 'Malleable', pt: 'Maleável' },
-    description: {
-      en: 'Cheaper to repair in the crafting station and anvil.',
-      pt: 'Mais barato para reparar na estação de criação e bigorna.',
-    },
-  },
-  'silentgear:flexible': {
-    id: 'silentgear:flexible',
-    maxLevel: 5,
-    name: { en: 'Flexible', pt: 'Flexível' },
-    description: {
-      en: 'Reduces damage taken by the tool or armor from explosions.',
-      pt: 'Reduz o dano sofrido pelo equipamento contra explosões.',
-    },
-  },
-  'silentgear:jagged': {
-    id: 'silentgear:jagged',
-    maxLevel: 5,
-    name: { en: 'Jagged', pt: 'Serrilhado' },
-    description: {
-      en: 'Causes extra bleeding damage over time on hit.',
-      pt: 'Causa dano adicional de sangramento contínuo ao golpear.',
-    },
-  },
-  'silentgear:swift': {
-    id: 'silentgear:swift',
-    maxLevel: 5,
-    name: { en: 'Swift', pt: 'Veloz' },
-    description: {
-      en: 'Increases attack speed and movement speed.',
-      pt: 'Aumenta a velocidade de ataque e a agilidade de movimento.',
-    },
-  },
-  'silentgear:holy': {
-    id: 'silentgear:holy',
-    maxLevel: 5,
-    name: { en: 'Holy', pt: 'Sagrado' },
-    description: {
-      en: 'Deals massive bonus damage against undead monsters.',
-      pt: 'Causa dano bônus maciço contra monstros mortos-vivos.',
-    },
-  },
-  'silentgear:magnetic': {
-    id: 'silentgear:magnetic',
-    maxLevel: 3,
-    name: { en: 'Magnetic', pt: 'Magnético' },
-    description: {
-      en: 'Pulls nearby dropped items toward the player.',
-      pt: 'Atrai itens caídos no chão diretamente para o jogador.',
-    },
-  },
-  'silentgear:indestructible': {
-    id: 'silentgear:indestructible',
-    maxLevel: 1,
-    name: { en: 'Indestructible', pt: 'Indestrutível' },
-    description: {
-      en: 'Item does not take durability damage and is immune to void damage.',
-      pt: 'O item não sofre dano de durabilidade e é imune ao dano do vazio.',
-    },
-  },
-  'silentgear:crushing': {
-    id: 'silentgear:crushing',
-    maxLevel: 5,
-    name: { en: 'Crushing', pt: 'Esmagador' },
-    description: {
-      en: 'Increases armor bypass or impact damage.',
-      pt: 'Aumenta a perfuração de armadura ou o impacto do golpe.',
-    },
-  },
-  'silentgear:brilliant': {
-    id: 'silentgear:brilliant',
-    maxLevel: 1,
-    name: { en: 'Brilliant', pt: 'Brilhante' },
-    description: {
-      en: 'Increases experience gained.',
-      pt: 'Aumenta a experiência obtida ao usar a ferramenta ou arma.',
-    },
-  },
-  'silentgear:sturdy': {
-    id: 'silentgear:sturdy',
-    maxLevel: 5,
-    name: { en: 'Sturdy', pt: 'Robusto' },
-    description: {
-      en: 'Increases durability and armor toughness.',
-      pt: 'Aumenta a durabilidade e a tenacidade da armadura.',
-    },
-  },
-  'silentgear:void_ward': {
-    id: 'silentgear:void_ward',
-    maxLevel: 1,
-    name: { en: 'Void Ward', pt: 'Proteção do Vazio' },
-    description: {
-      en: 'Protects the holder from falling into the void.',
-      pt: 'Protege o portador de quedas no vazio.',
-    },
-  },
-  'silentgear:aquatic': {
-    id: 'silentgear:aquatic',
-    maxLevel: 1,
-    name: { en: 'Aquatic', pt: 'Aquático' },
-    description: {
-      en: 'Improves underwater efficiency and mobility.',
-      pt: 'Melhora a eficiência e mobilidade debaixo d’água.',
+      en: 'Armor increases damage resistance; tools deal more damage to mobs with high health.',
+      pt: 'A armadura aumenta resistência a dano; ferramentas causam mais dano a criaturas com vida alta.',
     },
   },
   'silentgear:advanced_aquatic': {
@@ -908,15 +791,6 @@ export const OFFICIAL_TRAITS: Record<string, TraitInfo> = {
       pt: 'Concede respiração aquática superior e extrema mobilidade na água.',
     },
   },
-  'silentgear:flame_ward': {
-    id: 'silentgear:flame_ward',
-    maxLevel: 1,
-    name: { en: 'Flame Ward', pt: 'Proteção de Chamas' },
-    description: {
-      en: 'Protects against burning and fire damage.',
-      pt: 'Protege contra queimaduras e dano por fogo.',
-    },
-  },
   'silentgear:advanced_flame_ward': {
     id: 'silentgear:advanced_flame_ward',
     maxLevel: 1,
@@ -926,13 +800,112 @@ export const OFFICIAL_TRAITS: Record<string, TraitInfo> = {
       pt: 'Imunidade completa a fogo, lava e queimaduras.',
     },
   },
-  'silentgear:cure_wither': {
-    id: 'silentgear:cure_wither',
-    maxLevel: 1,
-    name: { en: 'Cure Wither', pt: 'Cura Decomposição' },
+  'silentgear:ancient': {
+    id: 'silentgear:ancient',
+    maxLevel: 5,
+    name: { en: 'Ancient', pt: 'Ancestral' },
     description: {
-      en: 'Neutralizes the wither effect.',
-      pt: 'Neutraliza o efeito de decomposição (wither).',
+      en: 'Increases XP dropped by blocks and mobs.',
+      pt: 'Aumenta a experiência dropada por blocos e criaturas.',
+    },
+  },
+  'silentgear:aquatic': {
+    id: 'silentgear:aquatic',
+    maxLevel: 5,
+    name: { en: 'Aquatic', pt: 'Aquático' },
+    description: {
+      en: 'Full set of armor gives water breathing, deals more damage to aquatic mobs.',
+      pt: 'Conjunto completo de armadura concede respiração aquática e causa mais dano a criaturas marinhas.',
+    },
+  },
+  'silentgear:bending': {
+    id: 'silentgear:bending',
+    maxLevel: 5,
+    name: { en: 'Bending', pt: 'Flexão' },
+    description: {
+      en: 'Gear sometimes takes extra damage.',
+      pt: 'O equipamento ocasionalmente sofre dano adicional.',
+    },
+  },
+  'silentgear:bounce': {
+    id: 'silentgear:bounce',
+    maxLevel: 1,
+    name: { en: 'Bounce', pt: 'Salto' },
+    description: {
+      en: 'Boots negate fall damage; armor knocks back attackers.',
+      pt: 'Botas anulam dano de queda; armadura repele atacantes.',
+    },
+  },
+  'silentgear:brilliant': {
+    id: 'silentgear:brilliant',
+    maxLevel: 1,
+    name: { en: 'Brilliant', pt: 'Brilhante' },
+    description: {
+      en: 'Shiny! Increases experience gained.',
+      pt: 'Brilhante! Aumenta a experiência obtida ao usar o equipamento.',
+    },
+  },
+  'silentgear:brittle': {
+    id: 'silentgear:brittle',
+    maxLevel: 5,
+    name: { en: 'Brittle', pt: 'Frágil' },
+    description: {
+      en: 'Increases durability loss on high-impact attacks.',
+      pt: 'Aumenta a perda de durabilidade em impactos intensos.',
+    },
+  },
+  'silentgear:bulky': {
+    id: 'silentgear:bulky',
+    maxLevel: 1,
+    name: { en: 'Bulky', pt: 'Volumoso' },
+    description: {
+      en: 'Heavier material that reduces mobility slightly.',
+      pt: 'Material pesado que reduz levemente a mobilidade.',
+    },
+  },
+  'silentgear:chilled': {
+    id: 'silentgear:chilled',
+    maxLevel: 5,
+    name: { en: 'Chilled', pt: 'Gélido' },
+    description: {
+      en: 'Deals more damage to Nether and fire-immune mobs.',
+      pt: 'Causa mais dano a criaturas do Nether e imunes ao fogo.',
+    },
+  },
+  'silentgear:chipping': {
+    id: 'silentgear:chipping',
+    maxLevel: 5,
+    name: { en: 'Chipping', pt: 'Lascando' },
+    description: {
+      en: 'Reduces armor or increases harvest speed as gear is damaged.',
+      pt: 'Reduz armadura ou aumenta velocidade de mineração conforme sofre dano.',
+    },
+  },
+  'silentgear:crude': {
+    id: 'silentgear:crude',
+    maxLevel: 5,
+    name: { en: 'Crude', pt: 'Bruto' },
+    description: {
+      en: 'Reduces synergy.',
+      pt: 'Reduz a sinergia.',
+    },
+  },
+  'silentgear:crushing': {
+    id: 'silentgear:crushing',
+    maxLevel: 5,
+    name: { en: 'Crushing', pt: 'Esmagador' },
+    description: {
+      en: 'Increases armor bypass or impact damage.',
+      pt: 'Aumenta a perfuração de armadura ou o impacto do golpe.',
+    },
+  },
+  'silentgear:cure_levitation': {
+    id: 'silentgear:cure_levitation',
+    maxLevel: 1,
+    name: { en: 'Cure Levitation', pt: 'Cura Levitação' },
+    description: {
+      en: 'Neutralizes levitation effect.',
+      pt: 'Neutraliza o efeito de levitação.',
     },
   },
   'silentgear:cure_nausea': {
@@ -953,49 +926,94 @@ export const OFFICIAL_TRAITS: Record<string, TraitInfo> = {
       pt: 'Neutraliza efeitos de veneno.',
     },
   },
-  'silentgear:cure_levitation': {
-    id: 'silentgear:cure_levitation',
+  'silentgear:cure_wither': {
+    id: 'silentgear:cure_wither',
     maxLevel: 1,
-    name: { en: 'Cure Levitation', pt: 'Cura Levitação' },
+    name: { en: 'Cure Wither', pt: 'Cura Decomposição' },
     description: {
-      en: 'Neutralizes levitation effect.',
-      pt: 'Neutraliza o efeito de levitação.',
+      en: 'Neutralizes wither effect.',
+      pt: 'Neutraliza o efeito de decomposição (wither).',
     },
   },
-  'silentgear:sting_resist': {
-    id: 'silentgear:sting_resist',
+  'silentgear:dulling': {
+    id: 'silentgear:dulling',
     maxLevel: 1,
-    name: { en: 'Sting Resist', pt: 'Resistência a Ferroadas' },
+    name: { en: 'Dulling', pt: 'Embotamento' },
     description: {
-      en: 'Reduces damage and sting effects from arthropods.',
-      pt: 'Reduz o dano e ferrões de artrópodes.',
+      en: 'Reduces effectiveness when neglected.',
+      pt: 'Reduz a eficácia com o desuso.',
     },
   },
-  'silentgear:hard': {
-    id: 'silentgear:hard',
-    maxLevel: 10,
-    name: { en: 'Hard', pt: 'Duro' },
-    description: {
-      en: 'Increases durability and armor.',
-      pt: 'Aumenta a durabilidade e o valor de armadura.',
-    },
-  },
-  'silentgear:soft': {
-    id: 'silentgear:soft',
+  'silentgear:eroded': {
+    id: 'silentgear:eroded',
     maxLevel: 5,
-    name: { en: 'Soft', pt: 'Macio' },
+    name: { en: 'Eroded', pt: 'Erodismo' },
     description: {
-      en: 'Decreases durability slightly but increases flexibility.',
-      pt: 'Reduz levemente a durabilidade mas aumenta a flexibilidade.',
+      en: 'Increases harvest speed and reduces attack damage as gear is damaged.',
+      pt: 'Aumenta velocidade de mineração e reduz dano de ataque conforme sofre dano.',
     },
   },
-  'silentgear:imperial': {
-    id: 'silentgear:imperial',
+  'silentgear:fiery': {
+    id: 'silentgear:fiery',
     maxLevel: 5,
-    name: { en: 'Imperial', pt: 'Imperial' },
+    name: { en: 'Fiery', pt: 'Ígneo' },
     description: {
-      en: 'Increases luck and treasure yield.',
-      pt: 'Aumenta a sorte e a obtenção de tesouros.',
+      en: 'Adds Fire Aspect or Flame to weapons.',
+      pt: 'Adiciona Aspecto Flamejante ou Chamas às armas.',
+    },
+  },
+  'silentgear:fireproof': {
+    id: 'silentgear:fireproof',
+    maxLevel: 1,
+    name: { en: 'Fireproof', pt: 'À Prova de Fogo' },
+    description: {
+      en: 'Item will float on lava and cannot burn in fire.',
+      pt: 'O item flutua na lava e não queima no fogo.',
+    },
+  },
+  'silentgear:flame_ward': {
+    id: 'silentgear:flame_ward',
+    maxLevel: 1,
+    name: { en: 'Flame Ward', pt: 'Proteção de Chamas' },
+    description: {
+      en: 'Protects against burning and fire damage.',
+      pt: 'Protege contra queimaduras e dano por fogo.',
+    },
+  },
+  'silentgear:flammable': {
+    id: 'silentgear:flammable',
+    maxLevel: 1,
+    name: { en: 'Flammable', pt: 'Inflamável' },
+    description: {
+      en: 'Takes damage when on fire and can be used as fuel.',
+      pt: 'Sofre dano quando exposto ao fogo e pode ser usado como combustível.',
+    },
+  },
+  'silentgear:flexible': {
+    id: 'silentgear:flexible',
+    maxLevel: 5,
+    name: { en: 'Flexible', pt: 'Flexível' },
+    description: {
+      en: 'Reduces damage taken by the tool or armor from explosions.',
+      pt: 'Reduz o dano sofrido pelo equipamento contra explosões.',
+    },
+  },
+  'silentgear:flutter': {
+    id: 'silentgear:flutter',
+    maxLevel: 1,
+    name: { en: 'Flutter', pt: 'Flutuante' },
+    description: {
+      en: 'Provides slow falling or reduced fall impact.',
+      pt: 'Proporciona queda lenta ou reduz o impacto da queda.',
+    },
+  },
+  'silentgear:fortunate': {
+    id: 'silentgear:fortunate',
+    maxLevel: 3,
+    name: { en: 'Fortunate', pt: 'Afortunado' },
+    description: {
+      en: 'Adds Fortune to tools.',
+      pt: 'Adiciona Fortuna a ferramentas.',
     },
   },
   'silentgear:gold_digger': {
@@ -1003,17 +1021,170 @@ export const OFFICIAL_TRAITS: Record<string, TraitInfo> = {
     maxLevel: 5,
     name: { en: 'Gold Digger', pt: 'Garimpeiro' },
     description: {
-      en: 'Increases gold drops from mining.',
-      pt: 'Aumenta a chance de extrair ouro ao minerar.',
+      en: 'Sometimes increases nugget drops when mining.',
+      pt: 'Ocasionalmente aumenta pepitas obtidas ao minerar.',
     },
   },
-  'silentgear:synergistic': {
-    id: 'silentgear:synergistic',
+  'silentgear:greedy': {
+    id: 'silentgear:greedy',
     maxLevel: 5,
-    name: { en: 'Synergistic', pt: 'Sinergético' },
+    name: { en: 'Greedy', pt: 'Ganancioso' },
     description: {
-      en: 'Gear gets a synergy bonus (if base value is more than 100%).',
-      pt: 'Concede bônus de sinergia caso o valor base seja superior a 100%.',
+      en: 'Increases the mining speed for ores.',
+      pt: 'Aumenta a velocidade de mineração de minérios.',
+    },
+  },
+  'silentgear:hard': {
+    id: 'silentgear:hard',
+    maxLevel: 5,
+    name: { en: 'Hard', pt: 'Duro' },
+    description: {
+      en: 'Increases harvest speed or decreases ranged damage as item is damaged.',
+      pt: 'Aumenta velocidade de mineração ou diminui dano de longo alcance conforme o item sofre dano.',
+    },
+  },
+  'silentgear:heat_resistant': {
+    id: 'silentgear:heat_resistant',
+    maxLevel: 5,
+    name: { en: 'Heat-Resistant', pt: 'Resistente ao Calor' },
+    description: {
+      en: 'Reduces fire damage taken.',
+      pt: 'Reduz o dano de fogo recebido.',
+    },
+  },
+  'silentgear:holy': {
+    id: 'silentgear:holy',
+    maxLevel: 5,
+    name: { en: 'Holy', pt: 'Sagrado' },
+    description: {
+      en: 'Deals massive bonus damage against undead monsters.',
+      pt: 'Causa dano bônus maciço contra monstros mortos-vivos.',
+    },
+  },
+  'silentgear:imperial': {
+    id: 'silentgear:imperial',
+    maxLevel: 5,
+    name: { en: 'Imperial', pt: 'Imperial' },
+    description: {
+      en: 'Sometimes increases gem drops when mining.',
+      pt: 'Ocasionalmente aumenta gemas obtidas ao minerar.',
+    },
+  },
+  'silentgear:indestructible': {
+    id: 'silentgear:indestructible',
+    maxLevel: 1,
+    name: { en: 'Indestructible', pt: 'Indestrutível' },
+    description: {
+      en: 'Prevents durability loss.',
+      pt: 'Impede perda de durabilidade.',
+    },
+  },
+  'silentgear:jagged': {
+    id: 'silentgear:jagged',
+    maxLevel: 5,
+    name: { en: 'Jagged', pt: 'Serrilhado' },
+    description: {
+      en: 'Increases attack damage or decreases ranged damage as item is damaged.',
+      pt: 'Aumenta dano de ataque ou reduz dano de longo alcance conforme sofre dano.',
+    },
+  },
+  'silentgear:light': {
+    id: 'silentgear:light',
+    maxLevel: 5,
+    name: { en: 'Light', pt: 'Leve' },
+    description: {
+      en: 'Armor increases movement speed.',
+      pt: 'A armadura aumenta a velocidade de movimento.',
+    },
+  },
+  'silentgear:lucky': {
+    id: 'silentgear:lucky',
+    maxLevel: 5,
+    name: { en: 'Lucky', pt: 'Sortudo' },
+    description: {
+      en: 'Adds luck when held.',
+      pt: 'Concede bônus de sorte quando empunhado.',
+    },
+  },
+  'silentgear:lustrous': {
+    id: 'silentgear:lustrous',
+    maxLevel: 5,
+    name: { en: 'Lustrous', pt: 'Lustroso' },
+    description: {
+      en: 'Tools gain a large harvest speed boost when in light.',
+      pt: 'Ferramentas ganham grande bônus de velocidade de mineração sob a luz.',
+    },
+  },
+  'silentgear:magmatic': {
+    id: 'silentgear:magmatic',
+    maxLevel: 1,
+    name: { en: 'Magmatic', pt: 'Magmático' },
+    description: {
+      en: 'Auto-smelting mined blocks.',
+      pt: 'Funde automaticamente blocos minerados.',
+    },
+  },
+  'silentgear:magnetic': {
+    id: 'silentgear:magnetic',
+    maxLevel: 5,
+    name: { en: 'Magnetic', pt: 'Magnético' },
+    description: {
+      en: 'Pulls nearby dropped items toward the player.',
+      pt: 'Atrai itens caídos no chão diretamente para o jogador.',
+    },
+  },
+  'silentgear:malleable': {
+    id: 'silentgear:malleable',
+    maxLevel: 6,
+    name: { en: 'Malleable', pt: 'Maleável' },
+    description: {
+      en: 'Gear sometimes takes less damage.',
+      pt: 'Equipamento ocasionalmente sofre menos dano.',
+    },
+  },
+  'silentgear:moonwalker': {
+    id: 'silentgear:moonwalker',
+    maxLevel: 5,
+    name: { en: 'Moonwalker', pt: 'Passo Lunar' },
+    description: {
+      en: 'Increases jump height and reduces gravity.',
+      pt: 'Aumenta altura do pulo e reduz gravidade.',
+    },
+  },
+  'silentgear:organic': {
+    id: 'silentgear:organic',
+    maxLevel: 5,
+    name: { en: 'Organic', pt: 'Orgânico' },
+    description: {
+      en: 'Gains enchantability, but loses magic damage as the item is damaged.',
+      pt: 'Ganha capacidade de encantamento, mas perde dano mágico ao sofrer dano.',
+    },
+  },
+  'silentgear:reach': {
+    id: 'silentgear:reach',
+    maxLevel: 5,
+    name: { en: 'Reach', pt: 'Alcance' },
+    description: {
+      en: 'Increases block reach distance.',
+      pt: 'Aumenta a distância de alcance de blocos.',
+    },
+  },
+  'silentgear:refractive': {
+    id: 'silentgear:refractive',
+    maxLevel: 1,
+    name: { en: 'Refractive', pt: 'Refrativo' },
+    description: {
+      en: 'Places phantom lights when used.',
+      pt: 'Posiciona luzes fantasmagóricas quando utilizado.',
+    },
+  },
+  'silentgear:renew': {
+    id: 'silentgear:renew',
+    maxLevel: 5,
+    name: { en: 'Renew', pt: 'Renovação' },
+    description: {
+      en: 'Slowly repairs the item over time.',
+      pt: 'Repara lentamente o item com o passar do tempo.',
     },
   },
   'silentgear:rustic': {
@@ -1025,13 +1196,193 @@ export const OFFICIAL_TRAITS: Record<string, TraitInfo> = {
       pt: 'Aumenta a sinergia caso o valor base seja de 100% ou menos.',
     },
   },
-  'silentgear:crude': {
-    id: 'silentgear:crude',
+  'silentgear:sharp': {
+    id: 'silentgear:sharp',
     maxLevel: 5,
-    name: { en: 'Crude', pt: 'Bruto' },
+    name: { en: 'Sharp', pt: 'Afiado' },
     description: {
-      en: 'Reduces synergy.',
-      pt: 'Reduz a sinergia.',
+      en: 'Gain harvest speed and attack damage as durability is lost.',
+      pt: 'Ganha velocidade de mineração e dano de ataque conforme perde durabilidade.',
+    },
+  },
+  'silentgear:silky': {
+    id: 'silentgear:silky',
+    maxLevel: 1,
+    name: { en: 'Silky', pt: 'Sedoso' },
+    description: {
+      en: 'Adds Silk Touch to tools.',
+      pt: 'Adiciona Toque Suave (Silk Touch) às ferramentas.',
+    },
+  },
+  'silentgear:snow_walker': {
+    id: 'silentgear:snow_walker',
+    maxLevel: 1,
+    name: { en: 'Snow Walker', pt: 'Caminhante da Neve' },
+    description: {
+      en: 'Walk on powder snow without sinking.',
+      pt: 'Permite caminhar sobre neve fofa sem afundar.',
+    },
+  },
+  'silentgear:soft': {
+    id: 'silentgear:soft',
+    maxLevel: 5,
+    name: { en: 'Soft', pt: 'Macio' },
+    description: {
+      en: 'Reduces harvest speed as tool is damaged.',
+      pt: 'Reduz a velocidade de mineração conforme a ferramenta sofre dano.',
+    },
+  },
+  'silentgear:stellar': {
+    id: 'silentgear:stellar',
+    maxLevel: 5,
+    name: { en: 'Stellar', pt: 'Estelar' },
+    description: {
+      en: 'Armor gives speed and jump boost, items slowly repair themselves.',
+      pt: 'Armadura concede velocidade e pulo, itens se reparam lentamente.',
+    },
+  },
+  'silentgear:sting_resist': {
+    id: 'silentgear:sting_resist',
+    maxLevel: 4,
+    name: { en: 'Sting Resist', pt: 'Resistência a Ferroadas' },
+    description: {
+      en: 'Reduces damage and sting effects from arthropods.',
+      pt: 'Reduz o dano e ferrões de artrópodes.',
+    },
+  },
+  'silentgear:sturdy': {
+    id: 'silentgear:sturdy',
+    maxLevel: 5,
+    name: { en: 'Sturdy', pt: 'Robusto' },
+    description: {
+      en: 'Gear frequently takes less damage.',
+      pt: 'Equipamento frequentemente sofre menos dano.',
+    },
+  },
+  'silentgear:swift_swim': {
+    id: 'silentgear:swift_swim',
+    maxLevel: 5,
+    name: { en: 'Swift Swim', pt: 'Nado Rápido' },
+    description: {
+      en: 'Increases swim speed.',
+      pt: 'Aumenta a velocidade de nado.',
+    },
+  },
+  'silentgear:synergistic': {
+    id: 'silentgear:synergistic',
+    maxLevel: 5,
+    name: { en: 'Synergistic', pt: 'Sinergético' },
+    description: {
+      en: 'Gear gets a synergy bonus (if base value is more than 100%).',
+      pt: 'Concede bônus de sinergia caso o valor base seja superior a 100%.',
+    },
+  },
+  'silentgear:turtle': {
+    id: 'silentgear:turtle',
+    maxLevel: 1,
+    name: { en: 'Turtle', pt: 'Tartaruga' },
+    description: {
+      en: 'Hold your breath for longer underwater.',
+      pt: 'Permite prender a respiração por mais tempo debaixo d’água.',
+    },
+  },
+  'silentgear:void_ward': {
+    id: 'silentgear:void_ward',
+    maxLevel: 1,
+    name: { en: 'Void Ward', pt: 'Proteção do Vazio' },
+    description: {
+      en: 'Saves the wearer from falling out of the world.',
+      pt: 'Salva o portador de quedas no vazio.',
+    },
+  },
+  'silentgear:vulcan': {
+    id: 'silentgear:vulcan',
+    maxLevel: 1,
+    name: { en: 'Vulcan', pt: 'Vulcânico' },
+    description: {
+      en: 'Places obsidian at a high durability cost.',
+      pt: 'Posiciona obsidiana a um custo alto de durabilidade.',
+    },
+  },
+  'silentgear:wind_blast': {
+    id: 'silentgear:wind_blast',
+    maxLevel: 1,
+    name: { en: 'Wind Blast', pt: 'Rajada de Vento' },
+    description: {
+      en: 'Creates a blast of wind when attacking.',
+      pt: 'Gera uma rajada de vento ao atacar.',
+    },
+  },
+  'silentgear:yummy': {
+    id: 'silentgear:yummy',
+    maxLevel: 5,
+    name: { en: 'Yummy', pt: 'Delicioso' },
+    description: {
+      en: 'Makes the item edible, but at durability cost.',
+      pt: 'Torna o item comestível, mas consome durabilidade.',
+    },
+  },
+  'silentgear:polished': {
+    id: 'silentgear:polished',
+    maxLevel: 1,
+    name: { en: 'Polished', pt: 'Polido' },
+    description: {
+      en: 'Becomes oxidized if not used for some time.',
+      pt: 'Torna-se oxidado se não for usado por algum tempo.',
+    },
+  },
+  'silentgems:barrier_jacket': {
+    id: 'silentgems:barrier_jacket',
+    maxLevel: 5,
+    name: { en: 'Barrier Jacket', pt: 'Traje de Barreira' },
+    description: {
+      en: 'Absorbs incoming damage with magical shielding.',
+      pt: 'Absorve dano recebido com um escudo mágico protetor.',
+    },
+  },
+  'silentgems:critical_strike': {
+    id: 'silentgems:critical_strike',
+    maxLevel: 5,
+    name: { en: 'Critical Strike', pt: 'Golpe Crítico' },
+    description: {
+      en: 'Chance to deal massive critical damage on attack.',
+      pt: 'Chance de desferir dano crítico devastador ao atacar.',
+    },
+  },
+  'silentgems:enderbane': {
+    id: 'silentgems:enderbane',
+    maxLevel: 5,
+    name: { en: 'Enderbane', pt: 'Ruína dos Enders' },
+    description: {
+      en: 'Deals extra damage to Endermen and Ender dragons.',
+      pt: 'Causa dano extra contra Endermen e dragões.',
+    },
+  },
+  'silentgems:fractal': {
+    id: 'silentgems:fractal',
+    maxLevel: 5,
+    name: { en: 'Fractal', pt: 'Fractal' },
+    description: {
+      en: 'Splits projectile and attack impact dynamically.',
+      pt: 'Divide dinamicamente o impacto de projéteis e ataques.',
+    },
+  },
+  'silentgems:freeze_resistant': {
+    id: 'silentgems:freeze_resistant',
+    maxLevel: 5,
+    name: { en: 'Freeze-Resistant', pt: 'Resistente ao Congelamento' },
+    description: {
+      en: 'Provides immunity to freezing and cold weather.',
+      pt: 'Concede imunidade a congelamento e frio extremo.',
+    },
+  },
+  'silentgems:neptunes_blessing': {
+    id: 'silentgems:neptunes_blessing',
+    maxLevel: 5,
+    name: { en: "Neptune's Blessing", pt: 'Bênção de Netuno' },
+    description: {
+      en: 'Grants enhanced underwater buffs and attack power.',
+      pt: 'Concede bônus aprimorados e poder de ataque subaquático.',
     },
   },
 };
@@ -1071,24 +1422,6 @@ export const VERSION_PRESETS: VersionPreset[] = [
     addons: DEFAULT_ATM_ADDONS,
   },
   {
-    id: 'atm10',
-    name: 'All The Mods 10 (ATM10)',
-    badge: '1.21.1',
-    type: 'modpack',
-    minecraftVersion: '1.21.1',
-    description: 'Modpack completo para Minecraft 1.21.1 NeoForge.',
-    addons: DEFAULT_ATM_ADDONS,
-  },
-  {
-    id: 'atm9',
-    name: 'All The Mods 9 (ATM9)',
-    badge: '1.20.1',
-    type: 'modpack',
-    minecraftVersion: '1.20.1',
-    description: 'Versão consagrada para 1.20.1 com centenas de mods.',
-    addons: DEFAULT_ATM_ADDONS,
-  },
-  {
     id: '1.21.1',
     name: 'Minecraft 1.21.1 (Oficial)',
     badge: 'SG 4.2.3',
@@ -1104,15 +1437,6 @@ export const VERSION_PRESETS: VersionPreset[] = [
     type: 'official',
     minecraftVersion: '1.20.1',
     description: 'Silent Gear oficial para Minecraft 1.20.1.',
-    addons: [],
-  },
-  {
-    id: '1.19.2',
-    name: 'Minecraft 1.19.2 (Oficial)',
-    badge: 'SG 3.2.x',
-    type: 'official',
-    minecraftVersion: '1.19.2',
-    description: 'Silent Gear oficial para Minecraft 1.19.2.',
     addons: [],
   },
 ];

@@ -1,6 +1,6 @@
 export type PartSlot = 'main' | 'rod' | 'tip' | 'coating' | 'grip' | 'lining' | 'binding';
 
-export type MaterialCategory = 'metal' | 'gem' | 'rock' | 'wood' | 'organic' | 'cloth' | 'composite';
+export type MaterialCategory = 'metal' | 'gem' | 'rock' | 'wood' | 'organic' | 'cloth' | 'composite' | 'intangible';
 
 export type GearCategory = 'weapon' | 'tool' | 'armor' | 'ranged';
 
@@ -100,6 +100,9 @@ export interface Material {
   parent?: string;
   source?: string;
   overriddenBy?: string[];
+  type?: string;
+  gear_type_blacklist?: string[];
+  isCompound?: boolean;
 }
 
 export interface GearType {
@@ -203,6 +206,7 @@ export interface AddonConfig {
   version: string;
   enabled: boolean;
   description?: string;
+  jar?: string;
 }
 
 export interface CatalogLayer {

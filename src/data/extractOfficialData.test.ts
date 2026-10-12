@@ -2,14 +2,14 @@ import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
-import { ATM11_CATALOG, OFFICIAL_GEAR_TYPES } from './defaultCatalog';
+import { ATM11_CATALOG, OFFICIAL_GEAR_TYPES, VERSION_PRESETS } from './defaultCatalog';
 import { VersionCatalog } from '@/types/silentgear';
 import { deriveGearTypes } from '../../scripts/extract-official-data';
 
 describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issue #6)', () => {
   const projectRoot = path.resolve(__dirname, '../..');
   const catalogPath = path.join(projectRoot, 'public/data/versions/atm11/catalog.json');
-  const tsvPath = path.join(projectRoot, 'output/silentgear/material_export.tsv');
+  const tsvPath = path.join(projectRoot, 'tests/fixtures/material_export.tsv');
 
   const rawCatalog = fs.readFileSync(catalogPath, 'utf-8');
   const catalog: VersionCatalog = JSON.parse(rawCatalog);
@@ -61,7 +61,7 @@ describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issu
   });
 
   it('Critério 3: para cada material Main do dump material_export.tsv, stats de armadura batem com o dump', () => {
-    expect(fs.existsSync(tsvPath), 'output/silentgear/material_export.tsv deve existir').toBe(true);
+    expect(fs.existsSync(tsvPath), 'tests/fixtures/material_export.tsv deve existir').toBe(true);
     const content = fs.readFileSync(tsvPath, 'utf-8');
     const lines = content.trim().split('\n');
 
@@ -436,5 +436,113 @@ describe('Resolução Oficial de Harvest Tier com level_hint (Issue #38)', () =>
       }
     });
   });
+
+  describe('Auditoria de Traits Oficiais (Issue #50)', () => {
+    it('Critério 1: todo trait referenciado por qualquer material do catálogo existe em catalog.traits', () => {
+      const referencedTraits = new Set<string>();
+      for (const mat of Object.values(catalog.materials)) {
+        for (const slotTraits of Object.values(mat.traits || {})) {
+          if (Array.isArray(slotTraits)) {
+            for (const t of slotTraits) {
+              referencedTraits.add(t.name);
+            }
+          }
+        }
+      }
+
+      for (const traitId of referencedTraits) {
+        expect(catalog.traits[traitId], `Trait ${traitId} deve existir em catalog.traits`).toBeDefined();
+        expect(catalog.traits[traitId].name).toBeDefined();
+        expect(catalog.traits[traitId].description).toBeDefined();
+      }
+    });
+
+    it('Critério 2: maxLevel de hard, magnetic, aquatic e sting_resist é 5, 5, 5 e 4', () => {
+      expect(catalog.traits['silentgear:hard']?.maxLevel).toBe(5);
+      expect(catalog.traits['silentgear:magnetic']?.maxLevel).toBe(5);
+      expect(catalog.traits['silentgear:aquatic']?.maxLevel).toBe(5);
+      expect(catalog.traits['silentgear:sting_resist']?.maxLevel).toBe(4);
+    });
+
+    it('Critério 3: o trait inexistente silentgear:swift não existe em catalog.traits nem em defaultCatalog.ts', () => {
+      expect(catalog.traits['silentgear:swift']).toBeUndefined();
+      expect(catalog.traits['silentgear:swift_swim']).toBeDefined();
+      expect(catalog.traits['silentgear:swift_swim'].maxLevel).toBe(5);
+    });
+  });
+
+  describe('Auditoria de Jars Instalados e Fixtures (Issues #48 e #49)', () => {
+    it('Critério Issue #48: silentgear:copper tem durability 190 e attack_damage/melee_damage 1.0', () => {
+      const copper = catalog.materials['silentgear:copper'];
+      expect(copper).toBeDefined();
+      expect(copper.stats.main?.durability).toBe(190);
+      expect(copper.stats.main?.armor_durability).toBe(11);
+      expect(copper.stats.main?.melee_damage).toBe(1.0);
+    });
+
+    it('Critério Issue #48: silentgear:netherite coating possui rarity ADD 40', () => {
+      const netherite = catalog.materials['silentgear:netherite'];
+      expect(netherite).toBeDefined();
+      expect(netherite.stats.coating?.rarity).toEqual({ value: 40, operation: 'ADD' });
+    });
+
+    it('Critério Issue #49: scripts/extract-official-data.ts não possui generateTsvDump', () => {
+      const scriptPath = path.join(projectRoot, 'scripts/extract-official-data.ts');
+      const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
+      expect(scriptContent.includes('generateTsvDump')).toBe(false);
+    });
+  });
+
+  describe('Auditoria de Presets e Catálogos Únicos (Issue #51)', () => {
+    it('Critério 1: nenhum par de catálogos em public/data/versions/ é clone idêntico além do nome da versão', () => {
+      const versionsDir = path.join(projectRoot, 'public/data/versions');
+      const versionDirs = fs
+        .readdirSync(versionsDir, { withFileTypes: true })
+        .filter((d) => d.isDirectory())
+        .map((d) => d.name);
+
+      expect(versionDirs.length).toBeGreaterThanOrEqual(2);
+
+      const catalogs: Record<string, any> = {};
+      for (const v of versionDirs) {
+        const catFile = path.join(versionsDir, v, 'catalog.json');
+        if (fs.existsSync(catFile)) {
+          const content = JSON.parse(fs.readFileSync(catFile, 'utf-8'));
+          catalogs[v] = content;
+        }
+      }
+
+      const keys = Object.keys(catalogs);
+      for (let i = 0; i < keys.length; i++) {
+        for (let j = i + 1; j < keys.length; j++) {
+          const catA = { ...catalogs[keys[i]], version: '' };
+          const catB = { ...catalogs[keys[j]], version: '' };
+          expect(
+            JSON.stringify(catA),
+            `Catálogo ${keys[i]} e ${keys[j]} não podem ser cópias idênticas`
+          ).not.toBe(JSON.stringify(catB));
+        }
+      }
+    });
+
+    it('Critério 2: scripts/extract-official-data.ts exporta apenas presets com dados próprios', () => {
+      const scriptPath = path.join(projectRoot, 'scripts/extract-official-data.ts');
+      const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
+      const atmExports = scriptContent
+        .split('\n')
+        .filter((line) => line.includes("exportCatalog('atm"));
+      expect(atmExports.length).toBe(1);
+      expect(atmExports[0]).toContain("exportCatalog('atm11'");
+    });
+
+    it('Critério 3: VERSION_PRESETS em defaultCatalog.ts não inclui clones de atm10 e atm9', () => {
+      const presetIds = VERSION_PRESETS.map((p) => p.id);
+      expect(presetIds).not.toContain('atm10');
+      expect(presetIds).not.toContain('atm9');
+      expect(presetIds).toContain('atm11');
+      expect(presetIds).toContain('1.21.1');
+    });
+  });
 });
+
 
