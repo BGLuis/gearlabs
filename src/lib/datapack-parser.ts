@@ -449,6 +449,7 @@ export function parseMaterialJson(filePath: string, json: any): Material | null 
         traits[slot] = slotData.traits.map((t: any) => ({
           name: t.trait ?? t.name,
           level: typeof t.level === 'number' ? t.level : 1,
+          ...(Array.isArray(t.conditions) && t.conditions.length > 0 && { conditions: t.conditions }),
         }));
       }
     }
@@ -492,6 +493,7 @@ export function parseMaterialJson(filePath: string, json: any): Material | null 
     ...(rawType && { type: rawType }),
     ...(gear_type_blacklist && gear_type_blacklist.length > 0 && { gear_type_blacklist }),
     ...(isCompound && { isCompound: true }),
+    ...(rawProps['silentgear:main']?.additive === true && { additive: true }),
   };
 
   if (json.parent && json.parent !== 'silentgear:empty') {
@@ -631,6 +633,7 @@ export function resolveMaterialParents(
       gear_type_blacklist: raw.gear_type_blacklist ?? parentMat.gear_type_blacklist,
       type: raw.type ?? parentMat.type,
       isCompound: raw.isCompound ?? parentMat.isCompound,
+      additive: raw.additive ?? parentMat.additive,
     };
 
     resolved[id] = result;

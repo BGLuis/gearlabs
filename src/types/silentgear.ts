@@ -79,9 +79,17 @@ export interface StatModifier {
   mul2?: number;
 }
 
+export type TraitCondition =
+  | { type: 'silentgear:material_ratio'; ratio: number }
+  | { type: 'silentgear:material_count'; count: number }
+  | { type: 'silentgear:gear_type'; gear_type: string }
+  | { type: 'silentgear:or' | 'silentgear:and'; values: TraitCondition[] }
+  | { type: 'silentgear:not'; value: TraitCondition };
+
 export interface MaterialTraitRef {
   name: string;
   level: number;
+  conditions?: TraitCondition[];
 }
 
 export interface Material {
@@ -126,6 +134,7 @@ export interface GearType {
 export interface TraitInfo {
   id: string;
   maxLevel: number;
+  conditions?: TraitCondition[];
   name: {
     en: string;
     pt: string;

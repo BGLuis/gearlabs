@@ -10,6 +10,7 @@ import {
   PartSlot,
   StatModifierEntry,
   StatOperation,
+  TraitInfo,
   VersionCatalog,
 } from '../src/types/silentgear';
 import {
@@ -29,6 +30,7 @@ import {
   parseHarvestTier,
 } from '../src/lib/datapack-parser';
 import { getGearTypeAncestors } from '../src/lib/gear-type-hierarchy';
+import { parseTraitJson, TraitLang } from '../src/lib/trait-parser';
 import { resolveCatalogWithAddons } from '../src/lib/layer-resolver';
 
 export const ATM_ADDONS: AddonConfig[] = [
@@ -247,6 +249,8 @@ export interface JarExtractionResult {
   materials: Record<string, Material>;
   parts: Record<string, RawPartData>;
   overrides: Record<string, Partial<Material>>;
+  rawTraits: Record<string, any>;
+  lang: TraitLang;
 }
 
 export async function extractDataFromJar(jarPath: string): Promise<JarExtractionResult> {
@@ -272,13 +276,14 @@ export async function extractDataFromJar(jarPath: string): Promise<JarExtraction
   const tomlFile = zip.file('META-INF/neoforge.mods.toml') || zip.file('META-INF/mods.toml');
   if (tomlFile) {
     const tomlContent = await tomlFile.async('text');
-    const verMatch = tomlContent.match(/version\s*=\s*["']([^"']+)["']/);
+    const verMatch = tomlContent.match(/version\s*=\s*(["'])(.*?)\1/);
     if (verMatch) {
-      version = verMatch[1];
+      // sgearmetalworks publica "26.1.2-1.6.0": o prefixo é a versão do Minecraft
+      version = verMatch[2].replace(/^\d+\.\d+(?:\.\d+)?-/, '');
     }
-    const nameMatch = tomlContent.match(/displayName\s*=\s*["']([^"']+)["']/);
+    const nameMatch = tomlContent.match(/displayName\s*=\s*(["'])(.*?)\1/);
     if (nameMatch) {
-      name = nameMatch[1];
+      name = nameMatch[2];
     }
   }
 
@@ -290,11 +295,19 @@ export async function extractDataFromJar(jarPath: string): Promise<JarExtraction
   const materials: Record<string, Material> = {};
   const overrides: Record<string, Partial<Material>> = {};
   const parts: Record<string, RawPartData> = {};
+  const rawTraits: Record<string, any> = {};
+  const lang: TraitLang = { en: {}, pt: {} };
 
   for (const [relPath, zipEntry] of Object.entries(zip.files)) {
     if (zipEntry.dir || !relPath.endsWith('.json')) continue;
 
-    if (relPath.includes('/silentgear_materials/')) {
+    const langMatch = relPath.match(/^assets\/[^/]+\/lang\/(en_us|pt_br)\.json$/);
+    const traitMatch = relPath.match(/^data\/([^/]+)\/silentgear_traits\/(.+)\.json$/);
+    if (langMatch) {
+      Object.assign(langMatch[1] === 'en_us' ? lang.en : lang.pt, JSON.parse(await zipEntry.async('text')));
+    } else if (traitMatch) {
+      rawTraits[`${traitMatch[1]}:${traitMatch[2]}`] = JSON.parse(await zipEntry.async('text'));
+    } else if (relPath.includes('/silentgear_materials/')) {
       try {
         const text = await zipEntry.async('text');
         const json = JSON.parse(text);
@@ -335,12 +348,20 @@ export async function extractDataFromJar(jarPath: string): Promise<JarExtraction
     materials,
     parts,
     overrides,
+    rawTraits,
+    lang,
   };
 }
 
 export async function extractFromInstance(
   instancePath: string
-): Promise<ExtractedCatalogData & { addons: AddonConfig[]; jarParts?: Record<string, RawPartData> }> {
+): Promise<
+  ExtractedCatalogData & {
+    addons: AddonConfig[];
+    jarParts?: Record<string, RawPartData>;
+    traits: Record<string, TraitInfo>;
+  }
+> {
   const modsDir = path.join(instancePath, 'mods');
   const kubejsDir = path.join(instancePath, 'kubejs/dynamic_data');
   const kubejsAltDir = path.join(instancePath, 'kubejs/data');
@@ -358,9 +379,17 @@ export async function extractFromInstance(
   let jarParts: Record<string, RawPartData> = {};
   const layers: Record<string, CatalogLayer> = {};
   const addons: AddonConfig[] = [];
+  const rawTraits: Record<string, any> = {};
+  const lang: TraitLang = { en: {}, pt: {} };
+  const mergeTraitData = (data: JarExtractionResult) => {
+    Object.assign(rawTraits, data.rawTraits);
+    Object.assign(lang.en, data.lang.en);
+    Object.assign(lang.pt, data.lang.pt);
+  };
 
   if (sgJar) {
     const sgData = await extractDataFromJar(path.join(modsDir, sgJar));
+    mergeTraitData(sgData);
     baseMaterials = resolveMaterialParents(sgData.materials);
     jarParts = sgData.parts;
     addons.push({
@@ -375,6 +404,7 @@ export async function extractFromInstance(
 
   if (gemsJar) {
     const gemsData = await extractDataFromJar(path.join(modsDir, gemsJar));
+    mergeTraitData(gemsData);
     layers['silentgems'] = {
       id: 'silentgems',
       name: gemsData.name,
@@ -393,6 +423,7 @@ export async function extractFromInstance(
 
   if (smwJar) {
     const smwData = await extractDataFromJar(path.join(modsDir, smwJar));
+    mergeTraitData(smwData);
     layers['sgearmetalworks'] = {
       id: 'sgearmetalworks',
       name: smwData.name,
@@ -419,6 +450,10 @@ export async function extractFromInstance(
   if (activeKubeDir) {
     const kubejsMaterials: Record<string, Material> = {};
     const kubejsOverrides: Record<string, Partial<Material>> = {};
+    for (const file of findJsonFiles(activeKubeDir).filter((f) => f.includes('/silentgear_traits/'))) {
+      const [, ns, name] = file.replace(/\\/g, '/').match(/([^/]+)\/silentgear_traits\/(.+)\.json$/) ?? [];
+      if (ns && name) rawTraits[`${ns}:${name}`] = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    }
     const kubejsFiles = findJsonFiles(activeKubeDir).filter((f) => f.includes('/silentgear_materials/'));
     for (const file of kubejsFiles) {
       try {
@@ -464,6 +499,9 @@ export async function extractFromInstance(
     resolvedMaterials,
     addons,
     jarParts,
+    traits: Object.fromEntries(
+      Object.entries(rawTraits).map(([id, json]) => [id, parseTraitJson(id, json, lang, OFFICIAL_TRAITS[id])])
+    ),
   };
 }
 
@@ -565,7 +603,8 @@ export function exportCatalog(
   gearTypes: Record<string, GearType> = OFFICIAL_GEAR_TYPES,
   baseMaterials?: Record<string, Material>,
   layers?: Record<string, CatalogLayer>,
-  addons?: AddonConfig[]
+  addons?: AddonConfig[],
+  traits: Record<string, TraitInfo> = OFFICIAL_TRAITS
 ) {
   const catalog: VersionCatalog = {
     version,
@@ -575,7 +614,7 @@ export function exportCatalog(
     ...(layers && { layers }),
     ...(addons && { addons }),
     gearTypes,
-    traits: OFFICIAL_TRAITS,
+    traits,
   };
 
   const dir = path.join(targetDir, version);
@@ -601,6 +640,7 @@ async function main() {
   let resolvedMaterials: Record<string, Material>;
   let addons = ATM_ADDONS;
   let customParts: Record<string, RawPartData> | undefined;
+  let traits: Record<string, TraitInfo> | undefined;
 
   if (instancePath) {
     console.log(`[extract-official-data] Extraindo dados da instância oficial: ${instancePath}`);
@@ -608,8 +648,10 @@ async function main() {
     baseMaterials = instanceData.baseMaterials;
     layers = instanceData.layers;
     resolvedMaterials = instanceData.resolvedMaterials;
-    addons = instanceData.addons;
+    // o Silent Gear base não é um addon alternável: as camadas dependem dele
+    addons = instanceData.addons.filter((addon) => addon.id !== 'silentgear');
     customParts = instanceData.jarParts;
+    traits = instanceData.traits;
   } else {
     console.log(`[extract-official-data] Extraindo dados oficiais para: ${outDir}`);
     const extracted = extractOfficialCatalogData(projectRoot);
@@ -626,10 +668,10 @@ async function main() {
   const derivedGearTypes = deriveGearTypes(OFFICIAL_GEAR_TYPES, projectRoot, customParts);
 
   // 3. Exportar modpack ATM11 (apenas presets com dados próprios)
-  exportCatalog('atm11', resolvedMaterials, outDir, ATM11_COMMIT, derivedGearTypes, baseMaterials, layers, addons);
+  exportCatalog('atm11', resolvedMaterials, outDir, ATM11_COMMIT, derivedGearTypes, baseMaterials, layers, addons, traits);
 
   // 4. Exportar versão oficial 1.21.1 (apenas base Silent Gear, sem addons)
-  exportCatalog('1.21.1', baseMaterials, outDir, SILENT_GEAR_COMMIT, derivedGearTypes, baseMaterials, {}, []);
+  exportCatalog('1.21.1', baseMaterials, outDir, SILENT_GEAR_COMMIT, derivedGearTypes, baseMaterials, {}, [], traits);
 
   console.log('[extract-official-data] Todos os catálogos oficiais gerados com sucesso!');
 }

@@ -26,6 +26,7 @@ import {
 import { parseHarvestTier } from './datapack-parser';
 import { getPartInstanceCount, syncPartInstancesWithCount } from './parts';
 import { getGearTypeAncestors } from './gear-type-hierarchy';
+import { collectActiveTraits } from './trait-conditions';
 
 /**
  * Propriedades do Silent Gear afetadas pelo multiplicador de sinergia
@@ -1286,18 +1287,7 @@ export function calculateGearStats(
   const finalHarvestSpeed = Number(baseHarvestSpeed.toFixed(1));
   const finalDps = Number((finalDamage * finalAttackSpeed).toFixed(1));
 
-  const allTraitInstances: MaterialTraitRef[] = [];
-  for (const slot of Object.keys(build.parts) as PartSlot[]) {
-    const sel = build.parts[slot];
-    if (!sel) continue;
-    const subMats: Material[] = (sel.materials && sel.materials.length > 0)
-      ? sel.materials.map((m) => catalog.materials[m.materialId]).filter(Boolean)
-      : (catalog.materials[sel.materialId] ? [catalog.materials[sel.materialId]] : []);
-
-    for (const mat of subMats) {
-      allTraitInstances.push(...(mat.traits[slot] || []));
-    }
-  }
+  const allTraitInstances = collectActiveTraits(build, catalog);
   const calculatedTraits = computeTraits(allTraitInstances, catalog.traits);
 
   return {

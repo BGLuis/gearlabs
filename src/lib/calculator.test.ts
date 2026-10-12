@@ -282,8 +282,15 @@ describe('calculateGearStats', () => {
     expect(stats.attackSpeed).toBeGreaterThan(1.6);
 
     const traitIds = stats.traits.map((t) => t.id);
-    expect(traitIds).toContain('silentgear:brilliant');
+    // O kubejs do ATM restringe o brilliant do Unobtainium a armaduras (condição gear_type)
+    expect(traitIds).not.toContain('silentgear:brilliant');
     expect(traitIds).toContain('silentgear:wind_blast');
+
+    const chestplate = calculateGearStats(
+      { gearTypeId: 'chestplate', parts: { main: { materialId: 'silentgear:unobtainium' } } },
+      atm11Catalog
+    );
+    expect(chestplate.traits.map((t) => t.id)).toContain('silentgear:brilliant');
   });
 
   describe('Issue #4: Armadura - resolução de armor por peça e armor_durability', () => {
