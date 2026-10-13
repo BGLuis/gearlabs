@@ -18,10 +18,10 @@ export default function RootLayout({
       <body className="min-h-screen bg-mc-bg text-mc-text antialiased flex flex-col">
         <GearProvider>
           <Navbar />
-          <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
+          <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 lg:px-6 py-6">
             {children}
           </main>
-          <footer className="border-t border-mc-border/60 py-6 px-4 text-center text-xs text-mc-muted font-mono">
+          <footer className="border-t border-mc-border py-6 px-4 text-center text-xs text-mc-mutedLight/70 font-mono">
             <p>GearLabs · Feito para a comunidade de Silent Gear & Minecraft Modded</p>
           </footer>
         </GearProvider>

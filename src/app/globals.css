@@ -1,36 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&family=Pixelify+Sans:wght@500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #0f1115;
-  --foreground: #f0f6fc;
+  --background: #0E0F11;
+  --foreground: #ECEDEF;
+  --font-pixel: 'Pixelify Sans', system-ui, monospace;
+  --font-sans: 'Geist', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--font-sans);
   overflow-x: hidden;
+  selection-background-color: #FF8A3D;
+  selection-color: #0E0F11;
+}
+
+::selection {
+  background-color: #FF8A3D;
+  color: #0E0F11;
 }
 
 /* Scrollbar estilizada */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #121417;
+  background: #0E0F11;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2e3544;
+  background: #24272C;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #444d62;
+  background: #30343A;
 }
 
 /* Suporte para renderização nítida de pixel art */

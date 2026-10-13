@@ -46,68 +46,65 @@ export function Navbar() {
   const customPresets = presets.filter((p) => p.type === 'custom');
 
   return (
-    <header className="sticky top-0 z-50 bg-mc-surface/90 backdrop-blur-md border-b border-mc-border">
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-50 bg-[#0E0F11]/95 backdrop-blur-md border-b border-mc-border">
+      <div className="max-w-[1440px] mx-auto px-4 lg:px-6 h-14 flex items-center justify-between gap-4">
         {/* Logo / Marca */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded bg-gradient-to-br from-mc-primary to-mc-accent flex items-center justify-center shadow-mc-box border border-mc-border group-hover:scale-105 transition-transform">
-              <Hammer className="w-5 h-5 text-mc-bg" />
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-[30px] h-[30px] rounded-[4px] bg-mc-forge flex items-center justify-center shadow-mc-box group-hover:scale-105 transition-transform">
+              <Hammer className="w-4 h-4 text-[#0E0F11]" />
             </div>
-            <div>
-              <span className="font-bold text-lg tracking-wider text-mc-text group-hover:text-mc-primary transition-colors">
-                GEAR<span className="text-mc-primary">LABS</span>
-              </span>
-              <span className="block text-[10px] text-mc-muted leading-none font-mono">Silent Gear Builder</span>
-            </div>
+            <span className="font-pixel text-[22px] font-semibold tracking-wide text-mc-text group-hover:text-mc-forge transition-colors">
+              GearLabs
+            </span>
           </Link>
 
-          {/* Links de navegação */}
-          <nav className="hidden md:flex items-center gap-1">
+          {/* Links de navegação em formato Pill */}
+          <nav className="hidden md:flex items-center gap-1.5">
             <Link
               href="/"
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors flex items-center gap-1.5 ${
+              className={`px-3 h-8 rounded-[6px] text-sm font-medium flex items-center gap-2 transition-colors ${
                 pathname === '/'
-                  ? 'bg-mc-border text-mc-primary'
-                  : 'text-mc-muted hover:text-mc-text hover:bg-mc-surfaceHover'
+                  ? 'bg-[#1E2125] text-mc-text border border-[#30343A]/50 shadow-sm'
+                  : 'text-mc-mutedLight hover:text-mc-text hover:bg-[#1E2125]/40'
               }`}
             >
-              <Hammer className="w-4 h-4" />
+              <Hammer className="w-3.5 h-3.5" />
               {t.builder}
             </Link>
             <Link
               href="/materials"
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors flex items-center gap-1.5 ${
+              className={`px-3 h-8 rounded-[6px] text-sm font-medium flex items-center gap-2 transition-colors ${
                 pathname === '/materials'
-                  ? 'bg-mc-border text-mc-primary'
-                  : 'text-mc-muted hover:text-mc-text hover:bg-mc-surfaceHover'
+                  ? 'bg-[#1E2125] text-mc-text border border-[#30343A]/50 shadow-sm'
+                  : 'text-mc-mutedLight hover:text-mc-text hover:bg-[#1E2125]/40'
               }`}
             >
-              <BookOpen className="w-4 h-4" />
+              <BookOpen className="w-3.5 h-3.5" />
               {t.materials}
             </Link>
             <Link
               href="/changelog"
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors flex items-center gap-1.5 ${
+              className={`px-3 h-8 rounded-[6px] text-sm font-medium flex items-center gap-2 transition-colors ${
                 pathname === '/changelog'
-                  ? 'bg-mc-border text-mc-primary'
-                  : 'text-mc-muted hover:text-mc-text hover:bg-mc-surfaceHover'
+                  ? 'bg-[#1E2125] text-mc-text border border-[#30343A]/50 shadow-sm'
+                  : 'text-mc-mutedLight hover:text-mc-text hover:bg-[#1E2125]/40'
               }`}
             >
-              <History className="w-4 h-4" />
+              <History className="w-3.5 h-3.5" />
               {t.changelog}
             </Link>
           </nav>
         </div>
 
         {/* Controles da Direita */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           {/* Seletor Agrupado de Versões */}
-          <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1.5 rounded border border-mc-border text-xs font-mono">
+          <div className="flex items-center gap-1.5 bg-[#16181B] hover:bg-[#1E2125] px-2.5 h-8 rounded-[6px] border border-mc-border text-xs font-mono transition-colors">
             <select
               value={version}
               onChange={(e) => setVersion(e.target.value)}
-              className="bg-transparent text-mc-text font-bold focus:outline-none cursor-pointer max-w-[160px] sm:max-w-[220px] truncate"
+              className="bg-transparent text-mc-text font-medium focus:outline-none cursor-pointer max-w-[150px] sm:max-w-[210px] truncate"
             >
               <optgroup label="🌟 Modpacks em Destaque" className="bg-mc-surface text-mc-gold font-bold">
                 {modpackPresets.map((p) => (
@@ -146,24 +143,24 @@ export function Navbar() {
           {/* Alternador de Idioma */}
           <button
             onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded bg-mc-card hover:bg-mc-surfaceHover border border-mc-border text-xs text-mc-text transition-colors"
+            className="flex items-center gap-1.5 px-2.5 h-8 rounded-[6px] bg-[#16181B] hover:bg-[#1E2125] border border-mc-border text-xs text-mc-text font-mono transition-colors"
             title="Mudar idioma / Switch language"
           >
-            <Globe className="w-3.5 h-3.5 text-mc-primary" />
+            <Globe className="w-3.5 h-3.5 text-mc-forge" />
             <span className="font-semibold uppercase">{lang}</span>
           </button>
 
-          {/* Botão de Compartilhar */}
+          {/* Botão de Compartilhar / Copiar Link */}
           <button
             onClick={handleCopy}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded font-medium text-xs transition-all shadow-mc-box border ${
+            className={`flex items-center gap-1.5 px-3 h-8 rounded-[6px] font-medium text-xs transition-all shadow-mc-box border ${
               copied
-                ? 'bg-mc-accent/20 border-mc-accent text-mc-accent'
-                : 'bg-mc-primary hover:bg-mc-primaryHover border-mc-primary text-mc-bg font-bold'
+                ? 'bg-mc-positive/20 border-mc-positive text-mc-positive'
+                : 'bg-mc-surface hover:bg-mc-card border-mc-border text-mc-text hover:border-mc-forge hover:text-mc-forge'
             }`}
           >
             {copied ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
-            <span className="hidden sm:inline">{copied ? t.copied : t.share}</span>
+            <span className="hidden sm:inline">{copied ? t.copied : (lang === 'pt' ? 'Copiar link' : t.share)}</span>
           </button>
         </div>
       </div>

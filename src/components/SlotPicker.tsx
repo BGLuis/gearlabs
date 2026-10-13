@@ -153,9 +153,9 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
   }
 
   return (
-    <div className="p-3 bg-mc-surface border border-mc-border rounded-lg shadow-sm">
+    <div className="p-3.5 bg-mc-surface border border-mc-border rounded-[10px] shadow-sm hover:border-mc-borderHover transition-colors">
       {/* Cabeçalho do Slot */}
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-2.5">
         <div className="flex items-center gap-2">
           <span className="text-xs font-bold text-mc-text uppercase tracking-wider font-mono">
             {slotLabels[slot][lang]}
@@ -413,47 +413,68 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
               />
             </div>
 
-            {/* Seletor de Grau (Grade) */}
-            <div className="flex items-center gap-1.5 bg-mc-bg border border-mc-border rounded px-2 py-1">
-              <span className="text-[10px] text-mc-muted font-mono">{lang === 'pt' ? 'Grau:' : 'Grade:'}</span>
-              <select
-                value={currentGrade}
-                onChange={(e) => {
-                  if (currentSelection) {
-                    setPartGrade(slot, e.target.value as Grade);
-                  }
-                }}
-                disabled={!currentSelection}
-                className="w-full bg-transparent text-mc-gold font-bold text-xs font-mono focus:outline-none cursor-pointer disabled:opacity-40"
-              >
-                {GRADES.map((g) => (
-                  <option key={g} value={g} className="bg-mc-surface text-mc-text">
-                    {g}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Controles de Grau e Carga Estelar Inline */}
+            <div className="sm:col-span-2 flex flex-wrap items-center justify-between gap-2 bg-[#121418] border border-mc-border rounded-[6px] px-2.5 py-1.5">
+              {/* Botões de Grau (Grade) */}
+              <div className="flex items-center gap-1 overflow-x-auto pb-0.5 sm:pb-0">
+                <span className="text-[10px] text-mc-mutedLight font-mono mr-1">
+                  {lang === 'pt' ? 'Grau:' : 'Grade:'}
+                </span>
+                {GRADES.filter((g) => g !== 'NONE').map((g) => {
+                  const isGSelected = currentGrade === g;
+                  return (
+                    <button
+                      key={g}
+                      onClick={() => {
+                        if (currentSelection) {
+                          setPartGrade(slot, isGSelected ? 'NONE' : g);
+                        }
+                      }}
+                      disabled={!currentSelection}
+                      className={`px-1.5 py-0.5 rounded-[4px] text-[10px] font-mono font-bold transition-colors ${
+                        isGSelected
+                          ? 'bg-mc-forge text-[#0E0F11] shadow-sm'
+                          : 'bg-[#16181B] hover:bg-[#1E2125] text-mc-mutedLight hover:text-mc-text border border-mc-border'
+                      } disabled:opacity-30`}
+                      title={`${lang === 'pt' ? 'Grau' : 'Grade'} ${g}`}
+                    >
+                      {g}
+                    </button>
+                  );
+                })}
+              </div>
 
-            {/* Seletor de Carga Estelar (Starcharge) */}
-            <div className="flex items-center gap-1.5 bg-mc-bg border border-mc-border rounded px-2 py-1">
-              <span className="text-[10px] text-mc-muted font-mono">{lang === 'pt' ? 'Carga:' : 'Charge:'}</span>
-              <select
-                value={currentStarcharge}
-                onChange={(e) => {
-                  if (currentSelection) {
-                    setPartMaterial(slot, currentSelection.materialId, currentGrade, Number(e.target.value) as StarchargeLevel);
-                  }
-                }}
-                disabled={!currentSelection}
-                className="w-full bg-transparent text-cyan-400 font-bold text-xs font-mono focus:outline-none cursor-pointer disabled:opacity-40"
-                title={lang === 'pt' ? 'Nível do Starlight Charger (Starcharged)' : 'Starlight Charger Level (Starcharged)'}
-              >
-                {STARCHARD_LEVELS.map(({ level, label }) => (
-                  <option key={level} value={level} className="bg-mc-surface text-mc-text">
-                    {label}
-                  </option>
-                ))}
-              </select>
+              {/* Botões de Carga Estelar (Starcharge) */}
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] text-mc-gold font-mono mr-0.5">★</span>
+                {STARCHARD_LEVELS.map(({ level, label }) => {
+                  const isLSelected = currentStarcharge === level;
+                  return (
+                    <button
+                      key={level}
+                      onClick={() => {
+                        if (currentSelection) {
+                          setPartMaterial(
+                            slot,
+                            currentSelection.materialId,
+                            currentGrade,
+                            level
+                          );
+                        }
+                      }}
+                      disabled={!currentSelection}
+                      className={`px-1.5 py-0.5 rounded-[4px] text-[10px] font-mono font-bold transition-colors ${
+                        isLSelected
+                          ? 'bg-mc-gold text-[#0E0F11] shadow-sm'
+                          : 'bg-[#16181B] hover:bg-[#1E2125] text-mc-mutedLight hover:text-mc-text border border-mc-border'
+                      } disabled:opacity-30`}
+                      title={`${lang === 'pt' ? 'Carga Estelar Nível' : 'Starcharge Level'} ${label}`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
