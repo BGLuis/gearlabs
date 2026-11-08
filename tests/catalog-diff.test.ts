@@ -236,6 +236,14 @@ describe('extractor CLI (#95)', () => {
     expect(report).toContain(`- \`${GONE}\` (autorizado)`);
   });
 
+  it('fails loudly when --allow-removed has no value', async () => {
+    const root = await buildInstance();
+    const run = spawnSync(TSX, [SCRIPT, '--instance', root, '--out', path.join(root, 'out'), '--allow-removed'], { encoding: 'utf-8' });
+    expect(run.status).not.toBe(0);
+    expect(run.stderr).toContain('--allow-removed precisa de um valor');
+    expect(fs.existsSync(path.join(root, 'out'))).toBe(false);
+  });
+
   it('writes "sem mudanças" for an identical catalog and exits 0', async () => {
     const root = await buildInstance();
     const out = path.join(root, 'out');

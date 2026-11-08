@@ -654,22 +654,22 @@ export function registerAtm11Version(outDir: string, plan: Atm11Publication, cat
   return next;
 }
 
+/** Valor de `--flag valor`; ausente devolve undefined, sem valor (ou outra flag no lugar) é erro. */
+function flagValue(argv: string[], flag: string): string | undefined {
+  const i = argv.indexOf(flag);
+  if (i === -1) return undefined;
+  const value = argv[i + 1];
+  if (!value || value.startsWith('--')) throw new Error(`${flag} precisa de um valor`);
+  return value;
+}
+
 async function main() {
   const projectRoot = path.resolve(__dirname, '..');
-  const outArgIdx = process.argv.indexOf('--out');
-  const outDir =
-    outArgIdx !== -1 && process.argv[outArgIdx + 1]
-      ? path.resolve(process.argv[outArgIdx + 1])
-      : path.resolve(projectRoot, 'public/data/versions');
-
-  const instanceArgIdx = process.argv.indexOf('--instance');
-  const instancePath =
-    instanceArgIdx !== -1 && process.argv[instanceArgIdx + 1]
-      ? path.resolve(process.argv[instanceArgIdx + 1])
-      : undefined;
-
-  const allowRemovedIdx = process.argv.indexOf('--allow-removed');
-  const allowRemovedArg = allowRemovedIdx !== -1 ? process.argv[allowRemovedIdx + 1] : undefined;
+  const outArg = flagValue(process.argv, '--out');
+  const outDir = outArg ? path.resolve(outArg) : path.resolve(projectRoot, 'public/data/versions');
+  const instanceArg = flagValue(process.argv, '--instance');
+  const instancePath = instanceArg ? path.resolve(instanceArg) : undefined;
+  const allowRemoved = parseAllowRemoved(flagValue(process.argv, '--allow-removed'));
 
   let baseMaterials: Record<string, Material>;
   let layers: Record<string, CatalogLayer>;
@@ -713,18 +713,21 @@ async function main() {
     publication.index,
     publication.id,
     { materials: resolvedMaterials },
-    parseAllowRemoved(allowRemovedArg)
+    allowRemoved
   );
-  if (!comparison) {
+  if (comparison) {
+    // o relatório vai antes do catálogo: uma falha aqui não deixa pasta de versão sem índice
+    const folder = path.join(outDir, VERSIONED_PRESET, publication.id);
+    fs.mkdirSync(folder, { recursive: true });
+    fs.writeFileSync(path.join(folder, 'catalog.diff.md'), comparison.report, 'utf-8');
+    const { added, removed, changed } = comparison.diff;
+    console.log(
+      `[extract-official-data] Diferenças contra ${comparison.previous}: +${added.length} -${removed.length} ~${changed.length} (catalog.diff.md)`
+    );
+  } else {
     console.log(`[extract-official-data] Sem versão anterior a ${publication.id} publicada: nenhum relatório de diferenças.`);
   }
   const atm11File = exportCatalog('atm11', resolvedMaterials, outDir, undefined, derivedGearTypes, baseMaterials, layers, addons, traits, source, publication.id);
-  if (comparison) {
-    fs.writeFileSync(path.join(path.dirname(atm11File), 'catalog.diff.md'), comparison.report, 'utf-8');
-    console.log(
-      `[extract-official-data] Diferenças contra ${comparison.previous}: +${comparison.diff.added.length} -${comparison.diff.removed.length} ~${comparison.diff.changed.length} (catalog.diff.md)`
-    );
-  }
   const index = registerAtm11Version(outDir, publication, atm11File);
   console.log(`[extract-official-data] atm11 index: latest ${index.latest}, ${index.versions.length} version(s)`);
 

@@ -110,14 +110,14 @@ export interface ReportContext {
   allowedRemoved?: string[];
 }
 
-const json = (value: unknown) => (value === undefined ? '_(ausente)_' : `\`${JSON.stringify(value)}\``);
-const trait = (ref?: MaterialTraitRef) => (ref ? `nível ${ref.level}${ref.conditions?.length ? `, condições ${JSON.stringify(ref.conditions)}` : ''}` : '');
+const fmtJson = (value: unknown) => (value === undefined ? '_(ausente)_' : `\`${JSON.stringify(value)}\``);
+const fmtTrait = (ref?: MaterialTraitRef) => (ref ? `nível ${ref.level}${ref.conditions?.length ? `, condições ${JSON.stringify(ref.conditions)}` : ''}` : '');
 
 function traitLine(c: TraitChange): string {
   const head = `trait \`${c.slot}\` \`${c.trait}\``;
-  if (c.kind === 'added') return `- ${head}: adicionado (${trait(c.after)})`;
-  if (c.kind === 'removed') return `- ${head}: removido (${trait(c.before)})`;
-  return `- ${head}: ${trait(c.before)} → ${trait(c.after)}`;
+  if (c.kind === 'added') return `- ${head}: adicionado (${fmtTrait(c.after)})`;
+  if (c.kind === 'removed') return `- ${head}: removido (${fmtTrait(c.before)})`;
+  return `- ${head}: ${fmtTrait(c.before)} → ${fmtTrait(c.after)}`;
 }
 
 export function isEmptyDiff(diff: CatalogDiff): boolean {
@@ -148,7 +148,7 @@ export function formatDiffReport(diff: CatalogDiff, ctx: ReportContext): string 
     for (const c of diff.changed) {
       lines.push(`<details><summary><code>${c.id}</code></summary>`, '');
       lines.push(...c.traits.map(traitLine));
-      lines.push(...c.fields.map((f) => `- \`${f.path}\`: ${json(f.before)} → ${json(f.after)}`));
+      lines.push(...c.fields.map((f) => `- \`${f.path}\`: ${fmtJson(f.before)} → ${fmtJson(f.after)}`));
       lines.push('', '</details>', '');
     }
   }
@@ -174,6 +174,16 @@ export class RemovalBlockedError extends Error {
   }
 }
 
+/** Por que a guarda barra: removidos fora de `allowRemoved` e ids autorizados que não foram removidos. */
+export function removalProblems(removed: string[], allowRemoved: string[]): string[] {
+  const blocked = removed.filter((id) => !allowRemoved.includes(id));
+  const unknown = allowRemoved.filter((id) => !removed.includes(id));
+  return [
+    ...(blocked.length ? [`materiais removidos sem autorização (use --allow-removed): ${blocked.join(', ')}`] : []),
+    ...(unknown.length ? [`--allow-removed cita ids que não foram removidos: ${unknown.join(', ')}`] : []),
+  ];
+}
+
 export interface CatalogComparison {
   previous: string;
   report: string;
@@ -193,14 +203,9 @@ export function compareWithPrevious(
   allowRemoved: string[]
 ): CatalogComparison | null {
   const entry = findPreviousVersion(index, nextId);
-  const unknownAllowed = (removed: string[]) => allowRemoved.filter((id) => !removed.includes(id));
   if (!entry) {
-    const unknown = unknownAllowed([]);
-    if (unknown.length) {
-      throw new RemovalBlockedError(
-        `--allow-removed cita ids que não foram removidos (não há versão anterior a ${nextId}): ${unknown.join(', ')}`
-      );
-    }
+    const reasons = removalProblems([], allowRemoved);
+    if (reasons.length) throw new RemovalBlockedError(`${reasons.join('\n')}\nNão há versão anterior a ${nextId}.`);
     return null;
   }
   const file = path.join(catalogDir, entry.folder, 'catalog.json');
@@ -210,14 +215,7 @@ export function compareWithPrevious(
   }
   const diff = diffCatalogs(previous, next);
   const report = formatDiffReport(diff, { previous: entry.id, next: nextId, allowedRemoved: allowRemoved });
-  const blocked = diff.removed.filter((id) => !allowRemoved.includes(id));
-  const unknown = unknownAllowed(diff.removed);
-  if (blocked.length || unknown.length) {
-    const reasons = [
-      blocked.length && `materiais removidos sem autorização (use --allow-removed): ${blocked.join(', ')}`,
-      unknown.length && `--allow-removed cita ids que não foram removidos: ${unknown.join(', ')}`,
-    ].filter(Boolean);
-    throw new RemovalBlockedError(`${reasons.join('\n')}\nNada foi gravado.\n\n${report}`);
-  }
+  const reasons = removalProblems(diff.removed, allowRemoved);
+  if (reasons.length) throw new RemovalBlockedError(`${reasons.join('\n')}\nNada foi gravado.\n\n${report}`);
   return { previous: entry.id, report, diff };
 }
