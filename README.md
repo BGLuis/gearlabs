@@ -35,7 +35,7 @@ Eu precisava de uma maneira de otimizar a criação de ligas para o Silent Gear 
 
 ### Requisitos
 
-- [Node.js](https://nodejs.org/) 18+ (testado no Node.js v26)
+- [Node.js](https://nodejs.org/) 24+ (testado no Node.js v26)
 - [npm](https://www.npmjs.com/)
 
 ### Instalação

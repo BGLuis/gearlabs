@@ -35,7 +35,7 @@ I needed a way to optimize alloy crafting for Silent Gear to find the best possi
 
 ### Requirements
 
-- [Node.js](https://nodejs.org/) 18+ (tested on Node.js v26)
+- [Node.js](https://nodejs.org/) 24+ (tested on Node.js v26)
 - [npm](https://www.npmjs.com/)
 
 ### Installation
