@@ -17,6 +17,7 @@ import {
   VersionCatalog,
   CatalogIndex,
 } from '../src/types/silentgear';
+import { RemovalBlockedError, compareWithPrevious, parseAllowRemoved } from './catalog-diff';
 import { readInstanceProvenance, resolveInstanceDirs, sha1OfFile } from './lib/instance';
 import { VERSIONED_PRESET, appendIndexEntry, isCatalogIndex, isValidVersionId } from '../src/lib/catalog-index';
 import {
@@ -667,6 +668,9 @@ async function main() {
       ? path.resolve(process.argv[instanceArgIdx + 1])
       : undefined;
 
+  const allowRemovedIdx = process.argv.indexOf('--allow-removed');
+  const allowRemovedArg = allowRemovedIdx !== -1 ? process.argv[allowRemovedIdx + 1] : undefined;
+
   let baseMaterials: Record<string, Material>;
   let layers: Record<string, CatalogLayer>;
   let resolvedMaterials: Record<string, Material>;
@@ -703,7 +707,24 @@ async function main() {
 
   // 3. Exportar modpack ATM11 em atm11/<versão do pack>/ e registrá-lo no índice
   const publication = planAtm11Publication(outDir, source);
+  // a guarda roda antes de qualquer escrita: remoção não autorizada aborta sem tocar no disco
+  const comparison = compareWithPrevious(
+    path.join(outDir, VERSIONED_PRESET),
+    publication.index,
+    publication.id,
+    { materials: resolvedMaterials },
+    parseAllowRemoved(allowRemovedArg)
+  );
+  if (!comparison) {
+    console.log(`[extract-official-data] Sem versão anterior a ${publication.id} publicada: nenhum relatório de diferenças.`);
+  }
   const atm11File = exportCatalog('atm11', resolvedMaterials, outDir, undefined, derivedGearTypes, baseMaterials, layers, addons, traits, source, publication.id);
+  if (comparison) {
+    fs.writeFileSync(path.join(path.dirname(atm11File), 'catalog.diff.md'), comparison.report, 'utf-8');
+    console.log(
+      `[extract-official-data] Diferenças contra ${comparison.previous}: +${comparison.diff.added.length} -${comparison.diff.removed.length} ~${comparison.diff.changed.length} (catalog.diff.md)`
+    );
+  }
   const index = registerAtm11Version(outDir, publication, atm11File);
   console.log(`[extract-official-data] atm11 index: latest ${index.latest}, ${index.versions.length} version(s)`);
 
@@ -715,7 +736,7 @@ async function main() {
 
 if (require.main === module) {
   main().catch((err) => {
-    console.error(err);
+    console.error(err instanceof RemovalBlockedError ? err.message : err);
     process.exit(1);
   });
 }

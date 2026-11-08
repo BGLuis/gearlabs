@@ -169,7 +169,7 @@ describe('extractor publishes immutable version folders', () => {
     const old: CatalogIndex = { latest: '0.11.1-beta', versions: [entry('0.11.1-beta')] };
     const { out, result } = await run([], (o) => {
       fs.mkdirSync(path.join(o, 'atm11/0.11.1-beta'), { recursive: true });
-      fs.writeFileSync(path.join(o, 'atm11/0.11.1-beta/catalog.json'), '{}');
+      fs.writeFileSync(path.join(o, 'atm11/0.11.1-beta/catalog.json'), '{"materials":{}}');
       fs.writeFileSync(path.join(o, 'atm11/index.json'), JSON.stringify(old));
     });
     expect(result.status).toBe(0);
