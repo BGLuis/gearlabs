@@ -15,6 +15,7 @@ import {
   MAX_UPGRADE_INSTANCES,
   syncPartInstancesWithCount,
 } from './parts';
+import { LEGACY_ATM11_VERSION, VERSIONED_PRESET, formatVersionKey } from './catalog-index';
 
 const MAX_INSTANCES_PER_PART = Math.max(MAX_UPGRADE_INSTANCES, 16);
 
@@ -36,7 +37,7 @@ interface SerializedPartState {
 }
 
 interface SerializedBuildState {
-  v: string; // versão (ex: "1.20.1")
+  v: string; // versão (ex: "1.20.1" ou "atm11@0.14.0-beta"; "atm11" sem versão só em links antigos)
   t: string; // tipo de item (ex: "sword")
   p: Record<string, SerializedPartState>; // partes
 }
@@ -162,8 +163,10 @@ export function decodeBuildFromHash(
       }
     }
 
+    // links de antes de #96 gravavam só "atm11", a única versão que existia então
+    const version = parsed.v === VERSIONED_PRESET ? formatVersionKey(VERSIONED_PRESET, LEGACY_ATM11_VERSION) : parsed.v;
     return {
-      version: parsed.v || '1.20.1',
+      version: version || '1.20.1',
       build: {
         gearTypeId: parsed.t,
         parts,

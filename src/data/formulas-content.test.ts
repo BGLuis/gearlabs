@@ -17,7 +17,9 @@ import {
 } from './formulas-content';
 import { GRADE_MULTIPLIERS, Grade, VersionCatalog } from '@/types/silentgear';
 import { SYNERGY_CONSTANTS, STARCHARGE_CONSTANTS, calculateGearStats } from '@/lib/calculator';
-import atm11Json from '../../public/data/versions/atm11/catalog.json';
+import { readLatestAtm11Catalog } from '../../tests/helpers/atm11-catalog';
+
+const atm11Json = readLatestAtm11Catalog();
 
 const atm11 = atm11Json as unknown as VersionCatalog;
 const liveSave = JSON.parse(

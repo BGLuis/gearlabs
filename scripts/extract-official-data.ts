@@ -15,7 +15,9 @@ import {
   StatOperation,
   TraitInfo,
   VersionCatalog,
+  CatalogIndex,
 } from '../src/types/silentgear';
+import { VERSIONED_PRESET, appendIndexEntry, isValidVersionId } from '../src/lib/catalog-index';
 import {
   OFFICIAL_GEAR_TYPES,
   OFFICIAL_TRAITS,
@@ -732,8 +734,10 @@ export function exportCatalog(
   layers?: Record<string, CatalogLayer>,
   addons?: AddonConfig[],
   traits: Record<string, TraitInfo> = OFFICIAL_TRAITS,
-  source?: CatalogSource
-) {
+  source?: CatalogSource,
+  /** pasta sob `targetDir/version`; vazia grava direto em `targetDir/version` */
+  versionFolder?: string
+): string {
   const catalog: VersionCatalog = {
     version,
     ...(sourceCommit && { sourceCommit }),
@@ -746,12 +750,58 @@ export function exportCatalog(
     traits,
   };
 
-  const dir = path.join(targetDir, version);
+  const dir = path.join(targetDir, version, ...(versionFolder ? [versionFolder] : []));
+  const file = path.join(dir, 'catalog.json');
   fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, 'catalog.json'), JSON.stringify(catalog, null, 2), 'utf-8');
+  fs.writeFileSync(file, JSON.stringify(catalog, null, 2), 'utf-8');
   console.log(
-    `[extract-official-data] Catalog saved for ${version} in ${dir}/catalog.json (${Object.keys(materials).length} materials)`
+    `[extract-official-data] Catalog saved for ${version} in ${file} (${Object.keys(materials).length} materials)`
   );
+  return file;
+}
+
+export interface Atm11Publication {
+  id: string;
+  dir: string;
+  index: CatalogIndex | null;
+}
+
+/**
+ * Valida, antes de qualquer escrita, que a versão do pack pode ser publicada: o id vem de
+ * `source.pack.version` e a pasta `atm11/<id>` não pode existir (versões publicadas são imutáveis).
+ */
+export function planAtm11Publication(outDir: string, source: CatalogSource | undefined): Atm11Publication {
+  const id = source?.pack.version;
+  if (!id) {
+    throw new Error('atm11 só é publicado com --instance: a versão do pack vem de source.pack.version');
+  }
+  if (!isValidVersionId(id)) {
+    throw new Error(`versão do pack inválida para nome de pasta: '${id}'`);
+  }
+  const dir = path.join(outDir, VERSIONED_PRESET, id);
+  if (fs.existsSync(dir)) {
+    throw new Error(`a versão ${id} já está publicada em ${dir}; versões publicadas nunca são reescritas`);
+  }
+  const indexFile = path.join(outDir, VERSIONED_PRESET, 'index.json');
+  const index = fs.existsSync(indexFile)
+    ? (JSON.parse(fs.readFileSync(indexFile, 'utf-8')) as CatalogIndex)
+    : null;
+  if (index?.versions.some((v) => v.id === id)) {
+    throw new Error(`a versão ${id} já consta em ${indexFile}`);
+  }
+  return { id, dir, index };
+}
+
+export function registerAtm11Version(
+  outDir: string,
+  plan: Atm11Publication,
+  catalogFile: string,
+  source: CatalogSource
+): CatalogIndex {
+  const sha1 = createHash('sha1').update(fs.readFileSync(catalogFile)).digest('hex');
+  const next = appendIndexEntry(plan.index, { id: plan.id, folder: plan.id, minecraft: source.minecraft, sha1 });
+  fs.writeFileSync(path.join(outDir, VERSIONED_PRESET, 'index.json'), JSON.stringify(next, null, 2) + '\n', 'utf-8');
+  return next;
 }
 
 async function main() {
@@ -802,8 +852,11 @@ async function main() {
   // 2. Derivar slots oficiais a partir das partes e hierarquia
   const derivedGearTypes = deriveGearTypes(OFFICIAL_GEAR_TYPES, projectRoot, customParts);
 
-  // 3. Exportar modpack ATM11 (apenas presets com dados próprios)
-  exportCatalog('atm11', resolvedMaterials, outDir, undefined, derivedGearTypes, baseMaterials, layers, addons, traits, source);
+  // 3. Exportar modpack ATM11 em atm11/<versão do pack>/ e registrá-lo no índice
+  const publication = planAtm11Publication(outDir, source);
+  const atm11File = exportCatalog('atm11', resolvedMaterials, outDir, undefined, derivedGearTypes, baseMaterials, layers, addons, traits, source, publication.id);
+  const index = registerAtm11Version(outDir, publication, atm11File, source!);
+  console.log(`[extract-official-data] atm11 index: latest ${index.latest}, ${index.versions.length} version(s)`);
 
   // 4. Exportar versão oficial 1.21.1 (apenas base Silent Gear, sem addons)
   exportCatalog('1.21.1', baseMaterials, outDir, SILENT_GEAR_COMMIT, derivedGearTypes, baseMaterials, {}, [], traits);
