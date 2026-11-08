@@ -29,6 +29,8 @@ export interface Probe {
   /** Trait do material, distinto por sonda (a comparação do jogo também lê os traits). */
   trait: string;
   dependencies: ProbeDependency[];
+  /** Ids de materiais do Silent Gear que a sonda sobrescreve (o jar do próprio Silent Gear também os define). */
+  overrides?: string[];
 }
 
 export interface Run {
@@ -39,12 +41,13 @@ export interface Run {
   kubegroovy?: boolean;
 }
 
-const probe = (modId: string, fileName: string, deps: ProbeDependency[] = []): Probe => ({
+const probe = (modId: string, fileName: string, deps: ProbeDependency[] = [], overrides: string[] = []): Probe => ({
   modId,
   fileName,
   label: modId === 'aaa_probe' ? 'Probe AAA' : 'Probe ZZZ',
   trait: modId === 'aaa_probe' ? 'silentgear:malleable' : 'silentgear:crushing',
   dependencies: deps,
+  overrides,
 });
 
 export const RUNS: Run[] = [
@@ -76,10 +79,11 @@ export const RUNS: Run[] = [
   },
   {
     run: 5,
-    description: 'Como o sgearmetalworks: zzz_probe declara silentgear com ordering AFTER; aaa_probe não declara nada.',
+    description:
+      'Como o sgearmetalworks: zzz_probe declara silentgear com ordering AFTER e sobrescreve silentgear:iron (que o jar do Silent Gear define); aaa_probe não declara nada.',
     probes: [
       probe('aaa_probe', 'aaa-probe-1.0.0.jar'),
-      probe('zzz_probe', 'zzz-probe-1.0.0.jar', [{ modId: 'silentgear', ordering: 'AFTER' }]),
+      probe('zzz_probe', 'zzz-probe-1.0.0.jar', [{ modId: 'silentgear', ordering: 'AFTER' }], ['iron']),
     ],
   },
   {
@@ -135,6 +139,9 @@ export async function buildProbeJar(run: Run, p: Probe): Promise<Buffer> {
   const date = new Date('2026-01-01T00:00:00Z');
   zip.file('META-INF/neoforge.mods.toml', modsToml(run, p), { date });
   zip.file(`data/silentgear/silentgear_materials/${MATERIAL_ID_FILE}`, materialJson(p.label, p.trait), { date });
+  for (const id of p.overrides ?? []) {
+    zip.file(`data/silentgear/silentgear_materials/${id}.json`, materialJson(`${p.label} ${id}`, p.trait), { date });
+  }
   return zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
 }
 

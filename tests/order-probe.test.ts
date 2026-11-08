@@ -52,6 +52,20 @@ describe('#106: gerador dos jars-sonda de ordem de camadas', () => {
     expect(await toml(1, 0)).not.toContain('[[dependencies.aaa_probe]]\nmodId="aaa_probe"');
   });
 
+  it('na rodada 5 zzz_probe também sobrescreve silentgear:iron, que o jar do Silent Gear já define', async () => {
+    const run = RUNS[4];
+    const zzz = run.probes.find((p) => p.modId === 'zzz_probe')!;
+    const zip = await JSZip.loadAsync(await buildProbeJar(run, zzz));
+    const iron = JSON.parse(await zip.file('data/silentgear/silentgear_materials/iron.json')!.async('string'));
+    expect(iron.display.name.text).toBe('Probe ZZZ iron');
+    for (const r of RUNS.filter((r) => r.run !== 5)) {
+      for (const p of r.probes) {
+        const z = await JSZip.loadAsync(await buildProbeJar(r, p));
+        expect(z.file('data/silentgear/silentgear_materials/iron.json')).toBeNull();
+      }
+    }
+  });
+
   it('a rodada 6 traz o material do KubeGroovy com índice próprio', () => {
     const files = kubegroovyFiles();
     expect(Object.keys(files).sort()).toEqual([
