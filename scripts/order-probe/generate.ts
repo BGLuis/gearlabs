@@ -112,18 +112,53 @@ function modsToml(run: Run, p: Probe): string {
   return lines.join('\n') + '\n';
 }
 
+/** Baseado no iron.json do Silent Gear 4.2.3: o jogo rejeita o material sem `equippable` e `part_substitutes`. */
 function materialJson(label: string, trait: string): string {
   return JSON.stringify(
     {
       type: 'silentgear:simple',
       parent: 'silentgear:empty',
-      crafting: { can_salvage: true, categories: ['metal', 'intermediate'], gear_type_blacklist: [], ingredient: 'minecraft:stick' },
-      display: { color: '#FFFFFFFF', main_texture_type: 'HIGH_CONTRAST', name: { text: label }, name_prefix: '' },
+      crafting: {
+        can_salvage: true,
+        categories: ['metal', 'intermediate'],
+        gear_type_blacklist: [],
+        ingredient: 'minecraft:stick',
+        part_substitutes: { 'silentgear:rod': 'minecraft:stick' },
+      },
+      display: {
+        color: '#FFFFFFFF',
+        equippable: {
+          always_use_tint: true,
+          asset_id: 'silentgear:generic_shiny',
+          compound_asset_id: 'silentgear:generic_shiny',
+          equip_sound: 'minecraft:item.armor.equip_generic',
+        },
+        main_texture_type: 'HIGH_CONTRAST',
+        name: { text: label },
+        name_prefix: '',
+      },
       properties: {
         'silentgear:main': {
-          durability: 100.0,
-          harvest_speed: 4.0,
-          attack_damage: 1.0,
+          armor: 15.0,
+          'armor/boots': 2.0,
+          'armor/chestplate': 6.0,
+          'armor/helmet': 2.0,
+          'armor/leggings': 5.0,
+          armor_durability: 15.0,
+          attack_damage: 2.0,
+          attack_speed: 0.0,
+          charging_value: 0.7,
+          draw_speed: 0.1,
+          durability: 250.0,
+          enchantment_value: 14.0,
+          harvest_speed: 6.0,
+          harvest_tier: { incorrect_blocks_for_tool: 'silentgear:incorrect_for_iron_tools', level_hint: '2', name: 'iron' },
+          magic_armor: 6.0,
+          magic_damage: 1.0,
+          projectile_accuracy: 1.1,
+          projectile_speed: 1.0,
+          ranged_damage: 1.0,
+          rarity: 20.0,
           traits: [{ conditions: [], level: 1, trait }],
         },
       },

@@ -32,6 +32,15 @@ describe('#106: gerador dos jars-sonda de ordem de camadas', () => {
     expect(names.size).toBe(run.probes.length);
   });
 
+  it('o material tem as chaves que o Silent Gear 4.2.3 exige (erro do jogo na rodada 1)', async () => {
+    const run = RUNS[0];
+    const zip = await JSZip.loadAsync(await buildProbeJar(run, run.probes[0]));
+    const json = JSON.parse(await zip.file('data/silentgear/silentgear_materials/order_probe.json')!.async('string'));
+    expect(json.display.equippable).toMatchObject({ asset_id: 'silentgear:generic_shiny', equip_sound: expect.any(String) });
+    expect(json.crafting.part_substitutes).toBeTypeOf('object');
+    expect(json.properties['silentgear:main'].harvest_tier).toMatchObject({ name: 'iron' });
+  });
+
   it('a rodada 2 inverte a ordem alfabética dos nomes de arquivo em relação à 1', () => {
     const files = (n: number) => RUNS[n - 1].probes.map((p) => [p.modId, p.fileName]);
     const r1 = files(1).sort((a, b) => a[0].localeCompare(b[0])).map((p) => p[1]);
