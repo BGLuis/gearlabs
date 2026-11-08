@@ -9,6 +9,7 @@ import {
 } from './defaultCatalog';
 import { ATM11_MATERIALS } from '../../tests/fixtures/atm11Materials';
 import { VersionCatalog } from '@/types/silentgear';
+import { latestAtm11CatalogPath } from '../../tests/helpers/atm11-catalog';
 
 // Cores oficiais do display.color (sem canal alfa #AARRGGBB -> #RRGGBB)
 // extraídas das fontes oficiais do mod Silent Gear 4.2.3 e ATM-11
@@ -119,7 +120,7 @@ describe('Tipos de Equipamento Manuais vs Partes Principais do Mod (Issue #39)',
 
 describe('atm11 preset vs published catalog source (#94)', () => {
   const published = JSON.parse(
-    fs.readFileSync(path.resolve(__dirname, '../../public/data/versions/atm11/catalog.json'), 'utf-8')
+    fs.readFileSync(latestAtm11CatalogPath(), 'utf-8')
   ) as VersionCatalog;
   // O catálogo publicado antes do #94 não tem `source`; o #98 publica um com ele.
   it.skipIf(!published.source)('preset minecraftVersion equals source.minecraft', () => {

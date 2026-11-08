@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { VersionCatalog } from '@/types/silentgear';
-import atm11Json from '../../public/data/versions/atm11/catalog.json';
+import { readLatestAtm11Catalog } from '../../tests/helpers/atm11-catalog';
+
+const atm11Json = readLatestAtm11Catalog();
 
 const traits = (atm11Json as unknown as VersionCatalog).traits;
 

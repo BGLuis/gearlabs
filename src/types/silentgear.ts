@@ -266,6 +266,22 @@ export interface VersionCatalog {
   traits: Record<string, TraitInfo>;
 }
 
+export interface CatalogIndexEntry {
+  /** versão do pack (ex.: `0.14.0-beta`), de `source.pack.version` */
+  id: string;
+  /** nome da pasta, relativo a `atm11/` */
+  folder: string;
+  minecraft: string;
+  /** SHA-1 do `catalog.json` da pasta */
+  sha1: string;
+}
+
+/** `public/data/versions/atm11/index.json`: versões publicadas, a mais nova primeiro. */
+export interface CatalogIndex {
+  latest: string;
+  versions: CatalogIndexEntry[];
+}
+
 export interface VersionPreset {
   id: string;
   name: string;

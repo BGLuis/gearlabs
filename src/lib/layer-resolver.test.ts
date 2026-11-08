@@ -1,8 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { resolveCatalogWithAddons, CANONICAL_LAYER_ORDER } from '@/lib/layer-resolver';
 import { calculateSynergy } from '@/lib/calculator';
-import atm11Catalog from '../../public/data/versions/atm11/catalog.json';
+import { readLatestAtm11Catalog } from '../../tests/helpers/atm11-catalog';
 import { Material, CatalogLayer } from '@/types/silentgear';
+
+const atm11Catalog = readLatestAtm11Catalog();
 
 describe('LayerResolver & Addon Management (Issue #47)', () => {
   const baseMaterials = atm11Catalog.baseMaterials as unknown as Record<string, Material>;

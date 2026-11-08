@@ -1,0 +1,11 @@
+{
+  "comment": "Hash gerado no d8b2fb5 (antes de #96) por encodeBuildToHash(build, 'atm11') com a build abaixo.",
+  "hash": "N4IgbiBcIIYC4FsCMSQBoRyiAzgdwHsAnAE3RAAcpQEYBLAO2pAWxzoBsBTBuAcy4wikEnRgICDMhj7YAyiAC+GIgTKQabTj36DhdVU0XGgA",
+  "build": {
+    "gearTypeId": "sword",
+    "parts": {
+      "main": { "materialId": "silentgear:diamond", "grade": "S" },
+      "rod": { "materialId": "silentgear:iron", "grade": "NONE" }
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import atm11Json from '../../public/data/versions/atm11/catalog.json';
+import { readAtm11Index, readLatestAtm11Catalog } from '../../tests/helpers/atm11-catalog';
 import { VersionCatalog } from '@/types/silentgear';
+
+const atm11Json = readLatestAtm11Catalog();
 
 /**
  * Auditoria #45: a lógica de carga do catálogo vive hoje dentro de GearProvider (efeitos do React),
@@ -46,7 +48,9 @@ describe('Auditoria #45: falha ao carregar o catalog.json não pode ser silencio
 
   it('carga bem-sucedida não tem erro e devolve o catálogo recebido', async () => {
     const { loadVersionCatalog } = await loadModule();
-    const result = await loadVersionCatalog('atm11', json(atm11));
+    const routed = (async (url: string) =>
+      url.endsWith('/index.json') ? json(readAtm11Index())() : json(atm11)()) as unknown as typeof fetch;
+    const result = await loadVersionCatalog('atm11', routed);
     expect(result.error).toBeFalsy();
     expect(Object.keys(result.catalog.materials)).toHaveLength(Object.keys(atm11.materials).length);
   });

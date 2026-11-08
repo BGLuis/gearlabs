@@ -2,7 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { encodeBuildToHash, decodeBuildFromHash } from './url-state';
 import { calculateGearStats } from './calculator';
 import { GearBuild, VersionCatalog } from '@/types/silentgear';
-import atm11Json from '../../public/data/versions/atm11/catalog.json';
+import { readLatestAtm11Catalog } from '../../tests/helpers/atm11-catalog';
+
+const atm11Json = readLatestAtm11Catalog();
 
 const atm11 = atm11Json as unknown as VersionCatalog;
 

@@ -1,4 +1,6 @@
 import { describe, it, expect } from 'vitest';
+import * as fs from 'fs';
+import * as path from 'path';
 import LZString from 'lz-string';
 import { encodeBuildToHash, decodeBuildFromHash } from './url-state';
 import { GearBuild } from '@/types/silentgear';
@@ -261,3 +263,40 @@ describe('url-state', () => {
   });
 });
 
+
+describe('url-state: versão fixa do pack (#96)', () => {
+  const build: GearBuild = {
+    gearTypeId: 'sword',
+    parts: { main: { materialId: 'silentgear:diamond', grade: 'S' }, rod: { materialId: 'silentgear:iron' } },
+  };
+
+  it('um link antigo com v: "atm11" é lido como atm11@0.11.1-beta (hash gerado no d8b2fb5)', () => {
+    const fixture = JSON.parse(
+      fs.readFileSync(path.resolve(__dirname, '../../tests/fixtures/url-state.pre-index.json'), 'utf-8')
+    );
+    const decoded = decodeBuildFromHash(fixture.hash);
+    expect(decoded?.version).toBe('atm11@0.11.1-beta');
+    expect(decoded?.build.gearTypeId).toBe('sword');
+    expect(decoded?.build.parts.main?.materialId).toBe('silentgear:diamond');
+  });
+
+  it('o hash antigo é o que o d8b2fb5 gerava para a build da fixture', () => {
+    const fixture = JSON.parse(
+      fs.readFileSync(path.resolve(__dirname, '../../tests/fixtures/url-state.pre-index.json'), 'utf-8')
+    );
+    expect(encodeBuildToHash(fixture.build, 'atm11')).toBe(fixture.hash);
+  });
+
+  it('o link novo grava v no formato atm11@<versão> e o decode devolve o mesmo valor', () => {
+    const hash = encodeBuildToHash(build, 'atm11@0.14.0-beta');
+    const payload = JSON.parse(LZString.decompressFromEncodedURIComponent(hash)!);
+    expect(payload.v).toBe('atm11@0.14.0-beta');
+    expect(decodeBuildFromHash(hash)?.version).toBe('atm11@0.14.0-beta');
+  });
+
+  it('presets 1.21.1 e 1.20.1 e catálogos importados não mudam', () => {
+    for (const v of ['1.21.1', '1.20.1', 'custom_x']) {
+      expect(decodeBuildFromHash(encodeBuildToHash(build, v))?.version).toBe(v);
+    }
+  });
+});

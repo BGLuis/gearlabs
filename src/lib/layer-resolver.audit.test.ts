@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { resolveCatalogWithAddons } from '@/lib/layer-resolver';
 import { CatalogLayer, Material } from '@/types/silentgear';
-import atm11Catalog from '../../public/data/versions/atm11/catalog.json';
+import { readLatestAtm11Catalog } from '../../tests/helpers/atm11-catalog';
+
+const atm11Catalog = readLatestAtm11Catalog();
 
 const baseMaterials = atm11Catalog.baseMaterials as unknown as Record<string, Material>;
 const layers = atm11Catalog.layers as unknown as Record<string, CatalogLayer>;

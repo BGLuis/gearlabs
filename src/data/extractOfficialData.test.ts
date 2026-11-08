@@ -5,10 +5,11 @@ import { execSync } from 'child_process';
 import { ATM11_CATALOG, OFFICIAL_GEAR_TYPES, VERSION_PRESETS } from './defaultCatalog';
 import { VersionCatalog } from '@/types/silentgear';
 import { deriveGearTypes } from '../../scripts/extract-official-data';
+import { latestAtm11CatalogPath } from '../../tests/helpers/atm11-catalog';
 
 describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issue #6)', () => {
   const projectRoot = path.resolve(__dirname, '../..');
-  const catalogPath = path.join(projectRoot, 'public/data/versions/atm11/catalog.json');
+  const catalogPath = latestAtm11CatalogPath();
   const tsvPath = path.join(projectRoot, 'tests/fixtures/material_export.atm11-0.9.0-beta.tsv');
 
   // O dump do jogo formata valores (ex.: "9x" para multiplicadores, "" para ausente)
@@ -164,7 +165,7 @@ describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issu
 
 describe('Derivação de Slots Opcionais por Tipo de Equipamento (Issue #63)', () => {
   const projectRoot = path.resolve(__dirname, '../..');
-  const catalogPath = path.join(projectRoot, 'public/data/versions/atm11/catalog.json');
+  const catalogPath = latestAtm11CatalogPath();
   const rawCatalog = fs.readFileSync(catalogPath, 'utf-8');
   const catalog: VersionCatalog = JSON.parse(rawCatalog);
 
@@ -263,8 +264,7 @@ describe('Derivação de Slots Opcionais por Tipo de Equipamento (Issue #63)', (
 });
 
 describe('Resolução de IDs aninhados e Herança de Parent (Issue #46)', () => {
-  const projectRoot = path.resolve(__dirname, '../..');
-  const catalogPath = path.join(projectRoot, 'public/data/versions/atm11/catalog.json');
+  const catalogPath = latestAtm11CatalogPath();
   const rawCatalog = fs.readFileSync(catalogPath, 'utf-8');
   const catalog: VersionCatalog = JSON.parse(rawCatalog);
 
@@ -359,7 +359,7 @@ describe('Resolução de IDs aninhados e Herança de Parent (Issue #46)', () => 
 
 describe('Resolução Oficial de Harvest Tier com level_hint (Issue #38)', () => {
   const projectRoot = path.resolve(__dirname, '../..');
-  const catalogPath = path.join(projectRoot, 'public/data/versions/atm11/catalog.json');
+  const catalogPath = latestAtm11CatalogPath();
   const rawCatalog = fs.readFileSync(catalogPath, 'utf-8');
   const catalog: VersionCatalog = JSON.parse(rawCatalog);
 

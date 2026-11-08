@@ -22,6 +22,7 @@ import {
   ATM11_CATALOG,
 } from '@/data/defaultCatalog';
 import { VersionCatalog, GearBuild, Material, MaterialStats } from '@/types/silentgear';
+import { latestAtm11CatalogPath } from '../../tests/helpers/atm11-catalog';
 
 const catalog: VersionCatalog = {
   version: '1.20.1',
@@ -30,7 +31,7 @@ const catalog: VersionCatalog = {
   traits: OFFICIAL_TRAITS,
 };
 
-const atm11CatalogPath = path.resolve(__dirname, '../../public/data/versions/atm11/catalog.json');
+const atm11CatalogPath = latestAtm11CatalogPath();
 const atm11Catalog: VersionCatalog = JSON.parse(fs.readFileSync(atm11CatalogPath, 'utf8'));
 
 describe('calculateGearStats', () => {
