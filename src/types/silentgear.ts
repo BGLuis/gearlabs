@@ -260,6 +260,7 @@ export interface VersionCatalog {
   source?: CatalogSource;
   materials: Record<string, Material>;
   baseMaterials?: Record<string, Material>;
+  /** a ordem das chaves é a ordem de carga (a última camada vence); o resolvedor depende dela */
   layers?: Record<string, CatalogLayer>;
   addons?: AddonConfig[];
   gearTypes: Record<string, GearType>;

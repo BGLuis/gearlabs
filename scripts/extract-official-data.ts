@@ -37,7 +37,17 @@ import { getGearTypeAncestors } from '../src/lib/gear-type-hierarchy';
 import { parseTraitJson, TraitLang } from '../src/lib/trait-parser';
 import { resolveCatalogWithAddons } from '../src/lib/layer-resolver';
 import { deriveLayerOrder, parseModsToml } from '../src/lib/layer-order';
-import { BASE_MOD_ID, findBaseJar, findScriptRoots, scanJars, splitMaterials } from './instance-layers';
+import {
+  BASE_MOD_ID,
+  dropShadowed,
+  findBaseJar,
+  findJsonFiles,
+  findScriptRoots,
+  parseMaterialFile,
+  readScriptRoot,
+  scanJars,
+  splitMaterials,
+} from './instance-layers';
 
 export const ATM_ADDONS: AddonConfig[] = [
   {
@@ -65,31 +75,6 @@ export const ATM_ADDONS: AddonConfig[] = [
 
 // Issue #38: extração oficial de harvest_tier respeitando level_hint
 export { formatMaterialName, normalizeColor, parseStatEntry, parseHarvestTier };
-
-export function parseMaterialFile(filePath: string): Material {
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const json = JSON.parse(content);
-  const mat = parseMaterialJson(filePath, json);
-  if (!mat) {
-    throw new Error(`[extract-official-data] Erro ao analisar material em ${filePath}`);
-  }
-  return mat;
-}
-
-function findJsonFiles(dir: string): string[] {
-  if (!fs.existsSync(dir)) return [];
-  const results: string[] = [];
-  const list = fs.readdirSync(dir, { withFileTypes: true });
-  for (const entry of list) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      results.push(...findJsonFiles(fullPath));
-    } else if (entry.isFile() && entry.name.endsWith('.json')) {
-      results.push(fullPath);
-    }
-  }
-  return results;
-}
 
 export interface ExtractedCatalogData {
   baseMaterials: Record<string, Material>;
@@ -483,62 +468,49 @@ export async function extractFromInstance(
     jar: baseJar.file,
   });
 
+  // um jar com materiais não pode ter o id de uma raiz de script: layers e addons são chaveados só pelo id
+  for (const root of scriptRoots) {
+    if (jarsById.get(root.id)?.hasMaterials) {
+      throw new Error(`[extract-official-data] o jar ${jarsById.get(root.id)!.file} tem o id da raiz de script ${root.id}`);
+    }
+  }
+
   // ids já definidos por camadas que carregam antes; um id repetido numa camada posterior a reescreve
   const known = new Set<string>();
+  const register = (layer: CatalogLayer, description: string, jar: string) => {
+    for (const matId of [...Object.keys(layer.materials ?? {}), ...Object.keys(layer.overrides ?? {})]) known.add(matId);
+    layers[layer.id] = layer;
+    addons.push({ id: layer.id, name: layer.name, version: layer.version, enabled: true, description, jar });
+  };
   let baseLoaded = false;
   for (const { id, kind } of loadOrder) {
     if (kind === 'jar' && id === BASE_MOD_ID) {
       mergeTraitData(baseData);
       Object.keys(baseMaterials).forEach((matId) => known.add(matId));
       baseLoaded = true;
-      continue;
-    }
-    const root = kind === 'script' ? rootsById.get(id) : undefined;
-    const jar = kind === 'jar' ? jarsById.get(id) : undefined;
-    let layer: CatalogLayer;
-    let description: string;
-    let jarName: string;
-    if (root) {
-      const incoming: Record<string, Material> = {};
-      for (const file of root.traitFiles) {
-        const [, ns, name] = file.match(/([^/]+)\/silentgear_traits\/(.+)\.json$/) ?? [];
-        rawTraits[`${ns}:${name}`] = JSON.parse(fs.readFileSync(file, 'utf-8'));
-        recordFile(file, { kind: 'script-data' });
-      }
-      for (const file of root.materialFiles) {
-        try {
-          const mat = parseMaterialFile(file);
-          mat.source = root.id;
-          incoming[mat.id] = mat;
-          recordFile(file, { kind: 'script-data' });
-        } catch (e) {
-          warn(`[extract-official-data] Erro ao ler ${root.id} ${file}: ${e}`);
-        }
-      }
-      layer = { id, name: root.name, version: 'dynamic', ...splitMaterials(incoming, known) };
-      description = `Dados de script ${root.id} do pack (${root.name}).`;
-      jarName = root.id;
-    } else if (jar?.hasMaterials) {
+    } else if (kind === 'script') {
+      const root = rootsById.get(id)!;
+      const { layer, traits } = readScriptRoot(root, known, { recordFile, warn });
+      Object.assign(rawTraits, traits);
+      register(layer, `Dados de script ${root.id} do pack (${root.name}).`, root.id);
+    } else if (jarsById.get(id)?.hasMaterials) {
+      const jar = jarsById.get(id)!;
       const data = await readJar(jar.file);
       mergeTraitData(data);
       let incoming = data.materials;
       if (!baseLoaded) {
-        // este jar carrega antes da base: nos ids que ela também define, a base vence
-        const shadowed = Object.keys(incoming).filter((matId) => matId in baseMaterials);
+        const { kept, shadowed } = dropShadowed(incoming, baseMaterials);
         if (shadowed.length > 0) {
           warn(`[extract-official-data] ${jar.file} carrega antes do ${BASE_MOD_ID}, que vence em: ${shadowed.join(', ')}`);
-          incoming = Object.fromEntries(Object.entries(incoming).filter(([matId]) => !shadowed.includes(matId)));
         }
+        incoming = kept;
       }
-      layer = { id, name: data.name, version: data.version, ...splitMaterials(incoming, known) };
-      description = `${data.name} extraído do jar ${jar.file}.`;
-      jarName = jar.file;
-    } else {
-      continue;
+      register(
+        { id, name: data.name, version: data.version, ...splitMaterials(incoming, known) },
+        `${data.name} extraído do jar ${jar.file}.`,
+        jar.file
+      );
     }
-    for (const matId of [...Object.keys(layer.materials ?? {}), ...Object.keys(layer.overrides ?? {})]) known.add(matId);
-    layers[id] = layer;
-    addons.push({ id, name: layer.name, version: layer.version, enabled: true, description, jar: jarName });
   }
 
   const enabledAddonIds = addons.map((a) => a.id).filter((id) => id !== BASE_MOD_ID);

@@ -181,6 +181,30 @@ describe('extractFromInstance: jars e pastas de script (#93)', () => {
     expect(addons.map((a) => a.id)).toEqual(['silentgear', 'kubegroovy']);
   });
 
+  it('um jar com materiais e o id de uma raiz de script é erro', async () => {
+    await expect(
+      extract({
+        jars: [silentgear, { file: 'k.jar', modId: 'kubejs', files: { 'data/k/silentgear_materials/m.json': material() } }],
+        scripts: { [`kubejs/${SCRIPT_MATS}/k.json`]: material() },
+      })
+    ).rejects.toThrow(/kubejs/);
+  });
+
+  it('o override carrega o parent do arquivo que reescreve o material', async () => {
+    const { layers } = await extract({
+      jars: [
+        silentgear,
+        {
+          file: 'metal.jar',
+          modId: 'metal',
+          after: ['silentgear'],
+          files: { 'data/silentgear/silentgear_materials/iron.json': { ...material(), parent: 'silentgear:gold' } },
+        },
+      ],
+    });
+    expect(layers.metal.overrides!['silentgear:iron'].parent).toBe('silentgear:gold');
+  });
+
   it('ciclo de ordem entre jars falha a extração nomeando os mods', async () => {
     await expect(
       extract({
