@@ -2,6 +2,7 @@ import { CatalogIndex, VersionCatalog } from '@/types/silentgear';
 import {
   VERSIONED_PRESET,
   indexUrl,
+  isCatalogIndex,
   isValidVersionId,
   parseVersionKey,
   versionCatalogUrl,
@@ -45,6 +46,7 @@ async function loadPackCatalog(pack: string | undefined, fetchFn: typeof fetch):
     return failure(`index.json do ${VERSIONED_PRESET} não encontrado (HTTP ${indexRes.status})`);
   }
   const index = indexRes.data;
+  if (!isCatalogIndex(index)) return failure(`index.json do ${VERSIONED_PRESET} está malformado`);
   const resolved: ResolvedPackVersion = { id: pack ?? index.latest, latest: index.latest, index };
   const entry = index.versions.find((v) => v.id === resolved.id);
   if (!entry) return failure(`versão '${resolved.id}' não está no índice do ${VERSIONED_PRESET}`, resolved);

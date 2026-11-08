@@ -133,7 +133,7 @@ export function Navbar() {
           </div>
 
           {/* Versões do pack: só no ATM11 e quando o índice publica mais de uma */}
-          {packInfo && packInfo.index.versions.length > 1 && (
+          {packInfo && (packInfo.index.versions.length > 1 || packInfo.id !== packInfo.latest) && (
             <div className="flex items-center bg-[#16181B] hover:bg-[#1E2125] px-2.5 h-8 rounded-[6px] border border-mc-border text-xs font-mono transition-colors">
               <select
                 aria-label={t.packVersion}

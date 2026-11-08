@@ -90,6 +90,13 @@ describe('loadVersionCatalog: versões do atm11 (#96)', () => {
     expect(result.resolved?.index).toEqual(INDEX);
   });
 
+  it('index.json malformado: erro claro e catálogo embutido', async () => {
+    const { fn } = fakeFetch({ '/data/versions/atm11/index.json': { latest: 'x' } });
+    const result = await loadVersionCatalog('atm11', fn);
+    expect(result.error).toContain('malformado');
+    expect(result.catalog).toBe(ATM11_CATALOG);
+  });
+
   it('pasta da versão com 404: erro visível', async () => {
     const { fn } = fakeFetch({ '/data/versions/atm11/index.json': INDEX });
     const result = await loadVersionCatalog('atm11', fn);

@@ -42,10 +42,25 @@ describe('published index.json', () => {
 });
 
 describe('version ids', () => {
-  it('compares major.minor.patch numerically and ignores the suffix', () => {
+  it('compares major.minor.patch numerically', () => {
     expect(compareVersionIds('0.14.0-beta', '0.9.0-beta')).toBeGreaterThan(0);
     expect(compareVersionIds('0.11.1-beta', '0.12.0-beta')).toBeLessThan(0);
-    expect(compareVersionIds('0.11.1-beta', '0.11.1')).toBe(0);
+    expect(compareVersionIds('0.11.1-beta', '0.11.1-beta')).toBe(0);
+  });
+
+  it('ranks a release above a prerelease of the same number', () => {
+    expect(compareVersionIds('0.12.0', '0.12.0-beta')).toBeGreaterThan(0);
+    expect(compareVersionIds('0.12.0-beta', '0.12.0')).toBeLessThan(0);
+    expect(compareVersionIds('0.12.0-beta.2', '0.12.0-beta.10')).toBeLessThan(0);
+  });
+
+  it('makes the final release latest after its beta, whichever order they were published', () => {
+    const beta = appendIndexEntry(null, entry('0.12.0-beta'));
+    expect(appendIndexEntry(beta, entry('0.12.0')).latest).toBe('0.12.0');
+    const final = appendIndexEntry(null, entry('0.12.0'));
+    const both = appendIndexEntry(final, entry('0.12.0-beta'));
+    expect(both.latest).toBe('0.12.0');
+    expect(both.versions.map((v) => v.id)).toEqual(['0.12.0', '0.12.0-beta']);
   });
 
   it('rejects ids that could leave the atm11 folder', () => {

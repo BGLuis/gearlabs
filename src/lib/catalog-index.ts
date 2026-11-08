@@ -13,20 +13,27 @@ export function isValidVersionId(id: string): boolean {
   return VERSION_ID.test(id) && !id.includes('..');
 }
 
-function numericParts(id: string): number[] {
-  const core = id.split('-')[0];
-  return core.split('.').map((n) => parseInt(n, 10) || 0);
+function splitVersionId(id: string): { core: number[]; suffix: string } {
+  const dash = id.indexOf('-');
+  const core = dash === -1 ? id : id.slice(0, dash);
+  return { core: core.split('.').map((n) => parseInt(n, 10) || 0), suffix: dash === -1 ? '' : id.slice(dash + 1) };
 }
 
-/** Compara major.minor.patch numericamente; o sufixo (`-beta`) é ignorado. */
+/**
+ * Compara major.minor.patch numericamente. Com o mesmo número, a release vence a pré-release
+ * (`0.12.0` > `0.12.0-beta`); entre sufixos diferentes vale a ordem natural do texto.
+ */
 export function compareVersionIds(a: string, b: string): number {
-  const pa = numericParts(a);
-  const pb = numericParts(b);
-  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-    const diff = (pa[i] ?? 0) - (pb[i] ?? 0);
+  const pa = splitVersionId(a);
+  const pb = splitVersionId(b);
+  for (let i = 0; i < Math.max(pa.core.length, pb.core.length); i++) {
+    const diff = (pa.core[i] ?? 0) - (pb.core[i] ?? 0);
     if (diff !== 0) return diff;
   }
-  return 0;
+  if (pa.suffix === pb.suffix) return 0;
+  if (pa.suffix === '') return 1;
+  if (pb.suffix === '') return -1;
+  return pa.suffix.localeCompare(pb.suffix, 'en', { numeric: true });
 }
 
 export function indexUrl(preset: string = VERSIONED_PRESET): string {
