@@ -66,6 +66,13 @@ I needed a way to optimize alloy crafting for Silent Gear to find the best possi
 - **Automated tests:** `npm test`
 - **Production build:** `npm run build && npm start`
 - **Extract official data:** `npm run extract-data`
+- **Check for ATM-11 changes:** `npm run check-remote -- check` (compares the ATM-11 `main` with the `latest` catalog)
+
+### The `check-atm11` workflow
+
+The `.github/workflows/check-atm11.yml` workflow runs every Monday (12:00 UTC) and on demand (`gh workflow run check-atm11.yml`). When the ATM-11 `main` differs from the `source` of the `latest` catalog, it opens an issue labelled `atm11-update` or comments on the one already open (only when the list of differences changes).
+
+GitHub disables scheduled workflows in public repositories after 60 days without activity. So the workflow fails, with a GitHub e-mail, when the last commit on the default branch is older than 50 days. To reactivate: push a commit to `main` (a small change is enough) and, if the workflow stays disabled, run `gh workflow enable check-atm11.yml` or use the **Enable workflow** button in the Actions tab.
 
 # 🤝 Contributors
 

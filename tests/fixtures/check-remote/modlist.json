@@ -1,0 +1,40 @@
+﻿{
+  "neoforge-26.1.2.126 (modloader)": {
+    "jarName": "neoforge-26.1.2.126 (modloader)",
+    "modId": "neoforge",
+    "name": "neoforge",
+    "version": "neoforge-26.1.2.126"
+  },
+  "AdvancedAE-26.1.7.jar": {
+    "jarName": "AdvancedAE-26.1.7.jar",
+    "modId": "advanced_ae",
+    "name": "Advanced AE",
+    "version": "26.1.7",
+    "curseForgeHash": 3047319314,
+    "modrinthHash": "1111111111111111111111111111111111111111"
+  },
+  "allthemodium-26.1.2-4.2.0.jar": {
+    "jarName": "allthemodium-26.1.2-4.2.0.jar",
+    "modId": "allthemodium",
+    "name": "AllTheModium",
+    "version": "26.1.2-4.2.0",
+    "curseForgeHash": 2056599235,
+    "modrinthHash": "be9e13b52981508c68ec6d3fc0746654596c8c2c"
+  },
+  "sgearmetalworks-26.1.2-1.6.0.jar": {
+    "jarName": "sgearmetalworks-26.1.2-1.6.0.jar",
+    "modId": "sgearmetalworks",
+    "name": "Silent Gear Metalworks",
+    "version": "26.1.2-1.6.0",
+    "curseForgeHash": 832645871,
+    "modrinthHash": "67e24157da6d6682752d1eebffc9b9267dc40481"
+  },
+  "silent-gear-26.1.2-neoforge-4.2.3.jar": {
+    "jarName": "silent-gear-26.1.2-neoforge-4.2.3.jar",
+    "modId": "silentgear",
+    "name": "Silent Gear",
+    "version": "4.2.3",
+    "curseForgeHash": 1641298151,
+    "modrinthHash": "f0e1d83ebb243990ffa3ceac22f807b016364fdf"
+  }
+}

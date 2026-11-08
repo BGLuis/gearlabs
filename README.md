@@ -66,6 +66,13 @@ Eu precisava de uma maneira de otimizar a criação de ligas para o Silent Gear 
 - **Testes automatizados:** `npm test`
 - **Build de produção:** `npm run build && npm start`
 - **Extração de dados oficiais:** `npm run extract-data`
+- **Verificar mudanças no ATM-11:** `npm run check-remote -- check` (compara a `main` do ATM-11 com o catálogo `latest`)
+
+### Workflow `check-atm11`
+
+O workflow `.github/workflows/check-atm11.yml` roda toda segunda-feira (12:00 UTC) e sob demanda (`gh workflow run check-atm11.yml`). Se a `main` do ATM-11 difere do `source` do catálogo `latest`, abre uma issue com o rótulo `atm11-update` ou comenta na que já está aberta (só quando a lista de diferenças muda).
+
+O GitHub desativa workflows agendados em repositório público após 60 dias sem atividade. Por isso o workflow falha, com e-mail do GitHub, se o último commit da branch padrão tiver mais de 50 dias. Para reativar: faça um commit na `main` (pode ser uma mudança pequena) e, se o workflow continuar desativado, rode `gh workflow enable check-atm11.yml` ou use o botão **Enable workflow** na aba Actions.
 
 # 🤝 Contribuidores
 
