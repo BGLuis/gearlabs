@@ -1,8 +1,6 @@
 import { CatalogLayer, Material } from '@/types/silentgear';
 import { resolveMaterialParents } from '@/lib/datapack-parser';
 
-export const CANONICAL_LAYER_ORDER = ['silentgems', 'sgearmetalworks', 'kubejs'];
-
 /**
  * Clona profundamente um material para evitar mutações indesejadas no catálogo base.
  */
@@ -31,12 +29,8 @@ export function resolveCatalogWithAddons(
     resolved[id] = cloned;
   }
 
-  // 2. Determinar a ordem de carga das camadas ativas
-  const layerKeys = Object.keys(layers);
-  const orderedLayers = [
-    ...CANONICAL_LAYER_ORDER.filter((k) => layerKeys.includes(k) && activeSet.has(k)),
-    ...layerKeys.filter((k) => !CANONICAL_LAYER_ORDER.includes(k) && activeSet.has(k)),
-  ];
+  // 2. A ordem de carga é a ordem das chaves de `layers`, gravada pelo extrator (ver layer-order.ts)
+  const orderedLayers = Object.keys(layers).filter((k) => activeSet.has(k));
 
   // 3. Aplicar cada camada ativa na ordem de precedência
   for (const layerId of orderedLayers) {

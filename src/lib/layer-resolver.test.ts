@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveCatalogWithAddons, CANONICAL_LAYER_ORDER } from '@/lib/layer-resolver';
+import { resolveCatalogWithAddons } from '@/lib/layer-resolver';
 import { calculateSynergy } from '@/lib/calculator';
 import { readLatestAtm11Catalog } from '../../tests/helpers/atm11-catalog';
 import { Material, CatalogLayer } from '@/types/silentgear';
@@ -107,7 +107,35 @@ describe('LayerResolver & Addon Management (Issue #47)', () => {
     expect(withBoth['sgearmetalworks:uru_metal']?.overriddenBy).toContain('kubejs');
   });
 
-  it('Ordem canônica das camadas é respeitada', () => {
-    expect(CANONICAL_LAYER_ORDER).toEqual(['silentgems', 'sgearmetalworks', 'kubejs']);
+  it('A ordem das camadas do catálogo atual é a de carga, e termina na camada de script', () => {
+    expect(Object.keys(layers)).toEqual(['silentgems', 'sgearmetalworks', 'kubejs']);
+  });
+
+  describe('ordem derivada (#93)', () => {
+    const mat = (trait: string): Material =>
+      ({
+        ...baseMaterials['silentgear:iron'],
+        id: 'silentgear:allthemodium',
+        traits: { main: [{ name: trait, level: 1 }] },
+      }) as Material;
+    const layer = (id: string, trait: string): CatalogLayer => ({
+      id,
+      name: id,
+      version: '1',
+      materials: { 'silentgear:allthemodium': mat(trait) },
+    });
+
+    it('a camada kubegroovy vence a do jar allthemodium no mesmo material', () => {
+      const ordered = { allthemodium: layer('allthemodium', 'jar'), kubegroovy: layer('kubegroovy', 'groovy') };
+      const resolved = resolveCatalogWithAddons(baseMaterials, ordered, ['allthemodium', 'kubegroovy']);
+      expect(resolved['silentgear:allthemodium'].traits.main![0].name).toBe('groovy');
+      expect(Object.keys(ordered).at(-1)).toBe('kubegroovy');
+    });
+
+    it('a ordem vem das chaves de layers, não do nome da camada', () => {
+      const flipped = { kubegroovy: layer('kubegroovy', 'groovy'), allthemodium: layer('allthemodium', 'jar') };
+      const resolved = resolveCatalogWithAddons(baseMaterials, flipped, ['allthemodium', 'kubegroovy']);
+      expect(resolved['silentgear:allthemodium'].traits.main![0].name).toBe('jar');
+    });
   });
 });
