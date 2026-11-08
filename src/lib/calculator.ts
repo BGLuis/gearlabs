@@ -441,6 +441,9 @@ export function calculateCompoundChargingValue(
 
 export const CRUDE_PROPERTY_MULTIPLIER = 0.8;
 
+/** Limites da propriedade attack_speed (GearProperties.java:195-201). */
+export const ATTACK_SPEED_LIMITS = { min: -3.9, max: 4.0 } as const;
+
 /**
  * Compõe as propriedades de um slot feito de múltiplos sub-materiais (liga ou tecido misto),
  * aplicando média ponderada e sinergia de SynergyUtils; a penalidade da liga crua vai em postMultiplier
@@ -1308,7 +1311,9 @@ export function calculateGearStats(
   const finalKnockbackResistance = Number((baseKnockback / 10).toFixed(2));
   const finalDamage = Number(baseDamage.toFixed(1));
   // Limites da propriedade attack_speed no Silent Gear (GearProperties.java: [-3.9, 4.0])
-  const finalAttackSpeed = Number(Math.min(4.0, Math.max(-3.9, baseAttackSpeed)).toFixed(2));
+  const finalAttackSpeed = Number(
+    Math.min(ATTACK_SPEED_LIMITS.max, Math.max(ATTACK_SPEED_LIMITS.min, baseAttackSpeed)).toFixed(2)
+  );
   const finalHarvestSpeed = Number(baseHarvestSpeed.toFixed(1));
   const finalDps = Number((finalDamage * finalAttackSpeed).toFixed(1));
 
