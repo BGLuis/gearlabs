@@ -3,6 +3,7 @@ import {
   addonsStorageKey,
   parseStoredAddons,
   loadActiveAddons,
+  addonsFromStorageEvent,
   saveActiveAddons,
   type AddonsStorage,
 } from './addons-state';
@@ -154,5 +155,42 @@ describe('saveActiveAddons', () => {
     const s = fakeStorage();
     saveActiveAddons(s, { ...target, pack: undefined }, ['a']);
     expect(s.writes).toEqual([]);
+  });
+});
+
+describe('addonsFromStorageEvent', () => {
+  const ev = (key: string | null, newValue: string | null) => ({ key, newValue });
+
+  it('applies a valid value written to the active version key, including []', () => {
+    expect(addonsFromStorageEvent(ev(V14, '["a","gone"]'), target)).toEqual(['a', 'gone']);
+    expect(addonsFromStorageEvent(ev(V14, '[]'), target)).toEqual([]);
+  });
+
+  it('ignores other versions, the inventory, the legacy key and clear()', () => {
+    expect(addonsFromStorageEvent(ev(V11, '["a"]'), target)).toBeNull();
+    expect(addonsFromStorageEvent(ev('gearlabs_inventory', '["a"]'), target)).toBeNull();
+    expect(addonsFromStorageEvent(ev(LEGACY, '["a"]'), target)).toBeNull();
+    expect(addonsFromStorageEvent(ev(null, null), target)).toBeNull();
+  });
+
+  it('ignores a removed key and invalid values', () => {
+    expect(addonsFromStorageEvent(ev(V14, null), target)).toBeNull();
+    expect(addonsFromStorageEvent(ev(V14, '{oops'), target)).toBeNull();
+    expect(addonsFromStorageEvent(ev(V14, '{"a":1}'), target)).toBeNull();
+    expect(addonsFromStorageEvent(ev(V14, '[1]'), target)).toBeNull();
+  });
+
+  it('ignores events while the catalog is in fallback', () => {
+    expect(addonsFromStorageEvent(ev(V14, '["a"]'), { ...target, catalogFailed: true })).toBeNull();
+  });
+
+  it('ignores atm11 without a resolved pack even though its key is the legacy one', () => {
+    expect(addonsFromStorageEvent(ev(LEGACY, '["a"]'), { ...target, pack: undefined })).toBeNull();
+  });
+
+  it('watches gearlabs_addons_<preset> for presets without an index', () => {
+    const t = { preset: '1.21.1', catalogFailed: false };
+    expect(addonsFromStorageEvent(ev('gearlabs_addons_1.21.1', '["b"]'), t)).toEqual(['b']);
+    expect(addonsFromStorageEvent(ev(V14, '["b"]'), t)).toBeNull();
   });
 });
