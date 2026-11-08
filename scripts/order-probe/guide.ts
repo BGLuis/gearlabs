@@ -20,6 +20,7 @@ const REAL_MODS = path.join(REAL_INSTANCE, 'minecraft', 'mods');
 const FIXTURES = path.resolve(__dirname, '../../tests/fixtures');
 const SILENT_GEAR_SHA1 = 'f0e1d83ebb243990ffa3ceac22f807b016364fdf';
 const BASE_JARS = ['silent-lib-26.1.2-neoforge-11.2.0.jar', 'silent-gear-26.1.2-neoforge-4.2.3.jar'];
+const DYNAMIC_DATA_SCRIPT = 'server_scripts/data/dynamic_data.groovy';
 const KUBEGROOVY_JAR = 'kubegroovy-neoforge-1.0.1+26.1.2-neoforge.jar';
 const PROBE_JAR = /^(aaa|zzz)-probe-.*\.jar$/;
 
@@ -73,6 +74,11 @@ function syncRun(mc: string, run: Run, jars: Map<string, Buffer>): void {
   fs.rmSync(path.join(mc, 'kubegroovy'), { recursive: true, force: true });
   if (run.kubegroovy) {
     fs.copyFileSync(path.join(REAL_MODS, KUBEGROOVY_JAR), path.join(mods, KUBEGROOVY_JAR));
+    // `dynamic_data/` não é recurso do KubeGroovy: é um script do ATM11 que lê o index.json e publica os arquivos.
+    // Copiado em tempo de execução (licença All Rights Reserved), nunca versionado.
+    const script = path.join(REAL_INSTANCE, 'minecraft/kubegroovy', DYNAMIC_DATA_SCRIPT);
+    fs.mkdirSync(path.dirname(path.join(mc, 'kubegroovy', DYNAMIC_DATA_SCRIPT)), { recursive: true });
+    fs.copyFileSync(script, path.join(mc, 'kubegroovy', DYNAMIC_DATA_SCRIPT));
     for (const [rel, content] of Object.entries(kubegroovyFiles())) {
       const target = path.join(mc, 'kubegroovy', rel);
       fs.mkdirSync(path.dirname(target), { recursive: true });
@@ -93,7 +99,7 @@ async function doRun(mc: string, run: Run): Promise<boolean> {
   const jars = new Map<string, Buffer>();
   for (const p of run.probes) jars.set(p.fileName, await buildProbeJar(run, p));
   syncRun(mc, run, jars);
-  console.log(`Copiei para mods/: ${[...jars.keys()].join(', ')}${run.kubegroovy ? ` e ${KUBEGROOVY_JAR}, e criei kubegroovy/dynamic_data/` : ''}.`);
+  console.log(`Copiei para mods/: ${[...jars.keys()].join(', ')}${run.kubegroovy ? ` e ${KUBEGROOVY_JAR}, e o script ${DYNAMIC_DATA_SCRIPT} do ATM11, e criei kubegroovy/dynamic_data/` : ''}.`);
   console.log('Agora, no jogo:\n  1. Abra a instância mínima no Prism (feche o jogo se já estava aberto).\n  2. Entre em um mundo criativo (pode reaproveitar o mesmo).\n  3. Rode /sgear_mats dump\n  4. Feche o jogo.');
   await pause('Quando fechar o jogo');
 

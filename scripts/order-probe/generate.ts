@@ -88,7 +88,7 @@ export const RUNS: Run[] = [
   },
   {
     run: 6,
-    description: 'Como a rodada 1, mais o mesmo material em kubegroovy/dynamic_data (instalar o jar do KubeGroovy).',
+    description: 'Como a rodada 1, mais o mesmo material em kubegroovy/dynamic_data, publicado pelo script dynamic_data.groovy do ATM11 (instalar o jar do KubeGroovy e esse script).',
     probes: [probe('aaa_probe', 'aaa-probe-1.0.0.jar'), probe('zzz_probe', 'zzz-probe-1.0.0.jar')],
     kubegroovy: true,
   },
