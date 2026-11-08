@@ -1,0 +1,15 @@
+{
+  "source": "/sgear_mats dump",
+  "file": "output/silentgear/material_export.tsv",
+  "instance": "All the Mods 11 - ATM11 (PrismLauncher)",
+  "packVersion": "0.14.0-beta (flame/manifest.json, instance.cfg e logs/latest.log da sessão que gerou o dump)",
+  "minecraft": "26.1.2",
+  "silentGearVersion": "4.2.3",
+  "addons": {
+    "silentgems": "5.1.4",
+    "sgearmetalworks": "1.6.0"
+  },
+  "generatedAt": "2026-11-08",
+  "sha256": "a021a7a19bf09400a424728610d14468050ca0e4fabc7a893bb58387e42401c3",
+  "note": "Arquivo gravado pelo próprio jogo (não gerado pelo extrator). Cabeçalho de colunas idêntico ao de material_export.atm11-0.9.0-beta.tsv. Para atualizar: rode o comando no jogo e copie o arquivo para tests/fixtures/material_export.atm11-0.14.0-beta.tsv."
+}
