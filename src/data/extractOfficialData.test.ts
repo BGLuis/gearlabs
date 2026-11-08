@@ -9,7 +9,7 @@ import { deriveGearTypes } from '../../scripts/extract-official-data';
 describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issue #6)', () => {
   const projectRoot = path.resolve(__dirname, '../..');
   const catalogPath = path.join(projectRoot, 'public/data/versions/atm11/catalog.json');
-  const tsvPath = path.join(projectRoot, 'tests/fixtures/material_export.tsv');
+  const tsvPath = path.join(projectRoot, 'tests/fixtures/material_export.atm11-0.9.0-beta.tsv');
 
   // O dump do jogo formata valores (ex.: "9x" para multiplicadores, "" para ausente)
   // Células "x0.5" ou "+2" são operações (multiplicador/soma), que o catálogo guarda como objeto: não comparáveis aqui
@@ -65,8 +65,8 @@ describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issu
     ]);
   });
 
-  it('Critério 3: para cada material Main do dump material_export.tsv, stats de armadura batem com o dump', () => {
-    expect(fs.existsSync(tsvPath), 'tests/fixtures/material_export.tsv deve existir').toBe(true);
+  it('Critério 3: para cada material Main do dump material_export.atm11-0.9.0-beta.tsv, stats de armadura batem com o dump', () => {
+    expect(fs.existsSync(tsvPath), 'tests/fixtures/material_export.atm11-0.9.0-beta.tsv deve existir').toBe(true);
     const content = fs.readFileSync(tsvPath, 'utf-8');
     const lines = content.trim().split('\n');
 

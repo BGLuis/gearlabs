@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import vitestConfig from '../vitest.config';
@@ -20,13 +21,20 @@ describe('Auditoria #31: licença coerente com a dependência mixbox (CC BY-NC 4
 });
 
 describe('Auditoria #49: fixture do dump do jogo', () => {
-  it('material_export.tsv tem proveniência registrada como dump de /sgear_mats do jogo', () => {
-    const metaPath = path.join(root, 'tests/fixtures/material_export.meta.json');
-    expect(fs.existsSync(metaPath)).toBe(true);
+  it.each([
+    ['atm11-0.9.0-beta', '0.9.0-beta'],
+    ['atm11-0.14.0-beta', '0.14.0-beta'],
+  ])('material_export.%s tem proveniência registrada como dump de /sgear_mats do jogo', (suffix, packVersion) => {
+    const base = path.join(root, `tests/fixtures/material_export.${suffix}`);
+    expect(fs.existsSync(`${base}.tsv`)).toBe(true);
+    expect(fs.existsSync(`${base}.meta.json`)).toBe(true);
 
-    const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+    const meta = JSON.parse(fs.readFileSync(`${base}.meta.json`, 'utf8'));
     expect(meta.source).toBe('/sgear_mats dump');
     expect(meta.silentGearVersion).toBe('4.2.3');
+    expect(meta.packVersion).toContain(packVersion);
+    const sha256 = createHash('sha256').update(fs.readFileSync(`${base}.tsv`)).digest('hex');
+    expect(meta.sha256).toBe(sha256);
   });
 });
 
