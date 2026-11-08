@@ -1,0 +1,50 @@
+name: check-atm11
+
+on:
+  schedule:
+    # segunda-feira 12:00 UTC (09:00 em Brasília), fora do topo da hora
+    - cron: '0 12 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # O GitHub desativa o schedule após 60 dias sem commits: falhar antes avisa por e-mail.
+      - name: Inactivity check
+        run: npm run check-remote -- inactivity
+
+      - name: Compare the ATM-11 main with the published catalog
+        id: check
+        run: npm run check-remote -- check --out "$RUNNER_TEMP/report.md"
+
+      - name: Open or update the atm11-update issue
+        if: steps.check.outputs.changed == 'true'
+        env:
+          HASH: ${{ steps.check.outputs.hash }}
+          REPORT: ${{ runner.temp }}/report.md
+        run: |
+          gh label create atm11-update --description "ATM-11 mudou algo que afeta o Silent Gear" --color fbca04 2>/dev/null || true
+          number=$(gh issue list --label atm11-update --state open --json number --jq '.[0].number // empty')
+          if [ -z "$number" ]; then
+            gh issue create --label atm11-update --title "ATM-11 mudou: atualizar o catálogo" --body-file "$REPORT"
+          elif gh issue view "$number" --json body,comments --jq '[.body, (.comments[].body)] | join("\n")' | grep -q "diff:$HASH "; then
+            echo "Issue #$number já registra este conjunto de diferenças."
+          else
+            gh issue comment "$number" --body-file "$REPORT"
+          fi
