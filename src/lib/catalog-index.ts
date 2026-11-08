@@ -39,21 +39,24 @@ export function versionCatalogUrl(entry: Pick<CatalogIndexEntry, 'folder'>, pres
 
 /** Separa a chave de versão do link: `atm11@0.14.0-beta` → preset + versão do pack. */
 export function parseVersionKey(key: string): { preset: string; pack?: string } {
-  const at = key.indexOf('@');
-  if (at === -1) return { preset: key };
-  return { preset: key.slice(0, at), pack: key.slice(at + 1) };
+  const prefix = `${VERSIONED_PRESET}@`;
+  if (!key.startsWith(prefix)) return { preset: key };
+  return { preset: VERSIONED_PRESET, pack: key.slice(prefix.length) };
 }
 
 export function formatVersionKey(preset: string, pack: string): string {
   return `${preset}@${pack}`;
 }
 
-/** `pack` ausente resolve `latest`. Lança se a versão não está no índice. */
-export function resolveVersionEntry(index: CatalogIndex, pack: string | undefined): CatalogIndexEntry {
-  const id = pack ?? index.latest;
-  const entry = index.versions.find((v) => v.id === id);
-  if (!entry) throw new Error(`versão '${id}' não está no índice do ${VERSIONED_PRESET}`);
-  return entry;
+export function isCatalogIndex(value: unknown): value is CatalogIndex {
+  const v = value as CatalogIndex | null;
+  return (
+    !!v &&
+    typeof v.latest === 'string' &&
+    Array.isArray(v.versions) &&
+    v.versions.every((e) => !!e && typeof e.id === 'string' && typeof e.folder === 'string') &&
+    v.versions.some((e) => e.id === v.latest)
+  );
 }
 
 /**

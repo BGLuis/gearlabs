@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useGear } from '@/context/GearContext';
-import { VERSIONED_PRESET } from '@/lib/catalog-index';
 import { GearTypeSidebar } from '@/components/GearTypeSidebar';
 import { BuildQuickStats } from '@/components/BuildQuickStats';
 import { GearCanvas } from '@/components/GearCanvas';
@@ -11,9 +10,7 @@ import { InlineOptimizerCard } from '@/components/InlineOptimizerCard';
 import { StatsPanel } from '@/components/StatsPanel';
 
 export default function HomePage() {
-  const { catalog, build, catalogError, statsError, lang, version, packInfo } = useGear();
-  const oldPackVersion =
-    version === VERSIONED_PRESET && packInfo && !catalogError && packInfo.id !== packInfo.latest ? packInfo : null;
+  const { catalog, build, catalogError, statsError, lang, outdatedPack: oldPackVersion } = useGear();
 
   const currentGearType = catalog.gearTypes[build.gearTypeId] || Object.values(catalog.gearTypes)[0];
   const requiredSlots = currentGearType?.requiredSlots || [];

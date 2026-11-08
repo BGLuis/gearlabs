@@ -80,6 +80,16 @@ describe('loadVersionCatalog: versões do atm11 (#96)', () => {
     expect(urls.some((u) => u.includes('..'))).toBe(false);
   });
 
+  it('falha de rede no catalog.json depois do índice carregado mantém o índice para o seletor', async () => {
+    const fn = (async (url: string) => {
+      if (url.endsWith('/index.json')) return { ok: true, status: 200, json: async () => INDEX } as Response;
+      throw new Error('offline');
+    }) as unknown as typeof fetch;
+    const result = await loadVersionCatalog('atm11@0.11.1-beta', fn);
+    expect(result.error).toContain('offline');
+    expect(result.resolved?.index).toEqual(INDEX);
+  });
+
   it('pasta da versão com 404: erro visível', async () => {
     const { fn } = fakeFetch({ '/data/versions/atm11/index.json': INDEX });
     const result = await loadVersionCatalog('atm11', fn);

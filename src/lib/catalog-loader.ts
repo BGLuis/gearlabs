@@ -4,7 +4,6 @@ import {
   indexUrl,
   isValidVersionId,
   parseVersionKey,
-  resolveVersionEntry,
   versionCatalogUrl,
 } from './catalog-index';
 import { ATM11_CATALOG } from '@/data/defaultCatalog';
@@ -23,8 +22,8 @@ export interface ResolvedPackVersion {
 export interface LoadedCatalog {
   catalog: VersionCatalog;
   error: string | null;
-  /** só para o preset versionado, e `null` quando o índice não carregou */
-  resolved?: ResolvedPackVersion | null;
+  /** só para o preset versionado; `null` nos demais e quando o índice não carregou */
+  resolved: ResolvedPackVersion | null;
 }
 
 async function fetchJson<T>(fetchFn: typeof fetch, url: string): Promise<{ data: T } | { status: number }> {
@@ -33,32 +32,33 @@ async function fetchJson<T>(fetchFn: typeof fetch, url: string): Promise<{ data:
   return { data: (await res.json()) as T };
 }
 
-function failure(error: string, resolved?: ResolvedPackVersion | null): LoadedCatalog {
-  return { catalog: ATM11_CATALOG, error, ...(resolved !== undefined && { resolved }) };
+function failure(error: string, resolved: ResolvedPackVersion | null = null): LoadedCatalog {
+  return { catalog: ATM11_CATALOG, error, resolved };
 }
 
 async function loadPackCatalog(pack: string | undefined, fetchFn: typeof fetch): Promise<LoadedCatalog> {
   if (pack !== undefined && !isValidVersionId(pack)) {
-    return failure(`versão inválida '${pack}' para o ${VERSIONED_PRESET}`, null);
+    return failure(`versão inválida '${pack}' para o ${VERSIONED_PRESET}`);
   }
   const indexRes = await fetchJson<CatalogIndex>(fetchFn, indexUrl());
   if (!('data' in indexRes)) {
-    return failure(`index.json do ${VERSIONED_PRESET} não encontrado (HTTP ${indexRes.status})`, null);
+    return failure(`index.json do ${VERSIONED_PRESET} não encontrado (HTTP ${indexRes.status})`);
   }
   const index = indexRes.data;
-  const id = pack ?? index.latest;
-  const resolved: ResolvedPackVersion = { id, latest: index.latest, index };
-  let entry;
+  const resolved: ResolvedPackVersion = { id: pack ?? index.latest, latest: index.latest, index };
+  const entry = index.versions.find((v) => v.id === resolved.id);
+  if (!entry) return failure(`versão '${resolved.id}' não está no índice do ${VERSIONED_PRESET}`, resolved);
+  // o índice já carregou: uma falha daqui em diante não pode esconder o seletor de versões
   try {
-    entry = resolveVersionEntry(index, pack);
+    const res = await fetchJson<VersionCatalog>(fetchFn, versionCatalogUrl(entry));
+    if (!('data' in res)) {
+      return failure(`catalog.json de '${VERSIONED_PRESET}@${resolved.id}' não encontrado (HTTP ${res.status})`, resolved);
+    }
+    return { catalog: res.data, error: null, resolved };
   } catch (err) {
-    return failure(err instanceof Error ? err.message : String(err), resolved);
+    const reason = err instanceof Error ? err.message : String(err);
+    return failure(`falha ao carregar o catalog.json de '${VERSIONED_PRESET}@${resolved.id}': ${reason}`, resolved);
   }
-  const res = await fetchJson<VersionCatalog>(fetchFn, versionCatalogUrl(entry));
-  if (!('data' in res)) {
-    return failure(`catalog.json de '${VERSIONED_PRESET}@${id}' não encontrado (HTTP ${res.status})`, resolved);
-  }
-  return { catalog: res.data, error: null, resolved };
 }
 
 /**

@@ -17,7 +17,7 @@ import {
   VersionCatalog,
   CatalogIndex,
 } from '../src/types/silentgear';
-import { VERSIONED_PRESET, appendIndexEntry, isValidVersionId } from '../src/lib/catalog-index';
+import { VERSIONED_PRESET, appendIndexEntry, isCatalogIndex, isValidVersionId } from '../src/lib/catalog-index';
 import {
   OFFICIAL_GEAR_TYPES,
   OFFICIAL_TRAITS,
@@ -750,7 +750,7 @@ export function exportCatalog(
     traits,
   };
 
-  const dir = path.join(targetDir, version, ...(versionFolder ? [versionFolder] : []));
+  const dir = path.join(targetDir, version, versionFolder ?? '');
   const file = path.join(dir, 'catalog.json');
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(file, JSON.stringify(catalog, null, 2), 'utf-8');
@@ -762,7 +762,7 @@ export function exportCatalog(
 
 export interface Atm11Publication {
   id: string;
-  dir: string;
+  minecraft: string;
   index: CatalogIndex | null;
 }
 
@@ -772,7 +772,7 @@ export interface Atm11Publication {
  */
 export function planAtm11Publication(outDir: string, source: CatalogSource | undefined): Atm11Publication {
   const id = source?.pack.version;
-  if (!id) {
+  if (!source || !id) {
     throw new Error('atm11 só é publicado com --instance: a versão do pack vem de source.pack.version');
   }
   if (!isValidVersionId(id)) {
@@ -783,23 +783,23 @@ export function planAtm11Publication(outDir: string, source: CatalogSource | und
     throw new Error(`a versão ${id} já está publicada em ${dir}; versões publicadas nunca são reescritas`);
   }
   const indexFile = path.join(outDir, VERSIONED_PRESET, 'index.json');
-  const index = fs.existsSync(indexFile)
-    ? (JSON.parse(fs.readFileSync(indexFile, 'utf-8')) as CatalogIndex)
-    : null;
+  let index: CatalogIndex | null = null;
+  if (fs.existsSync(indexFile)) {
+    const parsed: unknown = JSON.parse(fs.readFileSync(indexFile, 'utf-8'));
+    if (!isCatalogIndex(parsed)) {
+      throw new Error(`${indexFile} está malformado: esperado { latest, versions[] } com latest em versions`);
+    }
+    index = parsed;
+  }
   if (index?.versions.some((v) => v.id === id)) {
     throw new Error(`a versão ${id} já consta em ${indexFile}`);
   }
-  return { id, dir, index };
+  return { id, minecraft: source.minecraft, index };
 }
 
-export function registerAtm11Version(
-  outDir: string,
-  plan: Atm11Publication,
-  catalogFile: string,
-  source: CatalogSource
-): CatalogIndex {
+export function registerAtm11Version(outDir: string, plan: Atm11Publication, catalogFile: string): CatalogIndex {
   const sha1 = createHash('sha1').update(fs.readFileSync(catalogFile)).digest('hex');
-  const next = appendIndexEntry(plan.index, { id: plan.id, folder: plan.id, minecraft: source.minecraft, sha1 });
+  const next = appendIndexEntry(plan.index, { id: plan.id, folder: plan.id, minecraft: plan.minecraft, sha1 });
   fs.writeFileSync(path.join(outDir, VERSIONED_PRESET, 'index.json'), JSON.stringify(next, null, 2) + '\n', 'utf-8');
   return next;
 }
@@ -855,7 +855,7 @@ async function main() {
   // 3. Exportar modpack ATM11 em atm11/<versão do pack>/ e registrá-lo no índice
   const publication = planAtm11Publication(outDir, source);
   const atm11File = exportCatalog('atm11', resolvedMaterials, outDir, undefined, derivedGearTypes, baseMaterials, layers, addons, traits, source, publication.id);
-  const index = registerAtm11Version(outDir, publication, atm11File, source!);
+  const index = registerAtm11Version(outDir, publication, atm11File);
   console.log(`[extract-official-data] atm11 index: latest ${index.latest}, ${index.versions.length} version(s)`);
 
   // 4. Exportar versão oficial 1.21.1 (apenas base Silent Gear, sem addons)

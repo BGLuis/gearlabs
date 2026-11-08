@@ -47,6 +47,8 @@ interface GearContextType {
   setVersion: (v: string) => void;
   /** versão do pack resolvida pelo índice (só no preset ATM11, e só depois de carregar) */
   packInfo: ResolvedPackVersion | null;
+  /** o mesmo `packInfo` quando a versão carregada não é a mais recente; para o aviso da página */
+  outdatedPack: ResolvedPackVersion | null;
   setPackVersion: (id: string) => void;
   presets: VersionPreset[];
   catalog: VersionCatalog;
@@ -97,7 +99,9 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
   const [version, setVersionState] = useState<string>('atm11');
   // versão do pack pedida (link ou seletor); null = a mais recente do índice
   const [packVersion, setPackVersionState] = useState<string | null>(null);
-  const [packInfo, setPackInfo] = useState<ResolvedPackVersion | null>(null);
+  const [loadedPackInfo, setPackInfo] = useState<ResolvedPackVersion | null>(null);
+  // um `packInfo` de antes da troca de preset não vale para o preset atual
+  const packInfo = version === VERSIONED_PRESET ? loadedPackInfo : null;
   const [presets, setPresets] = useState<VersionPreset[]>(VERSION_PRESETS);
   const [rawCatalog, setRawCatalog] = useState<VersionCatalog>(ATM11_CATALOG);
   const [activeAddons, setActiveAddons] = useState<string[]>(() => {
@@ -306,18 +310,24 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
   // Atualizar URL de compartilhamento sempre que a build muda
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // o link grava sempre a versão do pack resolvida (atm11@<versão>), nunca só "atm11"
+      // o link grava sempre a versão do pack (atm11@<versão>), nunca só "atm11". Sem o índice
+      // resolvido vale a versão pedida pelo link; sem nenhuma das duas não há link para compartilhar.
       let versionKey = version;
       if (version === VERSIONED_PRESET) {
-        if (!packInfo) return;
-        versionKey = formatVersionKey(version, packInfo.id);
+        const pack = packInfo?.id ?? packVersion;
+        if (!pack) {
+          setShareUrl('');
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+          return;
+        }
+        versionKey = formatVersionKey(version, pack);
       }
       const hash = encodeBuildToHash(build, versionKey);
       const url = `${window.location.origin}${window.location.pathname}#${hash}`;
       setShareUrl(url);
       window.history.replaceState(null, '', `#${hash}`);
     }
-  }, [build, version, packInfo]);
+  }, [build, version, packInfo, packVersion]);
 
   const { stats, error: statsError } = React.useMemo(
     () => calculateGearStatsSafe(build, catalog),
@@ -677,6 +687,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         version,
         setVersion,
         packInfo,
+        outdatedPack: packInfo && !catalogError && packInfo.id !== packInfo.latest ? packInfo : null,
         setPackVersion,
         presets,
         catalog,

@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { useGear } from '@/context/GearContext';
 import { ImportModpackModal } from '@/components/ImportModpackModal';
 import { AddonSelector } from '@/components/AddonSelector';
-import { VERSIONED_PRESET } from '@/lib/catalog-index';
 import { Hammer, BookOpen, History, FlaskConical, Share2, Check, Globe } from 'lucide-react';
 
 export function Navbar() {
@@ -134,7 +133,7 @@ export function Navbar() {
           </div>
 
           {/* Versões do pack: só no ATM11 e quando o índice publica mais de uma */}
-          {version === VERSIONED_PRESET && packInfo && packInfo.index.versions.length > 1 && (
+          {packInfo && packInfo.index.versions.length > 1 && (
             <div className="flex items-center bg-[#16181B] hover:bg-[#1E2125] px-2.5 h-8 rounded-[6px] border border-mc-border text-xs font-mono transition-colors">
               <select
                 aria-label={t.packVersion}

@@ -6,9 +6,9 @@ import type { CatalogIndex } from '@/types/silentgear';
 import {
   appendIndexEntry,
   compareVersionIds,
+  isCatalogIndex,
   isValidVersionId,
   parseVersionKey,
-  resolveVersionEntry,
   LEGACY_ATM11_VERSION,
 } from './catalog-index';
 import { ATM11_DIR, readAtm11Index } from '../../tests/helpers/atm11-catalog';
@@ -55,10 +55,23 @@ describe('version ids', () => {
     expect(isValidVersionId('0.14.0-beta')).toBe(true);
   });
 
+  it('only splits the versioned preset, so other presets keep any @ they contain', () => {
+    expect(parseVersionKey('1.21.1@foo')).toEqual({ preset: '1.21.1@foo' });
+  });
+
   it('splits a version key into preset and pack version', () => {
     expect(parseVersionKey('atm11')).toEqual({ preset: 'atm11' });
     expect(parseVersionKey('atm11@0.14.0-beta')).toEqual({ preset: 'atm11', pack: '0.14.0-beta' });
     expect(parseVersionKey('1.21.1')).toEqual({ preset: '1.21.1' });
+  });
+});
+
+describe('isCatalogIndex', () => {
+  it('accepts a well-formed index and rejects broken ones', () => {
+    expect(isCatalogIndex({ latest: 'a', versions: [entry('a')] })).toBe(true);
+    expect(isCatalogIndex(null)).toBe(false);
+    expect(isCatalogIndex({ latest: 'a' })).toBe(false);
+    expect(isCatalogIndex({ latest: 'b', versions: [entry('a')] })).toBe(false);
   });
 });
 
@@ -93,22 +106,6 @@ describe('appendIndexEntry', () => {
     const copy = JSON.stringify(base);
     appendIndexEntry(base, entry('0.14.0-beta'));
     expect(JSON.stringify(base)).toBe(copy);
-  });
-});
-
-describe('resolveVersionEntry', () => {
-  const index: CatalogIndex = { latest: '0.14.0-beta', versions: [entry('0.14.0-beta'), entry('0.11.1-beta')] };
-
-  it('resolves latest when no pack version is given', () => {
-    expect(resolveVersionEntry(index, undefined).id).toBe('0.14.0-beta');
-  });
-
-  it('resolves a named version', () => {
-    expect(resolveVersionEntry(index, '0.11.1-beta').id).toBe('0.11.1-beta');
-  });
-
-  it('throws naming the missing version', () => {
-    expect(() => resolveVersionEntry(index, '9.9.9')).toThrow(/9\.9\.9/);
   });
 });
 
