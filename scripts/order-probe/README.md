@@ -2,6 +2,16 @@
 
 Experimento para saber qual regra o NeoForge 26.1.2 e o Silent Gear 4.2.3 usam quando dois mods definem o mesmo id em `silentgear_materials`: id do mod, nome do arquivo ou `ordering` das dependências. Os jars de teste são gerados, nunca versionados.
 
+## Caminho rápido: guia interativo
+
+```sh
+npx tsx scripts/order-probe/guide.ts            # as 6 rodadas
+npx tsx scripts/order-probe/guide.ts --only 5   # uma rodada
+npx tsx scripts/order-probe/guide.ts --from 3   # da 3 em diante
+```
+
+O guia pede o nome da instância mínima, copia os jars de base (conferindo o sha1 do `silent-gear`), troca os jars-sonda e o `kubegroovy/` a cada rodada, confere `logs/latest.log` e o dump, e grava `tests/fixtures/material_export.probe-106-runN.{tsv,meta.json}`. Só lê a instância `ATM 11`. O que ele não faz é abrir o jogo e rodar `/sgear_mats dump`. O resto deste arquivo é o passo a passo manual equivalente.
+
 ## Gerar os jars
 
 ```sh
