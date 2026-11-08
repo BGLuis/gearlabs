@@ -17,7 +17,7 @@ import { ExternalLink, FlaskConical, ListTree } from 'lucide-react';
 
 type Lang = 'pt' | 'en';
 
-const UI: Record<string, Localized> = {
+const UI = {
   title: { pt: 'Como o GearLabs calcula cada atributo', en: 'How GearLabs calculates each attribute' },
   subtitle: {
     pt: 'As fórmulas do Silent Gear 4.2.3, cada uma ligada ao arquivo e à linha do código do mod.',
@@ -52,7 +52,18 @@ const UI: Record<string, Localized> = {
   limitsTitle: { pt: 'O que o GearLabs ainda não modela', en: 'What GearLabs does not model yet' },
   noIssue: { pt: 'sem issue', en: 'no issue' },
   commitNote: { pt: 'Commit do Silent Gear lido', en: 'Silent Gear commit read' },
-};
+} as const satisfies Record<string, Localized>;
+
+/** O header fixo tem 56 px e, abaixo de md, mais a faixa de navegação (~49 px). */
+const ANCHOR_OFFSET = 'scroll-mt-28 md:scroll-mt-20';
+
+function SectionCard({ id, className = '', children }: { id: string; className?: string; children: React.ReactNode }) {
+  return (
+    <section id={id} className={`${ANCHOR_OFFSET} p-6 bg-mc-surface border rounded-xl shadow-sm space-y-3 ${className || 'border-mc-border'}`}>
+      {children}
+    </section>
+  );
+}
 
 const fmt = (n: number, lang: Lang, digits: number) => {
   const text = n.toFixed(digits);
@@ -163,7 +174,7 @@ export default function FormulasPage() {
 
         <div className="min-w-0 space-y-6">
           {sections.map((s) => (
-            <section key={s.id} id={s.id} className="scroll-mt-20 p-6 bg-mc-surface border border-mc-border rounded-xl shadow-sm space-y-3">
+            <SectionCard key={s.id} id={s.id}>
               <h2 className="text-lg font-bold text-mc-text">{s.title[lang]}</h2>
               {s.unobserved && (
                 <p className="inline-block px-2 py-0.5 rounded bg-mc-goldMuted border border-mc-gold/40 text-mc-gold text-xs font-mono">
@@ -179,10 +190,10 @@ export default function FormulasPage() {
                 ))}
               </div>
               <Sources refs={s.source} lang={lang} />
-            </section>
+            </SectionCard>
           ))}
 
-          <section id="mod-effects" className="scroll-mt-20 p-6 bg-mc-surface border border-mc-border rounded-xl shadow-sm space-y-3">
+          <SectionCard id="mod-effects">
             <h2 className="text-lg font-bold text-mc-text">{UI.tableTitle[lang]}</h2>
             <p className="text-sm text-mc-mutedLight">{UI.tableIntro[lang]}</p>
             <table className="hidden md:table w-full text-sm text-left border-collapse">
@@ -217,9 +228,9 @@ export default function FormulasPage() {
                 </li>
               ))}
             </ul>
-          </section>
+          </SectionCard>
 
-          <section id="worked-example" className="scroll-mt-20 p-6 bg-mc-surface border border-mc-forge/40 rounded-xl shadow-sm space-y-3">
+          <SectionCard id="worked-example" className="border-mc-forge/40">
             <h2 className="text-lg font-bold text-mc-text">{UI.exampleTitle[lang]}</h2>
             <p className="text-sm text-mc-mutedLight">{UI.exampleIntro[lang]}</p>
             <ol className="space-y-2">
@@ -233,10 +244,10 @@ export default function FormulasPage() {
                 </li>
               ))}
             </ol>
-          </section>
+          </SectionCard>
 
           {KNOWN_LIMITATIONS.length > 0 && (
-            <section id="limitations" className="scroll-mt-20 p-6 bg-mc-surface border border-mc-border rounded-xl shadow-sm space-y-3">
+            <SectionCard id="limitations">
               <h2 className="text-lg font-bold text-mc-text">{UI.limitsTitle[lang]}</h2>
               <ul className="space-y-2">
                 {KNOWN_LIMITATIONS.map((l) => (
@@ -257,7 +268,7 @@ export default function FormulasPage() {
                   </li>
                 ))}
               </ul>
-            </section>
+            </SectionCard>
           )}
 
           <p className="text-xs text-mc-muted font-mono">

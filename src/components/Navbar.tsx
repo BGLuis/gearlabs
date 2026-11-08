@@ -88,7 +88,7 @@ export function Navbar() {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1.5">{renderNavLinks(true)}</nav>
+          <nav aria-label={t.mainNav} className="hidden md:flex items-center gap-1.5">{renderNavLinks(true)}</nav>
         </div>
 
         {/* Controles da Direita */}

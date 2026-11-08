@@ -225,10 +225,10 @@ export interface ModElementEffect {
   sectionId: string;
 }
 
-const ALL_STATS = [...STATS_AFFECTED_BY_SYNERGY, 'attack_speed', 'rarity', 'harvest_tier'];
+const ALL_STATS = PROPERTY_KEYS.filter((key) => key !== 'traits' && key !== 'color');
 
 export const MOD_ELEMENT_EFFECTS: ModElementEffect[] = [
-  { id: 'material', element: { pt: 'Material', en: 'Material' }, affects: ALL_STATS, phase: 'material-properties', sectionId: 'pipeline' },
+  { id: 'material', element: { pt: 'Material', en: 'Material' }, affects: [...ALL_STATS], phase: 'material-properties', sectionId: 'pipeline' },
   { id: 'part', element: { pt: 'Parte', en: 'Part' }, affects: ['melee_damage', 'attack_speed', 'harvest_speed', 'rarity'], phase: 'part', sectionId: 'parts-and-types' },
   { id: 'grade', element: { pt: 'Grau', en: 'Grade' }, affects: [...STATS_AFFECTED_BY_SYNERGY], phase: 'material-modifiers', sectionId: 'grade' },
   { id: 'starcharge', element: { pt: 'Starcharge', en: 'Starcharge' }, affects: ['durability', 'armor', 'armor_durability', 'armor_toughness', 'magic_armor', 'enchantment_value', 'harvest_speed', 'melee_damage', 'ranged_damage'], phase: 'material-modifiers', sectionId: 'starcharge' },
