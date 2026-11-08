@@ -23,6 +23,7 @@ import {
 } from '@/data/defaultCatalog';
 import { calculateGearStatsSafe } from '@/lib/calculator';
 import { getDefaultInventory, loadVersionCatalog, ResolvedPackVersion } from '@/lib/catalog-loader';
+import { loadActiveAddons, saveActiveAddons } from '@/lib/addons-state';
 import { VERSIONED_PRESET, formatVersionKey, parseVersionKey } from '@/lib/catalog-index';
 import { resolveCatalogWithAddons } from '@/lib/layer-resolver';
 import { decodeBuildFromHash, encodeBuildToHash } from '@/lib/url-state';
@@ -170,31 +171,25 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
 
   // Carregar catálogo da versão selecionada
   useEffect(() => {
-    function setupCatalog(data: VersionCatalog) {
+    function setupCatalog(data: VersionCatalog, resolved: ResolvedPackVersion | null, failed: boolean) {
       setRawCatalog(data);
-
-      // Ler addons salvos no localStorage para esta versão ou usar defaults
-      let initialActive: string[] = [];
-      const savedAddons = typeof window !== 'undefined' ? localStorage.getItem(`gearlabs_addons_${version}`) : null;
-      if (savedAddons) {
-        try {
-          const parsed = JSON.parse(savedAddons);
-          if (Array.isArray(parsed)) {
-            initialActive = parsed;
-          }
-        } catch (e) {
-          console.error('Failed to parse saved addons', e);
-        }
-      } else if (data.addons) {
-        initialActive = data.addons.filter((a) => a.enabled !== false).map((a) => a.id);
-      }
-      setActiveAddons(initialActive);
+      const addons = data.addons || [];
+      setActiveAddons(
+        loadActiveAddons(localStorage, {
+          preset: version,
+          pack: resolved?.id,
+          catalogAddonIds: addons.map((a) => a.id),
+          defaults: addons.filter((a) => a.enabled !== false).map((a) => a.id),
+          knownVersions: resolved?.index.versions.map((v) => v.id) ?? [],
+          catalogFailed: failed,
+        })
+      );
     }
 
     if (customCatalogs[version]) {
       setCatalogError(null);
       setPackInfo(null);
-      setupCatalog(customCatalogs[version]);
+      setupCatalog(customCatalogs[version], null, false);
       return;
     }
 
@@ -207,7 +202,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
       if (cancelled) return;
       setPackInfo(resolved ?? null);
       setCatalogError(error);
-      setupCatalog(loaded);
+      setupCatalog(loaded, resolved ?? null, error !== null);
     }
     loadCatalog();
     return () => {
@@ -663,7 +658,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         ? prev.filter((id) => id !== addonId)
         : [...prev, addonId];
       if (typeof window !== 'undefined') {
-        localStorage.setItem(`gearlabs_addons_${version}`, JSON.stringify(next));
+        saveActiveAddons(localStorage, { preset: version, pack: packInfo?.id, catalogFailed: catalogError !== null }, next);
       }
       return next;
     });
@@ -675,7 +670,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         ? Array.from(new Set([...prev, addonId]))
         : prev.filter((id) => id !== addonId);
       if (typeof window !== 'undefined') {
-        localStorage.setItem(`gearlabs_addons_${version}`, JSON.stringify(next));
+        saveActiveAddons(localStorage, { preset: version, pack: packInfo?.id, catalogFailed: catalogError !== null }, next);
       }
       return next;
     });
