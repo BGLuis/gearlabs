@@ -1,9 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { createHash } from 'crypto';
 import JSZip from 'jszip';
 import {
   AddonConfig,
   CatalogLayer,
+  CatalogSource,
+  CatalogSourceFile,
   GearType,
   Material,
   MaterialCategory,
@@ -18,7 +21,6 @@ import {
   OFFICIAL_TRAITS,
 } from '../src/data/defaultCatalog';
 
-export const ATM11_COMMIT = '220614ecfacee7a4099696970471fe70ab7c72ed';
 export const SILENT_GEAR_COMMIT = 'cb9926f4a3215a2f6016e4b465d1029ce06251e4';
 
 import {
@@ -353,18 +355,107 @@ export async function extractDataFromJar(jarPath: string): Promise<JarExtraction
   };
 }
 
+export interface InstanceProvenance {
+  pack: CatalogSource['pack'];
+  minecraft: string;
+  loader: string;
+}
+
+export interface ExtractFromInstanceOptions {
+  now?: () => Date;
+  warn?: (message: string) => void;
+}
+
+// O caminho pode ser a raiz da instância do Prism (com `flame/`, `instance.cfg` e
+// `minecraft/`) ou a própria pasta `minecraft/` (formato aceito antes do #94).
+function resolveInstanceDirs(instancePath: string): { root: string; gameDir: string } {
+  const nested = path.join(instancePath, 'minecraft');
+  return fs.existsSync(nested)
+    ? { root: instancePath, gameDir: nested }
+    : { root: path.dirname(instancePath), gameDir: instancePath };
+}
+
+function readRequiredFile(file: string, what: string): string {
+  if (!fs.existsSync(file)) {
+    throw new Error(`[extract-official-data] ${what} não encontrado: ${file}`);
+  }
+  return fs.readFileSync(file, 'utf-8');
+}
+
+export function readInstanceProvenance(instancePath: string): InstanceProvenance {
+  const { root } = resolveInstanceDirs(instancePath);
+  const manifestPath = path.join(root, 'flame', 'manifest.json');
+  const cfgPath = path.join(root, 'instance.cfg');
+  const manifest = JSON.parse(readRequiredFile(manifestPath, 'flame/manifest.json'));
+  const cfg = readRequiredFile(cfgPath, 'instance.cfg');
+
+  const cfgInt = (key: string): number => {
+    const match = cfg.match(new RegExp(`^${key}=(\\d+)\\s*$`, 'm'));
+    if (!match) throw new Error(`[extract-official-data] ${key} ausente em ${cfgPath}`);
+    return Number(match[1]);
+  };
+  const loaders: Array<{ id: string; primary?: boolean }> = manifest.minecraft?.modLoaders ?? [];
+  const loader = (loaders.find((l) => l.primary) ?? loaders[0])?.id;
+  if (!manifest.name || !manifest.version || !manifest.minecraft?.version || !loader) {
+    throw new Error(
+      `[extract-official-data] ${manifestPath} sem name, version, minecraft.version ou modLoaders[].id`
+    );
+  }
+  return {
+    pack: {
+      name: manifest.name,
+      version: manifest.version,
+      curseforgeProjectId: cfgInt('ManagedPackID'),
+      curseforgeFileId: cfgInt('ManagedPackVersionID'),
+    },
+    minecraft: manifest.minecraft.version,
+    loader,
+  };
+}
+
+function formatIsoWithOffset(date: Date): string {
+  const pad = (n: number) => String(Math.abs(n)).padStart(2, '0');
+  const offset = -date.getTimezoneOffset();
+  const sign = offset >= 0 ? '+' : '-';
+  return (
+    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
+    `T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}` +
+    `${sign}${pad(Math.trunc(offset / 60))}:${pad(offset % 60)}`
+  );
+}
+
+// hashes SHA-1 que o Prism guarda em mods/.index/*.pw.toml, por nome de arquivo
+function readPrismIndexHashes(modsDir: string): Record<string, string> {
+  const indexDir = path.join(modsDir, '.index');
+  const hashes: Record<string, string> = {};
+  if (!fs.existsSync(indexDir)) return hashes;
+  for (const entry of fs.readdirSync(indexDir).filter((f) => f.endsWith('.pw.toml'))) {
+    const toml = fs.readFileSync(path.join(indexDir, entry), 'utf-8');
+    const filename = toml.match(/^filename\s*=\s*'([^']+)'/m)?.[1];
+    const hash = toml.match(/^hash\s*=\s*'([0-9a-f]+)'/m)?.[1];
+    const format = toml.match(/^hash-format\s*=\s*'([^']+)'/m)?.[1];
+    if (filename && hash && format === 'sha1') hashes[filename] = hash;
+  }
+  return hashes;
+}
+
 export async function extractFromInstance(
-  instancePath: string
+  instancePath: string,
+  options: ExtractFromInstanceOptions = {}
 ): Promise<
   ExtractedCatalogData & {
     addons: AddonConfig[];
     jarParts?: Record<string, RawPartData>;
     traits: Record<string, TraitInfo>;
+    source: CatalogSource;
   }
 > {
-  const modsDir = path.join(instancePath, 'mods');
-  const kubejsDir = path.join(instancePath, 'kubejs/dynamic_data');
-  const kubejsAltDir = path.join(instancePath, 'kubejs/data');
+  const provenance = readInstanceProvenance(instancePath);
+  const { root, gameDir } = resolveInstanceDirs(instancePath);
+  const warn = options.warn ?? ((message: string) => console.warn(message));
+  const modsDir = path.join(gameDir, 'mods');
+  const kubejsDir = path.join(gameDir, 'kubejs/dynamic_data');
+  const kubejsAltDir = path.join(gameDir, 'kubejs/data');
 
   if (!fs.existsSync(modsDir)) {
     throw new Error(`[extract-official-data] Pasta mods não encontrada na instância: ${modsDir}`);
@@ -374,6 +465,33 @@ export async function extractFromInstance(
   const sgJar = modFiles.find((f) => f.includes('silent-gear') || f.includes('silentgear'));
   const smwJar = modFiles.find((f) => f.includes('sgearmetalworks'));
   const gemsJar = modFiles.find((f) => f.includes('silentgems') || f.includes('silent-gems'));
+
+  const files: CatalogSourceFile[] = [];
+  const prismHashes = readPrismIndexHashes(modsDir);
+  const recordFile = (file: string, entry: Omit<CatalogSourceFile, 'path' | 'sha1'>) => {
+    const sha1 = createHash('sha1').update(fs.readFileSync(file)).digest('hex');
+    const expected = prismHashes[path.basename(file)];
+    if (entry.kind === 'jar' && expected && expected !== sha1) {
+      warn(
+        `[extract-official-data] ${path.basename(file)} difere do .index do Prism: arquivo ${sha1}, .index ${expected}. Gravando o hash do arquivo lido.`
+      );
+    }
+    files.push({ path: path.relative(root, file).split(path.sep).join('/'), ...entry, sha1 });
+  };
+  // só entram em source.files os jars que de fato geraram materiais, traits ou lang
+  const readJar = async (jarFile: string): Promise<JarExtractionResult> => {
+    const jarPath = path.join(modsDir, jarFile);
+    const data = await extractDataFromJar(jarPath);
+    const produced =
+      Object.keys(data.materials).length +
+        Object.keys(data.overrides).length +
+        Object.keys(data.rawTraits).length +
+        Object.keys(data.lang.en).length +
+        Object.keys(data.lang.pt).length >
+      0;
+    if (produced) recordFile(jarPath, { kind: 'jar', modId: data.id, version: data.version });
+    return data;
+  };
 
   let baseMaterials: Record<string, Material> = {};
   let jarParts: Record<string, RawPartData> = {};
@@ -388,7 +506,7 @@ export async function extractFromInstance(
   };
 
   if (sgJar) {
-    const sgData = await extractDataFromJar(path.join(modsDir, sgJar));
+    const sgData = await readJar(sgJar);
     mergeTraitData(sgData);
     baseMaterials = resolveMaterialParents(sgData.materials);
     jarParts = sgData.parts;
@@ -403,7 +521,7 @@ export async function extractFromInstance(
   }
 
   if (gemsJar) {
-    const gemsData = await extractDataFromJar(path.join(modsDir, gemsJar));
+    const gemsData = await readJar(gemsJar);
     mergeTraitData(gemsData);
     layers['silentgems'] = {
       id: 'silentgems',
@@ -422,7 +540,7 @@ export async function extractFromInstance(
   }
 
   if (smwJar) {
-    const smwData = await extractDataFromJar(path.join(modsDir, smwJar));
+    const smwData = await readJar(smwJar);
     mergeTraitData(smwData);
     layers['sgearmetalworks'] = {
       id: 'sgearmetalworks',
@@ -452,12 +570,16 @@ export async function extractFromInstance(
     const kubejsOverrides: Record<string, Partial<Material>> = {};
     for (const file of findJsonFiles(activeKubeDir).filter((f) => f.includes('/silentgear_traits/'))) {
       const [, ns, name] = file.replace(/\\/g, '/').match(/([^/]+)\/silentgear_traits\/(.+)\.json$/) ?? [];
-      if (ns && name) rawTraits[`${ns}:${name}`] = JSON.parse(fs.readFileSync(file, 'utf-8'));
+      if (ns && name) {
+        rawTraits[`${ns}:${name}`] = JSON.parse(fs.readFileSync(file, 'utf-8'));
+        recordFile(file, { kind: 'script-data' });
+      }
     }
     const kubejsFiles = findJsonFiles(activeKubeDir).filter((f) => f.includes('/silentgear_materials/'));
     for (const file of kubejsFiles) {
       try {
         const mat = parseMaterialFile(file);
+        recordFile(file, { kind: 'script-data' });
         if (mat.id.startsWith('sgearmetalworks:')) {
           kubejsOverrides[mat.id] = {
             stats: mat.stats,
@@ -502,6 +624,11 @@ export async function extractFromInstance(
     traits: Object.fromEntries(
       Object.entries(rawTraits).map(([id, json]) => [id, parseTraitJson(id, json, lang, OFFICIAL_TRAITS[id])])
     ),
+    source: {
+      ...provenance,
+      files: files.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0)),
+      extractedAt: formatIsoWithOffset((options.now ?? (() => new Date()))()),
+    },
   };
 }
 
@@ -604,11 +731,13 @@ export function exportCatalog(
   baseMaterials?: Record<string, Material>,
   layers?: Record<string, CatalogLayer>,
   addons?: AddonConfig[],
-  traits: Record<string, TraitInfo> = OFFICIAL_TRAITS
+  traits: Record<string, TraitInfo> = OFFICIAL_TRAITS,
+  source?: CatalogSource
 ) {
   const catalog: VersionCatalog = {
     version,
     ...(sourceCommit && { sourceCommit }),
+    ...(source && { source }),
     materials,
     ...(baseMaterials && { baseMaterials }),
     ...(layers && { layers }),
@@ -627,7 +756,11 @@ export function exportCatalog(
 
 async function main() {
   const projectRoot = path.resolve(__dirname, '..');
-  const outDir = path.resolve(projectRoot, 'public/data/versions');
+  const outArgIdx = process.argv.indexOf('--out');
+  const outDir =
+    outArgIdx !== -1 && process.argv[outArgIdx + 1]
+      ? path.resolve(process.argv[outArgIdx + 1])
+      : path.resolve(projectRoot, 'public/data/versions');
 
   const instanceArgIdx = process.argv.indexOf('--instance');
   const instancePath =
@@ -641,6 +774,7 @@ async function main() {
   let addons = ATM_ADDONS;
   let customParts: Record<string, RawPartData> | undefined;
   let traits: Record<string, TraitInfo> | undefined;
+  let source: CatalogSource | undefined;
 
   if (instancePath) {
     console.log(`[extract-official-data] Extraindo dados da instância oficial: ${instancePath}`);
@@ -652,6 +786,7 @@ async function main() {
     addons = instanceData.addons.filter((addon) => addon.id !== 'silentgear');
     customParts = instanceData.jarParts;
     traits = instanceData.traits;
+    source = instanceData.source;
   } else {
     console.log(`[extract-official-data] Extraindo dados oficiais para: ${outDir}`);
     const extracted = extractOfficialCatalogData(projectRoot);
@@ -668,7 +803,7 @@ async function main() {
   const derivedGearTypes = deriveGearTypes(OFFICIAL_GEAR_TYPES, projectRoot, customParts);
 
   // 3. Exportar modpack ATM11 (apenas presets com dados próprios)
-  exportCatalog('atm11', resolvedMaterials, outDir, ATM11_COMMIT, derivedGearTypes, baseMaterials, layers, addons, traits);
+  exportCatalog('atm11', resolvedMaterials, outDir, undefined, derivedGearTypes, baseMaterials, layers, addons, traits, source);
 
   // 4. Exportar versão oficial 1.21.1 (apenas base Silent Gear, sem addons)
   exportCatalog('1.21.1', baseMaterials, outDir, SILENT_GEAR_COMMIT, derivedGearTypes, baseMaterials, {}, [], traits);
