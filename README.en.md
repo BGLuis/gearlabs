@@ -67,6 +67,7 @@ I needed a way to optimize alloy crafting for Silent Gear to find the best possi
 - **Production build:** `npm run build && npm start`
 - **Extract official data:** `npm run extract-data`
 - **Check for ATM-11 changes:** `npm run check-remote -- check` (compares the ATM-11 `main` with the `latest` catalog)
+- **Compare the Prism instance with the catalog:** `npm run check-updates -- --instance <folder>` (accepts the instance root or `minecraft/`; exits 0 when up to date, 2 on a difference and 1 on error; writes nothing)
 
 ### The `check-atm11` workflow
 
