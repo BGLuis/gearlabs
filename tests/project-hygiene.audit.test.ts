@@ -36,6 +36,12 @@ describe('Auditoria #49: fixture do dump do jogo', () => {
     const sha256 = createHash('sha256').update(fs.readFileSync(`${base}.tsv`)).digest('hex');
     expect(meta.sha256).toBe(sha256);
   });
+
+  it('os dois dumps do jogo têm o mesmo cabeçalho de colunas', () => {
+    const header = (suffix: string) =>
+      fs.readFileSync(path.join(root, `tests/fixtures/material_export.${suffix}.tsv`), 'utf8').split('\n', 1)[0];
+    expect(header('atm11-0.14.0-beta')).toBe(header('atm11-0.9.0-beta'));
+  });
 });
 
 describe('Infra de testes', () => {

@@ -65,8 +65,8 @@ describe('Sincronização do Catálogo ATM11 com Datagen Oficial e Modpack (Issu
     ]);
   });
 
-  it('Critério 3: para cada material Main do dump material_export.atm11-0.9.0-beta.tsv, stats de armadura batem com o dump', () => {
-    expect(fs.existsSync(tsvPath), 'tests/fixtures/material_export.atm11-0.9.0-beta.tsv deve existir').toBe(true);
+  it(`Critério 3: para cada material Main do dump de jogo (${path.basename(tsvPath)}), stats de armadura batem com o dump`, () => {
+    expect(fs.existsSync(tsvPath), `${path.basename(tsvPath)} deve existir em tests/fixtures`).toBe(true);
     const content = fs.readFileSync(tsvPath, 'utf-8');
     const lines = content.trim().split('\n');
 
