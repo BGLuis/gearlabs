@@ -1,6 +1,12 @@
 {
-  "latest": "0.11.1-beta",
+  "latest": "0.14.0-beta",
   "versions": [
+    {
+      "id": "0.14.0-beta",
+      "folder": "0.14.0-beta",
+      "minecraft": "26.1.2",
+      "sha1": "cf43fe6d24fdfd74fee57ad19619df5246eddfbb"
+    },
     {
       "id": "0.11.1-beta",
       "folder": "0.11.1-beta",
