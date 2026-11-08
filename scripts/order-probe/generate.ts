@@ -1,0 +1,175 @@
+/**
+ * Gera os jars-sonda do spike #106 (ordem de camadas quando dois jars definem o mesmo
+ * material em `silentgear_materials`). Cada jar tem só `META-INF/neoforge.mods.toml` e
+ * `data/silentgear/silentgear_materials/order_probe.json`, sem código.
+ *
+ * Uso: npx tsx scripts/order-probe/generate.ts <pasta-de-saída>
+ * Saída: <pasta>/run<N>/mods/*.jar e, na rodada 6, <pasta>/run6/kubegroovy/**.
+ * Os jars não são versionados. Passo a passo das rodadas: scripts/order-probe/README.md.
+ */
+import * as fs from 'fs';
+import * as path from 'path';
+import JSZip from 'jszip';
+
+export const MATERIAL_ID_FILE = 'order_probe.json';
+export const MOD_LOADER = 'lowcodefml';
+
+export type Ordering = 'AFTER' | 'BEFORE' | 'NONE';
+
+export interface ProbeDependency {
+  modId: string;
+  ordering: Ordering;
+}
+
+export interface Probe {
+  modId: string;
+  fileName: string;
+  /** Rótulo no nome do material, para a coluna Name do dump dizer qual sonda venceu. */
+  label: string;
+  /** Trait do material, distinto por sonda (a comparação do jogo também lê os traits). */
+  trait: string;
+  dependencies: ProbeDependency[];
+}
+
+export interface Run {
+  run: number;
+  description: string;
+  probes: Probe[];
+  /** Rodada 6: coloca o mesmo material em kubegroovy/dynamic_data. */
+  kubegroovy?: boolean;
+}
+
+const probe = (modId: string, fileName: string, deps: ProbeDependency[] = []): Probe => ({
+  modId,
+  fileName,
+  label: modId === 'aaa_probe' ? 'Probe AAA' : 'Probe ZZZ',
+  trait: modId === 'aaa_probe' ? 'silentgear:malleable' : 'silentgear:crushing',
+  dependencies: deps,
+});
+
+export const RUNS: Run[] = [
+  {
+    run: 1,
+    description: 'Sem dependência; nomes de arquivo na mesma ordem dos ids dos mods.',
+    probes: [probe('aaa_probe', 'aaa-probe-1.0.0.jar'), probe('zzz_probe', 'zzz-probe-1.0.0.jar')],
+  },
+  {
+    run: 2,
+    description: 'Sem dependência; nomes de arquivo na ordem inversa dos ids dos mods.',
+    probes: [probe('aaa_probe', 'zzz-probe-1.0.0.jar'), probe('zzz_probe', 'aaa-probe-1.0.0.jar')],
+  },
+  {
+    run: 3,
+    description: 'zzz_probe depende de aaa_probe com ordering AFTER.',
+    probes: [
+      probe('aaa_probe', 'aaa-probe-1.0.0.jar'),
+      probe('zzz_probe', 'zzz-probe-1.0.0.jar', [{ modId: 'aaa_probe', ordering: 'AFTER' }]),
+    ],
+  },
+  {
+    run: 4,
+    description: 'zzz_probe depende de aaa_probe com ordering BEFORE (o inverso da rodada 3).',
+    probes: [
+      probe('aaa_probe', 'aaa-probe-1.0.0.jar'),
+      probe('zzz_probe', 'zzz-probe-1.0.0.jar', [{ modId: 'aaa_probe', ordering: 'BEFORE' }]),
+    ],
+  },
+  {
+    run: 5,
+    description: 'Como o sgearmetalworks: zzz_probe declara silentgear com ordering AFTER; aaa_probe não declara nada.',
+    probes: [
+      probe('aaa_probe', 'aaa-probe-1.0.0.jar'),
+      probe('zzz_probe', 'zzz-probe-1.0.0.jar', [{ modId: 'silentgear', ordering: 'AFTER' }]),
+    ],
+  },
+  {
+    run: 6,
+    description: 'Como a rodada 1, mais o mesmo material em kubegroovy/dynamic_data (instalar o jar do KubeGroovy).',
+    probes: [probe('aaa_probe', 'aaa-probe-1.0.0.jar'), probe('zzz_probe', 'zzz-probe-1.0.0.jar')],
+    kubegroovy: true,
+  },
+];
+
+function modsToml(run: Run, p: Probe): string {
+  const lines = [
+    `modLoader="${MOD_LOADER}"`,
+    'loaderVersion="[1,)"',
+    'license="MIT"',
+    '',
+    '[[mods]]',
+    `modId="${p.modId}"`,
+    'version="1.0.0"',
+    `displayName="Order probe ${p.label}"`,
+    `description='''Sonda do spike #106 (rodada ${run.run}). Só dados, sem código.'''`,
+  ];
+  for (const dep of p.dependencies) {
+    lines.push('', `[[dependencies.${p.modId}]]`, `modId="${dep.modId}"`, 'type="required"', 'versionRange="[0,)"', `ordering="${dep.ordering}"`, 'side="BOTH"');
+  }
+  return lines.join('\n') + '\n';
+}
+
+function materialJson(label: string, trait: string): string {
+  return JSON.stringify(
+    {
+      type: 'silentgear:simple',
+      parent: 'silentgear:empty',
+      crafting: { can_salvage: true, categories: ['metal', 'intermediate'], gear_type_blacklist: [], ingredient: 'minecraft:stick' },
+      display: { color: '#FFFFFFFF', main_texture_type: 'HIGH_CONTRAST', name: { text: label }, name_prefix: '' },
+      properties: {
+        'silentgear:main': {
+          durability: 100.0,
+          harvest_speed: 4.0,
+          attack_damage: 1.0,
+          traits: [{ conditions: [], level: 1, trait }],
+        },
+      },
+    },
+    null,
+    2,
+  );
+}
+
+export async function buildProbeJar(run: Run, p: Probe): Promise<Buffer> {
+  const zip = new JSZip();
+  // Data fixa: o mesmo jar sai com os mesmos bytes em cada geração.
+  const date = new Date('2026-01-01T00:00:00Z');
+  zip.file('META-INF/neoforge.mods.toml', modsToml(run, p), { date });
+  zip.file(`data/silentgear/silentgear_materials/${MATERIAL_ID_FILE}`, materialJson(p.label, p.trait), { date });
+  return zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
+}
+
+/** Arquivos da rodada 6 dentro da pasta `kubegroovy/` da instância. */
+export function kubegroovyFiles(): Record<string, string> {
+  const rel = `silentgear/silentgear_materials/${MATERIAL_ID_FILE}`;
+  return {
+    'dynamic_data/index.json': JSON.stringify({ index: [rel] }, null, 2),
+    [`dynamic_data/${rel}`]: materialJson('Probe KubeGroovy', 'silentgear:flexible'),
+  };
+}
+
+async function main(): Promise<void> {
+  const outDir = process.argv[2];
+  if (!outDir) {
+    console.error('Uso: npx tsx scripts/order-probe/generate.ts <pasta-de-saída>');
+    process.exit(1);
+  }
+  for (const run of RUNS) {
+    const modsDir = path.join(outDir, `run${run.run}`, 'mods');
+    fs.mkdirSync(modsDir, { recursive: true });
+    for (const p of run.probes) {
+      fs.writeFileSync(path.join(modsDir, p.fileName), await buildProbeJar(run, p));
+    }
+    if (run.kubegroovy) {
+      for (const [rel, content] of Object.entries(kubegroovyFiles())) {
+        const target = path.join(outDir, `run${run.run}`, 'kubegroovy', rel);
+        fs.mkdirSync(path.dirname(target), { recursive: true });
+        fs.writeFileSync(target, content);
+      }
+    }
+    console.log(`run${run.run}: ${run.description}`);
+  }
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename ?? '')) {
+  main();
+}
