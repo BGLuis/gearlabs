@@ -10,10 +10,10 @@ const layers = atm11Catalog.layers as unknown as Record<string, CatalogLayer>;
 const allAddons = Object.keys(layers);
 
 describe('Auditoria #47: camada sobrescreve o material, não funde com a anterior', () => {
-  it('o kubejs de uru_metal não define slot coating, então o material resolvido não tem coating', () => {
-    // kubejs/dynamic_data/sgearmetalworks/silentgear_materials/uru_metal.json reescreve o arquivo inteiro
-    const kubejsSlots = Object.keys(layers.kubejs.overrides!['sgearmetalworks:uru_metal'].stats ?? {});
-    expect(kubejsSlots).not.toContain('coating');
+  it('o kubegroovy de uru_metal não define slot coating, então o material resolvido não tem coating', () => {
+    // kubegroovy/dynamic_data/sgearmetalworks/silentgear_materials/uru_metal.json reescreve o arquivo inteiro
+    const kubegroovySlots = Object.keys(layers.kubegroovy.overrides!['sgearmetalworks:uru_metal'].stats ?? {});
+    expect(kubegroovySlots).not.toContain('coating');
 
     const resolved = resolveCatalogWithAddons(baseMaterials, layers, allAddons);
     const uru = resolved['sgearmetalworks:uru_metal'];
@@ -22,9 +22,9 @@ describe('Auditoria #47: camada sobrescreve o material, não funde com a anterio
     expect(uru.traits?.coating).toBeUndefined();
   });
 
-  it('todo material redefinido pelo kubejs termina com exatamente os slots do kubejs', () => {
+  it('todo material redefinido pelo kubegroovy termina com exatamente os slots do kubegroovy', () => {
     const resolved = resolveCatalogWithAddons(baseMaterials, layers, allAddons);
-    for (const [id, override] of Object.entries(layers.kubejs.overrides ?? {})) {
+    for (const [id, override] of Object.entries(layers.kubegroovy.overrides ?? {})) {
       const expected = Object.keys(override.stats ?? {}).sort();
       expect(Object.keys(resolved[id].stats).sort(), id).toEqual(expected);
     }
