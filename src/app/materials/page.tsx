@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useGear } from '@/context/GearContext';
 import { MaterialCategory, StatModifierEntry } from '@/types/silentgear';
 import { getNumericStatValue } from '@/lib/calculator';
-import { filterMaterials } from '@/lib/materials';
+import { filterMaterials, sourceBadge, sourceGroup, type SourceTone } from '@/lib/materials';
 import {
   Search,
   CheckCircle2,
@@ -16,6 +16,13 @@ import {
   Layers,
 } from 'lucide-react';
 import Link from 'next/link';
+
+const SOURCE_TONE_CLASSES: Record<SourceTone, string> = {
+  gems: 'bg-purple-900/40 text-purple-300 border border-purple-700/50',
+  metalworks: 'bg-amber-900/40 text-amber-300 border border-amber-700/50',
+  script: 'bg-pink-900/40 text-pink-300 border border-pink-700/50',
+  neutral: 'bg-mc-card text-mc-muted border border-mc-border',
+};
 
 function formatStatValue(stat: StatModifierEntry | undefined): string | number {
   if (stat === undefined || stat === null) return '-';
@@ -43,8 +50,9 @@ export default function MaterialsPage() {
     lang,
   }).filter((m) => {
     if (selectedSource === 'all') return true;
-    return (m.source || 'silentgear') === selectedSource;
+    return sourceGroup(m.source) === selectedSource;
   });
+  const sourceGroups = Array.from(new Set(materials.map((m) => sourceGroup(m.source))));
 
   // Ordenação
   const sorted = [...filtered].sort((a, b) => {
@@ -152,10 +160,11 @@ export default function MaterialsPage() {
               <option value="all" className="bg-mc-surface">
                 {lang === 'pt' ? 'Origem: Todas' : 'Source: All'}
               </option>
-              <option value="silentgear" className="bg-mc-surface">Silent Gear</option>
-              <option value="silentgems" className="bg-mc-surface">Silent&apos;s Gems</option>
-              <option value="sgearmetalworks" className="bg-mc-surface">Metalworks</option>
-              <option value="kubejs" className="bg-mc-surface">KubeJS</option>
+              {sourceGroups.map((group) => (
+                <option key={group} value={group} className="bg-mc-surface">
+                  {sourceBadge(group).label}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -237,25 +246,11 @@ export default function MaterialsPage() {
                         <div>
                           <div className="font-bold text-mc-text text-sm font-sans flex items-center gap-2">
                             <span>{mat.name[lang] || mat.name.en}</span>
-                            {mat.source && mat.source !== 'silentgear' && (
+                            {sourceGroup(mat.source) !== 'silentgear' && (
                               <span
-                                className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase ${
-                                  mat.source === 'silentgems'
-                                    ? 'bg-purple-900/40 text-purple-300 border border-purple-700/50'
-                                    : mat.source === 'sgearmetalworks'
-                                    ? 'bg-amber-900/40 text-amber-300 border border-amber-700/50'
-                                    : mat.source === 'kubejs'
-                                    ? 'bg-pink-900/40 text-pink-300 border border-pink-700/50'
-                                    : 'bg-mc-card text-mc-muted border border-mc-border'
-                                }`}
+                                className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase ${SOURCE_TONE_CLASSES[sourceBadge(mat.source).tone]}`}
                               >
-                                {mat.source === 'silentgems'
-                                  ? "Silent's Gems"
-                                  : mat.source === 'sgearmetalworks'
-                                  ? 'Metalworks'
-                                  : mat.source === 'kubejs'
-                                  ? 'KubeJS'
-                                  : mat.source}
+                                {sourceBadge(mat.source).label}
                               </span>
                             )}
                           </div>
