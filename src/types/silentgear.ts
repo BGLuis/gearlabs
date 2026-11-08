@@ -229,9 +229,35 @@ export interface CatalogLayer {
   overrides?: Record<string, Partial<Material>>;
 }
 
+export interface CatalogSourceFile {
+  /** caminho relativo à raiz da instância, com `/` */
+  path: string;
+  kind: 'jar' | 'script-data';
+  modId?: string;
+  version?: string;
+  /** SHA-1 do arquivo lido, o mesmo `modrinthHash` do modlist.json do pack */
+  sha1: string;
+}
+
+export interface CatalogSource {
+  pack: {
+    name: string;
+    version: string;
+    curseforgeProjectId: number;
+    curseforgeFileId: number;
+  };
+  minecraft: string;
+  loader: string;
+  /** só os arquivos que geraram materiais ou traits, ordenados por path */
+  files: CatalogSourceFile[];
+  /** ISO 8601 com fuso */
+  extractedAt: string;
+}
+
 export interface VersionCatalog {
   version: string;
   sourceCommit?: string;
+  source?: CatalogSource;
   materials: Record<string, Material>;
   baseMaterials?: Record<string, Material>;
   layers?: Record<string, CatalogLayer>;

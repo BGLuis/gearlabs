@@ -1,0 +1,12 @@
+{
+  "minecraft": {
+    "version": "26.1.2",
+    "modLoaders": [ { "id": "neoforge-26.1.2.124", "primary": true } ]
+  },
+  "manifestType": "minecraftModpack",
+  "manifestVersion": 1,
+  "name": "All the Mods 11",
+  "version": "0.14.0-beta",
+  "author": "ATMTeam",
+  "files": []
+}
