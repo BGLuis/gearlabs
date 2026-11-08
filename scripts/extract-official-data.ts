@@ -17,6 +17,7 @@ import {
   VersionCatalog,
   CatalogIndex,
 } from '../src/types/silentgear';
+import { readInstanceProvenance, resolveInstanceDirs, sha1OfFile } from './lib/instance';
 import { VERSIONED_PRESET, appendIndexEntry, isCatalogIndex, isValidVersionId } from '../src/lib/catalog-index';
 import {
   OFFICIAL_GEAR_TYPES,
@@ -313,62 +314,11 @@ export async function extractDataFromJar(jarPath: string): Promise<JarExtraction
   };
 }
 
-export interface InstanceProvenance {
-  pack: CatalogSource['pack'];
-  minecraft: string;
-  loader: string;
-}
+export { readInstanceProvenance };
 
 export interface ExtractFromInstanceOptions {
   now?: () => Date;
   warn?: (message: string) => void;
-}
-
-// O caminho pode ser a raiz da instância do Prism (com `flame/`, `instance.cfg` e
-// `minecraft/`) ou a própria pasta `minecraft/` (formato aceito antes do #94).
-function resolveInstanceDirs(instancePath: string): { root: string; gameDir: string } {
-  const nested = path.join(instancePath, 'minecraft');
-  return fs.existsSync(nested)
-    ? { root: instancePath, gameDir: nested }
-    : { root: path.dirname(instancePath), gameDir: instancePath };
-}
-
-function readRequiredFile(file: string, what: string): string {
-  if (!fs.existsSync(file)) {
-    throw new Error(`[extract-official-data] ${what} não encontrado: ${file}`);
-  }
-  return fs.readFileSync(file, 'utf-8');
-}
-
-export function readInstanceProvenance(instancePath: string): InstanceProvenance {
-  const { root } = resolveInstanceDirs(instancePath);
-  const manifestPath = path.join(root, 'flame', 'manifest.json');
-  const cfgPath = path.join(root, 'instance.cfg');
-  const manifest = JSON.parse(readRequiredFile(manifestPath, 'flame/manifest.json'));
-  const cfg = readRequiredFile(cfgPath, 'instance.cfg');
-
-  const cfgInt = (key: string): number => {
-    const match = cfg.match(new RegExp(`^${key}=(\\d+)\\s*$`, 'm'));
-    if (!match) throw new Error(`[extract-official-data] ${key} ausente em ${cfgPath}`);
-    return Number(match[1]);
-  };
-  const loaders: Array<{ id: string; primary?: boolean }> = manifest.minecraft?.modLoaders ?? [];
-  const loader = (loaders.find((l) => l.primary) ?? loaders[0])?.id;
-  if (!manifest.name || !manifest.version || !manifest.minecraft?.version || !loader) {
-    throw new Error(
-      `[extract-official-data] ${manifestPath} sem name, version, minecraft.version ou modLoaders[].id`
-    );
-  }
-  return {
-    pack: {
-      name: manifest.name,
-      version: manifest.version,
-      curseforgeProjectId: cfgInt('ManagedPackID'),
-      curseforgeFileId: cfgInt('ManagedPackVersionID'),
-    },
-    minecraft: manifest.minecraft.version,
-    loader,
-  };
 }
 
 function formatIsoWithOffset(date: Date): string {
@@ -420,7 +370,7 @@ export async function extractFromInstance(
   const files: CatalogSourceFile[] = [];
   const prismHashes = readPrismIndexHashes(modsDir);
   const recordFile = (file: string, entry: Omit<CatalogSourceFile, 'path' | 'sha1'>) => {
-    const sha1 = createHash('sha1').update(fs.readFileSync(file)).digest('hex');
+    const sha1 = sha1OfFile(file);
     const expected = prismHashes[path.basename(file)];
     if (entry.kind === 'jar' && expected && expected !== sha1) {
       warn(
