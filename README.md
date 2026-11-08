@@ -67,6 +67,7 @@ Eu precisava de uma maneira de otimizar a criação de ligas para o Silent Gear 
 - **Build de produção:** `npm run build && npm start`
 - **Extração de dados oficiais:** `npm run extract-data`
 - **Verificar mudanças no ATM-11:** `npm run check-remote -- check` (compara a `main` do ATM-11 com o catálogo `latest`)
+- **Comparar a instância do Prism com o catálogo:** `npm run check-updates -- --instance <pasta>` (aceita a raiz da instância ou `minecraft/`; sai com 0 se atualizado, 2 se houver diferença e 1 em caso de erro; não grava nada)
 
 ### Workflow `check-atm11`
 

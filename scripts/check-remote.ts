@@ -136,7 +136,10 @@ export function checkInactivity(lastCommit: Date, now: Date): string | null {
 }
 
 /** Origem do catálogo `latest`: o `index.json` aponta a versão e a pasta. */
-export function loadLatestSource(catalogDir: string): { id: string; source: CatalogSource } {
+export function loadLatestSource(
+  catalogDir: string,
+  purpose = 'verificar o ATM-11'
+): { id: string; source: CatalogSource } {
   const index: unknown = JSON.parse(fs.readFileSync(path.join(catalogDir, 'index.json'), 'utf8'));
   if (!isCatalogIndex(index)) throw new Error(`${catalogDir}/index.json está malformado`);
   const { latest, versions } = index as CatalogIndex;
@@ -144,7 +147,7 @@ export function loadLatestSource(catalogDir: string): { id: string; source: Cata
   if (!entry) throw new Error(`versão '${latest}' não está em ${catalogDir}/index.json`);
   const catalog = JSON.parse(fs.readFileSync(path.join(catalogDir, entry.folder, 'catalog.json'), 'utf8'));
   if (!catalog.source) {
-    throw new Error(`o catálogo ${latest} está sem source: publique um catálogo com source (#98) antes de verificar o ATM-11`);
+    throw new Error(`o catálogo ${latest} está sem source: publique um catálogo com source (#98) antes de ${purpose}`);
   }
   return { id: latest, source: catalog.source as CatalogSource };
 }
