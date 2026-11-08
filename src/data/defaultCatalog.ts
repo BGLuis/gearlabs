@@ -1417,7 +1417,7 @@ export const VERSION_PRESETS: VersionPreset[] = [
     name: 'All The Mods 11 (ATM11)',
     badge: 'Mais Recente',
     type: 'modpack',
-    minecraftVersion: '26.1.x / 1.21+',
+    minecraftVersion: '26.1.2',
     description: 'Modpack mais recente com Allthemodium, Vibranium, Unobtainium e Breeze Rod.',
     addons: DEFAULT_ATM_ADDONS,
   },
