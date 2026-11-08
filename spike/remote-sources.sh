@@ -136,7 +136,7 @@ run_q4b() {
   mkdir -p "$d"; curl -s -m 120 -A "$UA" -o "$d/remote.jar" "$url"
   echo "remote sha1: $(sha1sum "$d/remote.jar" | cut -d' ' -f1) | local sha1: $(sha1sum "$SG_JAR" | cut -d' ' -f1)"
   echo "size remote/local: $(stat -c %s "$d/remote.jar")/$(stat -c %s "$SG_JAR")"
-  diff <(unzip -Z '-2,l' "$d/remote.jar" 2>/dev/null | cat | sort) <(unzip -Z '-2,l' "$SG_JAR" 2>/dev/null | cat | sort) >/dev/null && echo "entry names identical" || echo "entry names DIFFER"
+  local en; en=$(diff <(unzip -Z1 "$d/remote.jar" | sort) <(unzip -Z1 "$SG_JAR" | sort) | grep -c '^[<>]'); echo "entry names different (present on one side only): $en"
   rm -rf "$d/r" "$d/l"; mkdir -p "$d/r" "$d/l"; (cd "$d/r" && unzip -qo ../remote.jar); (cd "$d/l" && unzip -qo "$SG_JAR")
   local j=0 c=0 f
   while read -r f; do cmp -s <(jq -S . "$d/r/$f" 2>/dev/null) <(jq -S . "$d/l/$f" 2>/dev/null) || { j=$((j+1)); echo "  json differs after jq -S: $f"; }; done < <(cd "$d/r" && find . -name '*.json' -not -path './META-INF/*' | sort)
