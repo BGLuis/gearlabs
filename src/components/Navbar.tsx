@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useGear } from '@/context/GearContext';
 import { ImportModpackModal } from '@/components/ImportModpackModal';
 import { AddonSelector } from '@/components/AddonSelector';
-import { Hammer, BookOpen, History, Share2, Check, Globe } from 'lucide-react';
+import { Hammer, BookOpen, History, FlaskConical, Share2, Check, Globe } from 'lucide-react';
 
 export function Navbar() {
   const { version, setVersion, presets, lang, setLang, copyShareUrl } = useGear();
@@ -26,6 +26,8 @@ export function Navbar() {
       builder: 'Simulador',
       materials: 'Catálogo & Inventário',
       changelog: 'Changelog',
+      formulas: 'Fórmulas',
+      mainNav: 'Navegação principal',
       share: 'Compartilhar',
       copied: 'Copiado!',
       version: 'Versão / Modpack',
@@ -34,6 +36,8 @@ export function Navbar() {
       builder: 'Simulator',
       materials: 'Catalog & Inventory',
       changelog: 'Changelog',
+      formulas: 'Formulas',
+      mainNav: 'Main navigation',
       share: 'Share',
       copied: 'Copied!',
       version: 'Version / Modpack',
@@ -44,6 +48,31 @@ export function Navbar() {
   const modpackPresets = presets.filter((p) => p.type === 'modpack');
   const officialPresets = presets.filter((p) => p.type === 'official');
   const customPresets = presets.filter((p) => p.type === 'custom');
+
+  const navItems = [
+    { href: '/', label: t.builder, Icon: Hammer },
+    { href: '/materials', label: t.materials, Icon: BookOpen },
+    { href: '/changelog', label: t.changelog, Icon: History },
+    { href: '/formulas', label: t.formulas, Icon: FlaskConical },
+  ];
+
+  // `compact`: abaixo de 2xl a barra do topo só tem espaço para ícones; o texto vira title/aria-label.
+  const renderNavLinks = (compact: boolean) => navItems.map(({ href, label, Icon }) => (
+    <Link
+      key={href}
+      href={href}
+      aria-current={pathname === href ? 'page' : undefined}
+      {...(compact ? { title: label, 'aria-label': label } : {})}
+      className={`px-3 h-8 shrink-0 rounded-[6px] text-sm font-medium flex items-center gap-2 transition-colors ${
+        pathname === href
+          ? 'bg-[#1E2125] text-mc-text border border-[#30343A]/50 shadow-sm'
+          : 'text-mc-mutedLight hover:text-mc-text hover:bg-[#1E2125]/40'
+      }`}
+    >
+      <Icon className="w-3.5 h-3.5" />
+      <span className={compact ? 'hidden 2xl:inline' : undefined}>{label}</span>
+    </Link>
+  ));
 
   return (
     <header className="sticky top-0 z-50 bg-[#0E0F11]/95 backdrop-blur-md border-b border-mc-border">
@@ -59,42 +88,7 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Links de navegação em formato Pill */}
-          <nav className="hidden md:flex items-center gap-1.5">
-            <Link
-              href="/"
-              className={`px-3 h-8 rounded-[6px] text-sm font-medium flex items-center gap-2 transition-colors ${
-                pathname === '/'
-                  ? 'bg-[#1E2125] text-mc-text border border-[#30343A]/50 shadow-sm'
-                  : 'text-mc-mutedLight hover:text-mc-text hover:bg-[#1E2125]/40'
-              }`}
-            >
-              <Hammer className="w-3.5 h-3.5" />
-              {t.builder}
-            </Link>
-            <Link
-              href="/materials"
-              className={`px-3 h-8 rounded-[6px] text-sm font-medium flex items-center gap-2 transition-colors ${
-                pathname === '/materials'
-                  ? 'bg-[#1E2125] text-mc-text border border-[#30343A]/50 shadow-sm'
-                  : 'text-mc-mutedLight hover:text-mc-text hover:bg-[#1E2125]/40'
-              }`}
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              {t.materials}
-            </Link>
-            <Link
-              href="/changelog"
-              className={`px-3 h-8 rounded-[6px] text-sm font-medium flex items-center gap-2 transition-colors ${
-                pathname === '/changelog'
-                  ? 'bg-[#1E2125] text-mc-text border border-[#30343A]/50 shadow-sm'
-                  : 'text-mc-mutedLight hover:text-mc-text hover:bg-[#1E2125]/40'
-              }`}
-            >
-              <History className="w-3.5 h-3.5" />
-              {t.changelog}
-            </Link>
-          </nav>
+          <nav aria-label={t.mainNav} className="hidden md:flex items-center gap-1.5">{renderNavLinks(true)}</nav>
         </div>
 
         {/* Controles da Direita */}
@@ -164,6 +158,13 @@ export function Navbar() {
           </button>
         </div>
       </div>
+      {/* Navegação abaixo de md: faixa de pills com rolagem horizontal */}
+      <nav
+        aria-label={t.mainNav}
+        className="md:hidden flex items-center gap-1.5 overflow-x-auto px-4 pb-2 border-t border-mc-border/60 pt-2"
+      >
+        {renderNavLinks(false)}
+      </nav>
     </header>
   );
 }
