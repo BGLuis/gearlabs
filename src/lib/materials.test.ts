@@ -3,6 +3,8 @@ import {
   filterMaterials,
   getKeyStatForSlot,
   normalizeSearchText,
+  sourceBadge,
+  sourceGroup,
 } from './materials';
 import { Material } from '@/types/silentgear';
 
@@ -168,5 +170,28 @@ describe('materials utilities', () => {
       const iron = sampleMaterials.find((m) => m.id === 'silentgear:iron')!;
       expect(getKeyStatForSlot(iron, 'coating')).toBe('🛡️+2 / +60 Dur');
     });
+  });
+});
+
+describe('rótulo da origem do material (#93)', () => {
+  it('kubegroovy e kubejs têm o mesmo rótulo e o mesmo grupo de filtro', () => {
+    expect(sourceBadge('kubegroovy')).toEqual(sourceBadge('kubejs'));
+    expect(sourceBadge('kubegroovy')).toEqual({ label: 'KubeJS', tone: 'script' });
+    expect(sourceGroup('kubegroovy')).toBe(sourceGroup('kubejs'));
+  });
+
+  it('mantém os rótulos de silentgems e sgearmetalworks', () => {
+    expect(sourceBadge('silentgems')).toEqual({ label: "Silent's Gems", tone: 'gems' });
+    expect(sourceBadge('sgearmetalworks')).toEqual({ label: 'Metalworks', tone: 'metalworks' });
+  });
+
+  it('o id de uma camada de jar desconhecida é o próprio rótulo, com tom neutro', () => {
+    expect(sourceBadge('allthemodium')).toEqual({ label: 'allthemodium', tone: 'neutral' });
+    expect(sourceGroup('allthemodium')).toBe('allthemodium');
+  });
+
+  it('sem source o material é do Silent Gear', () => {
+    expect(sourceGroup(undefined)).toBe('silentgear');
+    expect(sourceBadge('silentgear').label).toBe('Silent Gear');
   });
 });

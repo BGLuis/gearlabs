@@ -1,5 +1,6 @@
 import { Material, MaterialCategory, PartSlot, VersionCatalog } from '@/types/silentgear';
 import { getNumericStatValue, resolveTypedStat } from '@/lib/calculator';
+import { isScriptLayer } from '@/lib/script-layers';
 
 export interface FilterMaterialsOptions {
   query?: string;
@@ -236,4 +237,22 @@ export function materialFitsSlot(material: Material, slot: PartSlot, gearTypeId:
 export function getSelectableMaterials(catalog: VersionCatalog, gearTypeId: string, slot: PartSlot): Material[] {
   const isArmor = catalog.gearTypes[gearTypeId]?.category === 'armor';
   return Object.values(catalog.materials).filter((m) => materialFitsSlot(m, slot, gearTypeId, isArmor));
+}
+
+export type SourceTone = 'gems' | 'metalworks' | 'script' | 'neutral';
+
+/** Grupo de filtro da origem: toda camada de script (kubegroovy, kubejs) conta como uma só. */
+export function sourceGroup(source: string | undefined): string {
+  if (isScriptLayer(source)) return 'script';
+  return source || 'silentgear';
+}
+
+/** Rótulo e tom da origem de um material; o id de uma camada de jar sem rótulo próprio é o próprio rótulo. */
+export function sourceBadge(source: string | undefined): { label: string; tone: SourceTone } {
+  const group = sourceGroup(source);
+  if (group === 'silentgear') return { label: 'Silent Gear', tone: 'neutral' };
+  if (group === 'silentgems') return { label: "Silent's Gems", tone: 'gems' };
+  if (group === 'sgearmetalworks') return { label: 'Metalworks', tone: 'metalworks' };
+  if (group === 'script') return { label: 'KubeJS', tone: 'script' };
+  return { label: group, tone: 'neutral' };
 }

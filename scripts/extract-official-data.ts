@@ -36,6 +36,18 @@ import {
 import { getGearTypeAncestors } from '../src/lib/gear-type-hierarchy';
 import { parseTraitJson, TraitLang } from '../src/lib/trait-parser';
 import { resolveCatalogWithAddons } from '../src/lib/layer-resolver';
+import { deriveLayerOrder, parseModsToml } from '../src/lib/layer-order';
+import {
+  BASE_MOD_ID,
+  dropShadowed,
+  findBaseJar,
+  findJsonFiles,
+  findScriptRoots,
+  parseMaterialFile,
+  readScriptRoot,
+  scanJars,
+  splitMaterials,
+} from './instance-layers';
 
 export const ATM_ADDONS: AddonConfig[] = [
   {
@@ -63,31 +75,6 @@ export const ATM_ADDONS: AddonConfig[] = [
 
 // Issue #38: extração oficial de harvest_tier respeitando level_hint
 export { formatMaterialName, normalizeColor, parseStatEntry, parseHarvestTier };
-
-export function parseMaterialFile(filePath: string): Material {
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const json = JSON.parse(content);
-  const mat = parseMaterialJson(filePath, json);
-  if (!mat) {
-    throw new Error(`[extract-official-data] Erro ao analisar material em ${filePath}`);
-  }
-  return mat;
-}
-
-function findJsonFiles(dir: string): string[] {
-  if (!fs.existsSync(dir)) return [];
-  const results: string[] = [];
-  const list = fs.readdirSync(dir, { withFileTypes: true });
-  for (const entry of list) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      results.push(...findJsonFiles(fullPath));
-    } else if (entry.isFile() && entry.name.endsWith('.json')) {
-      results.push(fullPath);
-    }
-  }
-  return results;
-}
 
 export interface ExtractedCatalogData {
   baseMaterials: Record<string, Material>;
@@ -252,7 +239,6 @@ export interface JarExtractionResult {
   jar: string;
   materials: Record<string, Material>;
   parts: Record<string, RawPartData>;
-  overrides: Record<string, Partial<Material>>;
   rawTraits: Record<string, any>;
   lang: TraitLang;
 }
@@ -261,34 +247,15 @@ export async function extractDataFromJar(jarPath: string): Promise<JarExtraction
   const buffer = fs.readFileSync(jarPath);
   const zip = await JSZip.loadAsync(buffer);
   const jarName = path.basename(jarPath);
-
-  let id = 'unknown';
-  let name = jarName;
-  let version = 'unknown';
-
-  if (jarName.includes('sgearmetalworks')) {
-    id = 'sgearmetalworks';
-    name = 'Silent Gear Metalworks';
-  } else if (jarName.includes('silentgems') || jarName.includes('silent-gems')) {
-    id = 'silentgems';
-    name = "Silent's Gems";
-  } else if (jarName.includes('silent-gear') || jarName.includes('silentgear')) {
-    id = 'silentgear';
-    name = 'Silent Gear';
-  }
-
   const tomlFile = zip.file('META-INF/neoforge.mods.toml') || zip.file('META-INF/mods.toml');
-  if (tomlFile) {
-    const tomlContent = await tomlFile.async('text');
-    const verMatch = tomlContent.match(/version\s*=\s*(["'])(.*?)\1/);
-    if (verMatch) {
-      // sgearmetalworks publica "26.1.2-1.6.0": o prefixo é a versão do Minecraft
-      version = verMatch[2].replace(/^\d+\.\d+(?:\.\d+)?-/, '');
-    }
-    const nameMatch = tomlContent.match(/displayName\s*=\s*(["'])(.*?)\1/);
-    if (nameMatch) {
-      name = nameMatch[2];
-    }
+
+  const mod = tomlFile ? parseModsToml(await tomlFile.async('text')) : undefined;
+  const id = mod?.modId ?? 'unknown';
+  const name = mod?.displayName ?? jarName;
+  let version = 'unknown';
+  if (mod?.version) {
+    // sgearmetalworks publica "26.1.2-1.6.0": o prefixo é a versão do Minecraft
+    version = mod.version.replace(/^\d+\.\d+(?:\.\d+)?-/, '');
   }
 
   if (version === 'unknown') {
@@ -297,7 +264,6 @@ export async function extractDataFromJar(jarPath: string): Promise<JarExtraction
   }
 
   const materials: Record<string, Material> = {};
-  const overrides: Record<string, Partial<Material>> = {};
   const parts: Record<string, RawPartData> = {};
   const rawTraits: Record<string, any> = {};
   const lang: TraitLang = { en: {}, pt: {} };
@@ -318,16 +284,7 @@ export async function extractDataFromJar(jarPath: string): Promise<JarExtraction
         const mat = parseMaterialJson(relPath, json);
         if (mat) {
           mat.source = id;
-          if (id === 'sgearmetalworks' && !relPath.includes('/sgearmetalworks/silentgear_materials/')) {
-            overrides[mat.id] = {
-              categories: mat.categories,
-              stats: mat.stats,
-              traits: mat.traits,
-              statModifiers: mat.statModifiers,
-            };
-          } else {
-            materials[mat.id] = mat;
-          }
+          materials[mat.id] = mat;
         }
       } catch (e) {
         console.warn(`[extract-official-data] Erro ao analisar material no jar ${jarName}:${relPath}:`, e);
@@ -351,7 +308,6 @@ export async function extractDataFromJar(jarPath: string): Promise<JarExtraction
     jar: jarName,
     materials,
     parts,
-    overrides,
     rawTraits,
     lang,
   };
@@ -456,17 +412,10 @@ export async function extractFromInstance(
   const { root, gameDir } = resolveInstanceDirs(instancePath);
   const warn = options.warn ?? ((message: string) => console.warn(message));
   const modsDir = path.join(gameDir, 'mods');
-  const kubejsDir = path.join(gameDir, 'kubejs/dynamic_data');
-  const kubejsAltDir = path.join(gameDir, 'kubejs/data');
 
   if (!fs.existsSync(modsDir)) {
     throw new Error(`[extract-official-data] Pasta mods não encontrada na instância: ${modsDir}`);
   }
-
-  const modFiles = fs.readdirSync(modsDir).filter((f) => f.endsWith('.jar'));
-  const sgJar = modFiles.find((f) => f.includes('silent-gear') || f.includes('silentgear'));
-  const smwJar = modFiles.find((f) => f.includes('sgearmetalworks'));
-  const gemsJar = modFiles.find((f) => f.includes('silentgems') || f.includes('silent-gems'));
 
   const files: CatalogSourceFile[] = [];
   const prismHashes = readPrismIndexHashes(modsDir);
@@ -480,23 +429,23 @@ export async function extractFromInstance(
     }
     files.push({ path: path.relative(root, file).split(path.sep).join('/'), ...entry, sha1 });
   };
-  // só entram em source.files os jars que de fato geraram materiais, traits ou lang
   const readJar = async (jarFile: string): Promise<JarExtractionResult> => {
     const jarPath = path.join(modsDir, jarFile);
     const data = await extractDataFromJar(jarPath);
-    const produced =
-      Object.keys(data.materials).length +
-        Object.keys(data.overrides).length +
-        Object.keys(data.rawTraits).length +
-        Object.keys(data.lang.en).length +
-        Object.keys(data.lang.pt).length >
-      0;
-    if (produced) recordFile(jarPath, { kind: 'jar', modId: data.id, version: data.version });
+    recordFile(jarPath, { kind: 'jar', modId: data.id, version: data.version });
     return data;
   };
 
-  let baseMaterials: Record<string, Material> = {};
-  let jarParts: Record<string, RawPartData> = {};
+  const jars = await scanJars(modsDir);
+  const baseJar = findBaseJar(jars, modsDir);
+  const scriptRoots = findScriptRoots(gameDir);
+  const loadOrder = deriveLayerOrder(
+    jars.map((jar) => jar.ordering),
+    scriptRoots.map((root) => root.id)
+  );
+  const jarsById = new Map(jars.map((jar) => [jar.ordering.modId, jar]));
+  const rootsById = new Map(scriptRoots.map((root) => [root.id, root]));
+
   const layers: Record<string, CatalogLayer> = {};
   const addons: AddonConfig[] = [];
   const rawTraits: Record<string, any> = {};
@@ -507,114 +456,64 @@ export async function extractFromInstance(
     Object.assign(lang.pt, data.lang.pt);
   };
 
-  if (sgJar) {
-    const sgData = await readJar(sgJar);
-    mergeTraitData(sgData);
-    baseMaterials = resolveMaterialParents(sgData.materials);
-    jarParts = sgData.parts;
-    addons.push({
-      id: 'silentgear',
-      name: sgData.name,
-      version: sgData.version,
-      enabled: true,
-      description: `Silent Gear oficial extraído do jar ${sgJar}.`,
-      jar: sgJar,
-    });
-  }
+  const baseData = await readJar(baseJar.file);
+  const baseMaterials = resolveMaterialParents(baseData.materials);
+  const jarParts = baseData.parts;
+  addons.push({
+    id: BASE_MOD_ID,
+    name: baseData.name,
+    version: baseData.version,
+    enabled: true,
+    description: `Silent Gear oficial extraído do jar ${baseJar.file}.`,
+    jar: baseJar.file,
+  });
 
-  if (gemsJar) {
-    const gemsData = await readJar(gemsJar);
-    mergeTraitData(gemsData);
-    layers['silentgems'] = {
-      id: 'silentgems',
-      name: gemsData.name,
-      version: gemsData.version,
-      materials: gemsData.materials,
-    };
-    addons.push({
-      id: 'silentgems',
-      name: gemsData.name,
-      version: gemsData.version,
-      enabled: true,
-      description: `Silent's Gems extraído do jar ${gemsJar}.`,
-      jar: gemsJar,
-    });
-  }
-
-  if (smwJar) {
-    const smwData = await readJar(smwJar);
-    mergeTraitData(smwData);
-    layers['sgearmetalworks'] = {
-      id: 'sgearmetalworks',
-      name: smwData.name,
-      version: smwData.version,
-      materials: smwData.materials,
-      overrides: smwData.overrides,
-    };
-    addons.push({
-      id: 'sgearmetalworks',
-      name: smwData.name,
-      version: smwData.version,
-      enabled: true,
-      description: `Silent Gear Metalworks extraído do jar ${smwJar}.`,
-      jar: smwJar,
-    });
-  }
-
-  const activeKubeDir = fs.existsSync(kubejsDir)
-    ? kubejsDir
-    : fs.existsSync(kubejsAltDir)
-    ? kubejsAltDir
-    : undefined;
-
-  if (activeKubeDir) {
-    const kubejsMaterials: Record<string, Material> = {};
-    const kubejsOverrides: Record<string, Partial<Material>> = {};
-    for (const file of findJsonFiles(activeKubeDir).filter((f) => f.includes('/silentgear_traits/'))) {
-      const [, ns, name] = file.replace(/\\/g, '/').match(/([^/]+)\/silentgear_traits\/(.+)\.json$/) ?? [];
-      if (ns && name) {
-        rawTraits[`${ns}:${name}`] = JSON.parse(fs.readFileSync(file, 'utf-8'));
-        recordFile(file, { kind: 'script-data' });
-      }
+  // um jar com materiais não pode ter o id de uma raiz de script: layers e addons são chaveados só pelo id
+  for (const root of scriptRoots) {
+    if (jarsById.get(root.id)?.hasMaterials) {
+      throw new Error(`[extract-official-data] o jar ${jarsById.get(root.id)!.file} tem o id da raiz de script ${root.id}`);
     }
-    const kubejsFiles = findJsonFiles(activeKubeDir).filter((f) => f.includes('/silentgear_materials/'));
-    for (const file of kubejsFiles) {
-      try {
-        const mat = parseMaterialFile(file);
-        recordFile(file, { kind: 'script-data' });
-        if (mat.id.startsWith('sgearmetalworks:')) {
-          kubejsOverrides[mat.id] = {
-            stats: mat.stats,
-            traits: mat.traits,
-            statModifiers: mat.statModifiers,
-            harvest_tier: mat.harvest_tier,
-          };
-        } else {
-          mat.source = 'kubejs';
-          kubejsMaterials[mat.id] = mat;
+  }
+
+  // ids já definidos por camadas que carregam antes; um id repetido numa camada posterior a reescreve
+  const known = new Set<string>();
+  const register = (layer: CatalogLayer, description: string, jar: string) => {
+    for (const matId of [...Object.keys(layer.materials ?? {}), ...Object.keys(layer.overrides ?? {})]) known.add(matId);
+    layers[layer.id] = layer;
+    addons.push({ id: layer.id, name: layer.name, version: layer.version, enabled: true, description, jar });
+  };
+  let baseLoaded = false;
+  for (const { id, kind } of loadOrder) {
+    if (kind === 'jar' && id === BASE_MOD_ID) {
+      mergeTraitData(baseData);
+      Object.keys(baseMaterials).forEach((matId) => known.add(matId));
+      baseLoaded = true;
+    } else if (kind === 'script') {
+      const root = rootsById.get(id)!;
+      const { layer, traits } = readScriptRoot(root, known, { recordFile, warn });
+      Object.assign(rawTraits, traits);
+      register(layer, `Dados de script ${root.id} do pack (${root.name}).`, root.id);
+    } else if (jarsById.get(id)?.hasMaterials) {
+      const jar = jarsById.get(id)!;
+      const data = await readJar(jar.file);
+      mergeTraitData(data);
+      let incoming = data.materials;
+      if (!baseLoaded) {
+        const { kept, shadowed } = dropShadowed(incoming, baseMaterials);
+        if (shadowed.length > 0) {
+          warn(`[extract-official-data] ${jar.file} carrega antes do ${BASE_MOD_ID}, que vence em: ${shadowed.join(', ')}`);
         }
-      } catch (e) {
-        console.warn(`[extract-official-data] Erro ao ler kubejs ${file}:`, e);
+        incoming = kept;
       }
+      register(
+        { id, name: data.name, version: data.version, ...splitMaterials(incoming, known) },
+        `${data.name} extraído do jar ${jar.file}.`,
+        jar.file
+      );
     }
-    layers['kubejs'] = {
-      id: 'kubejs',
-      name: 'KubeJS (ATM)',
-      version: 'dynamic',
-      materials: kubejsMaterials,
-      overrides: kubejsOverrides,
-    };
-    addons.push({
-      id: 'kubejs',
-      name: 'KubeJS (ATM)',
-      version: 'dynamic',
-      enabled: true,
-      description: 'Dados dinâmicos do All The Mods com Allthemodium, Vibranium e Unobtainium.',
-      jar: 'kubejs',
-    });
   }
 
-  const enabledAddonIds = addons.map((a) => a.id).filter((id) => id !== 'silentgear');
+  const enabledAddonIds = addons.map((a) => a.id).filter((id) => id !== BASE_MOD_ID);
   const resolvedMaterials = resolveCatalogWithAddons(baseMaterials, layers, enabledAddonIds);
 
   return {
