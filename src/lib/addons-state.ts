@@ -30,34 +30,37 @@ export function parseStoredAddons(raw: string | null): string[] | null {
   return null;
 }
 
-export interface LoadAddonsOptions {
+/** Qual estado guardado está em jogo: o preset e, no preset versionado, a versão do pack. */
+export interface AddonsStateTarget {
   preset: string;
   /** versão do pack carregada; `undefined` nos presets sem índice e quando o índice não carregou */
   pack?: string;
+  /** o catálogo carregado é o de fallback: ler, mas não migrar nem gravar */
+  catalogFailed: boolean;
+}
+
+export interface LoadAddonsOptions extends AddonsStateTarget {
   /** ids de addon do catálogo carregado */
   catalogAddonIds: string[];
   /** addons ligados por padrão no catálogo carregado */
   defaults: string[];
-  /** versões do índice, em qualquer ordem */
+  /** versões do índice; a ordem não importa, a mais recente é achada por `compareVersionIds` */
   knownVersions: string[];
-  /** o catálogo carregado é o de fallback: ler, mas não migrar nem gravar */
-  catalogFailed: boolean;
 }
 
 /**
  * Addons ativos ao carregar uma versão. Estado próprio da versão vale como está. Sem ele, a
  * versão copia a maior versão do índice com estado salvo, depois a chave legada, filtrando os
  * ids que o catálogo não tem, e grava na chave nova. Sem nenhuma origem, usa os defaults sem gravar.
+ * Com o catálogo de fallback devolve a origem sem filtrar e sem gravar: filtrar por um catálogo
+ * que não é o da versão e gravar congelaria um estado errado.
  */
 export function loadActiveAddons(storage: AddonsStorage, opts: LoadAddonsOptions): string[] {
   const { preset, pack, catalogAddonIds, defaults, knownVersions, catalogFailed } = opts;
   const own = parseStoredAddons(storage.getItem(addonsStorageKey(preset, pack)));
   if (own) return own;
-
-  const versioned = preset === VERSIONED_PRESET;
-  if (!versioned) return defaults;
   // sem versão do pack, a chave "própria" acima já é a legada
-  if (!pack) return defaults;
+  if (preset !== VERSIONED_PRESET || !pack) return defaults;
 
   let source: string[] | null = null;
   const others = knownVersions.filter((v) => v !== pack).sort((a, b) => compareVersionIds(b, a));
@@ -67,15 +70,19 @@ export function loadActiveAddons(storage: AddonsStorage, opts: LoadAddonsOptions
   }
   source ??= parseStoredAddons(storage.getItem(addonsStorageKey(preset)));
   if (!source) return defaults;
+  if (catalogFailed) return source;
 
   const known = new Set(catalogAddonIds);
   const copied = source.filter((id) => known.has(id));
-  if (!catalogFailed) saveActiveAddons(storage, preset, pack, copied);
-  return catalogFailed ? source : copied;
+  saveActiveAddons(storage, { preset, pack, catalogFailed }, copied);
+  return copied;
 }
 
-/** Grava os addons ativos na chave da versão editada; no preset versionado sem versão não grava. */
-export function saveActiveAddons(storage: AddonsStorage, preset: string, pack: string | undefined, ids: string[]): void {
-  if (preset === VERSIONED_PRESET && !pack) return;
-  storage.setItem(addonsStorageKey(preset, pack), JSON.stringify(ids));
+/**
+ * Grava os addons ativos na chave da versão editada. Não grava com o catálogo de fallback nem
+ * no preset versionado sem versão (a chave legada nunca é escrita).
+ */
+export function saveActiveAddons(storage: AddonsStorage, target: AddonsStateTarget, ids: string[]): void {
+  if (target.catalogFailed || (target.preset === VERSIONED_PRESET && !target.pack)) return;
+  storage.setItem(addonsStorageKey(target.preset, target.pack), JSON.stringify(ids));
 }

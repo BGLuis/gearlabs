@@ -25,6 +25,8 @@ const LEGACY = 'gearlabs_addons_atm11';
 const V14 = 'gearlabs_addons_atm11@0.14.0-beta';
 const V11 = 'gearlabs_addons_atm11@0.11.1-beta';
 
+const target = { preset: 'atm11', pack: '0.14.0-beta', catalogFailed: false };
+
 const base = {
   preset: 'atm11',
   pack: '0.14.0-beta',
@@ -71,7 +73,7 @@ describe('loadActiveAddons', () => {
 
   it('uses the highest version in the index order, not the last edited', () => {
     const s = fakeStorage({ [V11]: '["b"]', 'gearlabs_addons_atm11@0.13.0-beta': '["a"]' });
-    const out = loadActiveAddons(s, { ...base, knownVersions: ['0.14.0-beta', '0.13.0-beta', '0.11.1-beta'] });
+    const out = loadActiveAddons(s, { ...base, knownVersions: ['0.11.1-beta', '0.14.0-beta', '0.13.0-beta'] });
     expect(out).toEqual(['a']);
   });
 
@@ -89,7 +91,7 @@ describe('loadActiveAddons', () => {
   it('keeps what the player changed when the same version loads twice', () => {
     const s = fakeStorage({ [LEGACY]: '["a"]' });
     loadActiveAddons(s, base);
-    saveActiveAddons(s, 'atm11', '0.14.0-beta', ['a', 'b']);
+    saveActiveAddons(s, target, ['a', 'b']);
     expect(loadActiveAddons(s, base)).toEqual(['a', 'b']);
     expect(s.data.get(LEGACY)).toBe('["a"]');
   });
@@ -126,7 +128,7 @@ describe('loadActiveAddons', () => {
     const opts = { ...base, preset: '1.21.1', pack: undefined, knownVersions: [] };
     expect(loadActiveAddons(s, opts)).toEqual(['a', 'gone']);
     expect(s.writes).toEqual([]);
-    saveActiveAddons(s, '1.21.1', undefined, ['b']);
+    saveActiveAddons(s, { preset: '1.21.1', catalogFailed: false }, ['b']);
     expect(s.data.get('gearlabs_addons_1.21.1')).toBe('["b"]');
     expect(loadActiveAddons(fakeStorage(), opts)).toEqual(['a']);
   });
@@ -135,15 +137,22 @@ describe('loadActiveAddons', () => {
 describe('saveActiveAddons', () => {
   it('writes only the key of the version being edited', () => {
     const s = fakeStorage({ [LEGACY]: '["a"]', [V11]: '["a"]' });
-    saveActiveAddons(s, 'atm11', '0.14.0-beta', ['b']);
+    saveActiveAddons(s, target, ['b']);
     expect(s.data.get(V14)).toBe('["b"]');
     expect(s.data.get(V11)).toBe('["a"]');
     expect(s.data.get(LEGACY)).toBe('["a"]');
   });
 
+  it('does not write while the catalog is in fallback, so the real load can still migrate', () => {
+    const s = fakeStorage({ [LEGACY]: '["a","gone"]' });
+    saveActiveAddons(s, { ...target, catalogFailed: true }, ['a', 'gone', 'b']);
+    expect(s.writes).toEqual([]);
+    expect(loadActiveAddons(s, base)).toEqual(['a']);
+  });
+
   it('never writes the legacy key when the pack version is unknown', () => {
     const s = fakeStorage();
-    saveActiveAddons(s, 'atm11', undefined, ['a']);
+    saveActiveAddons(s, { ...target, pack: undefined }, ['a']);
     expect(s.writes).toEqual([]);
   });
 });

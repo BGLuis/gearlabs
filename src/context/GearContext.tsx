@@ -658,7 +658,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         ? prev.filter((id) => id !== addonId)
         : [...prev, addonId];
       if (typeof window !== 'undefined') {
-        saveActiveAddons(localStorage, version, packInfo?.id, next);
+        saveActiveAddons(localStorage, { preset: version, pack: packInfo?.id, catalogFailed: catalogError !== null }, next);
       }
       return next;
     });
@@ -670,7 +670,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
         ? Array.from(new Set([...prev, addonId]))
         : prev.filter((id) => id !== addonId);
       if (typeof window !== 'undefined') {
-        saveActiveAddons(localStorage, version, packInfo?.id, next);
+        saveActiveAddons(localStorage, { preset: version, pack: packInfo?.id, catalogFailed: catalogError !== null }, next);
       }
       return next;
     });
