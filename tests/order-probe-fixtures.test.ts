@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { createHash } from 'crypto';
 import { RUNS } from '../scripts/order-probe/generate';
-import { buildRunMeta, probeRows } from '../scripts/order-probe/fixtures';
+import { buildRunMeta, probeRows, resolveInstanceDir } from '../scripts/order-probe/fixtures';
 
 const HEADER = 'Pack\tName\tType\tID\tParent\tCategories\tAdditive\tTraits';
 const tsv = [
@@ -34,5 +34,17 @@ describe('#106: meta dos dumps das rodadas', () => {
     ]);
     expect(meta.winners['silentgear:order_probe']).toEqual([{ pack: 'mod/zzz_probe', name: 'Probe ZZZ', traits: 'Crushing I' }]);
     expect(meta.winners['silentgear:iron']).toHaveLength(1);
+  });
+});
+
+describe('#106: guarda da instância do guia', () => {
+  const dir = '/home/u/.local/share/PrismLauncher/instances';
+
+  it('aceita uma instância nova que seja filha direta da pasta do Prism', () => {
+    expect(resolveInstanceDir(dir, '26.1.2')).toBe(`${dir}/26.1.2`);
+  });
+
+  it.each(['ATM 11', 'ATM 11/', '../ATM 11', 'x/../ATM 11', '', '   ', '..', '.', '/etc', 'a/b'])('recusa %j (nunca a instância real nem fora da pasta do Prism)', (name) => {
+    expect(resolveInstanceDir(dir, name)).toBeNull();
   });
 });

@@ -58,21 +58,17 @@ describe('#106: gerador dos jars-sonda de ordem de camadas', () => {
     expect(await toml(3, 1)).toMatch(/modId="aaa_probe"[\s\S]*?ordering="AFTER"/);
     expect(await toml(4, 1)).toMatch(/modId="aaa_probe"[\s\S]*?ordering="BEFORE"/);
     expect(await toml(5, 1)).toMatch(/modId="silentgear"[\s\S]*?ordering="AFTER"/);
-    expect(await toml(1, 0)).not.toContain('[[dependencies.aaa_probe]]\nmodId="aaa_probe"');
+    expect(await toml(1, 0)).not.toContain('[[dependencies');
   });
 
-  it('na rodada 5 zzz_probe também sobrescreve silentgear:iron, que o jar do Silent Gear já define', async () => {
+  it('só a rodada 5 sobrescreve silentgear:iron, e só com zzz_probe', async () => {
+    const overriding = RUNS.flatMap((r) => r.probes.filter((p) => p.overrides?.length).map((p) => [r.run, p.modId, p.overrides]));
+    expect(overriding).toEqual([[5, 'zzz_probe', ['iron']]]);
     const run = RUNS[4];
     const zzz = run.probes.find((p) => p.modId === 'zzz_probe')!;
     const zip = await JSZip.loadAsync(await buildProbeJar(run, zzz));
     const iron = JSON.parse(await zip.file('data/silentgear/silentgear_materials/iron.json')!.async('string'));
     expect(iron.display.name.text).toBe('Probe ZZZ iron');
-    for (const r of RUNS.filter((r) => r.run !== 5)) {
-      for (const p of r.probes) {
-        const z = await JSZip.loadAsync(await buildProbeJar(r, p));
-        expect(z.file('data/silentgear/silentgear_materials/iron.json')).toBeNull();
-      }
-    }
   });
 
   it('a rodada 6 traz o material do KubeGroovy com índice próprio', () => {

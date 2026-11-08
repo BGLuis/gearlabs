@@ -1,5 +1,8 @@
 import { createHash } from 'crypto';
-import { MOD_LOADER, Run } from './generate';
+import * as path from 'path';
+import { MINECRAFT_VERSION, MOD_LOADER, Run, SILENT_GEAR_VERSION } from './generate';
+
+export const REAL_INSTANCE_NAME = 'ATM 11';
 
 export interface DumpRow {
   pack: string;
@@ -28,8 +31,8 @@ export function buildRunMeta(run: Run, tsv: Buffer, jarSha256: Record<string, st
     source: '/sgear_mats dump',
     file: 'output/silentgear/material_export.tsv',
     instance: 'Instância mínima do spike #106 (Prism, só silent-lib, silent-gear 4.2.3 e as sondas)',
-    minecraft: '26.1.2',
-    silentGearVersion: '4.2.3',
+    minecraft: MINECRAFT_VERSION,
+    silentGearVersion: SILENT_GEAR_VERSION,
     modLoader: MOD_LOADER,
     run: run.run,
     description: run.description,
@@ -48,4 +51,17 @@ export function buildRunMeta(run: Run, tsv: Buffer, jarSha256: Record<string, st
     sha256: createHash('sha256').update(tsv).digest('hex'),
     note: 'Arquivo gravado pelo próprio jogo (não gerado pelo extrator). Gerado por scripts/order-probe/guide.ts; jars-sonda de scripts/order-probe/generate.ts, não versionados.',
   };
+}
+
+/**
+ * Pasta da instância mínima dentro de `instancesDir`, ou null quando o nome é vazio, sai da pasta
+ * do Prism ou é a instância real. O guia só escreve em um caminho aprovado por esta função.
+ */
+export function resolveInstanceDir(instancesDir: string, name: string): string | null {
+  const trimmed = name.trim();
+  if (!trimmed) return null;
+  const dir = path.resolve(instancesDir, trimmed);
+  if (path.dirname(dir) !== path.resolve(instancesDir)) return null;
+  if (path.basename(dir) === REAL_INSTANCE_NAME) return null;
+  return dir;
 }

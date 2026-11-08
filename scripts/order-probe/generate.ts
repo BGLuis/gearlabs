@@ -13,6 +13,8 @@ import JSZip from 'jszip';
 
 export const MATERIAL_ID_FILE = 'order_probe.json';
 export const MOD_LOADER = 'lowcodefml';
+export const MINECRAFT_VERSION = '26.1.2';
+export const SILENT_GEAR_VERSION = '4.2.3';
 
 export type Ordering = 'AFTER' | 'BEFORE' | 'NONE';
 
@@ -41,14 +43,16 @@ export interface Run {
   kubegroovy?: boolean;
 }
 
-const probe = (modId: string, fileName: string, deps: ProbeDependency[] = [], overrides: string[] = []): Probe => ({
-  modId,
-  fileName,
-  label: modId === 'aaa_probe' ? 'Probe AAA' : 'Probe ZZZ',
-  trait: modId === 'aaa_probe' ? 'silentgear:malleable' : 'silentgear:crushing',
-  dependencies: deps,
-  overrides,
-});
+const IDENTITY = {
+  aaa_probe: { label: 'Probe AAA', trait: 'silentgear:malleable' },
+  zzz_probe: { label: 'Probe ZZZ', trait: 'silentgear:crushing' },
+} as const;
+
+const probe = (
+  modId: keyof typeof IDENTITY,
+  fileName: string,
+  { dependencies = [], overrides = [] }: { dependencies?: ProbeDependency[]; overrides?: string[] } = {},
+): Probe => ({ modId, fileName, ...IDENTITY[modId], dependencies, overrides });
 
 export const RUNS: Run[] = [
   {
@@ -66,7 +70,7 @@ export const RUNS: Run[] = [
     description: 'zzz_probe depende de aaa_probe com ordering AFTER.',
     probes: [
       probe('aaa_probe', 'aaa-probe-1.0.0.jar'),
-      probe('zzz_probe', 'zzz-probe-1.0.0.jar', [{ modId: 'aaa_probe', ordering: 'AFTER' }]),
+      probe('zzz_probe', 'zzz-probe-1.0.0.jar', { dependencies: [{ modId: 'aaa_probe', ordering: 'AFTER' }] }),
     ],
   },
   {
@@ -74,7 +78,7 @@ export const RUNS: Run[] = [
     description: 'zzz_probe depende de aaa_probe com ordering BEFORE (o inverso da rodada 3).',
     probes: [
       probe('aaa_probe', 'aaa-probe-1.0.0.jar'),
-      probe('zzz_probe', 'zzz-probe-1.0.0.jar', [{ modId: 'aaa_probe', ordering: 'BEFORE' }]),
+      probe('zzz_probe', 'zzz-probe-1.0.0.jar', { dependencies: [{ modId: 'aaa_probe', ordering: 'BEFORE' }] }),
     ],
   },
   {
@@ -83,7 +87,7 @@ export const RUNS: Run[] = [
       'Como o sgearmetalworks: zzz_probe declara silentgear com ordering AFTER e sobrescreve silentgear:iron (que o jar do Silent Gear define); aaa_probe não declara nada.',
     probes: [
       probe('aaa_probe', 'aaa-probe-1.0.0.jar'),
-      probe('zzz_probe', 'zzz-probe-1.0.0.jar', [{ modId: 'silentgear', ordering: 'AFTER' }], ['iron']),
+      probe('zzz_probe', 'zzz-probe-1.0.0.jar', { dependencies: [{ modId: 'silentgear', ordering: 'AFTER' }], overrides: ['iron'] }),
     ],
   },
   {
@@ -189,6 +193,15 @@ export function kubegroovyFiles(): Record<string, string> {
   };
 }
 
+/** Grava os arquivos da rodada 6 dentro de `<kubegroovyDir>/`. */
+export function writeKubegroovy(kubegroovyDir: string): void {
+  for (const [rel, content] of Object.entries(kubegroovyFiles())) {
+    const target = path.join(kubegroovyDir, rel);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.writeFileSync(target, content);
+  }
+}
+
 async function main(): Promise<void> {
   const outDir = process.argv[2];
   if (!outDir) {
@@ -201,17 +214,14 @@ async function main(): Promise<void> {
     for (const p of run.probes) {
       fs.writeFileSync(path.join(modsDir, p.fileName), await buildProbeJar(run, p));
     }
-    if (run.kubegroovy) {
-      for (const [rel, content] of Object.entries(kubegroovyFiles())) {
-        const target = path.join(outDir, `run${run.run}`, 'kubegroovy', rel);
-        fs.mkdirSync(path.dirname(target), { recursive: true });
-        fs.writeFileSync(target, content);
-      }
-    }
+    if (run.kubegroovy) writeKubegroovy(path.join(outDir, `run${run.run}`, 'kubegroovy'));
     console.log(`run${run.run}: ${run.description}`);
   }
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename ?? '')) {
-  main();
+if (require.main === module) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
 }

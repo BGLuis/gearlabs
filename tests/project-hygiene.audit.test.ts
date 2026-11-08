@@ -3,6 +3,8 @@ import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import vitestConfig from '../vitest.config';
+import { RUNS } from '../scripts/order-probe/generate';
+import { probeRows, trackedIds } from '../scripts/order-probe/fixtures';
 
 const root = path.resolve(__dirname, '..');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
@@ -67,18 +69,14 @@ describe('Auditoria #106: dumps das rodadas do spike de ordem de camadas', () =>
     for (const n of runs) expect(header(`${probeBase(n)}.tsv`)).toBe(expected);
   });
 
-  it('a rodada 5 registra também a linha de silentgear:iron', () => {
-    const rows = fs.readFileSync(`${probeBase(5)}.tsv`, 'utf8').split('\n').filter((l) => l.split('\t')[3] === 'silentgear:iron');
-    expect(rows.length).toBeGreaterThan(0);
-  });
-
-  it('cada dump registra a linha de silentgear:order_probe', () => {
-    for (const n of runs) {
-      const rows = fs
-        .readFileSync(`${probeBase(n)}.tsv`, 'utf8')
-        .split('\n')
-        .filter((l) => l.split('\t')[3] === 'silentgear:order_probe');
-      expect(rows.length).toBeGreaterThan(0);
+  it.each(runs)('probe-106-run%i: meta.winners é exatamente o que o TSV registra para os ids acompanhados', (n) => {
+    const tsv = fs.readFileSync(`${probeBase(n)}.tsv`, 'utf8');
+    const meta = JSON.parse(fs.readFileSync(`${probeBase(n)}.meta.json`, 'utf8'));
+    const ids = trackedIds(RUNS[n - 1]);
+    expect(Object.keys(meta.winners)).toEqual(ids);
+    for (const id of ids) {
+      expect(probeRows(tsv, id).length).toBeGreaterThan(0);
+      expect(meta.winners[id]).toEqual(probeRows(tsv, id));
     }
   });
 });
