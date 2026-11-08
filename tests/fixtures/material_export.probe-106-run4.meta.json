@@ -1,0 +1,48 @@
+{
+  "source": "/sgear_mats dump",
+  "file": "output/silentgear/material_export.tsv",
+  "instance": "Instância mínima do spike #106 (Prism, só silent-lib, silent-gear 4.2.3 e as sondas)",
+  "minecraft": "26.1.2",
+  "silentGearVersion": "4.2.3",
+  "modLoader": "lowcodefml",
+  "run": 4,
+  "description": "zzz_probe depende de aaa_probe com ordering BEFORE (o inverso da rodada 3).",
+  "kubegroovy": false,
+  "probes": [
+    {
+      "modId": "aaa_probe",
+      "fileName": "aaa-probe-1.0.0.jar",
+      "label": "Probe AAA",
+      "trait": "silentgear:malleable",
+      "dependencies": [],
+      "overrides": [],
+      "jarSha256": "d73eaffac52564a0e8d71660b703f8e18ed0600858fa186478e43eda9de1b4c4"
+    },
+    {
+      "modId": "zzz_probe",
+      "fileName": "zzz-probe-1.0.0.jar",
+      "label": "Probe ZZZ",
+      "trait": "silentgear:crushing",
+      "dependencies": [
+        {
+          "modId": "aaa_probe",
+          "ordering": "BEFORE"
+        }
+      ],
+      "overrides": [],
+      "jarSha256": "bc4692ee22a297dea4bd12fb7b88e3235dd3ec167c89f0d52502ff5c2cf6b996"
+    }
+  ],
+  "winners": {
+    "silentgear:order_probe": [
+      {
+        "pack": "mod/aaa_probe",
+        "name": "Probe AAA",
+        "traits": "Malleable I"
+      }
+    ]
+  },
+  "generatedAt": "2026-11-08",
+  "sha256": "3378ac3362ba9c1abb865150b421f1f658174e3157223e8e85444b28a7b942c6",
+  "note": "Arquivo gravado pelo próprio jogo (não gerado pelo extrator). Gerado por scripts/order-probe/guide.ts; jars-sonda de scripts/order-probe/generate.ts, não versionados."
+}
