@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "extract-data": "tsx scripts/extract-official-data.ts",
-    "extract-textures": "tsx scripts/download-silentgear-textures.ts"
+    "extract-textures": "tsx scripts/download-silentgear-textures.ts",
+    "check-remote": "tsx scripts/check-remote.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",

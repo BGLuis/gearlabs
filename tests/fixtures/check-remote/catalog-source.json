@@ -1,0 +1,39 @@
+{
+  "pack": {
+    "name": "All the Mods 11",
+    "version": "0.14.0-beta",
+    "curseforgeProjectId": 1148445,
+    "curseforgeFileId": 9343763
+  },
+  "minecraft": "26.1.2",
+  "loader": "neoforge-26.1.2.124",
+  "extractedAt": "2026-11-08T12:00:00-03:00",
+  "files": [
+    {
+      "path": "minecraft/kubegroovy/dynamic_data/silentgear/silentgear_materials/allthemodium.json",
+      "kind": "script-data",
+      "sha1": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "path": "minecraft/mods/allthemodium-26.1.2-4.2.0.jar",
+      "kind": "jar",
+      "modId": "allthemodium",
+      "version": "4.2.0",
+      "sha1": "be9e13b52981508c68ec6d3fc0746654596c8c2c"
+    },
+    {
+      "path": "minecraft/mods/sgearmetalworks-26.1.2-1.6.0.jar",
+      "kind": "jar",
+      "modId": "sgearmetalworks",
+      "version": "1.6.0",
+      "sha1": "67e24157da6d6682752d1eebffc9b9267dc40481"
+    },
+    {
+      "path": "minecraft/mods/silent-gear-26.1.2-neoforge-4.2.3.jar",
+      "kind": "jar",
+      "modId": "silentgear",
+      "version": "4.2.3",
+      "sha1": "f0e1d83ebb243990ffa3ceac22f807b016364fdf"
+    }
+  ]
+}
