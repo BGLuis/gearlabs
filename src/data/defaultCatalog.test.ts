@@ -5,6 +5,7 @@ import {
   OFFICIAL_MATERIALS_1_20,
   OFFICIAL_MATERIALS_1_21,
   OFFICIAL_GEAR_TYPES,
+  VERSION_PRESETS,
 } from './defaultCatalog';
 import { ATM11_MATERIALS } from '../../tests/fixtures/atm11Materials';
 import { VersionCatalog } from '@/types/silentgear';
@@ -113,5 +114,16 @@ describe('Tipos de Equipamento Manuais vs Partes Principais do Mod (Issue #39)',
   it('katana: durabilityMultiplier é 1 + MULTIPLY_BASE da lâmina do mod', () => {
     const part = JSON.parse(fs.readFileSync(path.join(partsDir, 'katana_blade.json'), 'utf8'));
     expect(OFFICIAL_GEAR_TYPES.katana.durabilityMultiplier).toBe(1 + part.properties.durability.value);
+  });
+});
+
+describe('atm11 preset vs published catalog source (#94)', () => {
+  const published = JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, '../../public/data/versions/atm11/catalog.json'), 'utf-8')
+  ) as VersionCatalog;
+  // O catálogo publicado antes do #94 não tem `source`; o #98 publica um com ele.
+  it.skipIf(!published.source)('preset minecraftVersion equals source.minecraft', () => {
+    const preset = VERSION_PRESETS.find((p) => p.id === 'atm11');
+    expect(preset?.minecraftVersion).toBe(published.source?.minecraft);
   });
 });
