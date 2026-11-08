@@ -23,7 +23,7 @@ import {
 } from '@/data/defaultCatalog';
 import { calculateGearStatsSafe } from '@/lib/calculator';
 import { getDefaultInventory, loadVersionCatalog, ResolvedPackVersion } from '@/lib/catalog-loader';
-import { loadActiveAddons, saveActiveAddons } from '@/lib/addons-state';
+import { addonsFromStorageEvent, loadActiveAddons, saveActiveAddons } from '@/lib/addons-state';
 import { VERSIONED_PRESET, formatVersionKey, parseVersionKey } from '@/lib/catalog-index';
 import { resolveCatalogWithAddons } from '@/lib/layer-resolver';
 import { decodeBuildFromHash, encodeBuildToHash } from '@/lib/url-state';
@@ -209,6 +209,18 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
       cancelled = true;
     };
   }, [version, packVersion, customCatalogs]);
+
+  // Addons alterados em outra aba na mesma versão: o evento `storage` só dispara nas outras abas
+  const addonsPack = packInfo?.id;
+  const catalogFailed = catalogError !== null;
+  useEffect(() => {
+    function onStorage(e: StorageEvent) {
+      const ids = addonsFromStorageEvent(e, { preset: version, pack: addonsPack, catalogFailed });
+      if (ids) setActiveAddons(ids);
+    }
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [version, addonsPack, catalogFailed]);
 
   // Resolver o catálogo efetivo aplicando camadas de addons ativos
   useEffect(() => {
