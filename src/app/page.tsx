@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useGear } from '@/context/GearContext';
+import { VERSIONED_PRESET } from '@/lib/catalog-index';
 import { GearTypeSidebar } from '@/components/GearTypeSidebar';
 import { BuildQuickStats } from '@/components/BuildQuickStats';
 import { GearCanvas } from '@/components/GearCanvas';
@@ -10,7 +11,9 @@ import { InlineOptimizerCard } from '@/components/InlineOptimizerCard';
 import { StatsPanel } from '@/components/StatsPanel';
 
 export default function HomePage() {
-  const { catalog, build, catalogError, statsError, lang } = useGear();
+  const { catalog, build, catalogError, statsError, lang, version, packInfo } = useGear();
+  const oldPackVersion =
+    version === VERSIONED_PRESET && packInfo && !catalogError && packInfo.id !== packInfo.latest ? packInfo : null;
 
   const currentGearType = catalog.gearTypes[build.gearTypeId] || Object.values(catalog.gearTypes)[0];
   const requiredSlots = currentGearType?.requiredSlots || [];
@@ -19,6 +22,17 @@ export default function HomePage() {
 
   return (
     <div className="space-y-5">
+      {oldPackVersion && (
+        <div
+          role="status"
+          className="p-3 rounded-lg border border-mc-gold/60 bg-mc-gold/10 text-xs font-mono text-mc-gold"
+        >
+          {lang === 'pt'
+            ? `Este build usa o ATM11 ${oldPackVersion.id}. A versão mais recente é a ${oldPackVersion.latest}; os números podem diferir.`
+            : `This build uses ATM11 ${oldPackVersion.id}. The latest version is ${oldPackVersion.latest}; numbers may differ.`}
+        </div>
+      )}
+
       {catalogError && (
         <div
           role="alert"

@@ -6,10 +6,11 @@ import { usePathname } from 'next/navigation';
 import { useGear } from '@/context/GearContext';
 import { ImportModpackModal } from '@/components/ImportModpackModal';
 import { AddonSelector } from '@/components/AddonSelector';
+import { VERSIONED_PRESET } from '@/lib/catalog-index';
 import { Hammer, BookOpen, History, FlaskConical, Share2, Check, Globe } from 'lucide-react';
 
 export function Navbar() {
-  const { version, setVersion, presets, lang, setLang, copyShareUrl } = useGear();
+  const { version, setVersion, packInfo, setPackVersion, presets, lang, setLang, copyShareUrl } = useGear();
   const pathname = usePathname();
   const [copied, setCopied] = useState(false);
 
@@ -31,6 +32,8 @@ export function Navbar() {
       share: 'Compartilhar',
       copied: 'Copiado!',
       version: 'Versão / Modpack',
+      packVersion: 'Versão do modpack',
+      latestTag: 'mais recente',
     },
     en: {
       builder: 'Simulator',
@@ -41,6 +44,8 @@ export function Navbar() {
       share: 'Share',
       copied: 'Copied!',
       version: 'Version / Modpack',
+      packVersion: 'Modpack version',
+      latestTag: 'latest',
     },
   }[lang];
 
@@ -127,6 +132,29 @@ export function Navbar() {
               )}
             </select>
           </div>
+
+          {/* Versões do pack: só no ATM11 e quando o índice publica mais de uma */}
+          {version === VERSIONED_PRESET && packInfo && packInfo.index.versions.length > 1 && (
+            <div className="flex items-center bg-[#16181B] hover:bg-[#1E2125] px-2.5 h-8 rounded-[6px] border border-mc-border text-xs font-mono transition-colors">
+              <select
+                aria-label={t.packVersion}
+                title={t.packVersion}
+                value={packInfo.id}
+                onChange={(e) => setPackVersion(e.target.value)}
+                className="bg-transparent text-mc-text font-medium focus:outline-none cursor-pointer max-w-[130px] truncate"
+              >
+                {!packInfo.index.versions.some((v) => v.id === packInfo.id) && (
+                  <option value={packInfo.id}>{packInfo.id}</option>
+                )}
+                {packInfo.index.versions.map((v) => (
+                  <option key={v.id} value={v.id} className="text-mc-text">
+                    {v.id}
+                    {v.id === packInfo.latest ? ` (${t.latestTag})` : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Seletor de Addons e Camadas */}
           <AddonSelector />

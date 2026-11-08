@@ -22,7 +22,8 @@ import {
   OFFICIAL_TRAITS,
 } from '@/data/defaultCatalog';
 import { calculateGearStatsSafe } from '@/lib/calculator';
-import { getDefaultInventory, loadVersionCatalog } from '@/lib/catalog-loader';
+import { getDefaultInventory, loadVersionCatalog, ResolvedPackVersion } from '@/lib/catalog-loader';
+import { VERSIONED_PRESET, formatVersionKey, parseVersionKey } from '@/lib/catalog-index';
 import { resolveCatalogWithAddons } from '@/lib/layer-resolver';
 import { decodeBuildFromHash, encodeBuildToHash } from '@/lib/url-state';
 import {
@@ -41,8 +42,12 @@ import {
 } from '@/lib/parts';
 
 interface GearContextType {
+  /** id do preset (`atm11`, `1.21.1`, `custom_…`); a versão do pack do ATM11 fica em `packInfo` */
   version: string;
   setVersion: (v: string) => void;
+  /** versão do pack resolvida pelo índice (só no preset ATM11, e só depois de carregar) */
+  packInfo: ResolvedPackVersion | null;
+  setPackVersion: (id: string) => void;
   presets: VersionPreset[];
   catalog: VersionCatalog;
   addons: AddonConfig[];
@@ -90,6 +95,9 @@ const GearContext = createContext<GearContextType | null>(null);
 
 export function GearProvider({ children }: { children: React.ReactNode }) {
   const [version, setVersionState] = useState<string>('atm11');
+  // versão do pack pedida (link ou seletor); null = a mais recente do índice
+  const [packVersion, setPackVersionState] = useState<string | null>(null);
+  const [packInfo, setPackInfo] = useState<ResolvedPackVersion | null>(null);
   const [presets, setPresets] = useState<VersionPreset[]>(VERSION_PRESETS);
   const [rawCatalog, setRawCatalog] = useState<VersionCatalog>(ATM11_CATALOG);
   const [activeAddons, setActiveAddons] = useState<string[]>(() => {
@@ -148,7 +156,9 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined' && window.location.hash) {
       const decoded = decodeBuildFromHash(window.location.hash);
       if (decoded) {
-        setVersionState(decoded.version);
+        const { preset, pack } = parseVersionKey(decoded.version);
+        setVersionState(preset);
+        setPackVersionState(pack ?? null);
         setBuild(decoded.build);
       }
     }
@@ -179,6 +189,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
 
     if (customCatalogs[version]) {
       setCatalogError(null);
+      setPackInfo(null);
       setupCatalog(customCatalogs[version]);
       return;
     }
@@ -186,8 +197,11 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     // Buscar do endpoint estático
     let cancelled = false;
     async function loadCatalog() {
-      const { catalog: loaded, error } = await loadVersionCatalog(version);
+      const versionKey =
+        version === VERSIONED_PRESET && packVersion ? formatVersionKey(version, packVersion) : version;
+      const { catalog: loaded, error, resolved } = await loadVersionCatalog(versionKey);
       if (cancelled) return;
+      setPackInfo(resolved ?? null);
       setCatalogError(error);
       setupCatalog(loaded);
     }
@@ -195,7 +209,7 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [version, customCatalogs]);
+  }, [version, packVersion, customCatalogs]);
 
   // Resolver o catálogo efetivo aplicando camadas de addons ativos
   useEffect(() => {
@@ -292,12 +306,18 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
   // Atualizar URL de compartilhamento sempre que a build muda
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const hash = encodeBuildToHash(build, version);
+      // o link grava sempre a versão do pack resolvida (atm11@<versão>), nunca só "atm11"
+      let versionKey = version;
+      if (version === VERSIONED_PRESET) {
+        if (!packInfo) return;
+        versionKey = formatVersionKey(version, packInfo.id);
+      }
+      const hash = encodeBuildToHash(build, versionKey);
       const url = `${window.location.origin}${window.location.pathname}#${hash}`;
       setShareUrl(url);
       window.history.replaceState(null, '', `#${hash}`);
     }
-  }, [build, version]);
+  }, [build, version, packInfo]);
 
   const { stats, error: statsError } = React.useMemo(
     () => calculateGearStatsSafe(build, catalog),
@@ -306,6 +326,11 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
 
   function setVersion(newV: string) {
     setVersionState(newV);
+    setPackVersionState(null);
+  }
+
+  function setPackVersion(id: string) {
+    setPackVersionState(id);
   }
 
   function setLang(newLang: 'pt' | 'en') {
@@ -651,6 +676,8 @@ export function GearProvider({ children }: { children: React.ReactNode }) {
       value={{
         version,
         setVersion,
+        packInfo,
+        setPackVersion,
         presets,
         catalog,
         addons: catalog.addons || [],
