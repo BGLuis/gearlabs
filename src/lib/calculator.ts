@@ -47,6 +47,19 @@ export const STATS_AFFECTED_BY_SYNERGY = new Set<string>([
 ]);
 
 /**
+ * Constantes da sinergia (SynergyUtils.java:24-26,36-74,110 do Silent Gear 4.2.3).
+ * Exportadas para que a página /formulas leia os mesmos números que o cálculo usa.
+ */
+export const SYNERGY_CONSTANTS = {
+  curveA: 1.1,
+  sharedCategoryBonus: 0.015,
+  noSharedCategoryPenalty: 0.2,
+  rarityWeight: 0.001,
+  minValue: 0.1,
+  maxValue: 2.0,
+} as const;
+
+/**
  * Aplica o multiplicador de sinergia a um valor conforme NumberProperty.java:
  * value + Math.abs(value) * (synergy - 1.0)
  */
@@ -106,7 +119,7 @@ export function calculateSynergy(
     .filter(Boolean);
 
   // 2. Sinergia base pela curva
-  const a = 1.1;
+  const a = SYNERGY_CONSTANTS.curveA;
   const x = uniqueCount;
   let synergy = a * (x / (x + a)) + 1.0 / (1.0 + a);
 
@@ -124,14 +137,14 @@ export function calculateSynergy(
     (count) => count === materials.length
   );
   if (!hasSharedCategoryOnAll) {
-    synergy -= 0.2; // NO_SHARED_CATEGORY_PENALTY
+    synergy -= SYNERGY_CONSTANTS.noSharedCategoryPenalty;
   }
 
   // Bônus para categorias compartilhadas entre materiais únicos
   const divisor = materials.length - uniqueCount + 1;
   for (const count of Object.values(categoryCounts)) {
     if (count > 1) {
-      synergy += 0.015 * (count / divisor); // SHARED_CATEGORY_BONUS
+      synergy += SYNERGY_CONSTANTS.sharedCategoryBonus * (count / divisor);
     }
   }
 
@@ -154,7 +167,7 @@ export function calculateSynergy(
         mat.stats[partSlot]?.rarity,
         0
       );
-      synergy -= 0.001 * Math.abs(primaryRarity - rarity); // RARITY_WEIGHT
+      synergy -= SYNERGY_CONSTANTS.rarityWeight * Math.abs(primaryRarity - rarity);
     }
   }
 
@@ -171,7 +184,7 @@ export function calculateSynergy(
   }
 
   // Clamped entre MIN_VALUE (0.1) e MAX_VALUE (2.0)
-  return Math.min(2.0, Math.max(0.1, synergy));
+  return Math.min(SYNERGY_CONSTANTS.maxValue, Math.max(SYNERGY_CONSTANTS.minValue, synergy));
 }
 
 export function applyGradeBonus(value: number, bonus: number): number {
@@ -551,6 +564,18 @@ export function composeCompoundSlotModifiers(
   };
 }
 /**
+ * Constantes do starcharge por propriedade (StarchargedMaterialModifier.java:73-100).
+ * Exportadas para que a página /formulas leia os mesmos números que o cálculo usa.
+ */
+export const STARCHARGE_CONSTANTS = {
+  durabilityBase: 1.25,
+  armorDurabilityBase: 1.1,
+  harvestSpeedPerLevel: 1.5,
+  rangedDivisor: 2.0,
+  armorPerCharge: 2.0,
+} as const;
+
+/**
  * Aplica modificador do Starlight Charger (starcharged) conforme StarchargedMaterialModifier.java:
  * - Apenas operações AVERAGE, MAX e ADD são suportadas (isSupportedModifierOp).
  * - Multiplicativos (MULTIPLY_BASE, MULTIPLY_TOTAL) permanecem inalterados.
@@ -572,22 +597,22 @@ export function applyStarcharge(
 
   switch (statKey) {
     case 'durability':
-      return value * Math.pow(1.25, c);
+      return value * Math.pow(STARCHARGE_CONSTANTS.durabilityBase, c);
     case 'armor_durability':
     case 'enchantment_value':
-      return value * Math.pow(1.1, c);
+      return value * Math.pow(STARCHARGE_CONSTANTS.armorDurabilityBase, c);
     case 'harvest_speed':
-      return value + 1.5 * starchargeLevel * c;
+      return value + STARCHARGE_CONSTANTS.harvestSpeedPerLevel * starchargeLevel * c;
     case 'melee_damage':
     case 'attack_damage':
     case 'magic_damage':
       return value + c;
     case 'ranged_damage':
-      return value + c / 2.0;
+      return value + c / STARCHARGE_CONSTANTS.rangedDivisor;
     case 'armor':
     case 'armor_toughness':
     case 'magic_armor':
-      return value + c * 2.0;
+      return value + c * STARCHARGE_CONSTANTS.armorPerCharge;
     default:
       return value;
   }
