@@ -263,7 +263,7 @@ describe('Derivação de Slots Opcionais por Tipo de Equipamento (Issue #63)', (
   });
 });
 
-  const projectRoot = path.resolve(__dirname, '../..');
+describe('Resolução de IDs aninhados e Herança de Parent (Issue #46)', () => {
   const catalogPath = latestAtm11CatalogPath();
   const rawCatalog = fs.readFileSync(catalogPath, 'utf-8');
   const catalog: VersionCatalog = JSON.parse(rawCatalog);
