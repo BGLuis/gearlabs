@@ -86,3 +86,22 @@ export function saveActiveAddons(storage: AddonsStorage, target: AddonsStateTarg
   if (target.catalogFailed || (target.preset === VERSIONED_PRESET && !target.pack)) return;
   storage.setItem(addonsStorageKey(target.preset, target.pack), JSON.stringify(ids));
 }
+
+/** O que o evento `storage` entrega e esta lógica usa. */
+export interface AddonsStorageEvent {
+  /** `null` quando outra aba chamou `clear()` */
+  key: string | null;
+  newValue: string | null;
+}
+
+/**
+ * Decide se um evento `storage` de outra aba muda os addons ativos: devolve a lista a aplicar
+ * ou `null` para ignorar. Só vale a chave da versão ativa, com valor válido. Remoção, valor
+ * inválido, catálogo de fallback e atm11 sem versão do pack (cuja chave seria a legada, que nunca
+ * é escrita) são ignorados. Os ids vêm sem filtro, como no toggle local; quem aplica não grava.
+ */
+export function addonsFromStorageEvent(event: AddonsStorageEvent, target: AddonsStateTarget): string[] | null {
+  if (target.catalogFailed || (target.preset === VERSIONED_PRESET && !target.pack)) return null;
+  if (event.key !== addonsStorageKey(target.preset, target.pack)) return null;
+  return parseStoredAddons(event.newValue);
+}
