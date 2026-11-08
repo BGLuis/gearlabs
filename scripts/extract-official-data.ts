@@ -17,6 +17,7 @@ import {
   VersionCatalog,
   CatalogIndex,
 } from '../src/types/silentgear';
+import { RemovalBlockedError, compareWithPrevious, parseAllowRemoved } from './catalog-diff';
 import { readInstanceProvenance, resolveInstanceDirs, sha1OfFile } from './lib/instance';
 import { VERSIONED_PRESET, appendIndexEntry, isCatalogIndex, isValidVersionId } from '../src/lib/catalog-index';
 import {
@@ -653,19 +654,22 @@ export function registerAtm11Version(outDir: string, plan: Atm11Publication, cat
   return next;
 }
 
+/** Valor de `--flag valor`; ausente devolve undefined, sem valor (ou outra flag no lugar) é erro. */
+function flagValue(argv: string[], flag: string): string | undefined {
+  const i = argv.indexOf(flag);
+  if (i === -1) return undefined;
+  const value = argv[i + 1];
+  if (!value || value.startsWith('--')) throw new Error(`${flag} precisa de um valor`);
+  return value;
+}
+
 async function main() {
   const projectRoot = path.resolve(__dirname, '..');
-  const outArgIdx = process.argv.indexOf('--out');
-  const outDir =
-    outArgIdx !== -1 && process.argv[outArgIdx + 1]
-      ? path.resolve(process.argv[outArgIdx + 1])
-      : path.resolve(projectRoot, 'public/data/versions');
-
-  const instanceArgIdx = process.argv.indexOf('--instance');
-  const instancePath =
-    instanceArgIdx !== -1 && process.argv[instanceArgIdx + 1]
-      ? path.resolve(process.argv[instanceArgIdx + 1])
-      : undefined;
+  const outArg = flagValue(process.argv, '--out');
+  const outDir = outArg ? path.resolve(outArg) : path.resolve(projectRoot, 'public/data/versions');
+  const instanceArg = flagValue(process.argv, '--instance');
+  const instancePath = instanceArg ? path.resolve(instanceArg) : undefined;
+  const allowRemoved = parseAllowRemoved(flagValue(process.argv, '--allow-removed'));
 
   let baseMaterials: Record<string, Material>;
   let layers: Record<string, CatalogLayer>;
@@ -703,6 +707,26 @@ async function main() {
 
   // 3. Exportar modpack ATM11 em atm11/<versão do pack>/ e registrá-lo no índice
   const publication = planAtm11Publication(outDir, source);
+  // a guarda roda antes de qualquer escrita: remoção não autorizada aborta sem tocar no disco
+  const comparison = compareWithPrevious(
+    path.join(outDir, VERSIONED_PRESET),
+    publication.index,
+    publication.id,
+    { materials: resolvedMaterials },
+    allowRemoved
+  );
+  if (comparison) {
+    // o relatório vai antes do catálogo: uma falha aqui não deixa pasta de versão sem índice
+    const folder = path.join(outDir, VERSIONED_PRESET, publication.id);
+    fs.mkdirSync(folder, { recursive: true });
+    fs.writeFileSync(path.join(folder, 'catalog.diff.md'), comparison.report, 'utf-8');
+    const { added, removed, changed } = comparison.diff;
+    console.log(
+      `[extract-official-data] Diferenças contra ${comparison.previous}: +${added.length} -${removed.length} ~${changed.length} (catalog.diff.md)`
+    );
+  } else {
+    console.log(`[extract-official-data] Sem versão anterior a ${publication.id} publicada: nenhum relatório de diferenças.`);
+  }
   const atm11File = exportCatalog('atm11', resolvedMaterials, outDir, undefined, derivedGearTypes, baseMaterials, layers, addons, traits, source, publication.id);
   const index = registerAtm11Version(outDir, publication, atm11File);
   console.log(`[extract-official-data] atm11 index: latest ${index.latest}, ${index.versions.length} version(s)`);
@@ -715,7 +739,7 @@ async function main() {
 
 if (require.main === module) {
   main().catch((err) => {
-    console.error(err);
+    console.error(err instanceof RemovalBlockedError ? err.message : err);
     process.exit(1);
   });
 }
