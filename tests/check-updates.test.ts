@@ -11,6 +11,7 @@ import { TSX, METALWORKS_JAR, SILENT_GEAR_JAR, tmpDirs, buildInstance } from './
 const SCRIPT = path.resolve(__dirname, '../scripts/check-updates.ts');
 const REPO = path.resolve(__dirname, '..');
 const NOW = () => new Date('2026-11-07T12:00:00Z');
+const KUBEJS_MATERIAL = 'minecraft/kubejs/dynamic_data/silentgear/silentgear_materials/allthemodium.json';
 const KUBEGROOVY_MATERIAL = 'minecraft/kubegroovy/dynamic_data/silentgear/silentgear_materials/vibranium.json';
 
 afterEach(() => {
@@ -46,6 +47,11 @@ async function matchingSetup() {
   const { source } = await extractFromInstance(root, { now: NOW });
   return { root, source, catalogDir: publish(source) };
 }
+
+const ADDON_ENTRIES = {
+  'META-INF/neoforge.mods.toml': 'modLoader="javafml"\nloaderVersion="[1,)"\n[[mods]]\nmodId="newaddon"\nversion="1.0.0"\n',
+  'data/newaddon/silentgear_materials/shiny.json': '{}',
+};
 
 async function addJar(root: string, name: string, entries: Record<string, string>) {
   const zip = new JSZip();
@@ -103,10 +109,26 @@ describe('check-updates (#97)', () => {
 
   it('lists a new jar with silentgear_materials that is not in source.files as "novo"', async () => {
     const { root, catalogDir } = await matchingSetup();
-    await addJar(root, 'newaddon-1.0.0.jar', { 'data/newaddon/silentgear_materials/shiny.json': '{}' });
+    await addJar(root, 'newaddon-1.0.0.jar', ADDON_ENTRIES);
     const run = check(root, catalogDir);
     expect(run.code).toBe(2);
     expect(run.out).toMatch(/novo.*newaddon-1\.0\.0\.jar/);
+  });
+
+  it('ignores a jar the extractor would skip: materials but no mods.toml', async () => {
+    const { root, catalogDir } = await matchingSetup();
+    await addJar(root, 'library-1.0.0.jar', { 'data/library/silentgear_materials/shiny.json': '{}' });
+    expect(check(root, catalogDir).code).toBe(0);
+  });
+
+  it('ignores a new script material the extractor cannot parse', async () => {
+    const { root, catalogDir } = await matchingSetup();
+    const file = path.join(root, KUBEGROOVY_MATERIAL);
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(file, 'not json');
+    const run = check(root, catalogDir);
+    expect(run.code).toBe(0);
+    expect(run.err).toContain('vibranium.json');
   });
 
   it('ignores a jar without silentgear_materials', async () => {
@@ -120,7 +142,7 @@ describe('check-updates (#97)', () => {
     const { root, catalogDir } = await matchingSetup();
     const file = path.join(root, KUBEGROOVY_MATERIAL);
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, '{}');
+    fs.copyFileSync(path.join(root, KUBEJS_MATERIAL), file);
     const run = check(root, catalogDir);
     expect(run.code).toBe(2);
     expect(run.out).toMatch(/novo.*kubegroovy\/dynamic_data\/silentgear\/silentgear_materials\/vibranium\.json/);
@@ -168,7 +190,7 @@ describe('check-updates (#97)', () => {
 
   it('writes nothing: the instance, the catalog folder and the repo stay the same', async () => {
     const { root, catalogDir } = await matchingSetup();
-    await addJar(root, 'newaddon-1.0.0.jar', { 'data/newaddon/silentgear_materials/shiny.json': '{}' });
+    await addJar(root, 'newaddon-1.0.0.jar', ADDON_ENTRIES);
     const git = () => spawnSync('git', ['status', '--porcelain'], { cwd: REPO, encoding: 'utf-8' }).stdout;
     const before = { instance: listing(root), catalog: listing(catalogDir), git: git() };
     expect(check(root, catalogDir).code).toBe(2);

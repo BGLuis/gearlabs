@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import type { CatalogSource } from '../src/types/silentgear';
 import { loadLatestSource } from './check-remote';
-import { MATERIAL_ENTRY, findScriptRoots } from './instance-layers';
+import { findScriptRoots, isMaterialJar, parseMaterialFile } from './instance-layers';
 import { InstanceProvenance, readInstanceProvenance, resolveInstanceDirs, sha1OfFile } from './lib/instance';
 import { readZipEntryNames } from './lib/zip-entries';
 
@@ -26,9 +26,20 @@ const toPosix = (p: string) => p.split(path.sep).join('/');
 
 function jarHasMaterials(file: string, warn: (message: string) => void): boolean {
   try {
-    return readZipEntryNames(file).some((name) => MATERIAL_ENTRY.test(name));
+    return isMaterialJar(readZipEntryNames(file));
   } catch (e) {
     warn(`[check-updates] ${path.basename(file)} ignorado: não consegui ler como zip (${e instanceof Error ? e.message : e})`);
+    return false;
+  }
+}
+
+/** Material de script que o extrator não consegue ler não entra em `source.files`: não é novo. */
+function isReadableMaterial(file: string, warn: (message: string) => void): boolean {
+  try {
+    parseMaterialFile(file);
+    return true;
+  } catch (e) {
+    warn(`[check-updates] ${path.basename(file)} ignorado: ${e instanceof Error ? e.message : e}`);
     return false;
   }
 }
@@ -40,9 +51,12 @@ function findNewFiles(root: string, gameDir: string, known: ReadonlySet<string>,
     : [];
   const candidates = [
     ...jars.filter((jar) => !known.has(toPosix(path.relative(root, jar)))).filter((jar) => jarHasMaterials(jar, warn)),
-    ...findScriptRoots(gameDir).flatMap((script) => script.materialFiles),
+    ...findScriptRoots(gameDir)
+      .flatMap((script) => script.materialFiles)
+      .filter((file) => !known.has(toPosix(path.relative(root, file))))
+      .filter((file) => isReadableMaterial(file, warn)),
   ];
-  return candidates.map((file) => toPosix(path.relative(root, file))).filter((rel) => !known.has(rel)).sort();
+  return candidates.map((file) => toPosix(path.relative(root, file))).sort();
 }
 
 export function compareInstance(

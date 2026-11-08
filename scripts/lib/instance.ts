@@ -18,7 +18,7 @@ export function resolveInstanceDirs(instancePath: string): { root: string; gameD
     : { root: path.dirname(instancePath), gameDir: instancePath };
 }
 
-export function readRequiredFile(file: string, what: string): string {
+function readRequiredFile(file: string, what: string): string {
   if (!fs.existsSync(file)) {
     throw new Error(`[extract-official-data] ${what} não encontrado: ${file}`);
   }

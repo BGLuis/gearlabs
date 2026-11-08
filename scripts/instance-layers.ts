@@ -8,8 +8,12 @@ import { SCRIPT_LAYERS } from '../src/lib/script-layers';
 
 export const BASE_MOD_ID = 'silentgear';
 
-/** Entrada de zip que faz de um jar uma camada: `data/<ns>/silentgear_materials/*.json`. */
-export const MATERIAL_ENTRY = /^data\/[^/]+\/silentgear_materials\/.+\.json$/;
+const MATERIAL_ENTRY = /^data\/[^/]+\/silentgear_materials\/.+\.json$/;
+const MODS_TOML_ENTRIES = ['META-INF/neoforge.mods.toml', 'META-INF/mods.toml'];
+
+/** Regra única do #93: jar com `mods.toml` e `data/<ns>/silentgear_materials/*.json` vira camada. */
+export const isMaterialJar = (entryNames: readonly string[]): boolean =>
+  entryNames.some((name) => MODS_TOML_ENTRIES.includes(name)) && entryNames.some((name) => MATERIAL_ENTRY.test(name));
 
 export interface InstanceJar {
   file: string;
@@ -26,9 +30,7 @@ export async function scanJars(modsDir: string): Promise<InstanceJar[]> {
     const toml = zip.file('META-INF/neoforge.mods.toml') ?? zip.file('META-INF/mods.toml');
     const mod = toml ? parseModsToml(await toml.async('text')) : undefined;
     if (!mod) continue;
-    const hasMaterials = Object.values(zip.files).some(
-      (entry) => !entry.dir && MATERIAL_ENTRY.test(entry.name)
-    );
+    const hasMaterials = isMaterialJar(Object.keys(zip.files));
     jars.push({ file, ordering: { modId: mod.modId, after: mod.after, before: mod.before }, hasMaterials });
   }
   return jars;

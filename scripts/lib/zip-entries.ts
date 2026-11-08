@@ -30,6 +30,7 @@ export function readZipEntryNames(file: string): string[] {
     const centralOffset = tail.readUInt32LE(eocd + 16);
     if (centralSize === ZIP64_MARKER || centralOffset === ZIP64_MARKER) throw new Error('zip64 não suportado');
 
+    if (centralOffset + centralSize > size) throw new Error('diretório central fora do arquivo');
     const central = Buffer.alloc(centralSize);
     fs.readSync(fd, central, 0, centralSize, centralOffset);
     const names: string[] = [];
