@@ -416,10 +416,10 @@ describe('Resolução Oficial de Harvest Tier com level_hint (Issue #38)', () =>
   describe('Estrutura de Camadas de Addons (Issue #47)', () => {
     it('Catálogo ATM11 lista seus addons com versões em AddonConfig', () => {
       expect(catalog.addons).toBeDefined();
-      expect(catalog.addons?.length).toBe(3);
+      expect(catalog.addons?.length).toBe(4);
 
       const addonIds = catalog.addons?.map((a) => a.id);
-      expect(addonIds).toEqual(['silentgems', 'sgearmetalworks', 'kubejs']);
+      expect(addonIds).toEqual(['allthemodium', 'silentgems', 'sgearmetalworks', 'kubegroovy']);
 
       for (const addon of catalog.addons!) {
         expect(addon.version).toBeDefined();
@@ -438,7 +438,7 @@ describe('Resolução Oficial de Harvest Tier com level_hint (Issue #38)', () =>
       expect(Object.keys(catalog.baseMaterials!).length).toBe(131);
 
       expect(catalog.layers).toBeDefined();
-      expect(Object.keys(catalog.layers!)).toEqual(['silentgems', 'sgearmetalworks', 'kubejs']);
+      expect(Object.keys(catalog.layers!)).toEqual(['allthemodium', 'silentgems', 'sgearmetalworks', 'kubegroovy']);
     });
 
     it('Materiais reinforced_gold e reinforced_silver do Silent Gems existem no catálogo ATM11', () => {
@@ -451,7 +451,7 @@ describe('Resolução Oficial de Harvest Tier com level_hint (Issue #38)', () =>
     it('Todos os materiais do catálogo gerado possuem o campo source', () => {
       for (const [id, mat] of Object.entries(catalog.materials)) {
         expect(mat.source, `Material ${id} deve possuir source`).toBeDefined();
-        expect(['silentgear', 'silentgems', 'sgearmetalworks', 'kubejs']).toContain(mat.source);
+        expect(['silentgear', 'allthemodium', 'silentgems', 'sgearmetalworks', 'kubegroovy']).toContain(mat.source);
       }
     });
   });

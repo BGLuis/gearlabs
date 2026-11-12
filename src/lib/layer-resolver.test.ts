@@ -13,9 +13,10 @@ describe('LayerResolver & Addon Management (Issue #47)', () => {
   it('Critério 1: Desativar Metalworks remove uru_metal, meat, tira casting de iron e reduz sinergia de 1,166 para 0,936', () => {
     // 1. Catálogo com Metalworks ativo (e outros addons ativos padrão)
     const withMetalworks = resolveCatalogWithAddons(baseMaterials, layers, [
+      'allthemodium',
       'silentgems',
       'sgearmetalworks',
-      'kubejs',
+      'kubegroovy',
     ]);
 
     expect(withMetalworks['sgearmetalworks:uru_metal']).toBeDefined();
@@ -32,7 +33,7 @@ describe('LayerResolver & Addon Management (Issue #47)', () => {
     // 2. Catálogo SEM Metalworks
     const withoutMetalworks = resolveCatalogWithAddons(baseMaterials, layers, [
       'silentgems',
-      'kubejs',
+      'kubegroovy',
     ]);
 
     // Materiais específicos do Metalworks devem sumir
@@ -69,9 +70,10 @@ describe('LayerResolver & Addon Management (Issue #47)', () => {
 
   it('Critério 3: Todo material no catálogo resolvido possui o campo source', () => {
     const fullCatalog = resolveCatalogWithAddons(baseMaterials, layers, [
+      'allthemodium',
       'silentgems',
       'sgearmetalworks',
-      'kubejs',
+      'kubegroovy',
     ]);
 
     const materials = Object.values(fullCatalog);
@@ -79,7 +81,7 @@ describe('LayerResolver & Addon Management (Issue #47)', () => {
 
     for (const mat of materials) {
       expect(mat.source).toBeDefined();
-      expect(['silentgear', 'silentgems', 'sgearmetalworks', 'kubejs']).toContain(mat.source);
+      expect(['silentgear', 'allthemodium', 'silentgems', 'sgearmetalworks', 'kubegroovy']).toContain(mat.source);
     }
 
     // silentgear:iron deve ser silentgear
@@ -88,27 +90,27 @@ describe('LayerResolver & Addon Management (Issue #47)', () => {
     expect(fullCatalog['silentgems:ruby']?.source).toBe('silentgems');
     // sgearmetalworks:meat deve ser sgearmetalworks
     expect(fullCatalog['sgearmetalworks:meat']?.source).toBe('sgearmetalworks');
-    // silentgear:allthemodium deve ser kubejs
-    expect(fullCatalog['silentgear:allthemodium']?.source).toBe('kubejs');
+    // silentgear:allthemodium deve ser allthemodium
+    expect(fullCatalog['silentgear:allthemodium']?.source).toBe('allthemodium');
   });
 
-  it('KubeJS override em uru_metal não deve criar material fantasma quando Metalworks está desativado', () => {
-    // KubeJS ativo mas Metalworks desativado
-    const catalog = resolveCatalogWithAddons(baseMaterials, layers, ['kubejs']);
+  it('KubeGroovy override em uru_metal não deve criar material fantasma quando Metalworks está desativado', () => {
+    // KubeGroovy ativo mas Metalworks desativado
+    const catalog = resolveCatalogWithAddons(baseMaterials, layers, ['kubegroovy']);
     expect(catalog['sgearmetalworks:uru_metal']).toBeUndefined();
 
-    // Quando ambos estão ativos, uru_metal existe e recebe os stats de KubeJS
+    // Quando ambos estão ativos, uru_metal existe e recebe os stats de KubeGroovy
     const withBoth = resolveCatalogWithAddons(baseMaterials, layers, [
       'sgearmetalworks',
-      'kubejs',
+      'kubegroovy',
     ]);
     expect(withBoth['sgearmetalworks:uru_metal']).toBeDefined();
     expect(withBoth['sgearmetalworks:uru_metal']?.stats.main?.melee_damage).toBe(35);
-    expect(withBoth['sgearmetalworks:uru_metal']?.overriddenBy).toContain('kubejs');
+    expect(withBoth['sgearmetalworks:uru_metal']?.overriddenBy).toContain('kubegroovy');
   });
 
   it('A ordem das camadas do catálogo atual é a de carga, e termina na camada de script', () => {
-    expect(Object.keys(layers)).toEqual(['silentgems', 'sgearmetalworks', 'kubejs']);
+    expect(Object.keys(layers)).toEqual(['allthemodium', 'silentgems', 'sgearmetalworks', 'kubegroovy']);
   });
 
   describe('ordem derivada (#93)', () => {

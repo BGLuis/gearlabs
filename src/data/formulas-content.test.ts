@@ -17,11 +17,10 @@ import {
 } from './formulas-content';
 import { GRADE_MULTIPLIERS, Grade, VersionCatalog } from '@/types/silentgear';
 import { SYNERGY_CONSTANTS, STARCHARGE_CONSTANTS, calculateGearStats } from '@/lib/calculator';
-import { readLatestAtm11Catalog } from '../../tests/helpers/atm11-catalog';
+import { readAtm11Catalog } from '../../tests/helpers/atm11-catalog';
 
-const atm11Json = readLatestAtm11Catalog();
-
-const atm11 = atm11Json as unknown as VersionCatalog;
+// O save do exemplo (#29) foi jogado na 0.11.1-beta: o recorte é dessa versão, que é imutável.
+const atm11: VersionCatalog = readAtm11Catalog('0.11.1-beta');
 const liveSave = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../../tests/fixtures/reference_live_save.json'), 'utf8')
 );
@@ -187,7 +186,7 @@ describe('#64: exemplo trabalhado (peitoral do save, fixture de #29)', () => {
     expect(EXAMPLE_IN_GAME_ARMOR).toBe(saved.expectedInGameProperties.armor);
   });
 
-  it('cada material e o tipo de item do recorte são idênticos ao catálogo publicado do atm11', () => {
+  it('cada material e o tipo de item do recorte são idênticos ao catálogo publicado do atm11 0.11.1-beta', () => {
     for (const [id, material] of Object.entries(EXAMPLE_CATALOG.materials)) {
       expect(material).toEqual(atm11.materials[id]);
     }
