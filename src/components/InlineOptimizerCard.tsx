@@ -135,7 +135,7 @@ export function InlineOptimizerCard() {
   };
 
   return (
-    <div className="p-4 bg-mc-surface border border-mc-border rounded-[10px] space-y-3.5 shadow-sm">
+    <div className="p-4 bg-mc-surface border border-mc-border rounded-[10px] space-y-3.5 shadow-xs">
       {/* Cabeçalho */}
       <div className="flex items-start justify-between gap-3">
         <div>
@@ -166,7 +166,7 @@ export function InlineOptimizerCard() {
               onClick={() => setGoal(g.id)}
               className={`px-2.5 py-1 rounded-[6px] text-xs font-medium flex items-center gap-1.5 transition-colors ${
                 isSelected
-                  ? 'bg-mc-card border border-mc-forge text-mc-forge shadow-sm'
+                  ? 'bg-mc-card border border-mc-forge text-mc-forge shadow-xs'
                   : 'bg-[#121418] hover:bg-mc-card border border-mc-border text-mc-mutedLight hover:text-mc-text'
               }`}
             >
@@ -186,7 +186,7 @@ export function InlineOptimizerCard() {
             <select
               value={grade}
               onChange={(e) => setGrade(e.target.value as Grade)}
-              className="bg-[#121418] border border-mc-border rounded-[4px] px-1.5 py-0.5 text-mc-gold font-bold focus:outline-none"
+              className="bg-[#121418] border border-mc-border rounded-[4px] px-1.5 py-0.5 text-mc-gold font-bold focus:outline-hidden"
             >
               {(['NONE', 'E', 'D', 'C', 'B', 'A', 'S', 'SS', 'SSS', 'MAX'] as Grade[]).map((gr) => (
                 <option key={gr} value={gr}>
@@ -202,7 +202,7 @@ export function InlineOptimizerCard() {
             <select
               value={starcharge}
               onChange={(e) => setStarcharge(Number(e.target.value) as StarchargeLevel)}
-              className="bg-[#121418] border border-mc-border rounded-[4px] px-1.5 py-0.5 text-cyan-400 font-bold focus:outline-none"
+              className="bg-[#121418] border border-mc-border rounded-[4px] px-1.5 py-0.5 text-cyan-400 font-bold focus:outline-hidden"
             >
               {[0, 1, 2, 3].map((lvl) => (
                 <option key={lvl} value={lvl}>
@@ -218,7 +218,7 @@ export function InlineOptimizerCard() {
               type="checkbox"
               checked={allowAlloys}
               onChange={(e) => setAllowAlloys(e.target.checked)}
-              className="rounded bg-[#121418] border-mc-border text-mc-forge focus:ring-0"
+              className="rounded-sm bg-[#121418] border-mc-border text-mc-forge focus:ring-0"
             />
             <span>{lang === 'pt' ? 'Ligas' : 'Alloys'}</span>
           </label>
@@ -228,7 +228,7 @@ export function InlineOptimizerCard() {
         <button
           onClick={executeSearch}
           disabled={isSearching}
-          className="px-3 py-1.5 rounded-[6px] bg-mc-forge hover:bg-mc-forgeHover text-[#0E0F11] font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all disabled:opacity-50"
+          className="px-3 py-1.5 rounded-[6px] bg-mc-forge hover:bg-mc-forgeHover text-mc-bg font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50"
         >
           <Sparkles className="w-3.5 h-3.5" />
           {isSearching
@@ -290,7 +290,7 @@ export function InlineOptimizerCard() {
                     onClick={() => handleApply(res, idx)}
                     className={`px-3 py-1.5 rounded-[6px] text-xs font-semibold flex items-center gap-1.5 transition-all ${
                       appliedIndex === idx
-                        ? 'bg-mc-positive text-[#0E0F11] font-bold shadow-sm'
+                        ? 'bg-mc-positive text-mc-bg font-bold shadow-xs'
                         : 'bg-mc-card hover:bg-mc-surface border border-mc-border hover:border-mc-forge text-mc-text hover:text-mc-forge'
                     }`}
                   >

@@ -69,7 +69,7 @@ export function Navbar() {
       {...(compact ? { title: label, 'aria-label': label } : {})}
       className={`px-3 h-8 shrink-0 rounded-[6px] text-sm font-medium flex items-center gap-2 transition-colors ${
         pathname === href
-          ? 'bg-[#1E2125] text-mc-text border border-[#30343A]/50 shadow-sm'
+          ? 'bg-[#1E2125] text-mc-text border border-mc-borderHover/50 shadow-xs'
           : 'text-mc-mutedLight hover:text-mc-text hover:bg-[#1E2125]/40'
       }`}
     >
@@ -79,13 +79,13 @@ export function Navbar() {
   ));
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0E0F11]/95 backdrop-blur-md border-b border-mc-border">
+    <header className="sticky top-0 z-50 bg-mc-bg/95 backdrop-blur-md border-b border-mc-border">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-6 h-14 flex items-center justify-between gap-4">
         {/* Logo / Marca */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-[30px] h-[30px] rounded-[4px] bg-mc-forge flex items-center justify-center shadow-mc-box group-hover:scale-105 transition-transform">
-              <Hammer className="w-4 h-4 text-[#0E0F11]" />
+              <Hammer className="w-4 h-4 text-mc-bg" />
             </div>
             <span className="font-pixel text-[22px] font-semibold tracking-wide text-mc-text group-hover:text-mc-forge transition-colors">
               GearLabs
@@ -98,11 +98,11 @@ export function Navbar() {
         {/* Controles da Direita */}
         <div className="flex items-center gap-2 sm:gap-2.5">
           {/* Seletor Agrupado de Versões */}
-          <div className="flex items-center gap-1.5 bg-[#16181B] hover:bg-[#1E2125] px-2.5 h-8 rounded-[6px] border border-mc-border text-xs font-mono transition-colors">
+          <div className="flex items-center gap-1.5 bg-mc-surface hover:bg-[#1E2125] px-2.5 h-8 rounded-[6px] border border-mc-border text-xs font-mono transition-colors">
             <select
               value={version}
               onChange={(e) => setVersion(e.target.value)}
-              className="bg-transparent text-mc-text font-medium focus:outline-none cursor-pointer max-w-[150px] sm:max-w-[210px] truncate"
+              className="bg-transparent text-mc-text font-medium focus:outline-hidden cursor-pointer max-w-[150px] sm:max-w-[210px] truncate"
             >
               <optgroup label="🌟 Modpacks em Destaque" className="bg-mc-surface text-mc-gold font-bold">
                 {modpackPresets.map((p) => (
@@ -134,13 +134,13 @@ export function Navbar() {
 
           {/* Versões do pack: só no ATM11 e quando o índice publica mais de uma */}
           {packInfo && (packInfo.index.versions.length > 1 || packInfo.id !== packInfo.latest) && (
-            <div className="flex items-center bg-[#16181B] hover:bg-[#1E2125] px-2.5 h-8 rounded-[6px] border border-mc-border text-xs font-mono transition-colors">
+            <div className="flex items-center bg-mc-surface hover:bg-[#1E2125] px-2.5 h-8 rounded-[6px] border border-mc-border text-xs font-mono transition-colors">
               <select
                 aria-label={t.packVersion}
                 title={t.packVersion}
                 value={packInfo.id}
                 onChange={(e) => setPackVersion(e.target.value)}
-                className="bg-transparent text-mc-text font-medium focus:outline-none cursor-pointer max-w-[130px] truncate"
+                className="bg-transparent text-mc-text font-medium focus:outline-hidden cursor-pointer max-w-[130px] truncate"
               >
                 {!packInfo.index.versions.some((v) => v.id === packInfo.id) && (
                   <option value={packInfo.id}>{packInfo.id}</option>
@@ -164,7 +164,7 @@ export function Navbar() {
           {/* Alternador de Idioma */}
           <button
             onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}
-            className="flex items-center gap-1.5 px-2.5 h-8 rounded-[6px] bg-[#16181B] hover:bg-[#1E2125] border border-mc-border text-xs text-mc-text font-mono transition-colors"
+            className="flex items-center gap-1.5 px-2.5 h-8 rounded-[6px] bg-mc-surface hover:bg-[#1E2125] border border-mc-border text-xs text-mc-text font-mono transition-colors"
             title="Mudar idioma / Switch language"
           >
             <Globe className="w-3.5 h-3.5 text-mc-forge" />

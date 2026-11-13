@@ -89,7 +89,7 @@ export default function MaterialsPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner de Gerenciamento de Inventário */}
-      <div className="p-5 bg-gradient-to-r from-mc-surface to-mc-card border border-mc-border rounded-xl shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="p-5 bg-linear-to-r/srgb from-mc-surface to-mc-card border border-mc-border rounded-xl shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-mc-text flex items-center gap-2">
             <CircleCheck className="w-5 h-5 text-mc-accent" />
@@ -106,13 +106,13 @@ export default function MaterialsPage() {
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setAllInventory(true)}
-            className="px-3 py-1.5 rounded bg-mc-bg border border-mc-border text-xs font-mono font-medium hover:border-mc-accent hover:text-mc-accent transition-colors"
+            className="px-3 py-1.5 rounded-sm bg-mc-bg border border-mc-border text-xs font-mono font-medium hover:border-mc-accent hover:text-mc-accent transition-colors"
           >
             {lang === 'pt' ? 'Marcar Todos' : 'Check All'}
           </button>
           <button
             onClick={() => setAllInventory(false)}
-            className="px-3 py-1.5 rounded bg-mc-bg border border-mc-border text-xs font-mono font-medium hover:border-mc-crimson hover:text-mc-crimson transition-colors"
+            className="px-3 py-1.5 rounded-sm bg-mc-bg border border-mc-border text-xs font-mono font-medium hover:border-mc-crimson hover:text-mc-crimson transition-colors"
           >
             {lang === 'pt' ? 'Desmarcar Todos' : 'Uncheck All'}
           </button>
@@ -120,7 +120,7 @@ export default function MaterialsPage() {
       </div>
 
       {/* Barra de Filtro e Busca */}
-      <div className="p-4 bg-mc-surface border border-mc-border rounded-xl shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="p-4 bg-mc-surface border border-mc-border rounded-xl shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="relative w-full sm:w-72">
           <Search className="w-4 h-4 text-mc-muted absolute left-3 top-2.5" />
           <input
@@ -128,18 +128,18 @@ export default function MaterialsPage() {
             placeholder={lang === 'pt' ? 'Buscar por nome ou ID...' : 'Search by name or ID...'}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-mc-bg border border-mc-border rounded-lg pl-9 pr-3 py-1.5 text-xs text-mc-text focus:outline-none focus:border-mc-primary font-mono"
+            className="w-full bg-mc-bg border border-mc-border rounded-lg pl-9 pr-3 py-1.5 text-xs text-mc-text focus:outline-hidden focus:border-mc-primary font-mono"
           />
         </div>
 
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           {/* Seletor de Categoria */}
-          <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1.5 rounded border border-mc-border text-xs font-mono">
+          <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1.5 rounded-sm border border-mc-border text-xs font-mono">
             <Funnel className="w-3.5 h-3.5 text-mc-muted" />
             <select
               value={selectedCat}
               onChange={(e) => setSelectedCat(e.target.value as any)}
-              className="bg-transparent text-mc-text font-semibold focus:outline-none cursor-pointer"
+              className="bg-transparent text-mc-text font-semibold focus:outline-hidden cursor-pointer"
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.id} className="bg-mc-surface text-mc-text">
@@ -150,12 +150,12 @@ export default function MaterialsPage() {
           </div>
 
           {/* Seletor de Origem / Addon */}
-          <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1.5 rounded border border-mc-border text-xs font-mono">
+          <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1.5 rounded-sm border border-mc-border text-xs font-mono">
             <Layers className="w-3.5 h-3.5 text-mc-muted" />
             <select
               value={selectedSource}
               onChange={(e) => setSelectedSource(e.target.value)}
-              className="bg-transparent text-mc-text font-semibold focus:outline-none cursor-pointer"
+              className="bg-transparent text-mc-text font-semibold focus:outline-hidden cursor-pointer"
             >
               <option value="all" className="bg-mc-surface">
                 {lang === 'pt' ? 'Origem: Todas' : 'Source: All'}
@@ -169,12 +169,12 @@ export default function MaterialsPage() {
           </div>
 
           {/* Ordenação */}
-          <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1.5 rounded border border-mc-border text-xs font-mono">
+          <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1.5 rounded-sm border border-mc-border text-xs font-mono">
             <ArrowUpDown className="w-3.5 h-3.5 text-mc-muted" />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="bg-transparent text-mc-text font-semibold focus:outline-none cursor-pointer"
+              className="bg-transparent text-mc-text font-semibold focus:outline-hidden cursor-pointer"
             >
               <option value="tier" className="bg-mc-surface">Tier</option>
               <option value="name" className="bg-mc-surface">Nome</option>
@@ -193,7 +193,7 @@ export default function MaterialsPage() {
       </div>
 
       {/* Tabela de Materiais */}
-      <div className="bg-mc-surface border border-mc-border rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-mc-surface border border-mc-border rounded-xl shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
             <thead className="bg-mc-card/80 border-b border-mc-border text-mc-muted uppercase text-[10px] tracking-wider">
@@ -225,7 +225,7 @@ export default function MaterialsPage() {
                     <td className="p-3 text-center">
                       <button
                         onClick={() => toggleInventoryMaterial(mat.id)}
-                        className="p-1 rounded text-mc-text hover:text-mc-primary transition-colors"
+                        className="p-1 rounded-sm text-mc-text hover:text-mc-primary transition-colors"
                         title={inInv ? 'Disponível no inventário' : 'Indisponível'}
                       >
                         {inInv ? (
@@ -240,7 +240,7 @@ export default function MaterialsPage() {
                     <td className="p-3">
                       <div className="flex items-center gap-2.5">
                         <span
-                          className="w-3.5 h-3.5 rounded-full border border-white/20 shrink-0 shadow-sm"
+                          className="w-3.5 h-3.5 rounded-full border border-white/20 shrink-0 shadow-xs"
                           style={{ backgroundColor: mat.color }}
                         />
                         <div>
@@ -248,7 +248,7 @@ export default function MaterialsPage() {
                             <span>{mat.name[lang] || mat.name.en}</span>
                             {sourceGroup(mat.source) !== 'silentgear' && (
                               <span
-                                className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase ${SOURCE_TONE_CLASSES[sourceBadge(mat.source).tone]}`}
+                                className={`px-1.5 py-0.2 rounded-sm text-[9px] font-mono font-bold uppercase ${SOURCE_TONE_CLASSES[sourceBadge(mat.source).tone]}`}
                               >
                                 {sourceBadge(mat.source).label}
                               </span>
@@ -272,7 +272,7 @@ export default function MaterialsPage() {
                     {/* Tier */}
                     <td className="p-3">
                       {mat.tier > 0 ? (
-                        <span className="px-1.5 py-0.5 rounded bg-mc-card border border-mc-border text-mc-gold font-bold">
+                        <span className="px-1.5 py-0.5 rounded-sm bg-mc-card border border-mc-border text-mc-gold font-bold">
                           T{mat.tier}
                         </span>
                       ) : (
@@ -309,7 +309,7 @@ export default function MaterialsPage() {
                           return (
                             <span
                               key={idx}
-                              className="px-1.5 py-0.5 rounded bg-mc-card border border-mc-border text-[10px] text-mc-text"
+                              className="px-1.5 py-0.5 rounded-sm bg-mc-card border border-mc-border text-[10px] text-mc-text"
                               title={traitInfo?.description[lang]}
                             >
                               {traitInfo?.name[lang] || t.name.replace(/^.*:/, '')} {t.level}
@@ -326,7 +326,7 @@ export default function MaterialsPage() {
                         onClick={() => {
                           setPartMaterial('main', mat.id);
                         }}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-mc-surfaceHover hover:bg-mc-primary hover:text-mc-bg text-mc-text border border-mc-border font-bold transition-colors"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm bg-mc-surfaceHover hover:bg-mc-primary hover:text-mc-bg text-mc-text border border-mc-border font-bold transition-colors"
                       >
                         <Sparkles className="w-3 h-3" />
                         {lang === 'pt' ? 'Simular' : 'Simulate'}

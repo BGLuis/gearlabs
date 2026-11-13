@@ -153,7 +153,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
   }
 
   return (
-    <div className="p-3.5 bg-mc-surface border border-mc-border rounded-[10px] shadow-sm hover:border-mc-borderHover transition-colors">
+    <div className="p-3.5 bg-mc-surface border border-mc-border rounded-[10px] shadow-xs hover:border-mc-borderHover transition-colors">
       {/* Cabeçalho do Slot */}
       <div className="flex items-center justify-between mb-2.5">
         <div className="flex items-center gap-2">
@@ -161,17 +161,17 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
             {slotLabels[slot][lang]}
           </span>
           {isRequired ? (
-            <span className="text-[10px] px-1.5 py-0.2 rounded bg-mc-crimson/20 border border-mc-crimson/50 text-mc-crimson font-mono">
+            <span className="text-[10px] px-1.5 py-0.2 rounded-sm bg-mc-crimson/20 border border-mc-crimson/50 text-mc-crimson font-mono">
               {lang === 'pt' ? 'Obrigatório' : 'Required'}
             </span>
           ) : (
-            <span className="text-[10px] px-1.5 py-0.2 rounded bg-mc-border text-mc-muted font-mono">
+            <span className="text-[10px] px-1.5 py-0.2 rounded-sm bg-mc-border text-mc-muted font-mono">
               {lang === 'pt' ? 'Opcional' : 'Optional'}
             </span>
           )}
 
           {isCompound && (
-            <span className="flex items-center gap-1 text-[10px] px-1.5 py-0.2 rounded bg-mc-primary/20 border border-mc-primary/40 text-mc-primary font-mono font-bold">
+            <span className="flex items-center gap-1 text-[10px] px-1.5 py-0.2 rounded-sm bg-mc-primary/20 border border-mc-primary/40 text-mc-primary font-mono font-bold">
               <Layers className="w-2.5 h-2.5" />
               {alloyConfig.machineName[lang]} ({alloyConfig.name[lang]})
             </span>
@@ -182,7 +182,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
           {!isRequired && currentSelection && (
             <button
               onClick={() => removePart(slot)}
-              className="p-1 rounded text-mc-muted hover:text-mc-crimson hover:bg-mc-card transition-colors"
+              className="p-1 rounded-sm text-mc-muted hover:text-mc-crimson hover:bg-mc-card transition-colors"
               title={lang === 'pt' ? 'Remover peça' : 'Remove part'}
             >
               <X className="w-3.5 h-3.5" />
@@ -201,11 +201,11 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                 <Sparkles className="w-3 h-3" />
                 {lang === 'pt' ? 'Máquina' : 'Machine'}:
               </span>
-              <div className="flex items-center gap-1 bg-mc-bg border border-mc-border rounded px-1.5 py-0.5">
+              <div className="flex items-center gap-1 bg-mc-bg border border-mc-border rounded-sm px-1.5 py-0.5">
                 <select
                   value={currentAlloyType}
                   onChange={(e) => setPartAlloyType(slot, e.target.value as AlloyType)}
-                  className="bg-transparent text-mc-primary font-bold text-xs font-mono focus:outline-none cursor-pointer"
+                  className="bg-transparent text-mc-primary font-bold text-xs font-mono focus:outline-hidden cursor-pointer"
                   title={alloyConfig.description[lang]}
                 >
                   {(Object.keys(ALLOY_CONFIGS) as AlloyType[]).map((typeKey) => {
@@ -226,19 +226,19 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
               </span>
               {currentAlloyType === 'crude' && (
                 <span
-                  className="text-[10px] px-1.5 py-0.5 rounded bg-red-950/60 border border-red-800 text-red-400 font-bold"
+                  className="text-[10px] px-1.5 py-0.5 rounded-sm bg-red-950/60 border border-red-800 text-red-400 font-bold"
                   title={lang === 'pt' ? 'Penalidade de -20% nas propriedades com sinergia' : '-20% penalty on synergy-affected stats'}
                 >
                   ×0.8 {lang === 'pt' ? 'Crua' : 'Crude'}
                 </span>
               )}
               {compoundChargingValue !== undefined && (
-                <span className="text-[10px] px-1 rounded bg-cyan-950/60 border border-cyan-800 text-cyan-400" title="Valor base de carga (charging_value)">
+                <span className="text-[10px] px-1 rounded-sm bg-cyan-950/60 border border-cyan-800 text-cyan-400" title="Valor base de carga (charging_value)">
                   ⚡ {Number(compoundChargingValue.toFixed(2))}
                 </span>
               )}
               {/* Seletor de Grau da Liga */}
-              <div className="flex items-center gap-1 bg-mc-bg border border-mc-border rounded px-1.5 py-0.5">
+              <div className="flex items-center gap-1 bg-mc-bg border border-mc-border rounded-sm px-1.5 py-0.5">
                 <span className="text-[10px] text-mc-muted font-mono">{lang === 'pt' ? 'Grau:' : 'Grade:'}</span>
                 <select
                   value={currentGrade}
@@ -247,7 +247,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                       setPartGrade(slot, e.target.value as Grade);
                     }
                   }}
-                  className="bg-transparent text-mc-gold font-bold text-xs font-mono focus:outline-none cursor-pointer"
+                  className="bg-transparent text-mc-gold font-bold text-xs font-mono focus:outline-hidden cursor-pointer"
                   title={lang === 'pt' ? 'Grau da liga' : 'Alloy grade'}
                 >
                   {GRADES.map((g) => (
@@ -258,7 +258,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                 </select>
               </div>
               {/* Seletor de Carga Estelar (Starcharge) no modo composto */}
-              <div className="flex items-center gap-1 bg-mc-bg border border-mc-border rounded px-1.5 py-0.5">
+              <div className="flex items-center gap-1 bg-mc-bg border border-mc-border rounded-sm px-1.5 py-0.5">
                 <span className="text-[10px] text-mc-muted font-mono">{lang === 'pt' ? 'Carga:' : 'Charge:'}</span>
                 <select
                   value={currentStarcharge}
@@ -267,7 +267,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                       setPartStarcharge(slot, Number(e.target.value) as StarchargeLevel);
                     }
                   }}
-                  className="bg-transparent text-cyan-400 font-bold text-xs font-mono focus:outline-none cursor-pointer"
+                  className="bg-transparent text-cyan-400 font-bold text-xs font-mono focus:outline-hidden cursor-pointer"
                   title={lang === 'pt' ? 'Nível do Starlight Charger (Starcharged)' : 'Starlight Charger Level (Starcharged)'}
                 >
                   {STARCHARD_LEVELS.map(({ level, label }) => (
@@ -282,7 +282,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
 
           {/* Banner de Aviso de Validação (Carregamento de Builds Antigas ou Troca de Máquina) */}
           {!alloyValidation.valid && (
-            <div className="flex items-start gap-2 p-2 rounded bg-amber-500/10 border border-amber-500/40 text-amber-300 text-xs font-mono">
+            <div className="flex items-start gap-2 p-2 rounded-sm bg-amber-500/10 border border-amber-500/40 text-amber-300 text-xs font-mono">
               <TriangleExclamationPoint className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 {alloyValidation.warnings.map((warn, i) => (
@@ -303,13 +303,13 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
               return (
                 <div
                   key={`${subMat.materialId}-${idx}`}
-                  className={`flex items-center gap-1.5 bg-mc-bg border rounded p-1.5 ${
+                  className={`flex items-center gap-1.5 bg-mc-bg border rounded-sm p-1.5 ${
                     !isMatAllowed ? 'border-amber-500/60 bg-amber-500/5' : 'border-mc-border/80'
                   }`}
                 >
                   {/* Indicador de Ordem / Primário */}
                   <span
-                    className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                    className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-sm ${
                       isFirst
                         ? 'bg-mc-gold/20 text-mc-gold border border-mc-gold/40'
                         : 'bg-mc-surface text-mc-muted border border-mc-border'
@@ -338,7 +338,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                     <button
                       onClick={() => reorderSubMaterials(slot, idx, idx - 1)}
                       disabled={isFirst}
-                      className="p-1 rounded text-mc-muted hover:text-mc-text hover:bg-mc-card disabled:opacity-20 transition-colors"
+                      className="p-1 rounded-sm text-mc-muted hover:text-mc-text hover:bg-mc-card disabled:opacity-20 transition-colors"
                       title={lang === 'pt' ? 'Mover para cima (aumenta prioridade)' : 'Move up'}
                     >
                       <ArrowUp className="w-3 h-3" />
@@ -346,14 +346,14 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                     <button
                       onClick={() => reorderSubMaterials(slot, idx, idx + 1)}
                       disabled={isLast}
-                      className="p-1 rounded text-mc-muted hover:text-mc-text hover:bg-mc-card disabled:opacity-20 transition-colors"
+                      className="p-1 rounded-sm text-mc-muted hover:text-mc-text hover:bg-mc-card disabled:opacity-20 transition-colors"
                       title={lang === 'pt' ? 'Mover para baixo' : 'Move down'}
                     >
                       <ArrowDown className="w-3 h-3" />
                     </button>
                     <button
                       onClick={() => removeSubMaterial(slot, idx)}
-                      className="p-1 rounded text-mc-muted hover:text-mc-crimson hover:bg-mc-card transition-colors"
+                      className="p-1 rounded-sm text-mc-muted hover:text-mc-crimson hover:bg-mc-card transition-colors"
                       title={lang === 'pt' ? 'Remover sub-material' : 'Remove sub-material'}
                     >
                       <X className="w-3 h-3" />
@@ -375,7 +375,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                 addSubMaterial(slot, nextId);
               }}
               disabled={currentSelection.materials!.length >= maxSubMaterials}
-              className="flex items-center gap-1 text-[11px] font-mono px-2 py-1 rounded bg-mc-card hover:bg-mc-border text-mc-text border border-mc-border disabled:opacity-40 transition-colors"
+              className="flex items-center gap-1 text-[11px] font-mono px-2 py-1 rounded-sm bg-mc-card hover:bg-mc-border text-mc-text border border-mc-border disabled:opacity-40 transition-colors"
             >
               <Plus className="w-3 h-3" />
               {lang === 'pt' ? 'Adicionar Sub-material' : 'Add Sub-material'} ({currentSelection.materials!.length}/{maxSubMaterials})
@@ -433,8 +433,8 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                       disabled={!currentSelection}
                       className={`px-1.5 py-0.5 rounded-[4px] text-[10px] font-mono font-bold transition-colors ${
                         isGSelected
-                          ? 'bg-mc-forge text-[#0E0F11] shadow-sm'
-                          : 'bg-[#16181B] hover:bg-[#1E2125] text-mc-mutedLight hover:text-mc-text border border-mc-border'
+                          ? 'bg-mc-forge text-mc-bg shadow-xs'
+                          : 'bg-mc-surface hover:bg-[#1E2125] text-mc-mutedLight hover:text-mc-text border border-mc-border'
                       } disabled:opacity-30`}
                       title={`${lang === 'pt' ? 'Grau' : 'Grade'} ${g}`}
                     >
@@ -465,8 +465,8 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                       disabled={!currentSelection}
                       className={`px-1.5 py-0.5 rounded-[4px] text-[10px] font-mono font-bold transition-colors ${
                         isLSelected
-                          ? 'bg-mc-gold text-[#0E0F11] shadow-sm'
-                          : 'bg-[#16181B] hover:bg-[#1E2125] text-mc-mutedLight hover:text-mc-text border border-mc-border'
+                          ? 'bg-mc-gold text-mc-bg shadow-xs'
+                          : 'bg-mc-surface hover:bg-[#1E2125] text-mc-mutedLight hover:text-mc-text border border-mc-border'
                       } disabled:opacity-30`}
                       title={`${lang === 'pt' ? 'Carga Estelar Nível' : 'Starcharge Level'} ${label}`}
                     >
@@ -491,7 +491,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                     <span className="text-mc-text font-semibold">
                       {catalog.materials[currentSelection.materialId].name[lang]}
                     </span>
-                    <span className="text-[10px] px-1 rounded bg-mc-card border border-mc-border capitalize">
+                    <span className="text-[10px] px-1 rounded-sm bg-mc-card border border-mc-border capitalize">
                       {catalog.materials[currentSelection.materialId].category}
                     </span>
                   </>
@@ -500,7 +500,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
 
               <button
                 onClick={handleConvertToCompound}
-                className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-mc-card hover:bg-mc-primary/20 border border-mc-border hover:border-mc-primary text-mc-text hover:text-mc-primary transition-colors"
+                className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-sm bg-mc-card hover:bg-mc-primary/20 border border-mc-border hover:border-mc-primary text-mc-text hover:text-mc-primary transition-colors"
                 title={lang === 'pt' ? 'Compor múltiplos materiais como liga metálica ou tecido misto' : 'Compose multiple materials into an alloy or mixed fabric'}
               >
                 <Layers className="w-3 h-3 text-mc-primary" />
@@ -524,11 +524,11 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                 {lang === 'pt' ? 'Instâncias da Parte' : 'Part Instances'} ({instanceCount}x)
               </span>
               {isHeterogeneous ? (
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                <span className="text-[9px] px-1.5 py-0.2 rounded-sm bg-amber-500/20 text-amber-300 border border-amber-500/40">
                   {lang === 'pt' ? 'Mistas (Média Ponderada)' : 'Mixed (Weighted)'}
                 </span>
               ) : (
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-mc-border/60 text-mc-muted">
+                <span className="text-[9px] px-1.5 py-0.2 rounded-sm bg-mc-border/60 text-mc-muted">
                   {lang === 'pt' ? 'Uniforme' : 'Uniform'}
                 </span>
               )}
@@ -538,7 +538,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
               <div className="flex items-center gap-1">
                 <button
                   onClick={handleSplitHalf}
-                  className="flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-mc-bg hover:bg-mc-card border border-mc-border text-mc-muted hover:text-mc-text transition-colors"
+                  className="flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-sm bg-mc-bg hover:bg-mc-card border border-mc-border text-mc-muted hover:text-mc-text transition-colors"
                   title={lang === 'pt' ? 'Divide metade MAX e metade NONE' : 'Split half MAX and half NONE'}
                 >
                   <Split className="w-2.5 h-2.5" />
@@ -546,7 +546,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                 </button>
                 <button
                   onClick={handleResetUniform}
-                  className="text-[10px] px-1.5 py-0.5 rounded bg-mc-bg hover:bg-mc-card border border-mc-border text-mc-muted hover:text-mc-text transition-colors"
+                  className="text-[10px] px-1.5 py-0.5 rounded-sm bg-mc-bg hover:bg-mc-card border border-mc-border text-mc-muted hover:text-mc-text transition-colors"
                   title={lang === 'pt' ? 'Aplica o grau e carga principais a todas as instâncias' : 'Apply main grade and charge to all instances'}
                 >
                   {lang === 'pt' ? 'Uniformizar' : 'Reset'}
@@ -556,11 +556,11 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
           </div>
 
           {showInstances && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 mt-2 p-2 bg-mc-bg/50 border border-mc-border/50 rounded">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 mt-2 p-2 bg-mc-bg/50 border border-mc-border/50 rounded-sm">
               {currentInstances.map((inst, idx) => (
                 <div
                   key={idx}
-                  className="p-1.5 rounded bg-mc-surface/60 border border-mc-border/60 flex flex-col gap-1 text-[10px] font-mono"
+                  className="p-1.5 rounded-sm bg-mc-surface/60 border border-mc-border/60 flex flex-col gap-1 text-[10px] font-mono"
                 >
                   <span className="text-mc-muted font-bold">
                     #{idx + 1} {lang === 'pt' ? 'Instância' : 'Instance'}
@@ -569,7 +569,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                     <select
                       value={inst.grade || 'NONE'}
                       onChange={(e) => setPartInstanceGrade(slot, idx, e.target.value as Grade)}
-                      className="bg-mc-bg border border-mc-border rounded px-1 py-0.5 text-mc-gold font-bold focus:outline-none cursor-pointer text-[10px]"
+                      className="bg-mc-bg border border-mc-border rounded-sm px-1 py-0.5 text-mc-gold font-bold focus:outline-hidden cursor-pointer text-[10px]"
                     >
                       {GRADES.map((g) => (
                         <option key={g} value={g} className="bg-mc-surface text-mc-text">
@@ -580,7 +580,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
                     <select
                       value={inst.starcharge ?? 0}
                       onChange={(e) => setPartInstanceStarcharge(slot, idx, Number(e.target.value) as StarchargeLevel)}
-                      className="bg-mc-bg border border-mc-border rounded px-1 py-0.5 text-cyan-400 font-bold focus:outline-none cursor-pointer text-[10px]"
+                      className="bg-mc-bg border border-mc-border rounded-sm px-1 py-0.5 text-cyan-400 font-bold focus:outline-hidden cursor-pointer text-[10px]"
                     >
                       {STARCHARD_LEVELS.map(({ level, label }) => (
                         <option key={level} value={level} className="bg-mc-surface text-mc-text">

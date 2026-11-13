@@ -181,7 +181,7 @@ export function MaterialCombobox({
     <div ref={containerRef} className={`relative ${className}`}>
       {/* Campo Combobox Input */}
       <div
-        className={`flex items-center gap-1.5 bg-mc-bg border rounded transition-all ${
+        className={`flex items-center gap-1.5 bg-mc-bg border rounded-sm transition-all ${
           isOpen ? 'border-mc-primary ring-1 ring-mc-primary/40' : 'border-mc-border hover:border-mc-borderHover'
         } ${compact ? 'px-2 py-1 text-xs' : 'px-2.5 py-1.5 text-xs'}`}
       >
@@ -211,7 +211,7 @@ export function MaterialCombobox({
           onFocus={handleOpen}
           onKeyDown={handleKeyDown}
           placeholder={placeholder || defaultPlaceholder}
-          className="w-full bg-transparent text-mc-text font-medium focus:outline-none placeholder:text-mc-muted/60"
+          className="w-full bg-transparent text-mc-text font-medium focus:outline-hidden placeholder:text-mc-muted/60"
         />
 
         {/* Botão Limpar (se valor selecionado e não obrigatório) */}
@@ -225,7 +225,7 @@ export function MaterialCombobox({
               setSearchQuery('');
               setIsOpen(false);
             }}
-            className="text-mc-muted hover:text-mc-crimson p-0.5 rounded transition-colors"
+            className="text-mc-muted hover:text-mc-crimson p-0.5 rounded-sm transition-colors"
             title={lang === 'pt' ? 'Limpar seleção' : 'Clear selection'}
           >
             <X className="w-3 h-3" />
@@ -263,7 +263,7 @@ export function MaterialCombobox({
                 type="checkbox"
                 checked={onlyInventory}
                 onChange={(e) => setOnlyInventory(e.target.checked)}
-                className="rounded border-mc-border text-mc-primary focus:ring-0 cursor-pointer accent-mc-primary"
+                className="rounded-sm border-mc-border text-mc-primary focus:ring-0 cursor-pointer accent-mc-primary"
               />
               <span>
                 {lang === 'pt' ? 'Só materiais do meu inventário' : 'Only my inventory'}
@@ -291,7 +291,7 @@ export function MaterialCombobox({
                 aria-selected={!selectedMaterialId}
                 onClick={handleSelectEmpty}
                 onMouseEnter={() => setFocusedIndex(0)}
-                className={`px-2 py-1.5 rounded cursor-pointer text-xs font-mono flex items-center justify-between transition-colors ${
+                className={`px-2 py-1.5 rounded-sm cursor-pointer text-xs font-mono flex items-center justify-between transition-colors ${
                   focusedIndex === 0
                     ? 'bg-mc-card text-mc-text border border-mc-primary/40'
                     : 'text-mc-muted hover:bg-mc-bg hover:text-mc-text'
@@ -327,7 +327,7 @@ export function MaterialCombobox({
                     aria-selected={isSelected}
                     onClick={() => handleSelectMaterial(mat.id)}
                     onMouseEnter={() => setFocusedIndex(itemIndex)}
-                    className={`px-2 py-1.5 rounded cursor-pointer text-xs flex items-center justify-between gap-2 transition-colors ${
+                    className={`px-2 py-1.5 rounded-sm cursor-pointer text-xs flex items-center justify-between gap-2 transition-colors ${
                       isFocused
                         ? 'bg-mc-card text-mc-text border border-mc-primary/50'
                         : isSelected
@@ -381,7 +381,7 @@ export function MaterialCombobox({
                     {/* Lado Direito: Stat Chave do Slot + Ícone de Selecionado */}
                     <div className="flex items-center gap-1.5 shrink-0 font-mono text-[11px]">
                       {keyStat && (
-                        <span className="text-mc-gold/90 bg-mc-bg/70 px-1 py-0.2 rounded border border-mc-border/40 text-[10px]">
+                        <span className="text-mc-gold/90 bg-mc-bg/70 px-1 py-0.2 rounded-sm border border-mc-border/40 text-[10px]">
                           {keyStat}
                         </span>
                       )}

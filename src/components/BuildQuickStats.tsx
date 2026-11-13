@@ -43,7 +43,7 @@ export function BuildQuickStats() {
   return (
     <div className="space-y-4">
       {/* Header do Equipamento & Status */}
-      <div className="p-4 bg-mc-surface border border-mc-border rounded-[10px] space-y-2 shadow-sm">
+      <div className="p-4 bg-mc-surface border border-mc-border rounded-[10px] space-y-2 shadow-xs">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="text-xs font-mono uppercase tracking-wider text-mc-mutedLight">
             {gearTypeName} · {gearType.category}

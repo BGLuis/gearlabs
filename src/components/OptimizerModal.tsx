@@ -168,7 +168,7 @@ export function OptimizerModal() {
       {/* Botão de Disparo */}
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-mc-primary to-mc-accent hover:from-mc-primaryHover hover:to-emerald-500 text-mc-bg font-bold text-sm shadow-mc-box flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+        className="w-full py-2.5 px-4 rounded-lg bg-linear-to-r/srgb from-mc-primary to-mc-accent hover:from-mc-primaryHover hover:to-emerald-500 text-mc-bg font-bold text-sm shadow-mc-box flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
       >
         <Sparkles className="w-4 h-4" />
         {lang === 'pt' ? 'Sugerir Melhor Combinação' : 'Suggest Best Build'}
@@ -176,12 +176,12 @@ export function OptimizerModal() {
 
       {/* Modal */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in duration-200">
           <div className="relative w-full max-w-2xl bg-mc-surface border border-mc-border rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             {/* Header do Modal */}
             <div className="p-4 border-b border-mc-border flex items-center justify-between bg-mc-card/60">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded bg-mc-primary/20 border border-mc-primary/40 text-mc-primary">
+                <div className="p-2 rounded-sm bg-mc-primary/20 border border-mc-primary/40 text-mc-primary">
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
@@ -218,11 +218,11 @@ export function OptimizerModal() {
                         onClick={() => setGoal(g.id)}
                         className={`p-2.5 rounded-lg border text-left flex items-start gap-3 transition-all ${
                           isSelected
-                            ? 'bg-mc-card border-mc-primary text-mc-text shadow-sm'
+                            ? 'bg-mc-card border-mc-primary text-mc-text shadow-xs'
                             : 'bg-mc-bg/50 border-mc-border text-mc-muted hover:border-mc-borderHover hover:text-mc-text'
                         }`}
                       >
-                        <div className="p-1.5 rounded bg-mc-surface border border-mc-border mt-0.5">
+                        <div className="p-1.5 rounded-sm bg-mc-surface border border-mc-border mt-0.5">
                           {g.icon}
                         </div>
                         <div>
@@ -251,7 +251,7 @@ export function OptimizerModal() {
                       type="checkbox"
                       checked={allowAlloys}
                       onChange={(e) => setAllowAlloys(e.target.checked)}
-                      className="rounded border-mc-border text-mc-primary focus:ring-0"
+                      className="rounded-sm border-mc-border text-mc-primary focus:ring-0"
                     />
                     <span>{lang === 'pt' ? 'Explorar Ligas' : 'Explore Alloys'}</span>
                   </label>
@@ -268,7 +268,7 @@ export function OptimizerModal() {
                         <button
                           key={g}
                           onClick={() => setGrade(g)}
-                          className={`px-1.5 py-0.5 rounded text-[11px] font-mono font-bold border transition-colors ${
+                          className={`px-1.5 py-0.5 rounded-sm text-[11px] font-mono font-bold border transition-colors ${
                             grade === g
                               ? 'bg-mc-gold/20 border-mc-gold text-mc-gold'
                               : 'bg-mc-surface border-mc-border text-mc-muted hover:text-mc-text'
@@ -290,7 +290,7 @@ export function OptimizerModal() {
                         <button
                           key={sc}
                           onClick={() => setStarcharge(sc)}
-                          className={`flex-1 py-1 rounded text-xs font-mono font-bold border transition-colors flex items-center justify-center gap-1 ${
+                          className={`flex-1 py-1 rounded-sm text-xs font-mono font-bold border transition-colors flex items-center justify-center gap-1 ${
                             starcharge === sc
                               ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300'
                               : 'bg-mc-surface border-mc-border text-mc-muted hover:text-mc-text'
@@ -397,12 +397,12 @@ export function OptimizerModal() {
                                   );
                                 })}
                                 {res.build.parts.main?.grade && res.build.parts.main.grade !== 'NONE' && (
-                                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-mc-gold/20 text-mc-gold border border-mc-gold/40">
+                                  <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-mono font-bold bg-mc-gold/20 text-mc-gold border border-mc-gold/40">
                                     {res.build.parts.main.grade}
                                   </span>
                                 )}
                                 {res.build.parts.main?.starcharge && res.build.parts.main.starcharge > 0 ? (
-                                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                                  <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
                                     ⭐ {['', 'I', 'II', 'III'][res.build.parts.main.starcharge]}
                                   </span>
                                 ) : null}
@@ -443,7 +443,7 @@ export function OptimizerModal() {
                           {/* Botão de Aplicação */}
                           <button
                             onClick={() => handleApply(res)}
-                            className="w-full sm:w-auto px-3.5 py-1.5 rounded bg-mc-surfaceHover hover:bg-mc-primary hover:text-mc-bg border border-mc-border text-mc-text font-bold text-xs font-mono transition-colors shadow-sm flex items-center justify-center gap-1.5 shrink-0"
+                            className="w-full sm:w-auto px-3.5 py-1.5 rounded-sm bg-mc-surfaceHover hover:bg-mc-primary hover:text-mc-bg border border-mc-border text-mc-text font-bold text-xs font-mono transition-colors shadow-xs flex items-center justify-center gap-1.5 shrink-0"
                           >
                             <Check className="w-3.5 h-3.5" />
                             {lang === 'pt' ? 'Aplicar Build' : 'Apply Build'}
@@ -460,7 +460,7 @@ export function OptimizerModal() {
             <div className="p-3 bg-mc-card/80 border-t border-mc-border flex justify-end">
               <button
                 onClick={() => setIsOpen(false)}
-                className="px-4 py-1.5 rounded text-xs font-medium text-mc-muted hover:text-mc-text transition-colors"
+                className="px-4 py-1.5 rounded-sm text-xs font-medium text-mc-muted hover:text-mc-text transition-colors"
               >
                 {lang === 'pt' ? 'Fechar' : 'Close'}
               </button>

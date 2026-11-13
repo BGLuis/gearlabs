@@ -59,7 +59,7 @@ const ANCHOR_OFFSET = 'scroll-mt-28 md:scroll-mt-20';
 
 function SectionCard({ id, className = '', children }: { id: string; className?: string; children: React.ReactNode }) {
   return (
-    <section id={id} className={`${ANCHOR_OFFSET} p-6 bg-mc-surface border rounded-xl shadow-sm space-y-3 ${className || 'border-mc-border'}`}>
+    <section id={id} className={`${ANCHOR_OFFSET} p-6 bg-mc-surface border rounded-xl shadow-xs space-y-3 ${className || 'border-mc-border'}`}>
       {children}
     </section>
   );
@@ -94,7 +94,7 @@ function PropertyList({ keys }: { keys: string[] }) {
   return (
     <span className="flex flex-wrap gap-1">
       {keys.map((key) => (
-        <code key={key} className="px-1.5 py-0.5 rounded bg-mc-cardSubtle border border-mc-border text-xs text-mc-text">
+        <code key={key} className="px-1.5 py-0.5 rounded-sm bg-mc-cardSubtle border border-mc-border text-xs text-mc-text">
           {key}
         </code>
       ))}
@@ -145,9 +145,9 @@ export default function FormulasPage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      <div className="p-6 bg-mc-surface border border-mc-border rounded-xl shadow-sm">
+      <div className="p-6 bg-mc-surface border border-mc-border rounded-xl shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded bg-mc-primary/20 border border-mc-primary/40 text-mc-primary">
+          <div className="p-2.5 rounded-sm bg-mc-primary/20 border border-mc-primary/40 text-mc-primary">
             <FlaskConical className="w-6 h-6" aria-hidden="true" />
           </div>
           <div>
@@ -177,14 +177,14 @@ export default function FormulasPage() {
             <SectionCard key={s.id} id={s.id}>
               <h2 className="text-lg font-bold text-mc-text">{s.title[lang]}</h2>
               {s.unobserved && (
-                <p className="inline-block px-2 py-0.5 rounded bg-mc-goldMuted border border-mc-gold/40 text-mc-gold text-xs font-mono">
+                <p className="inline-block px-2 py-0.5 rounded-sm bg-mc-goldMuted border border-mc-gold/40 text-mc-gold text-xs font-mono">
                   {UI.unobserved[lang]}
                 </p>
               )}
               <p className="text-sm leading-relaxed text-mc-text">{s.text[lang]}</p>
               <div className="space-y-1.5">
                 {s.formula.map((line) => (
-                  <code key={line} className="block overflow-x-auto whitespace-pre px-3 py-2 rounded bg-mc-cardSubtle border border-mc-border text-xs text-mc-primary">
+                  <code key={line} className="block overflow-x-auto whitespace-pre px-3 py-2 rounded-sm bg-mc-cardSubtle border border-mc-border text-xs text-mc-primary">
                     {line}
                   </code>
                 ))}
@@ -235,7 +235,7 @@ export default function FormulasPage() {
             <p className="text-sm text-mc-mutedLight">{UI.exampleIntro[lang]}</p>
             <ol className="space-y-2">
               {steps.map((step, i) => (
-                <li key={i} className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between p-3 rounded bg-mc-cardSubtle border border-mc-border">
+                <li key={i} className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between p-3 rounded-sm bg-mc-cardSubtle border border-mc-border">
                   <span className="text-sm text-mc-text">{step.label[lang]}</span>
                   <span className="flex flex-wrap items-baseline gap-x-3">
                     <code className="text-xs text-mc-muted">{step.code}</code>

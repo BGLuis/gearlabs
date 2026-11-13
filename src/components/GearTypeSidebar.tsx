@@ -67,8 +67,8 @@ export function GearTypeSidebar() {
                     onClick={() => setGearType(gt.id)}
                     className={`w-full flex items-center gap-3 p-2.5 rounded-[8px] transition-all text-left ${
                       isSelected
-                        ? 'bg-mc-card border border-mc-forge shadow-sm text-mc-text'
-                        : 'bg-[#16181B]/70 hover:bg-mc-card/60 border border-mc-border text-mc-mutedLight hover:text-mc-text'
+                        ? 'bg-mc-card border border-mc-forge shadow-xs text-mc-text'
+                        : 'bg-mc-surface/70 hover:bg-mc-card/60 border border-mc-border text-mc-mutedLight hover:text-mc-text'
                     }`}
                   >
                     <div
