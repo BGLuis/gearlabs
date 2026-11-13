@@ -93,7 +93,7 @@ export function ImportModpackModal() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded bg-mc-card hover:bg-mc-surfaceHover border border-mc-border text-xs text-mc-primary font-bold transition-colors shadow-sm"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm bg-mc-card hover:bg-mc-surfaceHover border border-mc-border text-xs text-mc-primary font-bold transition-colors shadow-xs"
         title="Importar modpack customizado"
       >
         <CloudUpload className="w-3.5 h-3.5" />
@@ -101,12 +101,12 @@ export function ImportModpackModal() {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in duration-200">
           <div className="relative w-full max-w-lg bg-mc-surface border border-mc-border rounded-xl shadow-2xl overflow-hidden flex flex-col">
             {/* Header */}
             <div className="p-4 border-b border-mc-border flex items-center justify-between bg-mc-card/60">
               <div className="flex items-center gap-2">
-                <div className="p-2 rounded bg-mc-primary/20 text-mc-primary">
+                <div className="p-2 rounded-sm bg-mc-primary/20 text-mc-primary">
                   <CloudUpload className="w-5 h-5" />
                 </div>
                 <div>
@@ -123,7 +123,7 @@ export function ImportModpackModal() {
 
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded text-mc-muted hover:text-mc-text hover:bg-mc-card"
+                className="p-1.5 rounded-sm text-mc-muted hover:text-mc-text hover:bg-mc-card"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -140,7 +140,7 @@ export function ImportModpackModal() {
                   type="text"
                   value={modpackName}
                   onChange={(e) => setModpackName(e.target.value)}
-                  className="w-full bg-mc-bg border border-mc-border rounded-lg px-3 py-1.5 text-xs text-mc-text focus:outline-none focus:border-mc-primary font-mono"
+                  className="w-full bg-mc-bg border border-mc-border rounded-lg px-3 py-1.5 text-xs text-mc-text focus:outline-hidden focus:border-mc-primary font-mono"
                 />
               </div>
 
@@ -203,7 +203,7 @@ export function ImportModpackModal() {
                         ? 'Cole aqui a saída do comando /sgear_mats dump...'
                         : 'Paste /sgear_mats dump output here...'
                     }
-                    className="w-full bg-mc-bg border border-mc-border rounded-lg p-3 text-xs text-mc-text font-mono focus:outline-none focus:border-mc-primary"
+                    className="w-full bg-mc-bg border border-mc-border rounded-lg p-3 text-xs text-mc-text font-mono focus:outline-hidden focus:border-mc-primary"
                   />
                   <button
                     onClick={handleTsvImport}

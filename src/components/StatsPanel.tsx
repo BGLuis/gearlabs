@@ -135,7 +135,7 @@ export function StatsPanel() {
   return (
     <div className="space-y-5">
       {/* Card de Atributos */}
-      <div className="p-4 bg-mc-surface border border-mc-border rounded-[10px] space-y-3.5 shadow-sm">
+      <div className="p-4 bg-mc-surface border border-mc-border rounded-[10px] space-y-3.5 shadow-xs">
         <div className="flex items-center justify-between pb-2 border-b border-mc-border/60">
           <h3 className="font-semibold text-sm text-mc-text flex items-center gap-2">
             <Activity className="w-4 h-4 text-mc-forge" />
@@ -182,7 +182,7 @@ export function StatsPanel() {
       </div>
 
       {/* Card de Traits Ativos */}
-      <div className="p-4 bg-mc-surface border border-mc-border rounded-[10px] space-y-3 shadow-sm">
+      <div className="p-4 bg-mc-surface border border-mc-border rounded-[10px] space-y-3 shadow-xs">
         <div className="flex items-center justify-between pb-2 border-b border-mc-border/60">
           <h3 className="font-semibold text-sm text-mc-text flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-mc-gold" />
@@ -209,7 +209,7 @@ export function StatsPanel() {
                   <span className="font-semibold text-xs text-mc-text">
                     {trait.name[lang] || trait.name.en || trait.id}
                   </span>
-                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-mc-forgeMuted border border-mc-forge/40 text-mc-forge">
+                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-sm bg-mc-forgeMuted border border-mc-forge/40 text-mc-forge">
                     {lang === 'pt' ? `Nv ${trait.level}` : `Lv ${trait.level}`}
                   </span>
                 </div>

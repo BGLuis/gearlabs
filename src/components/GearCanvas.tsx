@@ -20,12 +20,12 @@ export function GearCanvas({ size = 128 }: { size?: number }) {
   return (
     <div className="relative flex flex-col items-center justify-center p-6 bg-mc-cardSubtle border border-mc-border rounded-[10px] shadow-mc-inset group">
       {/* Badge de Sinergia */}
-      <div className="absolute top-3 right-3 px-2 py-0.5 rounded-[4px] text-[11px] font-mono font-bold bg-[#16181B] border border-mc-gold/40 text-mc-gold shadow-sm">
+      <div className="absolute top-3 right-3 px-2 py-0.5 rounded-[4px] text-[11px] font-mono font-bold bg-mc-surface border border-mc-gold/40 text-mc-gold shadow-xs">
         {stats ? `${stats.synergy}% Sinergia` : '—'}
       </div>
 
       {/* Canvas com Pixel Art */}
-      <div className="w-44 h-44 flex items-center justify-center p-3 rounded-[8px] bg-[#0E0F11] border border-mc-border/80 shadow-inner">
+      <div className="w-44 h-44 flex items-center justify-center p-3 rounded-[8px] bg-mc-bg border border-mc-border/80 shadow-inner">
         <canvas
           ref={canvasRef}
           width={size}

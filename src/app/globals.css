@@ -1,15 +1,99 @@
 @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&family=Pixelify+Sans:wght@500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --color-mc-bg: #0e0f11;
+  --color-mc-surface: #16181b;
+  --color-mc-surfaceHover: #1e2125;
+  --color-mc-card: #1e2125;
+  --color-mc-cardSubtle: #0a0b0c;
+  --color-mc-border: #24272c;
+  --color-mc-borderHover: #30343a;
+  --color-mc-primary: #ff8a3d;
+  --color-mc-primaryHover: #ff9d5c;
+  --color-mc-forge: #ff8a3d;
+  --color-mc-forgeHover: #ff9d5c;
+  --color-mc-forgeMuted: rgba(255, 138, 61, 0.15);
+  --color-mc-positive: #4ade80;
+  --color-mc-positiveMuted: rgba(74, 222, 128, 0.14);
+  --color-mc-negative: #f87171;
+  --color-mc-negativeMuted: rgba(248, 113, 113, 0.14);
+  --color-mc-accent: #4ade80;
+  --color-mc-crimson: #f87171;
+  --color-mc-gold: #f2c94c;
+  --color-mc-goldMuted: rgba(242, 201, 76, 0.14);
+  --color-mc-diamond: #5cd6c7;
+  --color-mc-muted: #8b949e;
+  --color-mc-mutedDark: #4a4f57;
+  --color-mc-mutedLight: #a3a8b0;
+  --color-mc-text: #ecedef;
+
+  /* Paleta do Tailwind 3: o 4 trocou os tons por valores oklch ligeiramente diferentes. Só as cores usadas no projeto. */
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-red-400: #f87171;
+  --color-red-800: #991b1b;
+  --color-red-950: #450a0a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-cyan-300: #67e8f9;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+  --color-cyan-800: #155e75;
+  --color-cyan-950: #083344;
+  --color-purple-300: #d8b4fe;
+  --color-purple-400: #c084fc;
+  --color-purple-700: #7e22ce;
+  --color-purple-900: #581c87;
+  --color-pink-300: #f9a8d4;
+  --color-pink-700: #be185d;
+  --color-pink-900: #831843;
+
+  /* Alturas de linha absolutas como no Tailwind 3 (o 4 usa razões sem unidade, que mudam o texto filho com tamanho arbitrário) */
+  --text-xs--line-height: 1rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl--line-height: 2rem;
+
+  --font-pixel: 'Pixelify Sans', system-ui, monospace;
+  --font-sans: 'Geist', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  --shadow-mc-inset:
+    inset 2px 2px 0px rgba(255, 255, 255, 0.04),
+    inset -2px -2px 0px rgba(0, 0, 0, 0.5);
+  --shadow-mc-box: 2px 2px 0px rgba(0, 0, 0, 0.4);
+  --shadow-forge-glow: 0 0 16px rgba(255, 138, 61, 0.25);
+}
+
+/* O preflight do Tailwind 4 deixa o cursor dos botões como `default`; o 3 usava `pointer`. */
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* O 3 pintava o placeholder de cinza-400 sólido; o 4 usa a cor do texto a 50% */
+  input::placeholder,
+  textarea::placeholder {
+    opacity: 1;
+    color: #9ca3af;
+  }
+}
 
 :root {
   --background: #0E0F11;
   --foreground: #ECEDEF;
-  --font-pixel: 'Pixelify Sans', system-ui, monospace;
-  --font-sans: 'Geist', system-ui, -apple-system, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
 }
 
 body {

@@ -72,7 +72,7 @@ export function AddonSelector() {
   if (totalCount === 0) {
     return (
       <div
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded bg-mc-card/50 border border-mc-border text-xs text-mc-muted opacity-60 font-mono cursor-not-allowed select-none"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm bg-mc-card/50 border border-mc-border text-xs text-mc-muted opacity-60 font-mono cursor-not-allowed select-none"
         title={t.noAddons}
       >
         <Layers className="w-3.5 h-3.5" />
@@ -93,7 +93,7 @@ export function AddonSelector() {
         title={t.buttonTitle}
         aria-expanded={isOpen}
         aria-haspopup="dialog"
-        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded border text-xs font-mono font-medium transition-colors ${
+        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border text-xs font-mono font-medium transition-colors ${
           allActive
             ? 'bg-mc-card hover:bg-mc-surfaceHover border-mc-border text-mc-text'
             : activeCount > 0
@@ -125,7 +125,7 @@ export function AddonSelector() {
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded text-mc-muted hover:text-mc-text hover:bg-mc-card transition-colors"
+              className="p-1 rounded-sm text-mc-muted hover:text-mc-text hover:bg-mc-card transition-colors"
               title="Fechar"
             >
               <X className="w-4 h-4" />
@@ -143,19 +143,19 @@ export function AddonSelector() {
                   onClick={() => toggleAddon(addon.id)}
                   className={`p-3 rounded-lg border transition-all cursor-pointer select-none flex items-start gap-3 ${
                     isEnabled
-                      ? 'bg-mc-card/80 border-mc-primary/40 hover:border-mc-primary shadow-sm'
+                      ? 'bg-mc-card/80 border-mc-primary/40 hover:border-mc-primary shadow-xs'
                       : 'bg-mc-bg/40 border-mc-border/50 opacity-60 hover:opacity-100 hover:border-mc-border'
                   }`}
                 >
                   {/* Checkbox Visual */}
                   <div
-                    className={`mt-0.5 w-4 h-4 rounded flex items-center justify-center border shrink-0 transition-colors ${
+                    className={`mt-0.5 w-4 h-4 rounded-sm flex items-center justify-center border shrink-0 transition-colors ${
                       isEnabled
                         ? 'bg-mc-primary border-mc-primary text-mc-bg'
                         : 'border-mc-border bg-mc-bg'
                     }`}
                   >
-                    {isEnabled && <Check className="w-3 h-3 stroke-[3]" />}
+                    {isEnabled && <Check className="w-3 h-3 stroke-3" />}
                   </div>
 
                   {/* Informações do Addon */}
@@ -165,7 +165,7 @@ export function AddonSelector() {
                         {addon.name}
                       </span>
                       {addon.version && (
-                        <span className="px-1.5 py-0.2 rounded bg-mc-bg border border-mc-border text-[10px] font-mono text-mc-muted shrink-0">
+                        <span className="px-1.5 py-0.2 rounded-sm bg-mc-bg border border-mc-border text-[10px] font-mono text-mc-muted shrink-0">
                           v{addon.version}
                         </span>
                       )}

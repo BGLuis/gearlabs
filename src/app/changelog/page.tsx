@@ -64,9 +64,9 @@ export default function ChangelogPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Banner */}
-      <div className="p-6 bg-mc-surface border border-mc-border rounded-xl shadow-sm">
+      <div className="p-6 bg-mc-surface border border-mc-border rounded-xl shadow-xs">
         <div className="flex items-center gap-3 mb-2">
-          <div className="p-2.5 rounded bg-mc-primary/20 border border-mc-primary/40 text-mc-primary">
+          <div className="p-2.5 rounded-sm bg-mc-primary/20 border border-mc-primary/40 text-mc-primary">
             <RotateCcwClock className="w-6 h-6" />
           </div>
           <div>
@@ -87,7 +87,7 @@ export default function ChangelogPage() {
         {CHANGELOG_DATA.map((entry) => (
           <div
             key={entry.version}
-            className="p-6 bg-mc-surface border border-mc-border rounded-xl shadow-sm relative overflow-hidden"
+            className="p-6 bg-mc-surface border border-mc-border rounded-xl shadow-xs relative overflow-hidden"
           >
             {/* Header da Versão */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-mc-border/60 pb-3 mb-4">
@@ -95,7 +95,7 @@ export default function ChangelogPage() {
                 <span className="text-lg font-bold font-mono text-mc-primary">
                   {entry.version}
                 </span>
-                <span className="px-2 py-0.5 rounded bg-mc-accent/20 border border-mc-accent/40 text-mc-accent text-xs font-mono font-bold">
+                <span className="px-2 py-0.5 rounded-sm bg-mc-accent/20 border border-mc-accent/40 text-mc-accent text-xs font-mono font-bold">
                   {entry.tag}
                 </span>
                 <h3 className="font-bold text-sm text-mc-text">
