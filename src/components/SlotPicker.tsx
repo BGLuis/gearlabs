@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useGear } from '@/context/GearContext';
 import { Grade, PartSlot, SubMaterialSelection, StarchargeLevel, AlloyType } from '@/types/silentgear';
-import { X, ArrowUp, ArrowDown, Plus, Layers, Sparkles, AlertTriangle, ChevronDown, ChevronUp, Split } from 'lucide-react';
+import { X, ArrowUp, ArrowDown, Plus, Layers, Sparkles, TriangleExclamationPoint, ChevronDown, ChevronUp, Split } from 'lucide-react';
 import { calculateSynergy, calculateCompoundChargingValue } from '@/lib/calculator';
 import { MaterialCombobox } from '@/components/MaterialCombobox';
 import {
@@ -283,7 +283,7 @@ export function SlotPicker({ slot, isRequired = false }: SlotPickerProps) {
           {/* Banner de Aviso de Validação (Carregamento de Builds Antigas ou Troca de Máquina) */}
           {!alloyValidation.valid && (
             <div className="flex items-start gap-2 p-2 rounded bg-amber-500/10 border border-amber-500/40 text-amber-300 text-xs font-mono">
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <TriangleExclamationPoint className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 {alloyValidation.warnings.map((warn, i) => (
                   <div key={i}>{warn}</div>

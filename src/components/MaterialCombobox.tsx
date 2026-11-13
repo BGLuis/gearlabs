@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useId } from 'react';
 import { Material, PartSlot } from '@/types/silentgear';
 import { filterMaterials, getKeyStatForSlot } from '@/lib/materials';
-import { Search, ChevronDown, X, Check, CheckCircle2 } from 'lucide-react';
+import { Search, ChevronDown, X, Check, CircleCheck } from 'lucide-react';
 
 export interface MaterialComboboxProps {
   materials: Material[];

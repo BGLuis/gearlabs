@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useGear } from '@/context/GearContext';
 import { ImportModpackModal } from '@/components/ImportModpackModal';
 import { AddonSelector } from '@/components/AddonSelector';
-import { Hammer, BookOpen, History, FlaskConical, Share2, Check, Globe } from 'lucide-react';
+import { Hammer, BookOpen, RotateCcwClock, FlaskConical, Share2, Check, Globe } from 'lucide-react';
 
 export function Navbar() {
   const { version, setVersion, packInfo, setPackVersion, presets, lang, setLang, copyShareUrl } = useGear();
@@ -56,7 +56,7 @@ export function Navbar() {
   const navItems = [
     { href: '/', label: t.builder, Icon: Hammer },
     { href: '/materials', label: t.materials, Icon: BookOpen },
-    { href: '/changelog', label: t.changelog, Icon: History },
+    { href: '/changelog', label: t.changelog, Icon: RotateCcwClock },
     { href: '/formulas', label: t.formulas, Icon: FlaskConical },
   ];
 
