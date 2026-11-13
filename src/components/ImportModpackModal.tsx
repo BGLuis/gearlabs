@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useGear } from '@/context/GearContext';
 import { parseDatapackZip, parseDumpTsv } from '@/lib/datapack-parser';
-import { UploadCloud, FileCode, X, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
+import { CloudUpload, FileCode, X, CircleCheck, CircleExclamationPoint, Sparkles } from 'lucide-react';
 
 export function ImportModpackModal() {
   const { importCustomCatalog, lang } = useGear();
@@ -96,7 +96,7 @@ export function ImportModpackModal() {
         className="flex items-center gap-1.5 px-2.5 py-1.5 rounded bg-mc-card hover:bg-mc-surfaceHover border border-mc-border text-xs text-mc-primary font-bold transition-colors shadow-sm"
         title="Importar modpack customizado"
       >
-        <UploadCloud className="w-3.5 h-3.5" />
+        <CloudUpload className="w-3.5 h-3.5" />
         <span>{lang === 'pt' ? '+ Importar Modpack' : '+ Import Modpack'}</span>
       </button>
 
@@ -107,7 +107,7 @@ export function ImportModpackModal() {
             <div className="p-4 border-b border-mc-border flex items-center justify-between bg-mc-card/60">
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded bg-mc-primary/20 text-mc-primary">
-                  <UploadCloud className="w-5 h-5" />
+                  <CloudUpload className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-mc-text">
@@ -154,7 +154,7 @@ export function ImportModpackModal() {
                       : 'border-transparent text-mc-muted hover:text-mc-text'
                   }`}
                 >
-                  <UploadCloud className="w-3.5 h-3.5" />
+                  <CloudUpload className="w-3.5 h-3.5" />
                   {lang === 'pt' ? 'Arquivo .ZIP' : '.ZIP File'}
                 </button>
                 <button
@@ -173,7 +173,7 @@ export function ImportModpackModal() {
               {activeTab === 'zip' ? (
                 <div className="p-6 border-2 border-dashed border-mc-border hover:border-mc-primary/60 rounded-xl bg-mc-bg/40 text-center space-y-3 transition-colors">
                   <div className="mx-auto w-10 h-10 rounded-full bg-mc-card flex items-center justify-center text-mc-primary">
-                    <UploadCloud className="w-5 h-5" />
+                    <CloudUpload className="w-5 h-5" />
                   </div>
                   <div>
                     <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-mc-primary hover:bg-mc-primaryHover text-mc-bg font-bold text-xs shadow-mc-box">
@@ -225,9 +225,9 @@ export function ImportModpackModal() {
                   }`}
                 >
                   {statusMsg.type === 'success' ? (
-                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <CircleCheck className="w-4 h-4 shrink-0" />
                   ) : (
-                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <CircleExclamationPoint className="w-4 h-4 shrink-0" />
                   )}
                   <span>{statusMsg.text}</span>
                 </div>

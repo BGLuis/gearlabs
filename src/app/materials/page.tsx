@@ -7,9 +7,9 @@ import { getNumericStatValue } from '@/lib/calculator';
 import { filterMaterials, sourceBadge, sourceGroup, type SourceTone } from '@/lib/materials';
 import {
   Search,
-  CheckCircle2,
+  CircleCheck,
   Circle,
-  Filter,
+  Funnel,
   ArrowUpDown,
   ExternalLink,
   Sparkles,
@@ -92,7 +92,7 @@ export default function MaterialsPage() {
       <div className="p-5 bg-gradient-to-r from-mc-surface to-mc-card border border-mc-border rounded-xl shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-mc-text flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-mc-accent" />
+            <CircleCheck className="w-5 h-5 text-mc-accent" />
             {lang === 'pt' ? 'Catálogo de Materiais & Inventário Pessoal' : 'Materials Catalog & Inventory'}
           </h2>
           <p className="text-xs text-mc-muted mt-1 font-mono">
@@ -135,7 +135,7 @@ export default function MaterialsPage() {
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           {/* Seletor de Categoria */}
           <div className="flex items-center gap-1.5 bg-mc-bg px-2.5 py-1.5 rounded border border-mc-border text-xs font-mono">
-            <Filter className="w-3.5 h-3.5 text-mc-muted" />
+            <Funnel className="w-3.5 h-3.5 text-mc-muted" />
             <select
               value={selectedCat}
               onChange={(e) => setSelectedCat(e.target.value as any)}
@@ -229,7 +229,7 @@ export default function MaterialsPage() {
                         title={inInv ? 'Disponível no inventário' : 'Indisponível'}
                       >
                         {inInv ? (
-                          <CheckCircle2 className="w-4 h-4 text-mc-accent" />
+                          <CircleCheck className="w-4 h-4 text-mc-accent" />
                         ) : (
                           <Circle className="w-4 h-4 text-mc-muted" />
                         )}

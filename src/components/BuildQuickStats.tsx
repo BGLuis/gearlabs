@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useGear } from '@/context/GearContext';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { CircleCheck, CircleExclamationPoint } from 'lucide-react';
 import { GRADE_MULTIPLIERS } from '@/types/silentgear';
 
 export function BuildQuickStats() {
@@ -58,12 +58,12 @@ export function BuildQuickStats() {
           >
             {isValid ? (
               <>
-                <CheckCircle2 className="w-3.5 h-3.5" />
+                <CircleCheck className="w-3.5 h-3.5" />
                 {lang === 'pt' ? 'Montagem válida' : 'Valid Build'}
               </>
             ) : (
               <>
-                <AlertCircle className="w-3.5 h-3.5" />
+                <CircleExclamationPoint className="w-3.5 h-3.5" />
                 {lang === 'pt' ? 'Montagem incompleta' : 'Incomplete Build'}
               </>
             )}

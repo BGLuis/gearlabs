@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useGear } from '@/context/GearContext';
-import { History, Sparkles, CheckCircle2, Calendar, GitCommit } from 'lucide-react';
+import { RotateCcwClock, Sparkles, CircleCheck, Calendar, GitCommitHorizontal } from 'lucide-react';
 
 interface ChangelogEntry {
   version: string;
@@ -67,7 +67,7 @@ export default function ChangelogPage() {
       <div className="p-6 bg-mc-surface border border-mc-border rounded-xl shadow-sm">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2.5 rounded bg-mc-primary/20 border border-mc-primary/40 text-mc-primary">
-            <History className="w-6 h-6" />
+            <RotateCcwClock className="w-6 h-6" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-mc-text">
@@ -113,7 +113,7 @@ export default function ChangelogPage() {
             <div className="space-y-2.5">
               {entry.highlights.map((item, idx) => (
                 <div key={idx} className="flex items-start gap-2.5 text-xs text-mc-text">
-                  <CheckCircle2 className="w-4 h-4 text-mc-accent shrink-0 mt-0.5" />
+                  <CircleCheck className="w-4 h-4 text-mc-accent shrink-0 mt-0.5" />
                   <span className="leading-relaxed">{item[lang]}</span>
                 </div>
               ))}
